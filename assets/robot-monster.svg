@@ -1,0 +1,125 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="monster">
+    <!-- Antenna with satellite dish (behind body top) -->
+    <path id="antenna-pole" fill="#0D9488"
+      d="M247,120 L247,55 L253,55 L253,120 Z"/>
+    <path fill="none" stroke="#115E59" stroke-width="2.5"
+      d="M250,120 L250,55"/>
+    <!-- Satellite dish -->
+    <path id="antenna-dish" fill="#5EEAD4"
+      d="M225,55 C225,35 275,35 275,55 C275,65 225,65 225,55 Z"/>
+    <path fill="none" stroke="#115E59" stroke-width="2.5"
+      d="M225,55 C225,35 275,35 275,55"/>
+    <!-- Blinking light on dish -->
+    <circle id="antenna-light" cx="250" cy="38" r="6" fill="#FF4081"/>
+    <circle cx="248" cy="36" r="2" fill="#ffffff" opacity="0.7"/>
+
+    <!-- Mechanical arms with claw hands (behind body) -->
+    <g id="arm-left">
+      <path id="arm-left-upper" fill="#0D9488"
+        d="M95,240 C75,255 55,280 40,310 C32,328 28,345 38,350 C48,355 58,342 65,325 C75,300 85,275 100,255 Z"/>
+      <path fill="none" stroke="#115E59" stroke-width="3.5"
+        d="M95,240 C75,255 55,280 40,310 C32,328 28,345 38,350 C48,355 58,342 65,325"/>
+      <!-- Claw hand -->
+      <path id="claw-left-top" fill="#5EEAD4"
+        d="M35,345 C25,335 18,325 22,320 C26,315 35,322 40,335 Z"/>
+      <path id="claw-left-bottom" fill="#5EEAD4"
+        d="M35,345 C22,352 12,358 12,365 C12,372 22,370 32,362 Z"/>
+      <circle id="claw-left-joint" cx="38" cy="348" r="5" fill="#2DD4BF"/>
+    </g>
+    <g id="arm-right">
+      <path id="arm-right-upper" fill="#0D9488"
+        d="M405,255 C415,275 425,300 435,325 C442,342 452,355 462,350 C472,345 468,328 460,310 C445,280 425,255 405,240 Z"/>
+      <path fill="none" stroke="#115E59" stroke-width="3.5"
+        d="M405,240 C425,255 445,280 460,310 C468,328 472,345 462,350 C452,355 442,342 435,325"/>
+      <!-- Claw hand -->
+      <path id="claw-right-top" fill="#5EEAD4"
+        d="M465,345 C475,335 482,325 478,320 C474,315 465,322 460,335 Z"/>
+      <path id="claw-right-bottom" fill="#5EEAD4"
+        d="M465,345 C478,352 488,358 488,365 C488,372 478,370 468,362 Z"/>
+      <circle id="claw-right-joint" cx="462" cy="348" r="5" fill="#2DD4BF"/>
+    </g>
+
+    <!-- Treads/wheels at bottom (behind body) -->
+    <g id="treads">
+      <rect id="tread-left" x="145" y="455" rx="18" ry="18" width="90" height="36" fill="#115E59"/>
+      <rect id="tread-right" x="270" y="455" rx="18" ry="18" width="90" height="36" fill="#115E59"/>
+      <!-- Wheel details (no stroke) -->
+      <circle id="wheel-left1" cx="175" cy="473" r="12" fill="#0D9488"/>
+      <circle id="wheel-left2" cx="205" cy="473" r="12" fill="#0D9488"/>
+      <circle id="wheel-right1" cx="300" cy="473" r="12" fill="#0D9488"/>
+      <circle id="wheel-right2" cx="330" cy="473" r="12" fill="#0D9488"/>
+      <!-- Wheel hub caps -->
+      <circle cx="175" cy="473" r="5" fill="#5EEAD4"/>
+      <circle cx="205" cy="473" r="5" fill="#5EEAD4"/>
+      <circle cx="300" cy="473" r="5" fill="#5EEAD4"/>
+      <circle cx="330" cy="473" r="5" fill="#5EEAD4"/>
+    </g>
+    <path fill="none" stroke="#115E59" stroke-width="3"
+      d="M150,488 C158,493 172,495 190,495 C208,495 222,493 230,488"/>
+    <path fill="none" stroke="#115E59" stroke-width="3"
+      d="M274,488 C282,493 296,495 315,495 C334,495 348,493 356,488"/>
+
+    <!-- Body — boxy but rounded -->
+    <rect id="body" x="110" y="120" rx="40" ry="40" width="280" height="340" fill="#14B8A6"/>
+    <!-- Body outline — stops before tread area -->
+    <path fill="none" stroke="#115E59" stroke-width="3.5"
+      d="M150,460 C130,460 115,450 112,430 L110,160 C110,138 128,120 150,120 L350,120 C372,120 390,138 390,160 L388,430 C385,450 370,460 350,460"/>
+
+    <!-- Belly panel / screen showing heart (no stroke) -->
+    <rect id="belly-panel" x="180" y="320" rx="15" ry="15" width="140" height="100" fill="#0D9488"/>
+    <rect id="belly-screen" x="192" y="332" rx="10" ry="10" width="116" height="76" fill="#042F2E"/>
+    <!-- Heart symbol on screen -->
+    <path id="heart-symbol" fill="#FF4081"
+      d="M250,395 C240,385 218,368 218,355 C218,345 225,338 235,338 C242,338 248,342 250,348 C252,342 258,338 265,338 C275,338 282,345 282,355 C282,368 260,385 250,395 Z"/>
+
+    <!-- Bolts/rivets (no stroke) -->
+    <circle id="bolt1" cx="140" cy="155" r="7" fill="#5EEAD4"/>
+    <circle id="bolt2" cx="360" cy="155" r="7" fill="#5EEAD4"/>
+    <circle id="bolt3" cx="140" cy="425" r="7" fill="#5EEAD4"/>
+    <circle id="bolt4" cx="360" cy="425" r="7" fill="#5EEAD4"/>
+    <!-- Bolt inner detail -->
+    <rect x="137" y="152" width="6" height="6" rx="1" fill="#14B8A6"/>
+    <rect x="357" y="152" width="6" height="6" rx="1" fill="#14B8A6"/>
+    <rect x="137" y="422" width="6" height="6" rx="1" fill="#14B8A6"/>
+    <rect x="357" y="422" width="6" height="6" rx="1" fill="#14B8A6"/>
+
+    <!-- Blinking lights along top -->
+    <circle id="light1" cx="175" cy="145" r="5" fill="#FF4081"/>
+    <circle id="light2" cx="210" cy="145" r="5" fill="#FBBF24"/>
+    <circle id="light3" cx="250" cy="145" r="5" fill="#4ADE80"/>
+    <circle id="light4" cx="290" cy="145" r="5" fill="#FBBF24"/>
+    <circle id="light5" cx="325" cy="145" r="5" fill="#FF4081"/>
+
+    <!-- Eyes — square-ish with rectangular pupils, no stroke -->
+    <g id="eye1">
+      <rect x="160" y="185" rx="12" ry="12" width="72" height="68" fill="#F0FFF0"/>
+      <rect x="178" y="200" rx="6" ry="6" width="38" height="40" fill="#14B8A6"/>
+      <rect id="pupil-left" x="188" y="206" rx="3" ry="3" width="18" height="28" fill="#042F2E"/>
+      <rect x="192" y="210" rx="2" ry="2" width="6" height="10" fill="#ffffff"/>
+    </g>
+    <g id="eye2">
+      <rect x="268" y="185" rx="12" ry="12" width="72" height="68" fill="#F0FFF0"/>
+      <rect x="284" y="200" rx="6" ry="6" width="38" height="40" fill="#14B8A6"/>
+      <rect id="pupil-right" x="294" y="206" rx="3" ry="3" width="18" height="28" fill="#042F2E"/>
+      <rect x="298" y="210" rx="2" ry="2" width="6" height="10" fill="#ffffff"/>
+    </g>
+
+    <!-- Mouth — digital display style (rectangular with pixel-like teeth) -->
+    <rect id="mouth" x="190" y="290" rx="8" ry="8" width="120" height="40" fill="#042F2E"/>
+    <!-- Pixel-style smile inside the screen -->
+    <rect id="pixel1" x="200" y="302" width="8" height="8" rx="1" fill="#4ADE80"/>
+    <rect id="pixel2" x="212" y="310" width="8" height="8" rx="1" fill="#4ADE80"/>
+    <rect id="pixel3" x="224" y="314" width="8" height="8" rx="1" fill="#4ADE80"/>
+    <rect id="pixel4" x="236" y="316" width="8" height="8" rx="1" fill="#4ADE80"/>
+    <rect id="pixel5" x="252" y="316" width="8" height="8" rx="1" fill="#4ADE80"/>
+    <rect id="pixel6" x="264" y="314" width="8" height="8" rx="1" fill="#4ADE80"/>
+    <rect id="pixel7" x="276" y="310" width="8" height="8" rx="1" fill="#4ADE80"/>
+    <rect id="pixel8" x="288" y="302" width="8" height="8" rx="1" fill="#4ADE80"/>
+
+    <!-- Cheek blush (no stroke) -->
+    <ellipse id="blush-left" cx="158" cy="275" rx="18" ry="10" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="blush-right" cx="342" cy="275" rx="18" ry="10" fill="#FF8FCF" opacity="0.3"/>
+  </g>
+</svg>

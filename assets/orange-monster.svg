@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg3239"
+   sodipodi:docname="openclipart-logo-2019.svg"
+   inkscape:export-filename="/home/rejon/Pictures/openclipart-scissors-blue.png"
+   viewBox="0 0 2400 2400"
+   inkscape:export-xdpi="90"
+   version="1.1"
+   inkscape:export-ydpi="90"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   width="2400"
+   height="2400">
+  <defs
+     id="defs906" />
+  <sodipodi:namedview
+     id="namedview4055"
+     fit-margin-left="0"
+     inkscape:zoom="0.11041667"
+     borderopacity="1"
+     inkscape:current-layer="svg3239"
+     inkscape:cx="1538.6463"
+     inkscape:cy="1386.2764"
+     inkscape:window-maximized="1"
+     inkscape:snap-bbox="true"
+     showgrid="false"
+     fit-margin-right="0"
+     inkscape:snap-global="true"
+     bordercolor="#ffffff"
+     inkscape:window-x="0"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:window-width="1280"
+     inkscape:window-y="0"
+     fit-margin-bottom="0"
+     inkscape:snap-page="true"
+     inkscape:pageopacity="0.7450980392"
+     inkscape:pageshadow="0"
+     pagecolor="#003af6"
+     gridtolerance="10"
+     inkscape:window-height="778"
+     fit-margin-top="0"
+     borderlayer="true"
+     inkscape:showpageshadow="false"
+     guidecolor="#00ffe4"
+     guideopacity="1"
+     guidehicolor="#f000ff"
+     guidehiopacity="1"
+     inkscape:pagecheckerboard="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:bbox-nodes="true"
+     inkscape:bbox-paths="true" />
+  <path
+     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#0f7f12;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:fill markers stroke;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+     d="M 0,0 H 2400 V 2400 H 0 Z"
+     id="rect7169"
+     inkscape:connector-curvature="0" />
+  <metadata
+     id="metadata903">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title />
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title></dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Lazur URH</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:date>2018</dc:date>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="g924"
+     transform="translate(1.3553836e-5)"
+     style="fill:#ffffff">
+    <path
+       sodipodi:nodetypes="cczzzzzzzzzzczzzzz"
+       inkscape:connector-curvature="0"
+       id="path886"
+       d="m 1852.3834,2353.8895 -689.9307,-979.6433 c 0,0 -139.969,-247.2475 -201.21757,-286.0275 -61.24859,-38.7801 -143.9011,-33.1046 -286.84878,-34.0565 C 531.43867,1053.2102 277.81618,976.87447 174.50357,812.46535 71.190958,648.05623 123.75799,393.9438 245.62083,282.69172 367.48367,171.43964 470.61767,147.84922 640.21221,182.29142 c 169.59454,34.44219 290.49248,208.49381 324.89352,353.63284 34.4009,145.13903 23.355,256.67116 62.85737,352.01974 39.5024,95.34858 228.3032,180.4234 302.132,241.3517 73.8288,60.9283 98.5313,84.134 195.4264,201.2104 96.8951,117.0764 325.4815,486.852 399.5749,640.3502 74.0934,153.4982 35.6805,274.6397 -72.713,383.0332 z M 805.25002,667.83579 C 809.54492,516.35543 742.76903,385.44394 583.78919,362.67856 424.80935,339.91318 291.3706,449.80786 305.72403,612.86647 320.07746,775.92508 407.95525,836.75582 572.77963,872.49391 737.60401,908.232 800.95512,819.31615 805.25002,667.83579 Z"
+       style="fill:#ffffff;stroke-width:3.08355808" />
+    <path
+       style="fill:#ffffff;stroke-width:3.08355808"
+       d="m 547.61664,2352.342 689.93066,-979.6433 c 0,0 139.969,-247.2475 201.2176,-286.0275 61.2486,-38.7801 143.9011,-33.1046 286.8488,-34.0565 142.9476,-0.952 396.5701,-77.28772 499.8827,-241.69684 103.3126,-164.40912 50.7456,-418.52155 -71.1172,-529.77363 -121.8629,-111.25208 -224.9969,-134.8425 -394.5914,-100.4003 -169.5945,34.44219 -290.4925,208.49381 -324.8935,353.63284 -34.4009,145.13903 -23.355,256.67116 -62.8574,352.01974 -39.5024,95.34858 -228.3032,180.42339 -302.132,241.35169 -73.82877,60.9283 -98.53127,84.134 -195.42636,201.2104 -96.8951,117.0764 -325.4815,486.852 -399.5749,640.3502 -74.0934,153.4982 -35.6805,274.6397 72.713,383.0332 z M 1594.75,666.2883 c -4.2949,-151.48036 62.481,-282.39185 221.4608,-305.15723 158.9799,-22.76538 292.4186,87.1293 278.0652,250.18791 -14.3535,163.05861 -102.2312,223.88935 -267.0556,259.62744 C 1662.396,906.68451 1599.0449,817.76866 1594.75,666.2883 Z"
+       id="path906"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cczzzzzzzzzzczzzzz" />
+  </g>
+</svg>

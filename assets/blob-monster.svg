@@ -1,0 +1,108 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="monster">
+    <!-- Arms drawn BEHIND body so body covers the join seamlessly -->
+    <!-- Left arm -->
+    <path id="arm-left" fill="#2563EB"
+      d="M110,280 C85,290 55,310 40,330 C30,345 38,360 52,355 C62,350 78,335 95,315 C105,302 112,290 118,282 Z"/>
+    <path fill="none" stroke="#1E40AF" stroke-width="3.5"
+      d="M110,280 C85,290 55,310 40,330 C30,345 38,360 52,355 C62,350 78,335 95,315"/>
+    <!-- Left hand fingers -->
+    <circle id="hand-left-finger1" cx="42" cy="340" r="8" fill="#60A5FA"/>
+    <circle id="hand-left-finger2" cx="36" cy="350" r="7" fill="#60A5FA"/>
+    <circle id="hand-left-finger3" cx="45" cy="358" r="7" fill="#60A5FA"/>
+
+    <!-- Right arm -->
+    <path id="arm-right" fill="#2563EB"
+      d="M390,280 C415,290 445,310 460,330 C470,345 462,360 448,355 C438,350 422,335 405,315 C395,302 388,290 382,282 Z"/>
+    <path fill="none" stroke="#1E40AF" stroke-width="3.5"
+      d="M390,280 C415,290 445,310 460,330 C470,345 462,360 448,355 C438,350 422,335 405,315"/>
+    <!-- Right hand fingers -->
+    <circle id="hand-right-finger1" cx="458" cy="340" r="8" fill="#60A5FA"/>
+    <circle id="hand-right-finger2" cx="464" cy="350" r="7" fill="#60A5FA"/>
+    <circle id="hand-right-finger3" cx="455" cy="358" r="7" fill="#60A5FA"/>
+
+    <!-- Feet drawn BEHIND body -->
+    <ellipse id="foot-left" cx="195" cy="465" rx="35" ry="18" fill="#2563EB"/>
+    <path fill="none" stroke="#1E40AF" stroke-width="3.5"
+      d="M165,478 C170,483 185,485 195,485 C205,485 220,483 228,475"/>
+    <ellipse id="foot-right" cx="310" cy="465" rx="35" ry="18" fill="#2563EB"/>
+    <path fill="none" stroke="#1E40AF" stroke-width="3.5"
+      d="M278,475 C285,483 298,485 310,485 C322,485 338,483 342,478"/>
+
+    <!-- Antennae drawn BEHIND body top -->
+    <path id="antenna-left" fill="#2563EB"
+      d="M200,130 C195,100 185,65 175,45 L185,45 C192,65 198,100 202,130 Z"/>
+    <path fill="none" stroke="#1E40AF" stroke-width="2.5"
+      d="M200,130 C195,100 185,65 175,45"/>
+    <circle id="antenna-ball-left" cx="175" cy="42" r="12" fill="#FFD93D"/>
+    <circle cx="173" cy="39" r="4" fill="#FFF4B0" opacity="0.7"/>
+
+    <path id="antenna-right" fill="#2563EB"
+      d="M300,130 C305,100 315,65 325,45 L315,45 C308,65 302,100 298,130 Z"/>
+    <path fill="none" stroke="#1E40AF" stroke-width="2.5"
+      d="M300,130 C305,100 315,65 325,45"/>
+    <circle id="antenna-ball-right" cx="325" cy="42" r="12" fill="#FFD93D"/>
+    <circle cx="327" cy="39" r="4" fill="#FFF4B0" opacity="0.7"/>
+
+    <!-- Body main blob — amorphous wobbly shape -->
+    <path id="body" fill="#3B82F6"
+      d="M250,110 C290,105 330,112 362,130 C395,150 418,185 428,225 C438,268 435,310 425,348 C418,375 400,400 375,420 C355,435 325,448 295,455 C270,460 230,460 205,455 C175,448 145,435 125,420 C100,400 82,375 75,348 C65,310 62,268 72,225 C82,185 105,150 138,130 C170,112 210,105 250,110 Z"/>
+    <!-- Body outline — only visible outer contour -->
+    <path fill="none" stroke="#1E40AF" stroke-width="3.5"
+      d="M205,455 C175,448 145,435 125,420 C100,400 82,375 75,348 C65,310 62,268 72,225 C82,185 105,150 138,130 C170,112 210,105 250,110 C290,105 330,112 362,130 C395,150 418,185 428,225 C438,268 435,310 425,348 C418,375 400,400 375,420 C355,435 325,448 295,455"/>
+
+    <!-- Belly lighter area (no stroke — internal) -->
+    <path id="belly" fill="#60A5FA"
+      d="M250,185 C295,182 338,200 352,240 C365,280 360,330 348,370 C340,395 315,415 280,425 L220,425 C185,415 160,395 152,370 C140,330 135,280 148,240 C162,200 205,182 250,185 Z"/>
+
+    <!-- Spots (no stroke — internal detail) -->
+    <circle id="spot1" cx="150" cy="220" r="16" fill="#2563EB" opacity="0.5"/>
+    <circle id="spot2" cx="365" cy="260" r="13" fill="#2563EB" opacity="0.5"/>
+    <circle id="spot3" cx="180" cy="380" r="11" fill="#2563EB" opacity="0.5"/>
+    <circle id="spot4" cx="340" cy="180" r="9" fill="#2563EB" opacity="0.5"/>
+
+    <!-- Trumpet nose -->
+    <g id="nose">
+      <path id="nose-trunk" fill="#60A5FA"
+        d="M245,280 C242,290 238,305 232,318 C228,326 235,332 245,330 L258,330 C268,332 275,326 271,318 C265,305 261,290 258,280 Z"/>
+      <ellipse id="nose-bell" cx="251" cy="332" rx="18" ry="10" fill="#60A5FA"/>
+      <ellipse id="nostril-left" cx="244" cy="330" rx="5" ry="4" fill="#1E40AF"/>
+      <ellipse id="nostril-right" cx="258" cy="330" rx="5" ry="4" fill="#1E40AF"/>
+    </g>
+
+    <!-- Eye 1 (left, large) — no stroke, internal -->
+    <g id="eye1">
+      <ellipse cx="195" cy="230" rx="40" ry="42" fill="#F0FFF0"/>
+      <ellipse cx="200" cy="234" rx="18" ry="20" fill="#3B82F6"/>
+      <circle cx="203" cy="230" r="10" fill="#1E3A8A"/>
+      <circle cx="207" cy="224" r="5" fill="#ffffff"/>
+    </g>
+    <!-- Eye 2 (right, medium) -->
+    <g id="eye2">
+      <ellipse cx="310" cy="225" rx="35" ry="37" fill="#F0FFF0"/>
+      <ellipse cx="306" cy="229" rx="16" ry="18" fill="#3B82F6"/>
+      <circle cx="303" cy="225" r="9" fill="#1E3A8A"/>
+      <circle cx="299" cy="220" r="4.5" fill="#ffffff"/>
+    </g>
+    <!-- Eye 3 (center, small) -->
+    <g id="eye3">
+      <ellipse cx="252" cy="270" rx="22" ry="24" fill="#F0FFF0"/>
+      <ellipse cx="254" cy="273" rx="10" ry="12" fill="#3B82F6"/>
+      <circle cx="255" cy="270" r="6" fill="#1E3A8A"/>
+      <circle cx="257" cy="266" r="3" fill="#ffffff"/>
+    </g>
+
+    <!-- Mouth — big goofy open "O" shape -->
+    <ellipse id="mouth" cx="252" cy="365" rx="40" ry="32" fill="#1E3A8A"/>
+    <!-- Two big cute rounded front teeth hanging from top of mouth -->
+    <g id="teeth">
+      <ellipse id="tooth-left" cx="241" cy="348" rx="14" ry="18" fill="#ffffff"/>
+      <ellipse id="tooth-right" cx="263" cy="348" rx="14" ry="18" fill="#ffffff"/>
+    </g>
+
+    <!-- Cheek blush (no stroke) -->
+    <ellipse id="blush-left" cx="140" cy="310" rx="20" ry="12" fill="#FF8FCF" opacity="0.35"/>
+    <ellipse id="blush-right" cx="365" cy="305" rx="20" ry="12" fill="#FF8FCF" opacity="0.35"/>
+  </g>
+</svg>

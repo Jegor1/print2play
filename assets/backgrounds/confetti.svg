@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Scattered confetti shapes in pastel colors -->
+  <!-- Circles -->
+  <circle cx="60" cy="45" r="6" fill="#ffb3ba" opacity="0.2"/>
+  <circle cx="250" cy="90" r="5" fill="#bae1ff" opacity="0.25"/>
+  <circle cx="480" cy="30" r="7" fill="#baffc9" opacity="0.18"/>
+  <circle cx="700" cy="70" r="5" fill="#ffffba" opacity="0.22"/>
+  <circle cx="150" cy="250" r="6" fill="#e8baff" opacity="0.2"/>
+  <circle cx="400" cy="300" r="5" fill="#ffb3ba" opacity="0.15"/>
+  <circle cx="620" cy="220" r="7" fill="#bae1ff" opacity="0.2"/>
+  <circle cx="80" cy="450" r="5" fill="#baffc9" opacity="0.25"/>
+  <circle cx="350" cy="500" r="6" fill="#ffffba" opacity="0.18"/>
+  <circle cx="550" cy="430" r="5" fill="#e8baff" opacity="0.22"/>
+  <circle cx="750" cy="520" r="7" fill="#ffb3ba" opacity="0.2"/>
+  <!-- Squares (rotated) -->
+  <rect x="120" y="60" width="10" height="10" fill="#bae1ff" opacity="0.2" transform="rotate(30 125 65)"/>
+  <rect x="380" y="120" width="8" height="8" fill="#baffc9" opacity="0.18" transform="rotate(45 384 124)"/>
+  <rect x="580" y="50" width="12" height="12" fill="#e8baff" opacity="0.22" transform="rotate(15 586 56)"/>
+  <rect x="200" y="350" width="10" height="10" fill="#ffffba" opacity="0.2" transform="rotate(60 205 355)"/>
+  <rect x="500" y="280" width="8" height="8" fill="#ffb3ba" opacity="0.25" transform="rotate(25 504 284)"/>
+  <rect x="700" y="380" width="11" height="11" fill="#bae1ff" opacity="0.15" transform="rotate(40 706 386)"/>
+  <rect x="50" y="550" width="9" height="9" fill="#baffc9" opacity="0.2" transform="rotate(55 55 555)"/>
+  <rect x="450" y="480" width="10" height="10" fill="#e8baff" opacity="0.18" transform="rotate(35 455 485)"/>
+  <rect x="680" y="550" width="8" height="8" fill="#ffffba" opacity="0.22" transform="rotate(20 684 554)"/>
+  <!-- Triangles -->
+  <polygon points="320,40 328,55 312,55" fill="#ffb3ba" opacity="0.2"/>
+  <polygon points="550,130 558,145 542,145" fill="#bae1ff" opacity="0.18"/>
+  <polygon points="80,170 88,185 72,185" fill="#baffc9" opacity="0.22"/>
+  <polygon points="720,160 728,175 712,175" fill="#ffffba" opacity="0.15"/>
+  <polygon points="280,280 288,295 272,295" fill="#e8baff" opacity="0.25"/>
+  <polygon points="600,350 608,365 592,365" fill="#ffb3ba" opacity="0.2"/>
+  <polygon points="160,480 168,495 152,495" fill="#bae1ff" opacity="0.18"/>
+  <polygon points="440,560 448,575 432,575" fill="#baffc9" opacity="0.22"/>
+  <polygon points="760,440 768,455 752,455" fill="#e8baff" opacity="0.2"/>
+  <!-- Small diamond shapes -->
+  <polygon points="190,130 198,140 190,150 182,140" fill="#ffffba" opacity="0.2"/>
+  <polygon points="430,200 438,210 430,220 422,210" fill="#ffb3ba" opacity="0.15"/>
+  <polygon points="650,290 658,300 650,310 642,300" fill="#bae1ff" opacity="0.22"/>
+  <polygon points="100,380 108,390 100,400 92,390" fill="#baffc9" opacity="0.18"/>
+  <polygon points="530,530 538,540 530,550 522,540" fill="#e8baff" opacity="0.2"/>
+</svg>

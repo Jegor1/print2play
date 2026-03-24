@@ -1,0 +1,104 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="monster">
+    <!-- Legs drawn BEHIND body -->
+    <path id="leg-left" fill="#DB2777"
+      d="M175,400 C170,430 165,460 162,485 C160,500 170,510 182,508 C194,506 195,495 193,480 C190,460 188,435 190,410 Z"/>
+    <path fill="none" stroke="#9D174D" stroke-width="3.5"
+      d="M175,400 C170,430 165,460 162,485 C160,500 170,510 182,508 C194,506 195,495 193,480"/>
+    <!-- Left foot -->
+    <ellipse id="foot-left" cx="175" cy="510" rx="25" ry="12" fill="#DB2777"/>
+    <path fill="none" stroke="#9D174D" stroke-width="3"
+      d="M152,515 C160,522 172,524 178,524 C185,524 195,520 200,515"/>
+
+    <path id="leg-right" fill="#DB2777"
+      d="M310,410 C312,435 310,460 307,480 C305,495 306,506 318,508 C330,510 340,500 338,485 C335,460 330,430 325,400 Z"/>
+    <path fill="none" stroke="#9D174D" stroke-width="3.5"
+      d="M325,400 C330,430 335,460 338,485 C340,500 330,510 318,508 C306,506 305,495 307,480"/>
+    <!-- Right foot -->
+    <ellipse id="foot-right" cx="325" cy="510" rx="25" ry="12" fill="#DB2777"/>
+    <path fill="none" stroke="#9D174D" stroke-width="3"
+      d="M302,515 C308,522 318,524 325,524 C335,524 345,520 350,515"/>
+
+    <!-- Fluffy tail (behind body, right side) -->
+    <path id="tail" fill="#EC4899"
+      d="M385,320 C410,310 440,295 458,275 C470,260 475,250 465,248 C455,246 438,260 420,278 C405,295 392,310 385,320 Z"/>
+    <path fill="none" stroke="#9D174D" stroke-width="3"
+      d="M385,320 C410,310 440,295 458,275 C470,260 475,250 465,248 C455,246 438,260 420,278"/>
+    <!-- Fluffy tail poof -->
+    <circle id="tail-poof1" cx="462" cy="258" r="15" fill="#F9A8D4"/>
+    <circle id="tail-poof2" cx="470" cy="248" r="12" fill="#F9A8D4"/>
+    <circle id="tail-poof3" cx="458" cy="244" r="13" fill="#F9A8D4"/>
+
+    <!-- Body — round fluffy with scalloped fur-like edges -->
+    <path id="body" fill="#EC4899"
+      d="M250,100 C275,98 300,102 322,112 C330,108 338,112 335,120 C358,132 375,150 386,172 C394,168 400,174 395,182 C406,200 412,222 414,245 C422,244 424,252 418,256 C418,278 414,300 406,320 C414,322 414,330 406,330 C396,348 382,362 365,375 C370,380 366,388 358,385 C340,396 318,404 295,408 C296,416 290,418 285,414 C272,417 258,418 245,418 C232,418 218,417 205,414 C200,418 194,416 195,408 C172,404 150,396 132,385 C124,388 120,380 125,375 C108,362 94,348 84,330 C76,330 76,322 84,320 C76,300 72,278 72,256 C66,252 68,244 76,245 C78,222 84,200 95,182 C90,174 96,168 104,172 C115,150 132,132 155,120 C152,112 160,108 168,112 C190,102 215,98 250,100 Z"/>
+    <!-- Body outline — scalloped contour -->
+    <path fill="none" stroke="#9D174D" stroke-width="3.5"
+      d="M195,408 C172,404 150,396 132,385 C124,388 120,380 125,375 C108,362 94,348 84,330 C76,330 76,322 84,320 C76,300 72,278 72,256 C66,252 68,244 76,245 C78,222 84,200 95,182 C90,174 96,168 104,172 C115,150 132,132 155,120 C152,112 160,108 168,112 C190,102 215,98 250,100 C275,98 300,102 322,112 C330,108 338,112 335,120 C358,132 375,150 386,172 C394,168 400,174 395,182 C406,200 412,222 414,245 C422,244 424,252 418,256 C418,278 414,300 406,320 C414,322 414,330 406,330 C396,348 382,362 365,375 C370,380 366,388 358,385 C340,396 318,404 295,408"/>
+
+    <!-- Belly patch (no stroke — internal) -->
+    <path id="belly" fill="#F9A8D4"
+      d="M250,180 C295,178 335,200 345,240 C355,280 350,325 340,360 C332,382 310,400 275,408 L225,408 C190,400 168,382 160,360 C150,325 145,280 155,240 C165,200 205,178 250,180 Z"/>
+
+    <!-- Horn on top (small, cute) -->
+    <path id="horn" fill="#FBBF24"
+      d="M250,102 C248,78 245,52 250,35 C255,52 252,78 250,102 Z"/>
+    <path fill="none" stroke="#9D174D" stroke-width="2.5"
+      d="M248,102 C246,78 243,52 250,35 C257,52 254,78 252,102"/>
+
+    <!-- Trumpet ears -->
+    <g id="ear-left">
+      <path id="ear-left-shape" fill="#EC4899"
+        d="M115,175 C95,155 70,140 52,135 C40,132 35,142 42,150 C52,162 75,178 100,188 Z"/>
+      <path fill="none" stroke="#9D174D" stroke-width="3"
+        d="M115,175 C95,155 70,140 52,135 C40,132 35,142 42,150 C52,162 75,178 100,188"/>
+      <ellipse id="ear-left-inner" cx="58" cy="145" rx="14" ry="10" fill="#F9A8D4" transform="rotate(-35 58 145)"/>
+    </g>
+    <g id="ear-right">
+      <path id="ear-right-shape" fill="#EC4899"
+        d="M385,175 C405,155 430,140 448,135 C460,132 465,142 458,150 C448,162 425,178 400,188 Z"/>
+      <path fill="none" stroke="#9D174D" stroke-width="3"
+        d="M385,175 C405,155 430,140 448,135 C460,132 465,142 458,150 C448,162 425,178 400,188"/>
+      <ellipse id="ear-right-inner" cx="442" cy="145" rx="14" ry="10" fill="#F9A8D4" transform="rotate(35 442 145)"/>
+    </g>
+
+    <!-- Bow/ribbon on head -->
+    <g id="bow">
+      <path id="bow-left" fill="#FF4081"
+        d="M280,108 C295,88 315,82 320,90 C325,98 308,105 290,112 Z"/>
+      <path id="bow-right" fill="#FF4081"
+        d="M290,112 C310,118 328,128 325,136 C322,144 305,132 290,118 Z"/>
+      <circle id="bow-center" cx="288" cy="112" r="8" fill="#E91E63"/>
+    </g>
+
+    <!-- Eye 1 (left, bigger) — no stroke -->
+    <g id="eye1">
+      <ellipse cx="200" cy="235" rx="42" ry="45" fill="#F0FFF0"/>
+      <ellipse cx="205" cy="240" rx="20" ry="22" fill="#EC4899"/>
+      <circle cx="208" cy="236" r="11" fill="#9D174D"/>
+      <circle cx="212" cy="230" r="5" fill="#ffffff"/>
+    </g>
+    <!-- Eye 2 (right, smaller — cute asymmetry) -->
+    <g id="eye2">
+      <ellipse cx="310" cy="240" rx="34" ry="36" fill="#F0FFF0"/>
+      <ellipse cx="306" cy="244" rx="16" ry="18" fill="#EC4899"/>
+      <circle cx="303" cy="240" r="9" fill="#9D174D"/>
+      <circle cx="299" cy="235" r="4" fill="#ffffff"/>
+    </g>
+
+    <!-- Mouth — cute closed smile -->
+    <path id="mouth" fill="none" stroke="#9D174D" stroke-width="3"
+      d="M195,320 Q222,348 250,348 Q278,348 305,320"/>
+
+    <!-- Rosy cheeks (no stroke) -->
+    <ellipse id="blush-left" cx="155" cy="300" rx="22" ry="14" fill="#FF8FCF" opacity="0.4"/>
+    <ellipse id="blush-right" cx="355" cy="300" rx="22" ry="14" fill="#FF8FCF" opacity="0.4"/>
+
+    <!-- Small round nose -->
+    <g id="nose">
+      <ellipse id="nose-shape" cx="255" cy="295" rx="14" ry="11" fill="#DB2777"/>
+      <ellipse id="nose-highlight" cx="253" cy="292" rx="5" ry="4" fill="#F9A8D4" opacity="0.5"/>
+    </g>
+  </g>
+</svg>

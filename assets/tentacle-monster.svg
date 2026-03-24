@@ -1,0 +1,116 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="monster">
+    <!-- Tentacles drawn BEHIND body so body covers the join seamlessly -->
+    <!-- Tentacle 1 (far left) -->
+    <path id="tentacle1" fill="#7B2FBE"
+      d="M155,380 C140,420 110,465 95,490 C80,515 68,535 82,542 C96,549 118,530 138,505 C158,480 168,440 175,400 Z"/>
+    <!-- Tentacle 2 (center-left) -->
+    <path id="tentacle2" fill="#7B2FBE"
+      d="M205,400 C198,435 182,475 172,500 C162,525 152,545 168,548 C184,551 202,525 215,498 C228,471 232,435 233,405 Z"/>
+    <!-- Tentacle 3 (center-right) -->
+    <path id="tentacle3" fill="#7B2FBE"
+      d="M275,405 C278,435 282,471 295,498 C308,525 326,551 342,548 C358,545 348,525 338,500 C328,475 312,435 305,400 Z"/>
+    <!-- Tentacle 4 (far right) -->
+    <path id="tentacle4" fill="#7B2FBE"
+      d="M335,400 C342,440 352,480 372,505 C392,530 414,549 428,542 C442,535 430,515 415,490 C400,465 370,420 355,380 Z"/>
+    <!-- Tentacle outer stroke only (drawn as a single combined outline) -->
+    <path fill="none" stroke="#4A1A72" stroke-width="3.5"
+      d="M155,380 C140,420 110,465 95,490 C80,515 68,535 82,542 C96,549 118,530 138,505 C158,480 168,440 175,400"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="3.5"
+      d="M205,400 C198,435 182,475 172,500 C162,525 152,545 168,548 C184,551 202,525 215,498 C228,471 232,435 233,405"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="3.5"
+      d="M275,405 C278,435 282,471 295,498 C308,525 326,551 342,548 C358,545 348,525 338,500 C328,475 312,435 305,400"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="3.5"
+      d="M335,400 C342,440 352,480 372,505 C392,530 414,549 428,542 C442,535 430,515 415,490 C400,465 370,420 355,380"/>
+    <!-- Tentacle suckers (no stroke, internal detail) -->
+    <circle id="sucker1a" cx="92" cy="518" r="6" fill="#9B4FDE"/>
+    <circle id="sucker1b" cx="110" cy="498" r="5" fill="#9B4FDE"/>
+    <circle id="sucker1c" cx="125" cy="478" r="4" fill="#9B4FDE"/>
+    <circle id="sucker2a" cx="175" cy="520" r="6" fill="#9B4FDE"/>
+    <circle id="sucker2b" cx="188" cy="500" r="5" fill="#9B4FDE"/>
+    <circle id="sucker3a" cx="333" cy="520" r="6" fill="#9B4FDE"/>
+    <circle id="sucker3b" cx="322" cy="500" r="5" fill="#9B4FDE"/>
+    <circle id="sucker4a" cx="418" cy="518" r="6" fill="#9B4FDE"/>
+    <circle id="sucker4b" cx="400" cy="498" r="5" fill="#9B4FDE"/>
+    <circle id="sucker4c" cx="385" cy="478" r="4" fill="#9B4FDE"/>
+
+    <!-- Body main blob (covers tentacle tops) -->
+    <path id="body" fill="#7B2FBE"
+      d="M250,80 C310,75 385,105 415,170 C445,235 438,305 420,355 C408,385 378,408 345,420 C320,428 290,432 250,432 C210,432 180,428 155,420 C122,408 92,385 80,355 C62,305 55,235 85,170 C115,105 190,75 250,80 Z"/>
+    <!-- Body outline — only the TOP arc, stops before tentacle area -->
+    <path fill="none" stroke="#4A1A72" stroke-width="3.5"
+      d="M155,420 C122,408 92,385 80,355 C62,305 55,235 85,170 C115,105 190,75 250,80 C310,75 385,105 415,170 C445,235 438,305 420,355 C408,385 378,408 345,420"/>
+
+    <!-- Body belly lighter area (no stroke - internal) -->
+    <path id="belly" fill="#9B4FDE"
+      d="M250,155 C298,152 345,178 360,230 C375,282 370,335 355,372 C344,398 312,412 272,416 L228,416 C188,412 156,398 145,372 C130,335 125,282 140,230 C155,178 202,152 250,155 Z"/>
+
+    <!-- Spots on body (no stroke - internal detail) -->
+    <circle id="spot1" cx="160" cy="210" r="18" fill="#6B25A8" opacity="0.5"/>
+    <circle id="spot2" cx="350" cy="250" r="14" fill="#6B25A8" opacity="0.5"/>
+    <circle id="spot3" cx="195" cy="360" r="12" fill="#6B25A8" opacity="0.5"/>
+    <circle id="spot4" cx="320" cy="170" r="10" fill="#6B25A8" opacity="0.5"/>
+
+    <!-- Horns/antennae (these protrude from body top - drawn over body) -->
+    <path id="horn-left" fill="#FF6B35"
+      d="M185,100 C180,72 168,42 158,28 C152,20 160,14 167,20 C178,32 192,68 197,95 Z"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="2.5"
+      d="M185,100 C180,72 168,42 158,28 C152,20 160,14 167,20 C178,32 192,68 197,95"/>
+    <path id="horn-right" fill="#FF6B35"
+      d="M315,100 C320,72 332,42 342,28 C348,20 340,14 333,20 C322,32 308,68 303,95 Z"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="2.5"
+      d="M315,100 C320,72 332,42 342,28 C348,20 340,14 333,20 C322,32 308,68 303,95"/>
+
+    <!-- Horn tip balls (no stroke - soft glow) -->
+    <circle id="horn-tip-left" cx="158" cy="24" r="9" fill="#FFD93D"/>
+    <circle cx="156" cy="21" r="3.5" fill="#FFF4B0" opacity="0.7"/>
+    <circle id="horn-tip-right" cx="342" cy="24" r="9" fill="#FFD93D"/>
+    <circle cx="344" cy="21" r="3.5" fill="#FFF4B0" opacity="0.7"/>
+
+    <!-- Eye 1 (top-left, large) — no stroke, internal to body -->
+    <g id="eye1">
+      <ellipse cx="195" cy="200" rx="42" ry="44" fill="#F0FFF0"/>
+      <ellipse cx="200" cy="205" rx="20" ry="22" fill="#2BAE66"/>
+      <circle cx="203" cy="200" r="11" fill="#1A6B3C"/>
+      <circle cx="207" cy="194" r="5" fill="#ffffff"/>
+    </g>
+    <!-- Eye 2 (top-right, large) -->
+    <g id="eye2">
+      <ellipse cx="305" cy="200" rx="42" ry="44" fill="#F0FFF0"/>
+      <ellipse cx="300" cy="205" rx="20" ry="22" fill="#2BAE66"/>
+      <circle cx="297" cy="200" r="11" fill="#1A6B3C"/>
+      <circle cx="293" cy="194" r="5" fill="#ffffff"/>
+    </g>
+    <!-- Eye 3 (bottom-left, small) -->
+    <g id="eye3">
+      <ellipse cx="220" cy="268" rx="24" ry="26" fill="#F0FFF0"/>
+      <ellipse cx="223" cy="271" rx="12" ry="14" fill="#2BAE66"/>
+      <circle cx="225" cy="268" r="7" fill="#1A6B3C"/>
+      <circle cx="227" cy="264" r="3" fill="#ffffff"/>
+    </g>
+    <!-- Eye 4 (bottom-right, small) -->
+    <g id="eye4">
+      <ellipse cx="280" cy="268" rx="24" ry="26" fill="#F0FFF0"/>
+      <ellipse cx="277" cy="271" rx="12" ry="14" fill="#2BAE66"/>
+      <circle cx="275" cy="268" r="7" fill="#1A6B3C"/>
+      <circle cx="273" cy="264" r="3" fill="#ffffff"/>
+    </g>
+
+    <!-- Mouth — wobbly silly open mouth -->
+    <path id="mouth" fill="#3D0F5C"
+      d="M195,320 C205,310 220,308 250,310 C280,308 295,310 305,320 C300,355 280,375 250,378 C220,375 200,355 195,320 Z"/>
+    <!-- Single snaggletooth hanging from top-left of mouth -->
+    <path id="tooth1" fill="#ffffff"
+      d="M218,318 Q222,338 228,318 Z"/>
+
+    <!-- Cheek blush (no stroke) -->
+    <ellipse id="blush-left" cx="148" cy="300" rx="22" ry="13" fill="#FF8FCF" opacity="0.35"/>
+    <ellipse id="blush-right" cx="352" cy="300" rx="22" ry="13" fill="#FF8FCF" opacity="0.35"/>
+
+    <!-- Small warts/bumps -->
+    <circle id="wart1" cx="135" cy="255" r="5" fill="#6B25A8"/>
+    <circle id="wart2" cx="370" cy="225" r="6" fill="#6B25A8"/>
+    <circle id="wart3" cx="310" cy="390" r="4" fill="#6B25A8"/>
+  </g>
+</svg>

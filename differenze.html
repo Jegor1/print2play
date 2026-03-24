@@ -87,7 +87,7 @@
             flex-direction: column;
             gap: 6px;
             flex: 1;
-            min-width: 160px;
+            min-width: 140px;
         }
 
         .control-group label {
@@ -98,7 +98,7 @@
             letter-spacing: 0.04em;
         }
 
-        select {
+        select, input[type="color"] {
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             padding: 10px 14px;
@@ -110,7 +110,14 @@
             transition: border-color 0.15s;
         }
 
-        select:focus {
+        input[type="color"] {
+            height: 42px;
+            width: 100%;
+            cursor: pointer;
+            padding: 4px 6px;
+        }
+
+        select:focus, input[type="color"]:focus {
             border-color: var(--primary);
         }
 
@@ -212,6 +219,11 @@
             margin-top: 24px;
         }
 
+        footer p + p {
+            margin-top: 4px;
+            font-size: 0.78rem;
+        }
+
         @media (max-width: 640px) {
             .scenes-container {
                 grid-template-columns: 1fr;
@@ -257,16 +269,14 @@
     <main class="container">
         <div class="controls">
             <div class="control-group">
-                <label for="scene-select">Scena</label>
-                <select id="scene-select">
-                    <option value="fattoria">Fattoria</option>
-                    <option value="parco">Parco giochi</option>
-                    <option value="camera">Camera da letto</option>
-                    <option value="cucina">Cucina</option>
-                    <option value="giardino">Giardino</option>
-                    <option value="spiaggia">Spiaggia</option>
-                    <option value="classe">Classe scolastica</option>
-                    <option value="spazio">Spazio</option>
+                <label for="character-select">Personaggio</label>
+                <select id="character-select">
+                    <option value="tentacle">Mostro Tentacoli</option>
+                    <option value="blob">Blob</option>
+                    <option value="fluffy">Peloso</option>
+                    <option value="cyclops">Ciclope</option>
+                    <option value="dragon">Draghetto</option>
+                    <option value="robot">Robot</option>
                 </select>
             </div>
             <div class="control-group">
@@ -278,831 +288,666 @@
                     <option value="estremo">Estremo</option>
                 </select>
             </div>
+            <div class="control-group">
+                <label for="bg-color">Sfondo</label>
+                <input type="color" id="bg-color" value="#E8F5E9">
+            </div>
             <button class="btn btn-primary" onclick="generate()">Genera</button>
             <button class="btn btn-secondary" onclick="window.print()">Stampa</button>
             <button class="btn btn-secondary" onclick="exportPDF()">PDF</button>
         </div>
 
         <div class="scenes-wrapper" id="output">
-            <div class="placeholder-msg">Seleziona una scena e premi <strong>Genera</strong> per creare il gioco.</div>
+            <div class="placeholder-msg">Seleziona un personaggio e premi <strong>Genera</strong> per creare il gioco.</div>
         </div>
     </main>
 
     <footer>
         <p>Print2Play &mdash; Stampa, gioca, impara.</p>
+        <p>Illustrazioni originali create per Print2Play. Alcune illustrazioni da OpenClipart.org (CC0 Public Domain).</p>
     </footer>
 
-    <!-- ==================== SVG SCENE TEMPLATES ==================== -->
-    <!-- Each template is a hidden SVG that JS will clone and modify -->
+    <!-- ==================== MONSTER SVG TEMPLATES ==================== -->
 
-    <template id="tpl-fattoria">
-        <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <!-- Sky gradient -->
-                <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#4DA6E8"/>
-                    <stop offset="60%" stop-color="#87CEEB"/>
-                    <stop offset="100%" stop-color="#C9E8F7"/>
-                </linearGradient>
-                <!-- Sun radial -->
-                <radialGradient id="sunGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#FFF7A0"/>
-                    <stop offset="50%" stop-color="#FFE44D"/>
-                    <stop offset="100%" stop-color="#FFA726"/>
-                </radialGradient>
-                <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#FFE44D" stop-opacity="0.4"/>
-                    <stop offset="100%" stop-color="#FFE44D" stop-opacity="0"/>
-                </radialGradient>
-                <!-- Hill gradients -->
-                <linearGradient id="hillFarGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#6DBF5B"/>
-                    <stop offset="100%" stop-color="#4A8F3C"/>
-                </linearGradient>
-                <linearGradient id="hillMidGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#5BB84A"/>
-                    <stop offset="100%" stop-color="#3D7A30"/>
-                </linearGradient>
-                <linearGradient id="hillNearGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#4CAF50"/>
-                    <stop offset="100%" stop-color="#2E7D32"/>
-                </linearGradient>
-                <!-- Barn wall -->
-                <linearGradient id="barnWallGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#D32F2F"/>
-                    <stop offset="100%" stop-color="#B71C1C"/>
-                </linearGradient>
-                <!-- Barn roof -->
-                <linearGradient id="barnRoofGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#8D6E63"/>
-                    <stop offset="100%" stop-color="#5D4037"/>
-                </linearGradient>
-                <!-- Tree canopy -->
-                <radialGradient id="treeCanopyGrad" cx="45%" cy="40%" r="55%">
-                    <stop offset="0%" stop-color="#43A047"/>
-                    <stop offset="100%" stop-color="#1B5E20"/>
-                </radialGradient>
-                <!-- Tree trunk -->
-                <linearGradient id="treeTrunkGrad" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#5D4037"/>
-                    <stop offset="50%" stop-color="#8D6E63"/>
-                    <stop offset="100%" stop-color="#4E342E"/>
-                </linearGradient>
-                <!-- Cow body -->
-                <radialGradient id="cowBodyGrad" cx="50%" cy="40%" r="55%">
-                    <stop offset="0%" stop-color="#FFFFFF"/>
-                    <stop offset="100%" stop-color="#E0E0E0"/>
-                </radialGradient>
-                <!-- Pig body -->
-                <radialGradient id="pigBodyGrad" cx="45%" cy="40%" r="55%">
-                    <stop offset="0%" stop-color="#FFABCF"/>
-                    <stop offset="100%" stop-color="#E8769E"/>
-                </radialGradient>
-                <!-- Tractor body -->
-                <linearGradient id="tractorBodyGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#F44336"/>
-                    <stop offset="40%" stop-color="#E53935"/>
-                    <stop offset="100%" stop-color="#C62828"/>
-                </linearGradient>
-                <!-- Tractor wheel -->
-                <radialGradient id="wheelGrad" cx="45%" cy="40%" r="50%">
-                    <stop offset="0%" stop-color="#555"/>
-                    <stop offset="100%" stop-color="#222"/>
-                </radialGradient>
-                <!-- Pond -->
-                <radialGradient id="pondGrad" cx="50%" cy="45%" r="55%">
-                    <stop offset="0%" stop-color="#4FC3F7"/>
-                    <stop offset="100%" stop-color="#0277BD"/>
-                </radialGradient>
-                <!-- Mud puddle -->
-                <radialGradient id="mudGrad" cx="50%" cy="50%" r="55%">
-                    <stop offset="0%" stop-color="#A1887F"/>
-                    <stop offset="100%" stop-color="#6D4C41"/>
-                </radialGradient>
-                <!-- Hay bale -->
-                <linearGradient id="hayGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#FFD54F"/>
-                    <stop offset="100%" stop-color="#F9A825"/>
-                </linearGradient>
-                <!-- Fence -->
-                <linearGradient id="fenceGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#FAFAFA"/>
-                    <stop offset="100%" stop-color="#E0E0E0"/>
-                </linearGradient>
-                <!-- Apple -->
-                <radialGradient id="appleGrad" cx="40%" cy="35%" r="55%">
-                    <stop offset="0%" stop-color="#FF5252"/>
-                    <stop offset="100%" stop-color="#C62828"/>
-                </radialGradient>
-                <!-- Chicken body -->
-                <radialGradient id="chickenGrad" cx="45%" cy="40%" r="55%">
-                    <stop offset="0%" stop-color="#FFF8E1"/>
-                    <stop offset="100%" stop-color="#FFD54F"/>
-                </radialGradient>
-                <!-- Dirt path -->
-                <linearGradient id="dirtGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#D7CCC8"/>
-                    <stop offset="100%" stop-color="#A1887F"/>
-                </linearGradient>
-                <!-- Cloud gradient -->
-                <radialGradient id="cloudGrad" cx="50%" cy="40%" r="55%">
-                    <stop offset="0%" stop-color="#FFFFFF"/>
-                    <stop offset="100%" stop-color="#E8EAF0"/>
-                </radialGradient>
-                <!-- Barn door wood -->
-                <linearGradient id="barnDoorGrad" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#5D4037"/>
-                    <stop offset="50%" stop-color="#795548"/>
-                    <stop offset="100%" stop-color="#4E342E"/>
-                </linearGradient>
-                <!-- Barn hayloft glow -->
-                <radialGradient id="hayloftGlowGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#FFE082"/>
-                    <stop offset="100%" stop-color="#FFB300"/>
-                </radialGradient>
-                <!-- Bucket -->
-                <linearGradient id="bucketGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#90CAF9"/>
-                    <stop offset="100%" stop-color="#1565C0"/>
-                </linearGradient>
-                <!-- Flower petal gradients -->
-                <radialGradient id="flowerRedGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#FF7043"/>
-                    <stop offset="100%" stop-color="#D32F2F"/>
-                </radialGradient>
-                <radialGradient id="flowerYellowGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#FFF176"/>
-                    <stop offset="100%" stop-color="#FBC02D"/>
-                </radialGradient>
-                <radialGradient id="flowerPurpleGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#CE93D8"/>
-                    <stop offset="100%" stop-color="#7B1FA2"/>
-                </radialGradient>
-                <!-- Drop shadows -->
-                <filter id="shadow" x="-10%" y="-10%" width="130%" height="140%">
-                    <feDropShadow dx="2" dy="3" stdDeviation="2.5" flood-color="#000" flood-opacity="0.18"/>
-                </filter>
-                <filter id="shadowSm" x="-10%" y="-10%" width="130%" height="140%">
-                    <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#000" flood-opacity="0.15"/>
-                </filter>
-                <filter id="shadowLg" x="-10%" y="-10%" width="130%" height="140%">
-                    <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000" flood-opacity="0.2"/>
-                </filter>
-                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
-                    <feMerge>
-                        <feMergeNode in="blur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                </filter>
-            </defs>
+    <template id="tpl-tentacle">
+        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Tentacles drawn BEHIND body so body covers the join seamlessly -->
+            <!-- Tentacle 1 (far left) -->
+            <path id="tentacle1" fill="#7B2FBE"
+              d="M155,380 C140,420 110,465 95,490 C80,515 68,535 82,542 C96,549 118,530 138,505 C158,480 168,440 175,400 Z"/>
+            <!-- Tentacle 2 (center-left) -->
+            <path id="tentacle2" fill="#7B2FBE"
+              d="M205,400 C198,435 182,475 172,500 C162,525 152,545 168,548 C184,551 202,525 215,498 C228,471 232,435 233,405 Z"/>
+            <!-- Tentacle 3 (center-right) -->
+            <path id="tentacle3" fill="#7B2FBE"
+              d="M275,405 C278,435 282,471 295,498 C308,525 326,551 342,548 C358,545 348,525 338,500 C328,475 312,435 305,400 Z"/>
+            <!-- Tentacle 4 (far right) -->
+            <path id="tentacle4" fill="#7B2FBE"
+              d="M335,400 C342,440 352,480 372,505 C392,530 414,549 428,542 C442,535 430,515 415,490 C400,465 370,420 355,380 Z"/>
+            <!-- Tentacle outer stroke only -->
+            <path fill="none" stroke="#4A1A72" stroke-width="3.5"
+              d="M155,380 C140,420 110,465 95,490 C80,515 68,535 82,542 C96,549 118,530 138,505 C158,480 168,440 175,400"/>
+            <path fill="none" stroke="#4A1A72" stroke-width="3.5"
+              d="M205,400 C198,435 182,475 172,500 C162,525 152,545 168,548 C184,551 202,525 215,498 C228,471 232,435 233,405"/>
+            <path fill="none" stroke="#4A1A72" stroke-width="3.5"
+              d="M275,405 C278,435 282,471 295,498 C308,525 326,551 342,548 C358,545 348,525 338,500 C328,475 312,435 305,400"/>
+            <path fill="none" stroke="#4A1A72" stroke-width="3.5"
+              d="M335,400 C342,440 352,480 372,505 C392,530 414,549 428,542 C442,535 430,515 415,490 C400,465 370,420 355,380"/>
+            <!-- Tentacle suckers -->
+            <circle id="sucker1a" cx="92" cy="518" r="6" fill="#9B4FDE"/>
+            <circle id="sucker1b" cx="110" cy="498" r="5" fill="#9B4FDE"/>
+            <circle id="sucker1c" cx="125" cy="478" r="4" fill="#9B4FDE"/>
+            <circle id="sucker2a" cx="175" cy="520" r="6" fill="#9B4FDE"/>
+            <circle id="sucker2b" cx="188" cy="500" r="5" fill="#9B4FDE"/>
+            <circle id="sucker3a" cx="333" cy="520" r="6" fill="#9B4FDE"/>
+            <circle id="sucker3b" cx="322" cy="500" r="5" fill="#9B4FDE"/>
+            <circle id="sucker4a" cx="418" cy="518" r="6" fill="#9B4FDE"/>
+            <circle id="sucker4b" cx="400" cy="498" r="5" fill="#9B4FDE"/>
+            <circle id="sucker4c" cx="385" cy="478" r="4" fill="#9B4FDE"/>
 
-            <!-- ===== BACKGROUND LAYER ===== -->
+            <!-- Body main blob -->
+            <path id="body" fill="#7B2FBE"
+              d="M250,80 C310,75 385,105 415,170 C445,235 438,305 420,355 C408,385 378,408 345,420 C320,428 290,432 250,432 C210,432 180,428 155,420 C122,408 92,385 80,355 C62,305 55,235 85,170 C115,105 190,75 250,80 Z"/>
+            <path fill="none" stroke="#4A1A72" stroke-width="3.5"
+              d="M155,420 C122,408 92,385 80,355 C62,305 55,235 85,170 C115,105 190,75 250,80 C310,75 385,105 415,170 C445,235 438,305 420,355 C408,385 378,408 345,420"/>
 
-            <!-- Sky -->
-            <rect x="0" y="0" width="800" height="500" fill="url(#skyGrad)"/>
+            <!-- Body belly -->
+            <path id="belly" fill="#9B4FDE"
+              d="M250,155 C298,152 345,178 360,230 C375,282 370,335 355,372 C344,398 312,412 272,416 L228,416 C188,412 156,398 145,372 C130,335 125,282 140,230 C155,178 202,152 250,155 Z"/>
 
-            <!-- Sun with glow -->
-            <g id="el-sole" data-size="large" data-name="sole">
-                <circle cx="680" cy="75" r="60" fill="url(#sunGlow)"/>
-                <circle cx="680" cy="75" r="38" fill="url(#sunGrad)" stroke="#E8A000" stroke-width="1.5"/>
-                <!-- Sun rays -->
-                <g opacity="0.6" stroke="#FFD54F" stroke-width="3" stroke-linecap="round">
-                    <line x1="680" y1="25" x2="680" y2="12"/>
-                    <line x1="680" y1="125" x2="680" y2="138"/>
-                    <line x1="630" y1="75" x2="617" y2="75"/>
-                    <line x1="730" y1="75" x2="743" y2="75"/>
-                    <line x1="644" y1="39" x2="635" y2="30"/>
-                    <line x1="716" y1="39" x2="725" y2="30"/>
-                    <line x1="644" y1="111" x2="635" y2="120"/>
-                    <line x1="716" y1="111" x2="725" y2="120"/>
-                </g>
-                <!-- Highlight -->
-                <ellipse cx="670" cy="65" rx="12" ry="10" fill="#FFF9C4" opacity="0.5"/>
+            <!-- Spots -->
+            <circle id="spot1" cx="160" cy="210" r="18" fill="#6B25A8" opacity="0.5"/>
+            <circle id="spot2" cx="350" cy="250" r="14" fill="#6B25A8" opacity="0.5"/>
+            <circle id="spot3" cx="195" cy="360" r="12" fill="#6B25A8" opacity="0.5"/>
+            <circle id="spot4" cx="320" cy="170" r="10" fill="#6B25A8" opacity="0.5"/>
+
+            <!-- Horns -->
+            <path id="horn-left" fill="#FF6B35"
+              d="M185,100 C180,72 168,42 158,28 C152,20 160,14 167,20 C178,32 192,68 197,95 Z"/>
+            <path fill="none" stroke="#4A1A72" stroke-width="2.5"
+              d="M185,100 C180,72 168,42 158,28 C152,20 160,14 167,20 C178,32 192,68 197,95"/>
+            <path id="horn-right" fill="#FF6B35"
+              d="M315,100 C320,72 332,42 342,28 C348,20 340,14 333,20 C322,32 308,68 303,95 Z"/>
+            <path fill="none" stroke="#4A1A72" stroke-width="2.5"
+              d="M315,100 C320,72 332,42 342,28 C348,20 340,14 333,20 C322,32 308,68 303,95"/>
+
+            <!-- Horn tip balls -->
+            <circle id="horn-tip-left" cx="158" cy="24" r="9" fill="#FFD93D"/>
+            <circle cx="156" cy="21" r="3.5" fill="#FFF4B0" opacity="0.7"/>
+            <circle id="horn-tip-right" cx="342" cy="24" r="9" fill="#FFD93D"/>
+            <circle cx="344" cy="21" r="3.5" fill="#FFF4B0" opacity="0.7"/>
+
+            <!-- Eye 1 (top-left, large) -->
+            <g id="eye1">
+              <ellipse cx="195" cy="200" rx="42" ry="44" fill="#F0FFF0"/>
+              <ellipse cx="200" cy="205" rx="20" ry="22" fill="#2BAE66"/>
+              <circle cx="203" cy="200" r="11" fill="#1A6B3C"/>
+              <circle cx="207" cy="194" r="5" fill="#ffffff"/>
+            </g>
+            <!-- Eye 2 (top-right, large) -->
+            <g id="eye2">
+              <ellipse cx="305" cy="200" rx="42" ry="44" fill="#F0FFF0"/>
+              <ellipse cx="300" cy="205" rx="20" ry="22" fill="#2BAE66"/>
+              <circle cx="297" cy="200" r="11" fill="#1A6B3C"/>
+              <circle cx="293" cy="194" r="5" fill="#ffffff"/>
+            </g>
+            <!-- Eye 3 (bottom-left, small) -->
+            <g id="eye3">
+              <ellipse cx="220" cy="268" rx="24" ry="26" fill="#F0FFF0"/>
+              <ellipse cx="223" cy="271" rx="12" ry="14" fill="#2BAE66"/>
+              <circle cx="225" cy="268" r="7" fill="#1A6B3C"/>
+              <circle cx="227" cy="264" r="3" fill="#ffffff"/>
+            </g>
+            <!-- Eye 4 (bottom-right, small) -->
+            <g id="eye4">
+              <ellipse cx="280" cy="268" rx="24" ry="26" fill="#F0FFF0"/>
+              <ellipse cx="277" cy="271" rx="12" ry="14" fill="#2BAE66"/>
+              <circle cx="275" cy="268" r="7" fill="#1A6B3C"/>
+              <circle cx="273" cy="264" r="3" fill="#ffffff"/>
             </g>
 
-            <!-- Clouds -->
-            <g id="el-nuvola1" data-size="medium" data-name="nuvola1">
-                <ellipse cx="150" cy="65" rx="55" ry="22" fill="url(#cloudGrad)" stroke="#D6DBE4" stroke-width="1" opacity="0.9"/>
-                <ellipse cx="120" cy="70" rx="35" ry="18" fill="#FFFFFF" stroke="none" opacity="0.95"/>
-                <ellipse cx="175" cy="68" rx="40" ry="16" fill="#FFFFFF" stroke="none" opacity="0.9"/>
-                <ellipse cx="150" cy="72" rx="42" ry="14" fill="#FFFFFF" stroke="none"/>
-            </g>
-            <g id="el-nuvola2" data-size="small" data-name="nuvola2">
-                <ellipse cx="420" cy="48" rx="40" ry="16" fill="url(#cloudGrad)" stroke="#D6DBE4" stroke-width="0.8" opacity="0.85"/>
-                <ellipse cx="400" cy="52" rx="28" ry="12" fill="#FFFFFF" stroke="none" opacity="0.9"/>
-                <ellipse cx="440" cy="50" rx="30" ry="11" fill="#FFFFFF" stroke="none" opacity="0.9"/>
-                <ellipse cx="420" cy="53" rx="32" ry="10" fill="#FFFFFF" stroke="none"/>
-            </g>
-            <g id="el-nuvola3" data-size="small" data-name="nuvola3">
-                <ellipse cx="560" cy="38" rx="32" ry="13" fill="url(#cloudGrad)" stroke="#D6DBE4" stroke-width="0.7" opacity="0.8"/>
-                <ellipse cx="545" cy="41" rx="22" ry="10" fill="#FFFFFF" stroke="none" opacity="0.9"/>
-                <ellipse cx="575" cy="40" rx="24" ry="9" fill="#FFFFFF" stroke="none" opacity="0.9"/>
+            <!-- Mouth -->
+            <path id="mouth" fill="#3D0F5C"
+              d="M195,320 C205,310 220,308 250,310 C280,308 295,310 305,320 C300,355 280,375 250,378 C220,375 200,355 195,320 Z"/>
+            <!-- Tooth -->
+            <path id="tooth1" fill="#ffffff"
+              d="M218,318 Q222,338 228,318 Z"/>
+
+            <!-- Cheek blush -->
+            <ellipse id="blush-left" cx="148" cy="300" rx="22" ry="13" fill="#FF8FCF" opacity="0.35"/>
+            <ellipse id="blush-right" cx="352" cy="300" rx="22" ry="13" fill="#FF8FCF" opacity="0.35"/>
+
+            <!-- Small warts -->
+            <circle id="wart1" cx="135" cy="255" r="5" fill="#6B25A8"/>
+            <circle id="wart2" cx="370" cy="225" r="6" fill="#6B25A8"/>
+            <circle id="wart3" cx="310" cy="390" r="4" fill="#6B25A8"/>
+        </svg>
+    </template>
+
+    <template id="tpl-blob">
+        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Left arm -->
+            <path id="arm-left" fill="#2563EB"
+              d="M110,280 C85,290 55,310 40,330 C30,345 38,360 52,355 C62,350 78,335 95,315 C105,302 112,290 118,282 Z"/>
+            <path fill="none" stroke="#1E40AF" stroke-width="3.5"
+              d="M110,280 C85,290 55,310 40,330 C30,345 38,360 52,355 C62,350 78,335 95,315"/>
+            <circle id="hand-left-finger1" cx="42" cy="340" r="8" fill="#60A5FA"/>
+            <circle id="hand-left-finger2" cx="36" cy="350" r="7" fill="#60A5FA"/>
+            <circle id="hand-left-finger3" cx="45" cy="358" r="7" fill="#60A5FA"/>
+
+            <!-- Right arm -->
+            <path id="arm-right" fill="#2563EB"
+              d="M390,280 C415,290 445,310 460,330 C470,345 462,360 448,355 C438,350 422,335 405,315 C395,302 388,290 382,282 Z"/>
+            <path fill="none" stroke="#1E40AF" stroke-width="3.5"
+              d="M390,280 C415,290 445,310 460,330 C470,345 462,360 448,355 C438,350 422,335 405,315"/>
+            <circle id="hand-right-finger1" cx="458" cy="340" r="8" fill="#60A5FA"/>
+            <circle id="hand-right-finger2" cx="464" cy="350" r="7" fill="#60A5FA"/>
+            <circle id="hand-right-finger3" cx="455" cy="358" r="7" fill="#60A5FA"/>
+
+            <!-- Feet -->
+            <ellipse id="foot-left" cx="195" cy="465" rx="35" ry="18" fill="#2563EB"/>
+            <path fill="none" stroke="#1E40AF" stroke-width="3.5"
+              d="M165,478 C170,483 185,485 195,485 C205,485 220,483 228,475"/>
+            <ellipse id="foot-right" cx="310" cy="465" rx="35" ry="18" fill="#2563EB"/>
+            <path fill="none" stroke="#1E40AF" stroke-width="3.5"
+              d="M278,475 C285,483 298,485 310,485 C322,485 338,483 342,478"/>
+
+            <!-- Antennae -->
+            <path id="antenna-left" fill="#2563EB"
+              d="M200,130 C195,100 185,65 175,45 L185,45 C192,65 198,100 202,130 Z"/>
+            <path fill="none" stroke="#1E40AF" stroke-width="2.5"
+              d="M200,130 C195,100 185,65 175,45"/>
+            <circle id="antenna-ball-left" cx="175" cy="42" r="12" fill="#FFD93D"/>
+            <circle cx="173" cy="39" r="4" fill="#FFF4B0" opacity="0.7"/>
+
+            <path id="antenna-right" fill="#2563EB"
+              d="M300,130 C305,100 315,65 325,45 L315,45 C308,65 302,100 298,130 Z"/>
+            <path fill="none" stroke="#1E40AF" stroke-width="2.5"
+              d="M300,130 C305,100 315,65 325,45"/>
+            <circle id="antenna-ball-right" cx="325" cy="42" r="12" fill="#FFD93D"/>
+            <circle cx="327" cy="39" r="4" fill="#FFF4B0" opacity="0.7"/>
+
+            <!-- Body -->
+            <path id="body" fill="#3B82F6"
+              d="M250,110 C290,105 330,112 362,130 C395,150 418,185 428,225 C438,268 435,310 425,348 C418,375 400,400 375,420 C355,435 325,448 295,455 C270,460 230,460 205,455 C175,448 145,435 125,420 C100,400 82,375 75,348 C65,310 62,268 72,225 C82,185 105,150 138,130 C170,112 210,105 250,110 Z"/>
+            <path fill="none" stroke="#1E40AF" stroke-width="3.5"
+              d="M205,455 C175,448 145,435 125,420 C100,400 82,375 75,348 C65,310 62,268 72,225 C82,185 105,150 138,130 C170,112 210,105 250,110 C290,105 330,112 362,130 C395,150 418,185 428,225 C438,268 435,310 425,348 C418,375 400,400 375,420 C355,435 325,448 295,455"/>
+
+            <!-- Belly -->
+            <path id="belly" fill="#60A5FA"
+              d="M250,185 C295,182 338,200 352,240 C365,280 360,330 348,370 C340,395 315,415 280,425 L220,425 C185,415 160,395 152,370 C140,330 135,280 148,240 C162,200 205,182 250,185 Z"/>
+
+            <!-- Spots -->
+            <circle id="spot1" cx="150" cy="220" r="16" fill="#2563EB" opacity="0.5"/>
+            <circle id="spot2" cx="365" cy="260" r="13" fill="#2563EB" opacity="0.5"/>
+            <circle id="spot3" cx="180" cy="380" r="11" fill="#2563EB" opacity="0.5"/>
+            <circle id="spot4" cx="340" cy="180" r="9" fill="#2563EB" opacity="0.5"/>
+
+            <!-- Trumpet nose -->
+            <g id="nose">
+              <path id="nose-trunk" fill="#60A5FA"
+                d="M245,280 C242,290 238,305 232,318 C228,326 235,332 245,330 L258,330 C268,332 275,326 271,318 C265,305 261,290 258,280 Z"/>
+              <ellipse id="nose-bell" cx="251" cy="332" rx="18" ry="10" fill="#60A5FA"/>
+              <ellipse id="nostril-left" cx="244" cy="330" rx="5" ry="4" fill="#1E40AF"/>
+              <ellipse id="nostril-right" cx="258" cy="330" rx="5" ry="4" fill="#1E40AF"/>
             </g>
 
-            <!-- Rolling hills (far to near) -->
-            <!-- Far hill -->
-            <path d="M-20,300 C100,240 200,255 350,250 C500,245 600,270 820,260 L820,500 L-20,500 Z" fill="url(#hillFarGrad)" opacity="0.7"/>
-            <!-- Mid hill -->
-            <path d="M-20,320 C80,280 180,295 300,290 C420,285 550,310 700,295 C760,290 800,300 820,305 L820,500 L-20,500 Z" fill="url(#hillMidGrad)" opacity="0.85"/>
-            <!-- Near hill (main ground) -->
-            <path d="M-20,350 C60,335 150,345 280,340 C400,335 500,355 650,345 C720,340 780,348 820,350 L820,500 L-20,500 Z" fill="url(#hillNearGrad)"/>
-
-            <!-- Dirt path winding through scene -->
-            <path d="M350,500 C340,470 360,440 345,410 C330,380 355,365 365,350" fill="none" stroke="url(#dirtGrad)" stroke-width="40" stroke-linecap="round" opacity="0.7"/>
-            <path d="M350,500 C340,470 360,440 345,410 C330,380 355,365 365,350" fill="none" stroke="#C8B9A8" stroke-width="36" stroke-linecap="round" opacity="0.3"/>
-            <!-- Path texture dots -->
-            <g opacity="0.15" fill="#8D6E63">
-                <circle cx="348" cy="480" r="2"/><circle cx="355" cy="465" r="1.5"/>
-                <circle cx="342" cy="450" r="2"/><circle cx="358" cy="435" r="1.8"/>
-                <circle cx="345" cy="420" r="1.5"/><circle cx="350" cy="400" r="2"/>
-                <circle cx="340" cy="390" r="1.3"/><circle cx="355" cy="375" r="1.8"/>
-                <circle cx="360" cy="360" r="1.5"/>
+            <!-- Eye 1 (left, large) -->
+            <g id="eye1">
+              <ellipse cx="195" cy="230" rx="40" ry="42" fill="#F0FFF0"/>
+              <ellipse cx="200" cy="234" rx="18" ry="20" fill="#3B82F6"/>
+              <circle cx="203" cy="230" r="10" fill="#1E3A8A"/>
+              <circle cx="207" cy="224" r="5" fill="#ffffff"/>
+            </g>
+            <!-- Eye 2 (right, medium) -->
+            <g id="eye2">
+              <ellipse cx="310" cy="225" rx="35" ry="37" fill="#F0FFF0"/>
+              <ellipse cx="306" cy="229" rx="16" ry="18" fill="#3B82F6"/>
+              <circle cx="303" cy="225" r="9" fill="#1E3A8A"/>
+              <circle cx="299" cy="220" r="4.5" fill="#ffffff"/>
+            </g>
+            <!-- Eye 3 (center, small) -->
+            <g id="eye3">
+              <ellipse cx="252" cy="270" rx="22" ry="24" fill="#F0FFF0"/>
+              <ellipse cx="254" cy="273" rx="10" ry="12" fill="#3B82F6"/>
+              <circle cx="255" cy="270" r="6" fill="#1E3A8A"/>
+              <circle cx="257" cy="266" r="3" fill="#ffffff"/>
             </g>
 
-            <!-- ===== MID-GROUND LAYER ===== -->
-
-            <!-- ===== BARN ===== -->
-            <g id="el-fienile" data-size="large" data-name="fienile" filter="url(#shadowLg)">
-                <!-- Barn shadow on ground -->
-                <ellipse cx="170" cy="365" rx="85" ry="12" fill="#1B5E20" opacity="0.2"/>
-                <!-- Barn wall -->
-                <path d="M95,250 L95,365 L245,365 L245,250 Z" fill="url(#barnWallGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
-                <!-- Plank texture lines -->
-                <g stroke="#B71C1C" stroke-width="0.8" opacity="0.3">
-                    <line x1="115" y1="250" x2="115" y2="365"/>
-                    <line x1="135" y1="250" x2="135" y2="365"/>
-                    <line x1="155" y1="250" x2="155" y2="365"/>
-                    <line x1="175" y1="250" x2="175" y2="365"/>
-                    <line x1="195" y1="250" x2="195" y2="365"/>
-                    <line x1="215" y1="250" x2="215" y2="365"/>
-                    <line x1="235" y1="250" x2="235" y2="365"/>
-                </g>
-                <!-- Horizontal plank line -->
-                <line x1="95" y1="308" x2="245" y2="308" stroke="#8B1A1A" stroke-width="1.5" opacity="0.4"/>
-                <!-- Gambrel roof -->
-                <path d="M85,252 L120,218 L170,195 L220,218 L255,252 Z" fill="url(#barnRoofGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
-                <!-- Roof shingle hints -->
-                <g stroke="#4E342E" stroke-width="0.6" opacity="0.3">
-                    <path d="M100,245 Q130,232 170,222 Q210,232 240,245" fill="none"/>
-                    <path d="M93,250 Q135,238 170,228 Q205,238 247,250" fill="none"/>
-                </g>
-                <!-- Barn doors (arched top) -->
-                <path d="M140,365 L140,290 Q170,275 200,290 L200,365 Z" fill="url(#barnDoorGrad)" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
-                <!-- Door center line -->
-                <line x1="170" y1="280" x2="170" y2="365" stroke="#2D1B0E" stroke-width="1.5"/>
-                <!-- White X pattern on left door -->
-                <line x1="143" y1="295" x2="167" y2="360" stroke="#E8E0D4" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                <line x1="167" y1="295" x2="143" y2="360" stroke="#E8E0D4" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                <!-- White X pattern on right door -->
-                <line x1="173" y1="295" x2="197" y2="360" stroke="#E8E0D4" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                <line x1="197" y1="295" x2="173" y2="360" stroke="#E8E0D4" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                <!-- Hayloft window -->
-                <circle cx="170" cy="235" r="14" fill="url(#hayloftGlowGrad)" stroke="#2D1B0E" stroke-width="2"/>
-                <line x1="170" y1="221" x2="170" y2="249" stroke="#2D1B0E" stroke-width="1.2"/>
-                <line x1="156" y1="235" x2="184" y2="235" stroke="#2D1B0E" stroke-width="1.2"/>
-                <!-- Side windows -->
-                <rect x="102" y="265" width="22" height="20" rx="2" fill="#FFECB3" stroke="#2D1B0E" stroke-width="1.5"/>
-                <rect x="216" y="265" width="22" height="20" rx="2" fill="#FFECB3" stroke="#2D1B0E" stroke-width="1.5"/>
-                <!-- Window cross -->
-                <line x1="113" y1="265" x2="113" y2="285" stroke="#2D1B0E" stroke-width="1"/>
-                <line x1="102" y1="275" x2="124" y2="275" stroke="#2D1B0E" stroke-width="1"/>
-                <line x1="227" y1="265" x2="227" y2="285" stroke="#2D1B0E" stroke-width="1"/>
-                <line x1="216" y1="275" x2="238" y2="275" stroke="#2D1B0E" stroke-width="1"/>
+            <!-- Mouth -->
+            <ellipse id="mouth" cx="252" cy="365" rx="40" ry="32" fill="#1E3A8A"/>
+            <!-- Teeth -->
+            <g id="teeth">
+              <ellipse id="tooth-left" cx="241" cy="348" rx="14" ry="18" fill="#ffffff"/>
+              <ellipse id="tooth-right" cx="263" cy="348" rx="14" ry="18" fill="#ffffff"/>
             </g>
 
-            <!-- ===== WINDVANE on barn ===== -->
-            <g id="el-banderuola" data-size="small" data-name="banderuola">
-                <line x1="170" y1="195" x2="170" y2="172" stroke="#555" stroke-width="2.5" stroke-linecap="round"/>
-                <!-- Arrow -->
-                <polygon points="155,178 185,175 170,172" fill="#FFD600" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
-                <!-- N/S/E/W letters -->
-                <text x="170" y="170" font-size="7" fill="#555" text-anchor="middle" font-family="Arial" font-weight="bold">N</text>
+            <!-- Cheek blush -->
+            <ellipse id="blush-left" cx="140" cy="310" rx="20" ry="12" fill="#FF8FCF" opacity="0.35"/>
+            <ellipse id="blush-right" cx="365" cy="305" rx="20" ry="12" fill="#FF8FCF" opacity="0.35"/>
+        </svg>
+    </template>
+
+    <template id="tpl-fluffy">
+        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Legs -->
+            <path id="leg-left" fill="#DB2777"
+              d="M175,400 C170,430 165,460 162,485 C160,500 170,510 182,508 C194,506 195,495 193,480 C190,460 188,435 190,410 Z"/>
+            <path fill="none" stroke="#9D174D" stroke-width="3.5"
+              d="M175,400 C170,430 165,460 162,485 C160,500 170,510 182,508 C194,506 195,495 193,480"/>
+            <ellipse id="foot-left" cx="175" cy="510" rx="25" ry="12" fill="#DB2777"/>
+            <path fill="none" stroke="#9D174D" stroke-width="3"
+              d="M152,515 C160,522 172,524 178,524 C185,524 195,520 200,515"/>
+
+            <path id="leg-right" fill="#DB2777"
+              d="M310,410 C312,435 310,460 307,480 C305,495 306,506 318,508 C330,510 340,500 338,485 C335,460 330,430 325,400 Z"/>
+            <path fill="none" stroke="#9D174D" stroke-width="3.5"
+              d="M325,400 C330,430 335,460 338,485 C340,500 330,510 318,508 C306,506 305,495 307,480"/>
+            <ellipse id="foot-right" cx="325" cy="510" rx="25" ry="12" fill="#DB2777"/>
+            <path fill="none" stroke="#9D174D" stroke-width="3"
+              d="M302,515 C308,522 318,524 325,524 C335,524 345,520 350,515"/>
+
+            <!-- Fluffy tail -->
+            <path id="tail" fill="#EC4899"
+              d="M385,320 C410,310 440,295 458,275 C470,260 475,250 465,248 C455,246 438,260 420,278 C405,295 392,310 385,320 Z"/>
+            <path fill="none" stroke="#9D174D" stroke-width="3"
+              d="M385,320 C410,310 440,295 458,275 C470,260 475,250 465,248 C455,246 438,260 420,278"/>
+            <circle id="tail-poof1" cx="462" cy="258" r="15" fill="#F9A8D4"/>
+            <circle id="tail-poof2" cx="470" cy="248" r="12" fill="#F9A8D4"/>
+            <circle id="tail-poof3" cx="458" cy="244" r="13" fill="#F9A8D4"/>
+
+            <!-- Body -->
+            <path id="body" fill="#EC4899"
+              d="M250,100 C275,98 300,102 322,112 C330,108 338,112 335,120 C358,132 375,150 386,172 C394,168 400,174 395,182 C406,200 412,222 414,245 C422,244 424,252 418,256 C418,278 414,300 406,320 C414,322 414,330 406,330 C396,348 382,362 365,375 C370,380 366,388 358,385 C340,396 318,404 295,408 C296,416 290,418 285,414 C272,417 258,418 245,418 C232,418 218,417 205,414 C200,418 194,416 195,408 C172,404 150,396 132,385 C124,388 120,380 125,375 C108,362 94,348 84,330 C76,330 76,322 84,320 C76,300 72,278 72,256 C66,252 68,244 76,245 C78,222 84,200 95,182 C90,174 96,168 104,172 C115,150 132,132 155,120 C152,112 160,108 168,112 C190,102 215,98 250,100 Z"/>
+            <path fill="none" stroke="#9D174D" stroke-width="3.5"
+              d="M195,408 C172,404 150,396 132,385 C124,388 120,380 125,375 C108,362 94,348 84,330 C76,330 76,322 84,320 C76,300 72,278 72,256 C66,252 68,244 76,245 C78,222 84,200 95,182 C90,174 96,168 104,172 C115,150 132,132 155,120 C152,112 160,108 168,112 C190,102 215,98 250,100 C275,98 300,102 322,112 C330,108 338,112 335,120 C358,132 375,150 386,172 C394,168 400,174 395,182 C406,200 412,222 414,245 C422,244 424,252 418,256 C418,278 414,300 406,320 C414,322 414,330 406,330 C396,348 382,362 365,375 C370,380 366,388 358,385 C340,396 318,404 295,408"/>
+
+            <!-- Belly -->
+            <path id="belly" fill="#F9A8D4"
+              d="M250,180 C295,178 335,200 345,240 C355,280 350,325 340,360 C332,382 310,400 275,408 L225,408 C190,400 168,382 160,360 C150,325 145,280 155,240 C165,200 205,178 250,180 Z"/>
+
+            <!-- Horn -->
+            <path id="horn" fill="#FBBF24"
+              d="M250,102 C248,78 245,52 250,35 C255,52 252,78 250,102 Z"/>
+            <path fill="none" stroke="#9D174D" stroke-width="2.5"
+              d="M248,102 C246,78 243,52 250,35 C257,52 254,78 252,102"/>
+
+            <!-- Trumpet ears -->
+            <g id="ear-left">
+              <path id="ear-left-shape" fill="#EC4899"
+                d="M115,175 C95,155 70,140 52,135 C40,132 35,142 42,150 C52,162 75,178 100,188 Z"/>
+              <path fill="none" stroke="#9D174D" stroke-width="3"
+                d="M115,175 C95,155 70,140 52,135 C40,132 35,142 42,150 C52,162 75,178 100,188"/>
+              <ellipse id="ear-left-inner" cx="58" cy="145" rx="14" ry="10" fill="#F9A8D4" transform="rotate(-35 58 145)"/>
+            </g>
+            <g id="ear-right">
+              <path id="ear-right-shape" fill="#EC4899"
+                d="M385,175 C405,155 430,140 448,135 C460,132 465,142 458,150 C448,162 425,178 400,188 Z"/>
+              <path fill="none" stroke="#9D174D" stroke-width="3"
+                d="M385,175 C405,155 430,140 448,135 C460,132 465,142 458,150 C448,162 425,178 400,188"/>
+              <ellipse id="ear-right-inner" cx="442" cy="145" rx="14" ry="10" fill="#F9A8D4" transform="rotate(35 442 145)"/>
             </g>
 
-            <!-- ===== BIRD ON BARN ROOF ===== -->
-            <g id="el-uccello-tetto" data-size="small" data-name="uccello-tetto">
-                <ellipse cx="215" cy="218" rx="8" ry="5.5" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <!-- Wing -->
-                <path d="M210,216 Q205,210 212,214" fill="#E65100" stroke="#2D1B0E" stroke-width="1" stroke-linecap="round"/>
-                <!-- Tail -->
-                <path d="M207,218 L200,214 L202,220" fill="#E65100" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
-                <!-- Eye -->
-                <circle cx="220" cy="215.5" r="1.8" fill="#fff"/>
-                <circle cx="220.5" cy="215.5" r="1" fill="#2D1B0E"/>
-                <!-- Beak -->
-                <polygon points="223,217 228,218 223,219" fill="#FDD835" stroke="#2D1B0E" stroke-width="0.8"/>
-                <!-- Legs -->
-                <line x1="213" y1="223" x2="212" y2="226" stroke="#E65100" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="217" y1="223" x2="218" y2="226" stroke="#E65100" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- Bow -->
+            <g id="bow">
+              <path id="bow-left-lobe" fill="#FF4081"
+                d="M280,108 C295,88 315,82 320,90 C325,98 308,105 290,112 Z"/>
+              <path id="bow-right-lobe" fill="#FF4081"
+                d="M290,112 C310,118 328,128 325,136 C322,144 305,132 290,118 Z"/>
+              <circle id="bow-center" cx="288" cy="112" r="8" fill="#E91E63"/>
             </g>
 
-            <!-- ===== MOUSE HOLE IN BARN ===== -->
-            <g id="el-tana-topo" data-size="small" data-name="tana-topo">
-                <path d="M100,365 Q100,352 108,350 Q116,352 116,365 Z" fill="#3E2723"/>
-                <ellipse cx="108" cy="365" rx="8" ry="2" fill="#2D1B0E" opacity="0.3"/>
-                <!-- Tiny mouse eyes peeking -->
-                <circle cx="106" cy="358" r="1.2" fill="#FFD600"/>
-                <circle cx="110" cy="358" r="1.2" fill="#FFD600"/>
+            <!-- Eye 1 (left, bigger) -->
+            <g id="eye1">
+              <ellipse cx="200" cy="235" rx="42" ry="45" fill="#F0FFF0"/>
+              <ellipse cx="205" cy="240" rx="20" ry="22" fill="#EC4899"/>
+              <circle cx="208" cy="236" r="11" fill="#9D174D"/>
+              <circle cx="212" cy="230" r="5" fill="#ffffff"/>
+            </g>
+            <!-- Eye 2 (right, smaller) -->
+            <g id="eye2">
+              <ellipse cx="310" cy="240" rx="34" ry="36" fill="#F0FFF0"/>
+              <ellipse cx="306" cy="244" rx="16" ry="18" fill="#EC4899"/>
+              <circle cx="303" cy="240" r="9" fill="#9D174D"/>
+              <circle cx="299" cy="235" r="4" fill="#ffffff"/>
             </g>
 
-            <!-- ===== FENCE ===== -->
-            <g id="el-steccato" data-size="medium" data-name="steccato" filter="url(#shadowSm)">
-                <!-- Posts -->
-                <rect x="268" y="310" width="8" height="48" rx="1.5" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M268,310 L272,303 L276,310" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
-                <rect x="298" y="310" width="8" height="48" rx="1.5" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M298,310 L302,303 L306,310" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
-                <rect x="328" y="310" width="8" height="48" rx="1.5" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M328,310 L332,303 L336,310" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
-                <rect x="358" y="310" width="8" height="48" rx="1.5" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M358,310 L362,303 L366,310" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
-                <rect x="388" y="310" width="8" height="48" rx="1.5" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <path d="M388,310 L392,303 L396,310" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
-                <!-- Rails -->
-                <rect x="265" y="322" width="138" height="6" rx="2" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
-                <rect x="265" y="340" width="138" height="6" rx="2" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
-                <!-- Rail highlight -->
-                <rect x="267" y="323" width="134" height="2" rx="1" fill="#fff" opacity="0.3"/>
-                <rect x="267" y="341" width="134" height="2" rx="1" fill="#fff" opacity="0.3"/>
+            <!-- Mouth -->
+            <path id="mouth" fill="none" stroke="#9D174D" stroke-width="3"
+              d="M195,320 Q222,348 250,348 Q278,348 305,320"/>
+
+            <!-- Cheek blush -->
+            <ellipse id="blush-left" cx="155" cy="300" rx="22" ry="14" fill="#FF8FCF" opacity="0.4"/>
+            <ellipse id="blush-right" cx="355" cy="300" rx="22" ry="14" fill="#FF8FCF" opacity="0.4"/>
+
+            <!-- Nose -->
+            <g id="nose">
+              <ellipse id="nose-shape" cx="255" cy="295" rx="14" ry="11" fill="#DB2777"/>
+              <ellipse id="nose-highlight" cx="253" cy="292" rx="5" ry="4" fill="#F9A8D4" opacity="0.5"/>
+            </g>
+        </svg>
+    </template>
+
+    <template id="tpl-cyclops">
+        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Arms -->
+            <path id="arm-left" fill="#65A30D"
+              d="M105,250 C75,290 50,360 40,420 C35,450 30,480 42,492 C54,504 65,490 68,465 C72,430 80,380 100,320 C108,295 112,270 115,258 Z"/>
+            <path fill="none" stroke="#3F6212" stroke-width="3.5"
+              d="M105,250 C75,290 50,360 40,420 C35,450 30,480 42,492 C54,504 65,490 68,465 C72,430 80,380 100,320"/>
+            <circle id="hand-left-finger1" cx="40" cy="482" r="9" fill="#A3E635"/>
+            <circle id="hand-left-finger2" cx="32" cy="490" r="8" fill="#A3E635"/>
+            <circle id="hand-left-finger3" cx="44" cy="497" r="8" fill="#A3E635"/>
+
+            <path id="arm-right" fill="#65A30D"
+              d="M395,258 C398,270 402,295 410,320 C430,380 438,430 442,465 C445,490 456,504 468,492 C480,480 475,450 470,420 C460,360 435,290 405,250 Z"/>
+            <path fill="none" stroke="#3F6212" stroke-width="3.5"
+              d="M405,250 C435,290 460,360 470,420 C475,450 480,480 468,492 C456,504 445,490 442,465 C438,430 430,380 410,320"/>
+            <circle id="hand-right-finger1" cx="470" cy="482" r="9" fill="#A3E635"/>
+            <circle id="hand-right-finger2" cx="478" cy="490" r="8" fill="#A3E635"/>
+            <circle id="hand-right-finger3" cx="466" cy="497" r="8" fill="#A3E635"/>
+
+            <!-- Feet -->
+            <ellipse id="foot-left" cx="195" cy="478" rx="50" ry="18" fill="#65A30D"/>
+            <path fill="none" stroke="#3F6212" stroke-width="3.5"
+              d="M150,490 C162,496 180,498 195,498 C210,498 230,496 242,490"/>
+            <ellipse id="foot-right" cx="310" cy="478" rx="50" ry="18" fill="#65A30D"/>
+            <path fill="none" stroke="#3F6212" stroke-width="3.5"
+              d="M264,490 C276,496 294,498 310,498 C326,498 344,496 356,490"/>
+
+            <!-- Tail -->
+            <path id="tail" fill="#65A30D"
+              d="M385,380 C405,395 428,398 445,390 C455,385 458,375 450,372 C442,369 425,375 408,378 C395,380 388,378 385,375 Z"/>
+            <path fill="none" stroke="#3F6212" stroke-width="3"
+              d="M385,380 C405,395 428,398 445,390 C455,385 458,375 450,372 C442,369 425,375 408,378"/>
+
+            <!-- Body -->
+            <path id="body" fill="#84CC16"
+              d="M250,90 C310,88 365,110 395,155 C425,200 430,260 425,320 C420,365 405,405 378,432 C355,455 320,468 285,472 C268,474 232,474 215,472 C180,468 145,455 122,432 C95,405 80,365 75,320 C70,260 75,200 105,155 C135,110 190,88 250,90 Z"/>
+            <path fill="none" stroke="#3F6212" stroke-width="3.5"
+              d="M215,472 C180,468 145,455 122,432 C95,405 80,365 75,320 C70,260 75,200 105,155 C135,110 190,88 250,90 C310,88 365,110 395,155 C425,200 430,260 425,320 C420,365 405,405 378,432 C355,455 320,468 285,472"/>
+
+            <!-- Belly -->
+            <path id="belly" fill="#BEF264"
+              d="M250,170 C298,168 340,190 355,230 C370,275 368,330 358,375 C350,405 325,430 285,442 L215,442 C175,430 150,405 142,375 C132,330 130,275 145,230 C160,190 202,168 250,170 Z"/>
+
+            <!-- Antennae with eyes -->
+            <path id="antenna-left" fill="#84CC16"
+              d="M195,108 C192,82 188,55 185,35 L192,35 C194,55 196,82 198,108 Z"/>
+            <path fill="none" stroke="#3F6212" stroke-width="2.5"
+              d="M195,108 C192,82 188,55 185,35"/>
+            <g id="antenna-eye-left">
+              <circle cx="185" cy="30" r="18" fill="#F0FFF0"/>
+              <circle cx="185" cy="32" r="10" fill="#84CC16"/>
+              <circle cx="185" cy="30" r="6" fill="#3F6212"/>
+              <circle cx="188" cy="26" r="3" fill="#ffffff"/>
+            </g>
+            <path id="antenna-right" fill="#84CC16"
+              d="M305,108 C308,82 312,55 315,35 L308,35 C306,55 304,82 302,108 Z"/>
+            <path fill="none" stroke="#3F6212" stroke-width="2.5"
+              d="M305,108 C308,82 312,55 315,35"/>
+            <g id="antenna-eye-right">
+              <circle cx="315" cy="30" r="18" fill="#F0FFF0"/>
+              <circle cx="315" cy="32" r="10" fill="#84CC16"/>
+              <circle cx="315" cy="30" r="6" fill="#3F6212"/>
+              <circle cx="312" cy="26" r="3" fill="#ffffff"/>
             </g>
 
-            <!-- ===== LADYBUG ON FENCE ===== -->
-            <g id="el-coccinella" data-size="small" data-name="coccinella">
-                <ellipse cx="340" cy="320" rx="5" ry="4" fill="#E53935" stroke="#2D1B0E" stroke-width="1.2"/>
-                <circle cx="340" cy="316.5" r="2.5" fill="#2D1B0E"/>
-                <!-- Wing line -->
-                <line x1="340" y1="316" x2="340" y2="324" stroke="#2D1B0E" stroke-width="0.8"/>
-                <!-- Spots -->
-                <circle cx="337.5" cy="319" r="1" fill="#2D1B0E"/>
-                <circle cx="342.5" cy="319" r="1" fill="#2D1B0E"/>
-                <circle cx="338" cy="322" r="0.8" fill="#2D1B0E"/>
-                <circle cx="342" cy="322" r="0.8" fill="#2D1B0E"/>
-                <!-- Antennae -->
-                <path d="M339,316 Q337,313 336,312" stroke="#2D1B0E" stroke-width="0.7" fill="none"/>
-                <path d="M341,316 Q343,313 344,312" stroke="#2D1B0E" stroke-width="0.7" fill="none"/>
+            <!-- Giant eye -->
+            <g id="eye1">
+              <ellipse cx="250" cy="230" rx="68" ry="70" fill="#F0FFF0"/>
+              <ellipse cx="250" cy="236" rx="35" ry="38" fill="#84CC16"/>
+              <circle cx="250" cy="230" r="20" fill="#3F6212"/>
+              <circle cx="258" cy="220" r="9" fill="#ffffff"/>
+              <circle cx="242" cy="238" r="5" fill="#ffffff"/>
             </g>
 
-            <!-- ===== APPLE TREE ===== -->
-            <g id="el-melo" data-size="large" data-name="melo" filter="url(#shadow)">
-                <!-- Shadow on ground -->
-                <ellipse cx="620" cy="360" rx="55" ry="10" fill="#1B5E20" opacity="0.2"/>
-                <!-- Trunk - gnarled organic shape -->
-                <path d="M608,360 C605,340 600,320 602,300 C603,290 607,282 612,278 L616,278 C620,282 624,290 625,300 C627,320 622,340 618,360 Z" fill="url(#treeTrunkGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
-                <!-- Branch nub left -->
-                <path d="M604,310 C598,305 594,300 596,296 C599,294 604,298 608,305" fill="url(#treeTrunkGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <!-- Branch nub right -->
-                <path d="M622,300 C628,294 632,290 636,292 C638,296 633,300 626,304" fill="url(#treeTrunkGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <!-- Bark texture -->
-                <g stroke="#3E2723" stroke-width="0.6" opacity="0.3">
-                    <path d="M610,350 C612,340 609,330 611,320" fill="none"/>
-                    <path d="M617,345 C615,335 618,325 616,315" fill="none"/>
-                </g>
-                <!-- Canopy - cloud-like wavy blob -->
-                <path d="M570,280 C555,265 560,240 575,230 C580,215 600,205 615,210 C625,198 645,198 655,210 C670,205 690,215 692,230 C705,240 710,265 695,280 C700,295 690,305 675,305 C665,312 645,315 630,312 C615,315 595,312 585,305 C570,305 562,295 570,280 Z" fill="url(#treeCanopyGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
-                <!-- Canopy highlight -->
-                <path d="M585,255 C590,240 610,228 625,230 C635,225 648,228 652,240" fill="#4CAF50" opacity="0.3" stroke="none"/>
-                <!-- Leaf clusters as small bumps -->
-                <circle cx="580" cy="270" r="12" fill="#388E3C" opacity="0.3"/>
-                <circle cx="660" cy="260" r="14" fill="#388E3C" opacity="0.3"/>
-                <circle cx="620" cy="245" r="15" fill="#2E7D32" opacity="0.2"/>
+            <!-- Belly button -->
+            <ellipse id="belly-button" cx="250" cy="380" rx="10" ry="14" fill="#84CC16" opacity="0.6"/>
+
+            <!-- Spots -->
+            <circle id="spot1" cx="155" cy="200" r="15" fill="#65A30D" opacity="0.5"/>
+            <circle id="spot2" cx="355" cy="240" r="12" fill="#65A30D" opacity="0.5"/>
+            <circle id="spot3" cx="175" cy="400" r="10" fill="#65A30D" opacity="0.5"/>
+            <circle id="spot4" cx="340" cy="170" r="9" fill="#65A30D" opacity="0.5"/>
+
+            <!-- Warts -->
+            <circle id="wart1" cx="135" cy="280" r="6" fill="#65A30D"/>
+            <circle id="wart2" cx="375" cy="310" r="5" fill="#65A30D"/>
+            <circle id="wart3" cx="160" cy="350" r="4" fill="#65A30D"/>
+
+            <!-- Mouth -->
+            <path id="mouth" fill="#3F6212"
+              d="M180,350 Q200,370 220,350 Q240,370 260,350 Q280,370 300,350 Q320,370 340,350 L340,360 Q320,380 300,360 Q280,380 260,360 Q240,380 220,360 Q200,380 180,360 Z"/>
+            <path id="tooth1" fill="#ffffff"
+              d="M242,360 Q250,345 258,360 Z"/>
+
+            <!-- Cheek blush -->
+            <ellipse id="blush-left" cx="148" cy="320" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
+            <ellipse id="blush-right" cx="352" cy="320" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
+        </svg>
+    </template>
+
+    <template id="tpl-dragon">
+        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Wings -->
+            <g id="wing-left">
+              <path id="wing-left-membrane" fill="#FDBA74"
+                d="M85,170 C55,130 30,95 25,75 C22,62 35,60 42,72 C55,95 72,135 90,175 Z"/>
+              <path id="wing-left-membrane2" fill="#FDBA74"
+                d="M90,175 C60,155 30,130 15,115 C5,105 15,95 25,105 C42,122 68,152 92,180 Z"/>
+              <path fill="none" stroke="#C2410C" stroke-width="3"
+                d="M85,170 C55,130 30,95 25,75 C22,62 35,60 42,72 C55,95 72,135 90,175"/>
+              <path fill="none" stroke="#C2410C" stroke-width="3"
+                d="M90,175 C60,155 30,130 15,115 C5,105 15,95 25,105 C42,122 68,152 92,180"/>
+              <path id="wing-left-strut1" fill="#EA580C" opacity="0.4"
+                d="M88,174 C68,142 48,108 38,82 L42,80 C54,108 72,144 90,178 Z"/>
+              <path id="wing-left-strut2" fill="#EA580C" opacity="0.4"
+                d="M90,178 C68,158 42,132 28,115 L32,112 C48,130 72,158 92,180 Z"/>
+            </g>
+            <g id="wing-right">
+              <path id="wing-right-membrane" fill="#FDBA74"
+                d="M415,170 C445,130 470,95 475,75 C478,62 465,60 458,72 C445,95 428,135 410,175 Z"/>
+              <path id="wing-right-membrane2" fill="#FDBA74"
+                d="M410,175 C440,155 470,130 485,115 C495,105 485,95 475,105 C458,122 432,152 408,180 Z"/>
+              <path fill="none" stroke="#C2410C" stroke-width="3"
+                d="M415,170 C445,130 470,95 475,75 C478,62 465,60 458,72 C445,95 428,135 410,175"/>
+              <path fill="none" stroke="#C2410C" stroke-width="3"
+                d="M410,175 C440,155 470,130 485,115 C495,105 485,95 475,105 C458,122 432,152 408,180"/>
+              <path id="wing-right-strut1" fill="#EA580C" opacity="0.4"
+                d="M412,174 C432,142 452,108 462,82 L458,80 C446,108 428,144 410,178 Z"/>
+              <path id="wing-right-strut2" fill="#EA580C" opacity="0.4"
+                d="M410,178 C432,158 458,132 472,115 L468,112 C452,130 428,158 408,180 Z"/>
             </g>
 
-            <!-- Apples on tree -->
-            <g id="el-mela1" data-size="small" data-name="mela1">
-                <circle cx="595" cy="270" r="7" fill="url(#appleGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
-                <ellipse cx="593" cy="267" rx="2.5" ry="2" fill="#FF8A80" opacity="0.5"/>
-                <path d="M595,263 Q596,258 597,256" stroke="#5D4037" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M597,258 Q601,255 603,256" stroke="#4CAF50" stroke-width="1" fill="none" stroke-linecap="round"/>
+            <!-- Tail -->
+            <path id="tail" fill="#F97316"
+              d="M375,380 C400,375 430,360 450,335 C462,318 468,300 460,295 C452,290 440,305 428,325 C415,348 400,368 380,378 Z"/>
+            <path fill="none" stroke="#C2410C" stroke-width="3.5"
+              d="M375,380 C400,375 430,360 450,335 C462,318 468,300 460,295 C452,290 440,305 428,325 C415,348 400,368 380,378"/>
+            <ellipse id="tail-tip" cx="458" cy="295" rx="12" ry="8" fill="#FBBF24" transform="rotate(-30 458 295)"/>
+
+            <!-- Feet -->
+            <ellipse id="foot-left" cx="195" cy="470" rx="42" ry="16" fill="#EA580C"/>
+            <path fill="none" stroke="#C2410C" stroke-width="3"
+              d="M158,480 C168,488 182,490 195,490 C208,490 224,488 234,480"/>
+            <circle id="claw-left1" cx="165" cy="478" r="6" fill="#FBBF24"/>
+            <circle id="claw-left2" cx="180" cy="482" r="6" fill="#FBBF24"/>
+            <circle id="claw-left3" cx="210" cy="482" r="6" fill="#FBBF24"/>
+
+            <ellipse id="foot-right" cx="315" cy="470" rx="42" ry="16" fill="#EA580C"/>
+            <path fill="none" stroke="#C2410C" stroke-width="3"
+              d="M278,480 C288,488 302,490 315,490 C328,490 344,488 354,480"/>
+            <circle id="claw-right1" cx="300" cy="482" r="6" fill="#FBBF24"/>
+            <circle id="claw-right2" cx="330" cy="482" r="6" fill="#FBBF24"/>
+            <circle id="claw-right3" cx="345" cy="478" r="6" fill="#FBBF24"/>
+
+            <!-- Body -->
+            <path id="body" fill="#F97316"
+              d="M250,100 C310,97 368,120 398,165 C428,210 432,268 425,325 C420,365 400,400 372,425 C348,445 318,458 285,462 C268,464 232,464 215,462 C182,458 152,445 128,425 C100,400 80,365 75,325 C68,268 72,210 102,165 C132,120 190,97 250,100 Z"/>
+            <path fill="none" stroke="#C2410C" stroke-width="3.5"
+              d="M215,462 C182,458 152,445 128,425 C100,400 80,365 75,325 C68,268 72,210 102,165 C132,120 190,97 250,100 C310,97 368,120 398,165 C428,210 432,268 425,325 C420,365 400,400 372,425 C348,445 318,458 285,462"/>
+
+            <!-- Belly -->
+            <path id="belly" fill="#FDBA74"
+              d="M250,180 C298,178 340,198 355,238 C370,280 365,332 355,375 C348,402 322,425 282,435 L218,435 C178,425 152,402 145,375 C135,332 130,280 145,238 C160,198 202,178 250,180 Z"/>
+
+            <!-- Spikes -->
+            <ellipse id="spike1" cx="210" cy="102" rx="10" ry="22" fill="#FBBF24" transform="rotate(-15 210 102)"/>
+            <ellipse id="spike2" cx="235" cy="92" rx="10" ry="26" fill="#FBBF24" transform="rotate(-5 235 92)"/>
+            <ellipse id="spike3" cx="262" cy="88" rx="11" ry="28" fill="#FBBF24" transform="rotate(2 262 88)"/>
+            <ellipse id="spike4" cx="290" cy="92" rx="10" ry="26" fill="#FBBF24" transform="rotate(10 290 92)"/>
+            <ellipse id="spike5" cx="315" cy="102" rx="10" ry="22" fill="#FBBF24" transform="rotate(18 315 102)"/>
+
+            <!-- Snout -->
+            <ellipse id="snout" cx="250" cy="310" rx="55" ry="35" fill="#FDBA74"/>
+            <ellipse id="nostril-left" cx="232" cy="305" rx="8" ry="6" fill="#EA580C"/>
+            <ellipse id="nostril-right" cx="268" cy="305" rx="8" ry="6" fill="#EA580C"/>
+
+            <!-- Eyes -->
+            <g id="eye1">
+              <ellipse cx="195" cy="225" rx="38" ry="40" fill="#F0FFF0"/>
+              <ellipse cx="200" cy="230" rx="18" ry="20" fill="#F97316"/>
+              <circle cx="202" cy="226" r="10" fill="#C2410C"/>
+              <circle cx="206" cy="220" r="5" fill="#ffffff"/>
             </g>
-            <g id="el-mela2" data-size="small" data-name="mela2">
-                <circle cx="645" cy="260" r="6.5" fill="url(#appleGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
-                <ellipse cx="643" cy="257" rx="2" ry="1.8" fill="#FF8A80" opacity="0.5"/>
-                <path d="M645,253 Q646,249 647,247" stroke="#5D4037" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-            </g>
-            <g id="el-mela3" data-size="small" data-name="mela3">
-                <circle cx="625" cy="290" r="6" fill="url(#appleGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
-                <ellipse cx="623" cy="287" rx="2" ry="1.5" fill="#FF8A80" opacity="0.5"/>
-                <path d="M625,284 Q626,280 626,278" stroke="#5D4037" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            <g id="eye2">
+              <ellipse cx="305" cy="225" rx="38" ry="40" fill="#F0FFF0"/>
+              <ellipse cx="300" cy="230" rx="18" ry="20" fill="#F97316"/>
+              <circle cx="298" cy="226" r="10" fill="#C2410C"/>
+              <circle cx="294" cy="220" r="5" fill="#ffffff"/>
             </g>
 
-            <!-- ===== HAY BALES ===== -->
-            <g id="el-fieno1" data-size="medium" data-name="fieno1" filter="url(#shadowSm)">
-                <!-- Cylindrical bale 1 -->
-                <ellipse cx="480" cy="365" rx="30" ry="18" fill="url(#hayGrad)" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
-                <!-- Straw texture -->
-                <g stroke="#E6A23C" stroke-width="0.8" opacity="0.5">
-                    <line x1="460" y1="360" x2="500" y2="360"/>
-                    <line x1="455" y1="367" x2="505" y2="367"/>
-                    <line x1="458" y1="374" x2="502" y2="374"/>
-                    <line x1="465" y1="354" x2="495" y2="354"/>
-                </g>
-                <!-- Highlight -->
-                <ellipse cx="475" cy="358" rx="14" ry="5" fill="#FFE082" opacity="0.3"/>
-            </g>
-            <g id="el-fieno2" data-size="small" data-name="fieno2" filter="url(#shadowSm)">
-                <!-- Smaller bale stacked -->
-                <ellipse cx="495" cy="348" rx="22" ry="14" fill="url(#hayGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <g stroke="#E6A23C" stroke-width="0.7" opacity="0.4">
-                    <line x1="478" y1="344" x2="512" y2="344"/>
-                    <line x1="476" y1="350" x2="514" y2="350"/>
-                    <line x1="480" y1="356" x2="510" y2="356"/>
-                </g>
-                <ellipse cx="490" cy="342" rx="10" ry="4" fill="#FFE082" opacity="0.3"/>
+            <!-- Mouth -->
+            <path id="mouth" fill="#C2410C"
+              d="M195,340 C210,345 230,348 250,348 C270,348 290,345 305,340 C300,365 280,385 250,385 C220,385 200,365 195,340 Z"/>
+
+            <!-- Smoke -->
+            <g id="smoke">
+              <circle id="smoke1" cx="218" cy="290" r="6" fill="#D1D5DB" opacity="0.4"/>
+              <circle id="smoke2" cx="210" cy="278" r="8" fill="#D1D5DB" opacity="0.3"/>
+              <circle id="smoke3" cx="205" cy="264" r="5" fill="#D1D5DB" opacity="0.2"/>
             </g>
 
-            <!-- ===== CAT near hay ===== -->
-            <g id="el-gatto" data-size="small" data-name="gatto">
-                <!-- Cat sitting -->
-                <ellipse cx="520" cy="358" rx="10" ry="12" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <!-- Head -->
-                <circle cx="520" cy="342" r="8" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1.8"/>
-                <!-- Ears -->
-                <polygon points="514,336 511,326 518,333" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1.2"/>
-                <polygon points="526,336 529,326 522,333" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1.2"/>
-                <polygon points="515,335 513,329 517,333" fill="#FFAB40" stroke="none"/>
-                <polygon points="525,335 527,329 523,333" fill="#FFAB40" stroke="none"/>
-                <!-- Eyes -->
-                <ellipse cx="516" cy="341" rx="2.5" ry="3" fill="#C8E6C9"/>
-                <ellipse cx="516.5" cy="341" rx="1" ry="2.5" fill="#2D1B0E"/>
-                <ellipse cx="524" cy="341" rx="2.5" ry="3" fill="#C8E6C9"/>
-                <ellipse cx="524.5" cy="341" rx="1" ry="2.5" fill="#2D1B0E"/>
-                <!-- Nose -->
-                <polygon points="520,344 518.5,346 521.5,346" fill="#F48FB1"/>
-                <!-- Whiskers -->
-                <line x1="512" y1="345" x2="504" y2="343" stroke="#2D1B0E" stroke-width="0.6"/>
-                <line x1="512" y1="347" x2="504" y2="348" stroke="#2D1B0E" stroke-width="0.6"/>
-                <line x1="528" y1="345" x2="536" y2="343" stroke="#2D1B0E" stroke-width="0.6"/>
-                <line x1="528" y1="347" x2="536" y2="348" stroke="#2D1B0E" stroke-width="0.6"/>
-                <!-- Tail curving up -->
-                <path d="M530,360 C538,355 542,345 536,338" stroke="#FF8F00" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-                <path d="M530,360 C538,355 542,345 536,338" stroke="#2D1B0E" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.2"/>
-                <!-- Front paws -->
-                <ellipse cx="515" cy="369" rx="3.5" ry="2" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1"/>
-                <ellipse cx="525" cy="369" rx="3.5" ry="2" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1"/>
+            <!-- Cheek blush -->
+            <ellipse id="blush-left" cx="148" cy="290" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
+            <ellipse id="blush-right" cx="352" cy="290" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
+        </svg>
+    </template>
+
+    <template id="tpl-robot">
+        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Antenna -->
+            <path id="antenna-pole" fill="#0D9488"
+              d="M247,120 L247,55 L253,55 L253,120 Z"/>
+            <path fill="none" stroke="#115E59" stroke-width="2.5"
+              d="M250,120 L250,55"/>
+            <path id="antenna-dish" fill="#5EEAD4"
+              d="M225,55 C225,35 275,35 275,55 C275,65 225,65 225,55 Z"/>
+            <path fill="none" stroke="#115E59" stroke-width="2.5"
+              d="M225,55 C225,35 275,35 275,55"/>
+            <circle id="antenna-light" cx="250" cy="38" r="6" fill="#FF4081"/>
+            <circle cx="248" cy="36" r="2" fill="#ffffff" opacity="0.7"/>
+
+            <!-- Arms -->
+            <g id="arm-left">
+              <path id="arm-left-upper" fill="#0D9488"
+                d="M95,240 C75,255 55,280 40,310 C32,328 28,345 38,350 C48,355 58,342 65,325 C75,300 85,275 100,255 Z"/>
+              <path fill="none" stroke="#115E59" stroke-width="3.5"
+                d="M95,240 C75,255 55,280 40,310 C32,328 28,345 38,350 C48,355 58,342 65,325"/>
+              <path id="claw-left-top" fill="#5EEAD4"
+                d="M35,345 C25,335 18,325 22,320 C26,315 35,322 40,335 Z"/>
+              <path id="claw-left-bottom" fill="#5EEAD4"
+                d="M35,345 C22,352 12,358 12,365 C12,372 22,370 32,362 Z"/>
+              <circle id="claw-left-joint" cx="38" cy="348" r="5" fill="#2DD4BF"/>
+            </g>
+            <g id="arm-right">
+              <path id="arm-right-upper" fill="#0D9488"
+                d="M405,255 C415,275 425,300 435,325 C442,342 452,355 462,350 C472,345 468,328 460,310 C445,280 425,255 405,240 Z"/>
+              <path fill="none" stroke="#115E59" stroke-width="3.5"
+                d="M405,240 C425,255 445,280 460,310 C468,328 472,345 462,350 C452,355 442,342 435,325"/>
+              <path id="claw-right-top" fill="#5EEAD4"
+                d="M465,345 C475,335 482,325 478,320 C474,315 465,322 460,335 Z"/>
+              <path id="claw-right-bottom" fill="#5EEAD4"
+                d="M465,345 C478,352 488,358 488,365 C488,372 478,370 468,362 Z"/>
+              <circle id="claw-right-joint" cx="462" cy="348" r="5" fill="#2DD4BF"/>
             </g>
 
-            <!-- ===== BUCKET near barn ===== -->
-            <g id="el-secchio" data-size="small" data-name="secchio" filter="url(#shadowSm)">
-                <path d="M250,365 L254,338 L280,338 L284,365 Z" fill="url(#bucketGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <!-- Rim -->
-                <rect x="252" y="336" width="30" height="4" rx="1.5" fill="#B0BEC5" stroke="#2D1B0E" stroke-width="1"/>
-                <!-- Handle -->
-                <path d="M256,338 Q267,322 278,338" fill="none" stroke="#78909C" stroke-width="2.5" stroke-linecap="round"/>
-                <!-- Metallic highlight -->
-                <path d="M258,342 L258,360" stroke="#64B5F6" stroke-width="2" opacity="0.3" stroke-linecap="round"/>
+            <!-- Treads -->
+            <g id="treads">
+              <rect id="tread-left" x="145" y="455" rx="18" ry="18" width="90" height="36" fill="#115E59"/>
+              <rect id="tread-right" x="270" y="455" rx="18" ry="18" width="90" height="36" fill="#115E59"/>
+              <circle id="wheel-left1" cx="175" cy="473" r="12" fill="#0D9488"/>
+              <circle id="wheel-left2" cx="205" cy="473" r="12" fill="#0D9488"/>
+              <circle id="wheel-right1" cx="300" cy="473" r="12" fill="#0D9488"/>
+              <circle id="wheel-right2" cx="330" cy="473" r="12" fill="#0D9488"/>
+              <circle cx="175" cy="473" r="5" fill="#5EEAD4"/>
+              <circle cx="205" cy="473" r="5" fill="#5EEAD4"/>
+              <circle cx="300" cy="473" r="5" fill="#5EEAD4"/>
+              <circle cx="330" cy="473" r="5" fill="#5EEAD4"/>
+            </g>
+            <path fill="none" stroke="#115E59" stroke-width="3"
+              d="M150,488 C158,493 172,495 190,495 C208,495 222,493 230,488"/>
+            <path fill="none" stroke="#115E59" stroke-width="3"
+              d="M274,488 C282,493 296,495 315,495 C334,495 348,493 356,488"/>
+
+            <!-- Body -->
+            <rect id="body" x="110" y="120" rx="40" ry="40" width="280" height="340" fill="#14B8A6"/>
+            <path fill="none" stroke="#115E59" stroke-width="3.5"
+              d="M150,460 C130,460 115,450 112,430 L110,160 C110,138 128,120 150,120 L350,120 C372,120 390,138 390,160 L388,430 C385,450 370,460 350,460"/>
+
+            <!-- Belly panel -->
+            <rect id="belly-panel" x="180" y="320" rx="15" ry="15" width="140" height="100" fill="#0D9488"/>
+            <rect id="belly-screen" x="192" y="332" rx="10" ry="10" width="116" height="76" fill="#042F2E"/>
+            <path id="heart-symbol" fill="#FF4081"
+              d="M250,395 C240,385 218,368 218,355 C218,345 225,338 235,338 C242,338 248,342 250,348 C252,342 258,338 265,338 C275,338 282,345 282,355 C282,368 260,385 250,395 Z"/>
+
+            <!-- Bolts -->
+            <circle id="bolt1" cx="140" cy="155" r="7" fill="#5EEAD4"/>
+            <circle id="bolt2" cx="360" cy="155" r="7" fill="#5EEAD4"/>
+            <circle id="bolt3" cx="140" cy="425" r="7" fill="#5EEAD4"/>
+            <circle id="bolt4" cx="360" cy="425" r="7" fill="#5EEAD4"/>
+            <rect x="137" y="152" width="6" height="6" rx="1" fill="#14B8A6"/>
+            <rect x="357" y="152" width="6" height="6" rx="1" fill="#14B8A6"/>
+            <rect x="137" y="422" width="6" height="6" rx="1" fill="#14B8A6"/>
+            <rect x="357" y="422" width="6" height="6" rx="1" fill="#14B8A6"/>
+
+            <!-- Blinking lights -->
+            <circle id="light1" cx="175" cy="145" r="5" fill="#FF4081"/>
+            <circle id="light2" cx="210" cy="145" r="5" fill="#FBBF24"/>
+            <circle id="light3" cx="250" cy="145" r="5" fill="#4ADE80"/>
+            <circle id="light4" cx="290" cy="145" r="5" fill="#FBBF24"/>
+            <circle id="light5" cx="325" cy="145" r="5" fill="#FF4081"/>
+
+            <!-- Eyes -->
+            <g id="eye1">
+              <rect x="160" y="185" rx="12" ry="12" width="72" height="68" fill="#F0FFF0"/>
+              <rect x="178" y="200" rx="6" ry="6" width="38" height="40" fill="#14B8A6"/>
+              <rect id="pupil-left" x="188" y="206" rx="3" ry="3" width="18" height="28" fill="#042F2E"/>
+              <rect x="192" y="210" rx="2" ry="2" width="6" height="10" fill="#ffffff"/>
+            </g>
+            <g id="eye2">
+              <rect x="268" y="185" rx="12" ry="12" width="72" height="68" fill="#F0FFF0"/>
+              <rect x="284" y="200" rx="6" ry="6" width="38" height="40" fill="#14B8A6"/>
+              <rect id="pupil-right" x="294" y="206" rx="3" ry="3" width="18" height="28" fill="#042F2E"/>
+              <rect x="298" y="210" rx="2" ry="2" width="6" height="10" fill="#ffffff"/>
             </g>
 
-            <!-- ===== POND ===== -->
-            <g id="el-stagno" data-size="medium" data-name="stagno">
-                <ellipse cx="140" cy="430" rx="55" ry="25" fill="url(#pondGrad)" stroke="#01579B" stroke-width="1.5" opacity="0.8"/>
-                <!-- Water reflection -->
-                <ellipse cx="130" cy="425" rx="20" ry="6" fill="#81D4FA" opacity="0.4"/>
-                <ellipse cx="155" cy="435" rx="12" ry="4" fill="#81D4FA" opacity="0.3"/>
-                <!-- Cattails at edge -->
-                <line x1="100" y1="430" x2="98" y2="402" stroke="#5D4037" stroke-width="2" stroke-linecap="round"/>
-                <ellipse cx="98" cy="402" rx="3" ry="7" fill="#795548" stroke="#4E342E" stroke-width="0.8"/>
-                <line x1="108" y1="428" x2="106" y2="406" stroke="#5D4037" stroke-width="1.8" stroke-linecap="round"/>
-                <ellipse cx="106" cy="406" rx="2.5" ry="6" fill="#795548" stroke="#4E342E" stroke-width="0.8"/>
-                <!-- Grass tufts near pond -->
-                <path d="M85,430 Q83,418 80,412" stroke="#2E7D32" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path d="M88,428 Q90,416 92,410" stroke="#388E3C" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                <path d="M185,425 Q188,414 192,408" stroke="#2E7D32" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                <path d="M180,427 Q177,416 175,410" stroke="#388E3C" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            </g>
+            <!-- Mouth -->
+            <rect id="mouth" x="190" y="290" rx="8" ry="8" width="120" height="40" fill="#042F2E"/>
+            <!-- Pixel smile -->
+            <rect id="pixel1" x="200" y="302" width="8" height="8" rx="1" fill="#4ADE80"/>
+            <rect id="pixel2" x="212" y="310" width="8" height="8" rx="1" fill="#4ADE80"/>
+            <rect id="pixel3" x="224" y="314" width="8" height="8" rx="1" fill="#4ADE80"/>
+            <rect id="pixel4" x="236" y="316" width="8" height="8" rx="1" fill="#4ADE80"/>
+            <rect id="pixel5" x="252" y="316" width="8" height="8" rx="1" fill="#4ADE80"/>
+            <rect id="pixel6" x="264" y="314" width="8" height="8" rx="1" fill="#4ADE80"/>
+            <rect id="pixel7" x="276" y="310" width="8" height="8" rx="1" fill="#4ADE80"/>
+            <rect id="pixel8" x="288" y="302" width="8" height="8" rx="1" fill="#4ADE80"/>
 
-            <!-- ===== COW ===== -->
-            <g id="el-mucca" data-size="large" data-name="mucca" filter="url(#shadow)">
-                <!-- Shadow on ground -->
-                <ellipse cx="450" cy="440" rx="48" ry="8" fill="#1B5E20" opacity="0.2"/>
-                <!-- Body - organic blob -->
-                <path d="M415,405 C400,400 390,410 392,420 C390,430 400,438 415,440 C425,442 465,442 480,440 C495,438 505,430 503,420 C505,410 495,400 480,405 C465,400 430,400 415,405 Z" fill="url(#cowBodyGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
-                <!-- Spots -->
-                <g class="cow-spots">
-                    <path d="M420,410 C416,408 412,412 414,418 C416,422 424,424 426,418 C428,412 424,408 420,410 Z" fill="#333"/>
-                    <path d="M460,415 C456,412 450,416 452,422 C454,426 462,426 464,420 C466,414 462,412 460,415 Z" fill="#333"/>
-                    <ellipse cx="440" cy="432" rx="8" ry="5" fill="#333"/>
-                    <path d="M480,412 C477,410 474,414 476,418 C478,420 482,420 484,416 C485,412 482,410 480,412 Z" fill="#333"/>
-                </g>
-                <!-- Legs -->
-                <rect x="406" y="436" width="10" height="28" rx="3" fill="#F5F5F5" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
-                <rect x="422" y="436" width="10" height="28" rx="3" fill="#F5F5F5" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
-                <rect x="460" y="436" width="10" height="28" rx="3" fill="#F5F5F5" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
-                <rect x="476" y="436" width="10" height="28" rx="3" fill="#F5F5F5" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
-                <!-- Hooves -->
-                <rect x="405" y="460" width="12" height="5" rx="2" fill="#333" stroke="#2D1B0E" stroke-width="1"/>
-                <rect x="421" y="460" width="12" height="5" rx="2" fill="#333" stroke="#2D1B0E" stroke-width="1"/>
-                <rect x="459" y="460" width="12" height="5" rx="2" fill="#333" stroke="#2D1B0E" stroke-width="1"/>
-                <rect x="475" y="460" width="12" height="5" rx="2" fill="#333" stroke="#2D1B0E" stroke-width="1"/>
-                <!-- Udder -->
-                <ellipse cx="445" cy="440" rx="10" ry="6" fill="#FFCDD2" stroke="#2D1B0E" stroke-width="1.2"/>
-                <!-- Head -->
-                <circle cx="500" cy="400" r="20" fill="url(#cowBodyGrad)" stroke="#2D1B0E" stroke-width="2.5"/>
-                <!-- Head highlight -->
-                <ellipse cx="495" cy="393" rx="8" ry="6" fill="#fff" opacity="0.15"/>
-                <!-- Ears -->
-                <path d="M486,385 C480,378 476,382 478,388 C480,392 484,390 486,385 Z" fill="#FFCCBC" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
-                <path d="M514,385 C520,378 524,382 522,388 C520,392 516,390 514,385 Z" fill="#FFCCBC" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
-                <!-- Horns -->
-                <path d="M490,383 Q486,370 488,366" stroke="#FFB74D" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <path d="M510,383 Q514,370 512,366" stroke="#FFB74D" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <!-- Eyes -->
-                <ellipse cx="493" cy="396" rx="5" ry="5.5" fill="#fff" stroke="#2D1B0E" stroke-width="1.2"/>
-                <circle cx="494" cy="397" r="2.8" fill="#4E342E"/>
-                <circle cx="495" cy="395.5" r="1.2" fill="#fff"/>
-                <ellipse cx="507" cy="396" rx="5" ry="5.5" fill="#fff" stroke="#2D1B0E" stroke-width="1.2"/>
-                <circle cx="508" cy="397" r="2.8" fill="#4E342E"/>
-                <circle cx="509" cy="395.5" r="1.2" fill="#fff"/>
-                <!-- Muzzle / snout -->
-                <ellipse cx="500" cy="408" rx="11" ry="7" fill="#FFCCBC" stroke="#2D1B0E" stroke-width="1.5"/>
-                <!-- Nostrils -->
-                <ellipse cx="496" cy="408" rx="2" ry="1.5" fill="#5D4037"/>
-                <ellipse cx="504" cy="408" rx="2" ry="1.5" fill="#5D4037"/>
-                <!-- Smile -->
-                <path d="M494,412 Q500,416 506,412" fill="none" stroke="#2D1B0E" stroke-width="1.5" stroke-linecap="round"/>
-                <!-- Tail -->
-                <path d="M392,415 C380,410 375,400 372,408 C370,412 374,416 378,414" stroke="#E0E0E0" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <path d="M392,415 C380,410 375,400 372,408 C370,412 374,416 378,414" stroke="#2D1B0E" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.3"/>
-                <!-- Tail tuft -->
-                <circle cx="377" cy="413" r="5" fill="#E0E0E0" stroke="#2D1B0E" stroke-width="1.2"/>
-            </g>
-
-            <!-- ===== TRACTOR ===== -->
-            <g id="el-trattore" data-size="large" data-name="trattore" filter="url(#shadow)">
-                <!-- Shadow on ground -->
-                <ellipse cx="720" cy="450" rx="50" ry="8" fill="#1B5E20" opacity="0.2"/>
-                <!-- Body -->
-                <path d="M685,390 L685,420 L760,420 L760,395 L740,385 L710,385 L705,390 Z" fill="url(#tractorBodyGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
-                <!-- Metallic highlight on body -->
-                <path d="M688,392 L688,408 L720,408 L720,392 Z" fill="#EF5350" opacity="0.4"/>
-                <!-- Cabin/windshield -->
-                <path d="M710,385 L710,360 L742,360 L745,385 Z" fill="#B3E5FC" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round" opacity="0.85"/>
-                <!-- Windshield reflection -->
-                <path d="M714,365 L714,380 L724,380 L724,365 Z" fill="#E1F5FE" opacity="0.4"/>
-                <!-- Roof -->
-                <rect x="706" y="355" width="40" height="5" rx="2" fill="#C62828" stroke="#2D1B0E" stroke-width="1.5"/>
-                <!-- Exhaust pipe -->
-                <rect x="690" y="365" width="5" height="25" rx="2" fill="#616161" stroke="#2D1B0E" stroke-width="1.5"/>
-                <ellipse cx="692.5" cy="364" rx="4" ry="2" fill="#757575" stroke="#2D1B0E" stroke-width="1"/>
-                <!-- Smoke puff -->
-                <circle cx="690" cy="356" r="4" fill="#BDBDBD" opacity="0.5"/>
-                <circle cx="686" cy="349" r="3" fill="#E0E0E0" opacity="0.35"/>
-                <circle cx="688" cy="343" r="2.5" fill="#EEEEEE" opacity="0.2"/>
-                <!-- Seat -->
-                <path d="M726,370 C724,365 722,362 726,360 L734,360 C738,362 736,365 734,370 Z" fill="#5D4037" stroke="#2D1B0E" stroke-width="1.2"/>
-                <!-- Steering wheel hint -->
-                <circle cx="717" cy="378" r="5" fill="none" stroke="#333" stroke-width="2"/>
-                <line x1="717" y1="373" x2="717" y2="383" stroke="#333" stroke-width="1.5"/>
-                <!-- Big back wheel -->
-                <circle cx="700" cy="440" r="28" fill="url(#wheelGrad)" stroke="#2D1B0E" stroke-width="2.5"/>
-                <circle cx="700" cy="440" r="18" fill="none" stroke="#444" stroke-width="1.5"/>
-                <circle cx="700" cy="440" r="8" fill="#9E9E9E" stroke="#2D1B0E" stroke-width="1.5"/>
-                <circle cx="700" cy="440" r="3" fill="#616161"/>
-                <!-- Wheel spokes -->
-                <g stroke="#666" stroke-width="1.5" opacity="0.4">
-                    <line x1="700" y1="422" x2="700" y2="412"/>
-                    <line x1="700" y1="458" x2="700" y2="468"/>
-                    <line x1="682" y1="440" x2="672" y2="440"/>
-                    <line x1="718" y1="440" x2="728" y2="440"/>
-                </g>
-                <!-- Tire tread hints -->
-                <g stroke="#111" stroke-width="2" opacity="0.15" stroke-linecap="round">
-                    <path d="M678,425 L674,422" /><path d="M676,445 L672,448" />
-                    <path d="M722,425 L726,422" /><path d="M724,445 L728,448" />
-                    <path d="M688,418 L686,414" /><path d="M712,418 L714,414" />
-                    <path d="M688,462 L686,466" /><path d="M712,462 L714,466" />
-                </g>
-                <!-- Small front wheel -->
-                <circle cx="756" cy="445" r="16" fill="url(#wheelGrad)" stroke="#2D1B0E" stroke-width="2"/>
-                <circle cx="756" cy="445" r="10" fill="none" stroke="#444" stroke-width="1"/>
-                <circle cx="756" cy="445" r="5" fill="#9E9E9E" stroke="#2D1B0E" stroke-width="1.2"/>
-                <!-- Axle connection -->
-                <rect x="748" y="418" width="6" height="28" rx="2" fill="#616161" stroke="#2D1B0E" stroke-width="1.2"/>
-                <!-- Fender over back wheel -->
-                <path d="M672,420 Q672,410 700,408 Q728,410 728,420" fill="#C62828" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
-            </g>
-
-            <!-- ===== CHICKENS ===== -->
-            <g id="el-gallina1" data-size="medium" data-name="gallina1" filter="url(#shadowSm)">
-                <!-- Body blob -->
-                <path d="M290,430 C278,425 270,430 272,440 C274,450 285,455 295,452 C305,449 310,440 308,432 C306,426 298,425 290,430 Z" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
-                <!-- Wing -->
-                <path d="M285,435 C280,432 276,436 278,440 C280,444 288,446 290,442 C292,438 288,434 285,435 Z" fill="#FFD54F" stroke="#2D1B0E" stroke-width="1.2"/>
-                <!-- Tail feathers -->
-                <path d="M272,435 C265,428 260,430 262,436 C264,440 270,442 272,438" fill="#FFB300" stroke="#2D1B0E" stroke-width="1.2" stroke-linejoin="round"/>
-                <path d="M270,438 C264,434 258,438 262,442 C264,444 268,444 270,440" fill="#FFA000" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
-                <!-- Head -->
-                <circle cx="305" cy="426" r="9" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="2"/>
-                <!-- Comb -->
-                <path d="M300,418 Q302,410 305,412 Q306,408 309,412 Q312,410 310,418" fill="#F44336" stroke="#2D1B0E" stroke-width="1.2" stroke-linejoin="round"/>
-                <!-- Wattle -->
-                <path d="M307,432 Q310,438 308,440 Q305,438 307,432" fill="#F44336" stroke="#2D1B0E" stroke-width="0.8"/>
-                <!-- Eye -->
-                <circle cx="307" cy="424" r="2.5" fill="#fff"/>
-                <circle cx="307.5" cy="424" r="1.3" fill="#2D1B0E"/>
-                <!-- Beak -->
-                <polygon points="313,426 320,428 313,430" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
-                <!-- Legs -->
-                <line x1="288" y1="452" x2="286" y2="468" stroke="#FF8F00" stroke-width="2.5" stroke-linecap="round"/>
-                <line x1="296" y1="452" x2="298" y2="468" stroke="#FF8F00" stroke-width="2.5" stroke-linecap="round"/>
-                <!-- Feet -->
-                <path d="M282,468 L286,468 L290,468" stroke="#FF8F00" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path d="M294,468 L298,468 L302,468" stroke="#FF8F00" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <!-- Toes -->
-                <path d="M286,468 L284,470" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M286,468 L288,470" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M298,468 L296,470" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M298,468 L300,470" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            </g>
-
-            <g id="el-gallina2" data-size="small" data-name="gallina2" filter="url(#shadowSm)">
-                <!-- Smaller chicken pecking -->
-                <path d="M220,450 C212,447 207,450 208,456 C210,462 218,465 224,462 C230,460 232,454 230,449 C228,446 224,446 220,450 Z" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <!-- Wing -->
-                <path d="M218,453 C215,451 213,453 214,456 C216,458 220,458 221,456 Z" fill="#FFD54F" stroke="#2D1B0E" stroke-width="1"/>
-                <!-- Head (pecking down) -->
-                <circle cx="230" cy="448" r="7" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="1.8"/>
-                <!-- Comb -->
-                <path d="M226,442 Q228,436 230,438 Q232,435 233,440" fill="#F44336" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
-                <!-- Eye -->
-                <circle cx="232" cy="446" r="2" fill="#fff"/>
-                <circle cx="232.5" cy="446" r="1" fill="#2D1B0E"/>
-                <!-- Beak pointing down -->
-                <polygon points="236,450 240,454 236,453" fill="#FF8F00" stroke="#2D1B0E" stroke-width="0.8"/>
-                <!-- Legs -->
-                <line x1="218" y1="462" x2="216" y2="474" stroke="#FF8F00" stroke-width="2" stroke-linecap="round"/>
-                <line x1="224" y1="462" x2="226" y2="474" stroke="#FF8F00" stroke-width="2" stroke-linecap="round"/>
-                <path d="M213,474 L216,474 L219,474" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M223,474 L226,474 L229,474" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            </g>
-
-            <g id="el-gallina3" data-size="small" data-name="gallina3" filter="url(#shadowSm)">
-                <!-- Third chicken, walking -->
-                <path d="M330,445 C322,442 316,445 318,452 C320,458 328,460 334,458 C340,456 342,450 340,444 C338,441 334,440 330,445 Z" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
-                <circle cx="340" cy="438" r="7.5" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="1.8"/>
-                <path d="M336,432 Q338,426 340,428 Q342,425 343,430" fill="#F44336" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
-                <circle cx="342" cy="436" r="2" fill="#fff"/>
-                <circle cx="342.5" cy="436" r="1" fill="#2D1B0E"/>
-                <polygon points="347,438 353,440 347,441" fill="#FF8F00" stroke="#2D1B0E" stroke-width="0.8"/>
-                <line x1="328" y1="458" x2="326" y2="472" stroke="#FF8F00" stroke-width="2" stroke-linecap="round"/>
-                <line x1="334" y1="458" x2="336" y2="472" stroke="#FF8F00" stroke-width="2" stroke-linecap="round"/>
-                <path d="M323,472 L326,472 L329,472" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M333,472 L336,472 L339,472" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            </g>
-
-            <!-- ===== EGGS near chickens ===== -->
-            <g id="el-uova" data-size="small" data-name="uova">
-                <ellipse cx="310" cy="470" rx="5" ry="6" fill="#FFF8E1" stroke="#2D1B0E" stroke-width="1.2" transform="rotate(-10,310,470)"/>
-                <ellipse cx="308" cy="467" rx="2" ry="1.5" fill="#fff" opacity="0.4"/>
-                <ellipse cx="320" cy="472" rx="4.5" ry="5.5" fill="#FFF8E1" stroke="#2D1B0E" stroke-width="1.2" transform="rotate(8,320,472)"/>
-                <ellipse cx="318" cy="469" rx="1.8" ry="1.3" fill="#fff" opacity="0.4"/>
-            </g>
-
-            <!-- ===== PIG ===== -->
-            <g id="el-maiale" data-size="medium" data-name="maiale" filter="url(#shadow)">
-                <!-- Mud puddle -->
-                <ellipse cx="80" cy="465" rx="40" ry="14" fill="url(#mudGrad)" opacity="0.7" stroke="#5D4037" stroke-width="1"/>
-                <!-- Mud splatter -->
-                <circle cx="60" cy="460" r="3" fill="#8D6E63" opacity="0.4"/>
-                <circle cx="105" cy="462" r="2" fill="#8D6E63" opacity="0.3"/>
-                <!-- Pig body - round pink blob -->
-                <path d="M60,440 C48,435 40,442 42,452 C40,460 50,468 65,468 C80,470 100,470 110,468 C120,465 125,455 122,448 C125,440 118,435 108,438 C95,434 72,434 60,440 Z" fill="url(#pigBodyGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
-                <!-- Belly highlight -->
-                <ellipse cx="82" cy="458" rx="22" ry="8" fill="#FFD1E8" opacity="0.4"/>
-                <!-- Legs -->
-                <rect x="58" y="465" width="8" height="16" rx="3" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5"/>
-                <rect x="72" y="465" width="8" height="16" rx="3" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5"/>
-                <rect x="94" y="465" width="8" height="16" rx="3" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5"/>
-                <rect x="108" y="465" width="8" height="16" rx="3" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5"/>
-                <!-- Hooves -->
-                <rect x="57" y="478" width="10" height="4" rx="2" fill="#D48BA6" stroke="#2D1B0E" stroke-width="0.8"/>
-                <rect x="71" y="478" width="10" height="4" rx="2" fill="#D48BA6" stroke="#2D1B0E" stroke-width="0.8"/>
-                <rect x="93" y="478" width="10" height="4" rx="2" fill="#D48BA6" stroke="#2D1B0E" stroke-width="0.8"/>
-                <rect x="107" y="478" width="10" height="4" rx="2" fill="#D48BA6" stroke="#2D1B0E" stroke-width="0.8"/>
-                <!-- Head -->
-                <circle cx="120" cy="440" r="16" fill="url(#pigBodyGrad)" stroke="#2D1B0E" stroke-width="2.5"/>
-                <!-- Ears -->
-                <path d="M110,428 C106,420 102,424 105,430" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
-                <path d="M130,428 C134,420 138,424 135,430" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
-                <!-- Inner ear -->
-                <path d="M109,427 C107,423 105,425 107,429" fill="#E8769E" stroke="none"/>
-                <path d="M131,427 C133,423 135,425 133,429" fill="#E8769E" stroke="none"/>
-                <!-- Snout -->
-                <ellipse cx="130" cy="442" rx="9" ry="6.5" fill="#F48FB1" stroke="#2D1B0E" stroke-width="1.8"/>
-                <!-- Nostrils -->
-                <ellipse cx="127" cy="442" rx="2" ry="1.5" fill="#C2185B"/>
-                <ellipse cx="133" cy="442" rx="2" ry="1.5" fill="#C2185B"/>
-                <!-- Eyes -->
-                <circle cx="116" cy="436" r="3.5" fill="#fff" stroke="#2D1B0E" stroke-width="1"/>
-                <circle cx="116.5" cy="436.5" r="1.8" fill="#2D1B0E"/>
-                <circle cx="117" cy="435.5" r="0.8" fill="#fff"/>
-                <circle cx="125" cy="436" r="3.5" fill="#fff" stroke="#2D1B0E" stroke-width="1"/>
-                <circle cx="125.5" cy="436.5" r="1.8" fill="#2D1B0E"/>
-                <circle cx="126" cy="435.5" r="0.8" fill="#fff"/>
-                <!-- Smile -->
-                <path d="M118,448 Q122,452 126,448" fill="none" stroke="#2D1B0E" stroke-width="1.2" stroke-linecap="round"/>
-                <!-- Curly tail -->
-                <path d="M42,445 C35,440 32,445 35,450 C38,455 32,458 30,452" stroke="#FFABCF" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <path d="M42,445 C35,440 32,445 35,450 C38,455 32,458 30,452" stroke="#2D1B0E" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.3"/>
-            </g>
-
-            <!-- ===== FOREGROUND ELEMENTS ===== -->
-
-            <!-- Flowers scattered -->
-            <g id="el-fiore1" data-size="small" data-name="fiore1">
-                <!-- Stem -->
-                <path d="M560,480 C558,470 562,460 560,452" stroke="#2E7D32" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                <!-- Leaf -->
-                <path d="M560,468 Q568,462 572,466 Q566,472 560,468" fill="#43A047" stroke="#2D1B0E" stroke-width="0.8"/>
-                <!-- Petals -->
-                <ellipse cx="554" cy="448" rx="5" ry="8" fill="url(#flowerRedGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-30,554,448)"/>
-                <ellipse cx="566" cy="448" rx="5" ry="8" fill="url(#flowerRedGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(30,566,448)"/>
-                <ellipse cx="555" cy="455" rx="5" ry="8" fill="url(#flowerRedGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-60,555,455)"/>
-                <ellipse cx="565" cy="455" rx="5" ry="8" fill="url(#flowerRedGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(60,565,455)"/>
-                <ellipse cx="560" cy="444" rx="5" ry="8" fill="url(#flowerRedGrad)" stroke="#2D1B0E" stroke-width="1"/>
-                <!-- Center -->
-                <circle cx="560" cy="452" r="5" fill="#FFD600" stroke="#2D1B0E" stroke-width="1"/>
-                <circle cx="559" cy="450" r="1.5" fill="#FFE082" opacity="0.6"/>
-            </g>
-
-            <g id="el-fiore2" data-size="small" data-name="fiore2">
-                <path d="M400,485 C398,475 402,465 400,458" stroke="#2E7D32" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path d="M400,472 Q392,467 390,472 Q396,476 400,472" fill="#43A047" stroke="#2D1B0E" stroke-width="0.8"/>
-                <ellipse cx="395" cy="454" rx="4" ry="7" fill="url(#flowerYellowGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-25,395,454)"/>
-                <ellipse cx="405" cy="454" rx="4" ry="7" fill="url(#flowerYellowGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(25,405,454)"/>
-                <ellipse cx="396" cy="460" rx="4" ry="7" fill="url(#flowerYellowGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-55,396,460)"/>
-                <ellipse cx="404" cy="460" rx="4" ry="7" fill="url(#flowerYellowGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(55,404,460)"/>
-                <ellipse cx="400" cy="450" rx="4" ry="7" fill="url(#flowerYellowGrad)" stroke="#2D1B0E" stroke-width="1"/>
-                <circle cx="400" cy="457" r="4" fill="#FF7043" stroke="#2D1B0E" stroke-width="1"/>
-            </g>
-
-            <g id="el-fiore3" data-size="small" data-name="fiore3">
-                <path d="M660,490 C658,480 662,472 660,465" stroke="#2E7D32" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path d="M660,478 Q668,474 670,478 Q664,482 660,478" fill="#43A047" stroke="#2D1B0E" stroke-width="0.8"/>
-                <ellipse cx="655" cy="461" rx="4.5" ry="7" fill="url(#flowerPurpleGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-30,655,461)"/>
-                <ellipse cx="665" cy="461" rx="4.5" ry="7" fill="url(#flowerPurpleGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(30,665,461)"/>
-                <ellipse cx="656" cy="467" rx="4.5" ry="7" fill="url(#flowerPurpleGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-60,656,467)"/>
-                <ellipse cx="664" cy="467" rx="4.5" ry="7" fill="url(#flowerPurpleGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(60,664,467)"/>
-                <ellipse cx="660" cy="457" rx="4.5" ry="7" fill="url(#flowerPurpleGrad)" stroke="#2D1B0E" stroke-width="1"/>
-                <circle cx="660" cy="464" r="4" fill="#FFEB3B" stroke="#2D1B0E" stroke-width="1"/>
-            </g>
-
-            <!-- ===== BUTTERFLY ===== -->
-            <g id="el-farfalla" data-size="small" data-name="farfalla">
-                <!-- Upper wings -->
-                <path d="M575,400 C560,382 548,388 555,400 C548,395 552,408 565,405 Z" fill="#CE93D8" stroke="#2D1B0E" stroke-width="1.2" stroke-linejoin="round" opacity="0.9"/>
-                <path d="M575,400 C590,382 602,388 595,400 C602,395 598,408 585,405 Z" fill="#CE93D8" stroke="#2D1B0E" stroke-width="1.2" stroke-linejoin="round" opacity="0.9"/>
-                <!-- Lower wings -->
-                <path d="M575,400 C560,410 555,420 565,418 C558,415 568,408 575,405 Z" fill="#AB47BC" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round" opacity="0.85"/>
-                <path d="M575,400 C590,410 595,420 585,418 C592,415 582,408 575,405 Z" fill="#AB47BC" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round" opacity="0.85"/>
-                <!-- Wing spots -->
-                <circle cx="562" cy="394" r="3" fill="#E1BEE7" opacity="0.6"/>
-                <circle cx="588" cy="394" r="3" fill="#E1BEE7" opacity="0.6"/>
-                <!-- Body -->
-                <ellipse cx="575" cy="402" rx="2.5" ry="8" fill="#2D1B0E"/>
-                <!-- Antennae -->
-                <path d="M574,395 Q568,384 564,381" stroke="#2D1B0E" stroke-width="1" fill="none" stroke-linecap="round"/>
-                <circle cx="564" cy="381" r="1.5" fill="#2D1B0E"/>
-                <path d="M576,395 Q582,384 586,381" stroke="#2D1B0E" stroke-width="1" fill="none" stroke-linecap="round"/>
-                <circle cx="586" cy="381" r="1.5" fill="#2D1B0E"/>
-            </g>
-
-            <!-- ===== MUSHROOM near tree ===== -->
-            <g id="el-fungo" data-size="small" data-name="fungo">
-                <!-- Stem -->
-                <path d="M645,475 C643,468 644,460 646,458 L650,458 C652,460 653,468 651,475 Z" fill="#FFF8E1" stroke="#2D1B0E" stroke-width="1.2" stroke-linejoin="round"/>
-                <!-- Cap -->
-                <path d="M636,460 Q638,448 648,445 Q658,448 660,460 Z" fill="#E53935" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
-                <!-- White spots -->
-                <circle cx="644" cy="452" r="2" fill="#FFF" opacity="0.8"/>
-                <circle cx="652" cy="454" r="1.5" fill="#FFF" opacity="0.8"/>
-                <circle cx="648" cy="448" r="1.8" fill="#FFF" opacity="0.7"/>
-            </g>
-
-            <!-- ===== GRASS TUFTS scattered ===== -->
-            <g opacity="0.8">
-                <!-- Near barn -->
-                <path d="M255,370 Q253,358 250,352" stroke="#2E7D32" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path d="M258,368 Q260,356 264,350" stroke="#388E3C" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M261,370 Q259,360 256,355" stroke="#43A047" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <!-- Near fence -->
-                <path d="M410,368 Q408,358 405,354" stroke="#2E7D32" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                <path d="M414,370 Q416,360 418,354" stroke="#388E3C" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <!-- Near tractor -->
-                <path d="M770,465 Q768,458 765,453" stroke="#2E7D32" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                <path d="M774,467 Q776,460 778,454" stroke="#388E3C" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <!-- Near path -->
-                <path d="M370,400 Q368,392 366,388" stroke="#2E7D32" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M374,402 Q376,394 378,390" stroke="#388E3C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-                <!-- Near pond -->
-                <path d="M195,440 Q193,432 190,428" stroke="#2E7D32" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M200,442 Q202,434 205,430" stroke="#388E3C" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-                <!-- Random foreground -->
-                <path d="M500,478 Q498,470 496,465" stroke="#2E7D32" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M504,480 Q506,472 508,466" stroke="#388E3C" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-                <path d="M160,488 Q158,480 155,476" stroke="#2E7D32" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <path d="M165,490 Q167,482 170,478" stroke="#388E3C" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-            </g>
+            <!-- Cheek blush -->
+            <ellipse id="blush-left" cx="158" cy="275" rx="18" ry="10" fill="#FF8FCF" opacity="0.3"/>
+            <ellipse id="blush-right" cx="342" cy="275" rx="18" ry="10" fill="#FF8FCF" opacity="0.3"/>
         </svg>
     </template>
 
@@ -1129,239 +974,236 @@
         return a;
     }
 
-    const W = 800, H = 500;
+    const W = 500, H = 550;
 
-    // Difficulty config: only color changes and element removal
+    // ========== DIFFICULTY CONFIG ==========
     const DIFFICULTY = {
-        facile:    { diffs: [3,4], sizes: ['large'] },
+        facile:    { diffs: [3,3], sizes: ['large'] },
         medio:     { diffs: [4,5], sizes: ['large','medium'] },
         difficile: { diffs: [5,7], sizes: ['medium','small'] },
         estremo:   { diffs: [7,9], sizes: ['small'] },
     };
 
-    // Available scenes
-    const AVAILABLE_SCENES = ['fattoria'];
-
-    // ========== COLOR ALTERNATIVES FOR DIFFERENCES ==========
-
-    // Map of gradient/fill IDs to alternative flat colors for color-change diffs
-    // Each entry: original fill identifier -> array of alternative fills
-    const COLOR_ALTERNATIVES = [
-        '#FF4757', '#EF5350', '#FF6B6B',
-        '#2196F3', '#42A5F5', '#1E88E5',
-        '#4CAF50', '#66BB6A', '#43A047',
-        '#AB47BC', '#CE93D8', '#9C27B0',
-        '#FF9800', '#FFA726', '#FB8C00',
-        '#FFEB3B', '#FFC107', '#FFD600',
-        '#FF69B4', '#E91E63', '#FF3B6F',
-        '#00BCD4', '#26C6DA', '#00ACC1',
-        '#795548', '#8D6E63', '#6D4C41',
-        '#FFFFFF', '#ECEFF1', '#CFD8DC'
+    // ========== BRIGHT COLORS FOR RANDOM COLOR CHANGES ==========
+    const BRIGHT_COLORS = [
+        '#FF4757', '#FF6B6B', '#EE5A24', '#FFC312', '#F79F1F',
+        '#A3CB38', '#009432', '#12CBC4', '#1289A7', '#0652DD',
+        '#6F1E51', '#B53471', '#FDA7DF', '#ED4C67', '#D980FA',
+        '#9980FA', '#5758BB', '#0ABF5C', '#E84118', '#00E5FF',
     ];
 
-    function getAlternateColor(original) {
-        var filtered = COLOR_ALTERNATIVES.filter(function(c) {
-            return c.toLowerCase() !== original.toLowerCase();
+    function getRandomBrightColor(avoid) {
+        var filtered = BRIGHT_COLORS.filter(function(c) {
+            return c.toLowerCase() !== avoid.toLowerCase();
         });
         return pick(filtered);
     }
 
-    // ========== ELEMENT REGISTRY ==========
-    // Defines which elements exist in each scene, their size, and how to apply color changes
+    // ========== ELEMENT REGISTRY PER MONSTER ==========
+    // Each element: { id, size: 'large'|'medium'|'small', fill: original fill color }
+    // fill is the primary fill to change for color-change diffs
 
-    // For fattoria scene, each element entry:
-    // { id: 'el-xxx', size: 'large|medium|small', name: 'xxx',
-    //   colorTargets: [ { selector: 'css-selector-within-group', attr: 'fill|stroke', original: '#xxx' }, ... ] }
-
-    const SCENE_ELEMENTS = {
-        fattoria: [
-            {
-                id: 'el-sole', size: 'large', name: 'sole',
-                colorTargets: [
-                    // Change sun circle fills to a different color
-                    { query: 'circle:nth-child(2)', attr: 'fill', original: 'url(#sunGrad)', replaceFill: '#42A5F5' },
-                ]
-            },
-            {
-                id: 'el-nuvola1', size: 'medium', name: 'nuvola1',
-                colorTargets: [
-                    { query: 'ellipse', attr: 'fill', original: '#FFFFFF', replaceFill: '#FFCDD2' },
-                ]
-            },
-            {
-                id: 'el-nuvola2', size: 'small', name: 'nuvola2',
-                colorTargets: [
-                    { query: 'ellipse', attr: 'fill', original: '#FFFFFF', replaceFill: '#C8E6C9' },
-                ]
-            },
-            {
-                id: 'el-nuvola3', size: 'small', name: 'nuvola3',
-                colorTargets: [
-                    { query: 'ellipse', attr: 'fill', original: '#FFFFFF', replaceFill: '#FFE0B2' },
-                ]
-            },
-            {
-                id: 'el-fienile', size: 'large', name: 'fienile',
-                colorTargets: [
-                    { query: '[fill="url(#barnWallGrad)"]', attr: 'fill', original: 'url(#barnWallGrad)', replaceFill: '#1565C0' },
-                ]
-            },
-            {
-                id: 'el-banderuola', size: 'small', name: 'banderuola',
-                colorTargets: [
-                    { query: 'polygon', attr: 'fill', original: '#FFD600', replaceFill: '#E53935' },
-                ]
-            },
-            {
-                id: 'el-uccello-tetto', size: 'small', name: 'uccello-tetto',
-                colorTargets: [
-                    { query: 'ellipse', attr: 'fill', original: '#FF8F00', replaceFill: '#42A5F5' },
-                ]
-            },
-            {
-                id: 'el-tana-topo', size: 'small', name: 'tana-topo',
-                colorTargets: []
-            },
-            {
-                id: 'el-steccato', size: 'medium', name: 'steccato',
-                colorTargets: [
-                    { query: '[fill="url(#fenceGrad)"]', attr: 'fill', original: 'url(#fenceGrad)', replaceFill: '#FFCC80' },
-                ]
-            },
-            {
-                id: 'el-coccinella', size: 'small', name: 'coccinella',
-                colorTargets: [
-                    { query: '[fill="#E53935"]', attr: 'fill', original: '#E53935', replaceFill: '#FFD600' },
-                ]
-            },
-            {
-                id: 'el-melo', size: 'large', name: 'melo',
-                colorTargets: [
-                    { query: '[fill="url(#treeCanopyGrad)"]', attr: 'fill', original: 'url(#treeCanopyGrad)', replaceFill: '#FF8F00' },
-                ]
-            },
-            {
-                id: 'el-mela1', size: 'small', name: 'mela1',
-                colorTargets: [
-                    { query: 'circle:first-child', attr: 'fill', original: 'url(#appleGrad)', replaceFill: '#FFD600' },
-                ]
-            },
-            {
-                id: 'el-mela2', size: 'small', name: 'mela2',
-                colorTargets: [
-                    { query: 'circle:first-child', attr: 'fill', original: 'url(#appleGrad)', replaceFill: '#66BB6A' },
-                ]
-            },
-            {
-                id: 'el-mela3', size: 'small', name: 'mela3',
-                colorTargets: [
-                    { query: 'circle:first-child', attr: 'fill', original: 'url(#appleGrad)', replaceFill: '#AB47BC' },
-                ]
-            },
-            {
-                id: 'el-fieno1', size: 'medium', name: 'fieno1',
-                colorTargets: [
-                    { query: 'ellipse:first-child', attr: 'fill', original: 'url(#hayGrad)', replaceFill: '#CE93D8' },
-                ]
-            },
-            {
-                id: 'el-fieno2', size: 'small', name: 'fieno2',
-                colorTargets: [
-                    { query: 'ellipse:first-child', attr: 'fill', original: 'url(#hayGrad)', replaceFill: '#90CAF9' },
-                ]
-            },
-            {
-                id: 'el-gatto', size: 'small', name: 'gatto',
-                colorTargets: [
-                    { query: '[fill="#FF8F00"]', attr: 'fill', original: '#FF8F00', replaceFill: '#9E9E9E' },
-                ]
-            },
-            {
-                id: 'el-secchio', size: 'small', name: 'secchio',
-                colorTargets: [
-                    { query: '[fill="url(#bucketGrad)"]', attr: 'fill', original: 'url(#bucketGrad)', replaceFill: '#FF5252' },
-                ]
-            },
-            {
-                id: 'el-stagno', size: 'medium', name: 'stagno',
-                colorTargets: [
-                    { query: '[fill="url(#pondGrad)"]', attr: 'fill', original: 'url(#pondGrad)', replaceFill: '#CE93D8' },
-                ]
-            },
-            {
-                id: 'el-mucca', size: 'large', name: 'mucca',
-                colorTargets: [
-                    { query: '.cow-spots path, .cow-spots ellipse', attr: 'fill', original: '#333', replaceFill: '#D32F2F' },
-                ]
-            },
-            {
-                id: 'el-trattore', size: 'large', name: 'trattore',
-                colorTargets: [
-                    { query: '[fill="url(#tractorBodyGrad)"]', attr: 'fill', original: 'url(#tractorBodyGrad)', replaceFill: '#1565C0' },
-                ]
-            },
-            {
-                id: 'el-gallina1', size: 'medium', name: 'gallina1',
-                colorTargets: [
-                    { query: '[fill="#F44336"]', attr: 'fill', original: '#F44336', replaceFill: '#2196F3' },
-                ]
-            },
-            {
-                id: 'el-gallina2', size: 'small', name: 'gallina2',
-                colorTargets: [
-                    { query: '[fill="url(#chickenGrad)"]', attr: 'fill', original: 'url(#chickenGrad)', replaceFill: '#BBDEFB' },
-                ]
-            },
-            {
-                id: 'el-gallina3', size: 'small', name: 'gallina3',
-                colorTargets: [
-                    { query: '[fill="url(#chickenGrad)"]', attr: 'fill', original: 'url(#chickenGrad)', replaceFill: '#C8E6C9' },
-                ]
-            },
-            {
-                id: 'el-uova', size: 'small', name: 'uova',
-                colorTargets: [
-                    { query: '[fill="#FFF8E1"]', attr: 'fill', original: '#FFF8E1', replaceFill: '#90CAF9' },
-                ]
-            },
-            {
-                id: 'el-maiale', size: 'medium', name: 'maiale',
-                colorTargets: [
-                    { query: '[fill="url(#pigBodyGrad)"]', attr: 'fill', original: 'url(#pigBodyGrad)', replaceFill: '#90CAF9' },
-                ]
-            },
-            {
-                id: 'el-fiore1', size: 'small', name: 'fiore1',
-                colorTargets: [
-                    { query: '[fill="url(#flowerRedGrad)"]', attr: 'fill', original: 'url(#flowerRedGrad)', replaceFill: '#42A5F5' },
-                ]
-            },
-            {
-                id: 'el-fiore2', size: 'small', name: 'fiore2',
-                colorTargets: [
-                    { query: '[fill="url(#flowerYellowGrad)"]', attr: 'fill', original: 'url(#flowerYellowGrad)', replaceFill: '#CE93D8' },
-                ]
-            },
-            {
-                id: 'el-fiore3', size: 'small', name: 'fiore3',
-                colorTargets: [
-                    { query: '[fill="url(#flowerPurpleGrad)"]', attr: 'fill', original: 'url(#flowerPurpleGrad)', replaceFill: '#FF7043' },
-                ]
-            },
-            {
-                id: 'el-farfalla', size: 'small', name: 'farfalla',
-                colorTargets: [
-                    { query: '[fill="#CE93D8"]', attr: 'fill', original: '#CE93D8', replaceFill: '#FFD600' },
-                    { query: '[fill="#AB47BC"]', attr: 'fill', original: '#AB47BC', replaceFill: '#FF8F00' },
-                ]
-            },
-            {
-                id: 'el-fungo', size: 'small', name: 'fungo',
-                colorTargets: [
-                    { query: '[fill="#E53935"]', attr: 'fill', original: '#E53935', replaceFill: '#2196F3' },
-                ]
-            },
-        ]
+    const MONSTER_ELEMENTS = {
+        tentacle: [
+            // large
+            { id: 'body', size: 'large', fill: '#7B2FBE' },
+            { id: 'belly', size: 'large', fill: '#9B4FDE' },
+            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
+            { id: 'eye2', size: 'large', fill: '#F0FFF0' },
+            { id: 'tentacle1', size: 'large', fill: '#7B2FBE' },
+            { id: 'tentacle2', size: 'large', fill: '#7B2FBE' },
+            { id: 'mouth', size: 'large', fill: '#3D0F5C' },
+            // medium
+            { id: 'tentacle3', size: 'medium', fill: '#7B2FBE' },
+            { id: 'tentacle4', size: 'medium', fill: '#7B2FBE' },
+            { id: 'eye3', size: 'medium', fill: '#F0FFF0' },
+            { id: 'eye4', size: 'medium', fill: '#F0FFF0' },
+            { id: 'horn-left', size: 'medium', fill: '#FF6B35' },
+            { id: 'horn-right', size: 'medium', fill: '#FF6B35' },
+            // small
+            { id: 'spot1', size: 'small', fill: '#6B25A8' },
+            { id: 'spot2', size: 'small', fill: '#6B25A8' },
+            { id: 'spot3', size: 'small', fill: '#6B25A8' },
+            { id: 'spot4', size: 'small', fill: '#6B25A8' },
+            { id: 'horn-tip-left', size: 'small', fill: '#FFD93D' },
+            { id: 'horn-tip-right', size: 'small', fill: '#FFD93D' },
+            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
+            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
+            { id: 'tooth1', size: 'small', fill: '#ffffff' },
+            { id: 'wart1', size: 'small', fill: '#6B25A8' },
+            { id: 'wart2', size: 'small', fill: '#6B25A8' },
+            { id: 'wart3', size: 'small', fill: '#6B25A8' },
+            { id: 'sucker1a', size: 'small', fill: '#9B4FDE' },
+            { id: 'sucker1b', size: 'small', fill: '#9B4FDE' },
+            { id: 'sucker2a', size: 'small', fill: '#9B4FDE' },
+            { id: 'sucker3a', size: 'small', fill: '#9B4FDE' },
+            { id: 'sucker4a', size: 'small', fill: '#9B4FDE' },
+            { id: 'sucker4b', size: 'small', fill: '#9B4FDE' },
+        ],
+        blob: [
+            // large
+            { id: 'body', size: 'large', fill: '#3B82F6' },
+            { id: 'belly', size: 'large', fill: '#60A5FA' },
+            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
+            { id: 'eye2', size: 'large', fill: '#F0FFF0' },
+            { id: 'arm-left', size: 'large', fill: '#2563EB' },
+            { id: 'arm-right', size: 'large', fill: '#2563EB' },
+            { id: 'mouth', size: 'large', fill: '#1E3A8A' },
+            // medium
+            { id: 'eye3', size: 'medium', fill: '#F0FFF0' },
+            { id: 'nose', size: 'medium', fill: '#60A5FA' },
+            { id: 'teeth', size: 'medium', fill: '#ffffff' },
+            { id: 'foot-left', size: 'medium', fill: '#2563EB' },
+            { id: 'foot-right', size: 'medium', fill: '#2563EB' },
+            { id: 'antenna-ball-left', size: 'medium', fill: '#FFD93D' },
+            { id: 'antenna-ball-right', size: 'medium', fill: '#FFD93D' },
+            // small
+            { id: 'spot1', size: 'small', fill: '#2563EB' },
+            { id: 'spot2', size: 'small', fill: '#2563EB' },
+            { id: 'spot3', size: 'small', fill: '#2563EB' },
+            { id: 'spot4', size: 'small', fill: '#2563EB' },
+            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
+            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
+            { id: 'hand-left-finger1', size: 'small', fill: '#60A5FA' },
+            { id: 'hand-left-finger2', size: 'small', fill: '#60A5FA' },
+            { id: 'hand-left-finger3', size: 'small', fill: '#60A5FA' },
+            { id: 'hand-right-finger1', size: 'small', fill: '#60A5FA' },
+            { id: 'hand-right-finger2', size: 'small', fill: '#60A5FA' },
+            { id: 'hand-right-finger3', size: 'small', fill: '#60A5FA' },
+        ],
+        fluffy: [
+            // large
+            { id: 'body', size: 'large', fill: '#EC4899' },
+            { id: 'belly', size: 'large', fill: '#F9A8D4' },
+            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
+            { id: 'eye2', size: 'large', fill: '#F0FFF0' },
+            { id: 'mouth', size: 'large', fill: '#9D174D' },
+            { id: 'bow', size: 'large', fill: '#FF4081' },
+            // medium
+            { id: 'ear-left', size: 'medium', fill: '#EC4899' },
+            { id: 'ear-right', size: 'medium', fill: '#EC4899' },
+            { id: 'nose', size: 'medium', fill: '#DB2777' },
+            { id: 'horn', size: 'medium', fill: '#FBBF24' },
+            { id: 'tail', size: 'medium', fill: '#EC4899' },
+            { id: 'leg-left', size: 'medium', fill: '#DB2777' },
+            { id: 'leg-right', size: 'medium', fill: '#DB2777' },
+            // small
+            { id: 'foot-left', size: 'small', fill: '#DB2777' },
+            { id: 'foot-right', size: 'small', fill: '#DB2777' },
+            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
+            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
+            { id: 'ear-left-inner', size: 'small', fill: '#F9A8D4' },
+            { id: 'ear-right-inner', size: 'small', fill: '#F9A8D4' },
+            { id: 'bow-center', size: 'small', fill: '#E91E63' },
+            { id: 'tail-poof1', size: 'small', fill: '#F9A8D4' },
+            { id: 'tail-poof2', size: 'small', fill: '#F9A8D4' },
+            { id: 'tail-poof3', size: 'small', fill: '#F9A8D4' },
+            { id: 'nose-highlight', size: 'small', fill: '#F9A8D4' },
+        ],
+        cyclops: [
+            // large
+            { id: 'body', size: 'large', fill: '#84CC16' },
+            { id: 'belly', size: 'large', fill: '#BEF264' },
+            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
+            { id: 'mouth', size: 'large', fill: '#3F6212' },
+            { id: 'arm-left', size: 'large', fill: '#65A30D' },
+            { id: 'arm-right', size: 'large', fill: '#65A30D' },
+            // medium
+            { id: 'antenna-eye-left', size: 'medium', fill: '#F0FFF0' },
+            { id: 'antenna-eye-right', size: 'medium', fill: '#F0FFF0' },
+            { id: 'tail', size: 'medium', fill: '#65A30D' },
+            { id: 'foot-left', size: 'medium', fill: '#65A30D' },
+            { id: 'foot-right', size: 'medium', fill: '#65A30D' },
+            { id: 'tooth1', size: 'medium', fill: '#ffffff' },
+            // small
+            { id: 'spot1', size: 'small', fill: '#65A30D' },
+            { id: 'spot2', size: 'small', fill: '#65A30D' },
+            { id: 'spot3', size: 'small', fill: '#65A30D' },
+            { id: 'spot4', size: 'small', fill: '#65A30D' },
+            { id: 'wart1', size: 'small', fill: '#65A30D' },
+            { id: 'wart2', size: 'small', fill: '#65A30D' },
+            { id: 'wart3', size: 'small', fill: '#65A30D' },
+            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
+            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
+            { id: 'belly-button', size: 'small', fill: '#84CC16' },
+            { id: 'hand-left-finger1', size: 'small', fill: '#A3E635' },
+            { id: 'hand-left-finger2', size: 'small', fill: '#A3E635' },
+            { id: 'hand-left-finger3', size: 'small', fill: '#A3E635' },
+            { id: 'hand-right-finger1', size: 'small', fill: '#A3E635' },
+            { id: 'hand-right-finger2', size: 'small', fill: '#A3E635' },
+            { id: 'hand-right-finger3', size: 'small', fill: '#A3E635' },
+        ],
+        dragon: [
+            // large
+            { id: 'body', size: 'large', fill: '#F97316' },
+            { id: 'belly', size: 'large', fill: '#FDBA74' },
+            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
+            { id: 'eye2', size: 'large', fill: '#F0FFF0' },
+            { id: 'wing-left', size: 'large', fill: '#FDBA74' },
+            { id: 'wing-right', size: 'large', fill: '#FDBA74' },
+            { id: 'mouth', size: 'large', fill: '#C2410C' },
+            // medium
+            { id: 'tail', size: 'medium', fill: '#F97316' },
+            { id: 'snout', size: 'medium', fill: '#FDBA74' },
+            { id: 'foot-left', size: 'medium', fill: '#EA580C' },
+            { id: 'foot-right', size: 'medium', fill: '#EA580C' },
+            { id: 'smoke', size: 'medium', fill: '#D1D5DB' },
+            // small
+            { id: 'spike1', size: 'small', fill: '#FBBF24' },
+            { id: 'spike2', size: 'small', fill: '#FBBF24' },
+            { id: 'spike3', size: 'small', fill: '#FBBF24' },
+            { id: 'spike4', size: 'small', fill: '#FBBF24' },
+            { id: 'spike5', size: 'small', fill: '#FBBF24' },
+            { id: 'tail-tip', size: 'small', fill: '#FBBF24' },
+            { id: 'nostril-left', size: 'small', fill: '#EA580C' },
+            { id: 'nostril-right', size: 'small', fill: '#EA580C' },
+            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
+            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
+            { id: 'claw-left1', size: 'small', fill: '#FBBF24' },
+            { id: 'claw-left2', size: 'small', fill: '#FBBF24' },
+            { id: 'claw-left3', size: 'small', fill: '#FBBF24' },
+            { id: 'claw-right1', size: 'small', fill: '#FBBF24' },
+            { id: 'claw-right2', size: 'small', fill: '#FBBF24' },
+            { id: 'claw-right3', size: 'small', fill: '#FBBF24' },
+        ],
+        robot: [
+            // large
+            { id: 'body', size: 'large', fill: '#14B8A6' },
+            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
+            { id: 'eye2', size: 'large', fill: '#F0FFF0' },
+            { id: 'mouth', size: 'large', fill: '#042F2E' },
+            { id: 'arm-left', size: 'large', fill: '#0D9488' },
+            { id: 'arm-right', size: 'large', fill: '#0D9488' },
+            { id: 'belly-panel', size: 'large', fill: '#0D9488' },
+            // medium
+            { id: 'treads', size: 'medium', fill: '#115E59' },
+            { id: 'antenna-dish', size: 'medium', fill: '#5EEAD4' },
+            { id: 'heart-symbol', size: 'medium', fill: '#FF4081' },
+            { id: 'belly-screen', size: 'medium', fill: '#042F2E' },
+            // small
+            { id: 'bolt1', size: 'small', fill: '#5EEAD4' },
+            { id: 'bolt2', size: 'small', fill: '#5EEAD4' },
+            { id: 'bolt3', size: 'small', fill: '#5EEAD4' },
+            { id: 'bolt4', size: 'small', fill: '#5EEAD4' },
+            { id: 'antenna-light', size: 'small', fill: '#FF4081' },
+            { id: 'light1', size: 'small', fill: '#FF4081' },
+            { id: 'light2', size: 'small', fill: '#FBBF24' },
+            { id: 'light3', size: 'small', fill: '#4ADE80' },
+            { id: 'light4', size: 'small', fill: '#FBBF24' },
+            { id: 'light5', size: 'small', fill: '#FF4081' },
+            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
+            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
+            { id: 'pixel1', size: 'small', fill: '#4ADE80' },
+            { id: 'pixel2', size: 'small', fill: '#4ADE80' },
+            { id: 'pixel3', size: 'small', fill: '#4ADE80' },
+            { id: 'pixel4', size: 'small', fill: '#4ADE80' },
+            { id: 'pixel5', size: 'small', fill: '#4ADE80' },
+            { id: 'pixel6', size: 'small', fill: '#4ADE80' },
+            { id: 'pixel7', size: 'small', fill: '#4ADE80' },
+            { id: 'pixel8', size: 'small', fill: '#4ADE80' },
+            { id: 'claw-left-joint', size: 'small', fill: '#2DD4BF' },
+            { id: 'claw-right-joint', size: 'small', fill: '#2DD4BF' },
+        ],
     };
 
     // ========== DIFFERENCE GENERATOR ==========
@@ -1397,14 +1239,13 @@
             var type;
             // Decide color change vs removal based on size
             if (el.size === 'large') {
-                type = (el.colorTargets && el.colorTargets.length > 0 && rng() < 0.85) ? 'color' : 'missing';
+                type = rng() < 0.8 ? 'color' : 'remove';
             } else if (el.size === 'medium') {
-                type = (el.colorTargets && el.colorTargets.length > 0 && rng() < 0.6) ? 'color' : 'missing';
+                type = rng() < 0.5 ? 'color' : 'remove';
             } else {
-                type = (el.colorTargets && el.colorTargets.length > 0 && rng() < 0.5) ? 'color' : 'missing';
+                type = rng() < 0.4 ? 'color' : 'remove';
             }
-
-            diffs.push({ elId: el.id, elName: el.name, type: type, element: el });
+            diffs.push({ elId: el.id, type: type, fill: el.fill });
         }
 
         return diffs;
@@ -1415,20 +1256,22 @@
     function applyDifferences(svgEl, diffs) {
         for (var i = 0; i < diffs.length; i++) {
             var diff = diffs[i];
-            var group = svgEl.querySelector('#' + diff.elId);
-            if (!group) continue;
+            var target = svgEl.querySelector('#' + diff.elId);
+            if (!target) continue;
 
-            if (diff.type === 'missing') {
-                group.style.display = 'none';
+            if (diff.type === 'remove') {
+                target.style.display = 'none';
             } else if (diff.type === 'color') {
-                var el = diff.element;
-                if (el.colorTargets) {
-                    for (var t = 0; t < el.colorTargets.length; t++) {
-                        var target = el.colorTargets[t];
-                        var nodes = group.querySelectorAll(target.query);
-                        for (var n = 0; n < nodes.length; n++) {
-                            nodes[n].setAttribute(target.attr, target.replaceFill);
-                        }
+                var newColor = getRandomBrightColor(diff.fill);
+                // Apply color to the element itself and all children with a fill attribute
+                if (target.getAttribute('fill') && target.getAttribute('fill') !== 'none') {
+                    target.setAttribute('fill', newColor);
+                }
+                var children = target.querySelectorAll('[fill]');
+                for (var c = 0; c < children.length; c++) {
+                    var childFill = children[c].getAttribute('fill');
+                    if (childFill && childFill !== 'none' && childFill !== '#ffffff' && childFill.charAt(0) === '#') {
+                        children[c].setAttribute('fill', newColor);
                     }
                 }
             }
@@ -1437,19 +1280,58 @@
 
     // ========== CLONE SVG FROM TEMPLATE ==========
 
-    function cloneSceneSvg(sceneType) {
-        var tpl = document.getElementById('tpl-' + sceneType);
+    function cloneMonsterSvg(monsterType, bgColor) {
+        var tpl = document.getElementById('tpl-' + monsterType);
         if (!tpl) return null;
         var svg = tpl.content.querySelector('svg').cloneNode(true);
+
+        // Insert background rectangle as first child
+        var bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        bg.setAttribute('x', '0');
+        bg.setAttribute('y', '0');
+        bg.setAttribute('width', '500');
+        bg.setAttribute('height', '550');
+        bg.setAttribute('fill', bgColor);
+        bg.setAttribute('rx', '0');
+        svg.insertBefore(bg, svg.firstChild);
+
+        // Add a subtle gradient overlay for depth
+        var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        var grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+        grad.setAttribute('id', 'bgGrad');
+        grad.setAttribute('x1', '0');
+        grad.setAttribute('y1', '0');
+        grad.setAttribute('x2', '0');
+        grad.setAttribute('y2', '1');
+        var stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stop1.setAttribute('offset', '0%');
+        stop1.setAttribute('stop-color', '#ffffff');
+        stop1.setAttribute('stop-opacity', '0.3');
+        var stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stop2.setAttribute('offset', '100%');
+        stop2.setAttribute('stop-color', '#000000');
+        stop2.setAttribute('stop-opacity', '0.08');
+        grad.appendChild(stop1);
+        grad.appendChild(stop2);
+        defs.appendChild(grad);
+        svg.insertBefore(defs, svg.firstChild);
+
+        var overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        overlay.setAttribute('x', '0');
+        overlay.setAttribute('y', '0');
+        overlay.setAttribute('width', '500');
+        overlay.setAttribute('height', '550');
+        overlay.setAttribute('fill', 'url(#bgGrad)');
+        // Insert after the bg rect (which is after defs now)
+        svg.insertBefore(overlay, svg.children[2]);
+
         return svg;
     }
 
-    // Make gradient IDs unique per copy to avoid conflicts
-    function makeGradientIdsUnique(svgEl, suffix) {
+    // Make gradient/defs IDs unique per copy to avoid conflicts
+    function makeIdsUnique(svgEl, suffix) {
         var defs = svgEl.querySelector('defs');
         if (!defs) return;
-
-        // Collect all elements with IDs in defs
         var defsChildren = defs.querySelectorAll('[id]');
         var idMap = {};
         for (var i = 0; i < defsChildren.length; i++) {
@@ -1458,8 +1340,6 @@
             idMap[oldId] = newId;
             defsChildren[i].setAttribute('id', newId);
         }
-
-        // Replace all url(#oldId) references in the SVG
         var allEls = svgEl.querySelectorAll('*');
         var urlAttrs = ['fill', 'stroke', 'filter'];
         for (var i = 0; i < allEls.length; i++) {
@@ -1478,33 +1358,27 @@
     // ========== MAIN GENERATE ==========
 
     function generate() {
-        var sceneType = document.getElementById('scene-select').value;
+        var monsterType = document.getElementById('character-select').value;
         var difficulty = document.getElementById('difficulty').value;
-
-        // Check if scene is available
-        if (AVAILABLE_SCENES.indexOf(sceneType) === -1) {
-            var output = document.getElementById('output');
-            output.innerHTML = '<div class="placeholder-msg">La scena <strong>' + sceneType + '</strong> sarà disponibile prossimamente! Per ora prova la <strong>Fattoria</strong>.</div>';
-            return;
-        }
+        var bgColor = document.getElementById('bg-color').value;
 
         var seed = Date.now();
         rng = mulberry32(seed);
 
-        var elements = SCENE_ELEMENTS[sceneType];
+        var elements = MONSTER_ELEMENTS[monsterType];
         if (!elements) return;
 
         var diffs = generateDifferences(elements, difficulty);
 
         // Clone two copies of the SVG
-        var originalSvg = cloneSceneSvg(sceneType);
-        var modifiedSvg = cloneSceneSvg(sceneType);
+        var originalSvg = cloneMonsterSvg(monsterType, bgColor);
+        var modifiedSvg = cloneMonsterSvg(monsterType, bgColor);
 
         if (!originalSvg || !modifiedSvg) return;
 
         // Make gradient IDs unique to avoid conflicts between the two SVGs
-        makeGradientIdsUnique(originalSvg, '-orig');
-        makeGradientIdsUnique(modifiedSvg, '-mod');
+        makeIdsUnique(originalSvg, '-orig');
+        makeIdsUnique(modifiedSvg, '-mod');
 
         // Apply differences to the modified copy
         applyDifferences(modifiedSvg, diffs);
@@ -1523,7 +1397,7 @@
         box1.appendChild(origLeft ? originalSvg : modifiedSvg);
         var label1 = document.createElement('div');
         label1.className = 'scene-label';
-        label1.textContent = origLeft ? 'Originale' : 'Modificata';
+        label1.textContent = 'Originale';
         box1.appendChild(label1);
 
         var box2 = document.createElement('div');
@@ -1531,7 +1405,7 @@
         box2.appendChild(origLeft ? modifiedSvg : originalSvg);
         var label2 = document.createElement('div');
         label2.className = 'scene-label';
-        label2.textContent = origLeft ? 'Modificata' : 'Originale';
+        label2.textContent = 'Trova le differenze!';
         box2.appendChild(label2);
 
         container.appendChild(box1);
@@ -1549,7 +1423,7 @@
     function exportPDF() {
         var wrapper = document.getElementById('output');
         var svgs = wrapper.querySelectorAll('svg');
-        if (svgs.length < 2) { alert('Genera prima una scena.'); return; }
+        if (svgs.length < 2) { alert('Genera prima un personaggio.'); return; }
 
         var jsPDFLib = window.jspdf;
         var pdf = new jsPDFLib.jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });

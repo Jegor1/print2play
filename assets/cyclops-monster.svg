@@ -1,0 +1,104 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="monster">
+    <!-- Long arms drawn BEHIND body (hang down to ground) -->
+    <path id="arm-left" fill="#65A30D"
+      d="M105,250 C75,290 50,360 40,420 C35,450 30,480 42,492 C54,504 65,490 68,465 C72,430 80,380 100,320 C108,295 112,270 115,258 Z"/>
+    <path fill="none" stroke="#3F6212" stroke-width="3.5"
+      d="M105,250 C75,290 50,360 40,420 C35,450 30,480 42,492 C54,504 65,490 68,465 C72,430 80,380 100,320"/>
+    <!-- Left hand fingers -->
+    <circle id="hand-left-finger1" cx="40" cy="482" r="9" fill="#A3E635"/>
+    <circle id="hand-left-finger2" cx="32" cy="490" r="8" fill="#A3E635"/>
+    <circle id="hand-left-finger3" cx="44" cy="497" r="8" fill="#A3E635"/>
+
+    <path id="arm-right" fill="#65A30D"
+      d="M395,258 C398,270 402,295 410,320 C430,380 438,430 442,465 C445,490 456,504 468,492 C480,480 475,450 470,420 C460,360 435,290 405,250 Z"/>
+    <path fill="none" stroke="#3F6212" stroke-width="3.5"
+      d="M405,250 C435,290 460,360 470,420 C475,450 480,480 468,492 C456,504 445,490 442,465 C438,430 430,380 410,320"/>
+    <!-- Right hand fingers -->
+    <circle id="hand-right-finger1" cx="470" cy="482" r="9" fill="#A3E635"/>
+    <circle id="hand-right-finger2" cx="478" cy="490" r="8" fill="#A3E635"/>
+    <circle id="hand-right-finger3" cx="466" cy="497" r="8" fill="#A3E635"/>
+
+    <!-- Big flat feet drawn BEHIND body -->
+    <ellipse id="foot-left" cx="195" cy="478" rx="50" ry="18" fill="#65A30D"/>
+    <path fill="none" stroke="#3F6212" stroke-width="3.5"
+      d="M150,490 C162,496 180,498 195,498 C210,498 230,496 242,490"/>
+    <ellipse id="foot-right" cx="310" cy="478" rx="50" ry="18" fill="#65A30D"/>
+    <path fill="none" stroke="#3F6212" stroke-width="3.5"
+      d="M264,490 C276,496 294,498 310,498 C326,498 344,496 356,490"/>
+
+    <!-- Small tail (behind body) -->
+    <path id="tail" fill="#65A30D"
+      d="M385,380 C405,395 428,398 445,390 C455,385 458,375 450,372 C442,369 425,375 408,378 C395,380 388,378 385,375 Z"/>
+    <path fill="none" stroke="#3F6212" stroke-width="3"
+      d="M385,380 C405,395 428,398 445,390 C455,385 458,375 450,372 C442,369 425,375 408,378"/>
+
+    <!-- Body — tall oval shape -->
+    <path id="body" fill="#84CC16"
+      d="M250,90 C310,88 365,110 395,155 C425,200 430,260 425,320 C420,365 405,405 378,432 C355,455 320,468 285,472 C268,474 232,474 215,472 C180,468 145,455 122,432 C95,405 80,365 75,320 C70,260 75,200 105,155 C135,110 190,88 250,90 Z"/>
+    <!-- Body outline -->
+    <path fill="none" stroke="#3F6212" stroke-width="3.5"
+      d="M215,472 C180,468 145,455 122,432 C95,405 80,365 75,320 C70,260 75,200 105,155 C135,110 190,88 250,90 C310,88 365,110 395,155 C425,200 430,260 425,320 C420,365 405,405 378,432 C355,455 320,468 285,472"/>
+
+    <!-- Belly lighter area (no stroke) -->
+    <path id="belly" fill="#BEF264"
+      d="M250,170 C298,168 340,190 355,230 C370,275 368,330 358,375 C350,405 325,430 285,442 L215,442 C175,430 150,405 142,375 C132,330 130,275 145,230 C160,190 202,168 250,170 Z"/>
+
+    <!-- Antennae with eyes on top -->
+    <path id="antenna-left" fill="#84CC16"
+      d="M195,108 C192,82 188,55 185,35 L192,35 C194,55 196,82 198,108 Z"/>
+    <path fill="none" stroke="#3F6212" stroke-width="2.5"
+      d="M195,108 C192,82 188,55 185,35"/>
+    <g id="antenna-eye-left">
+      <circle cx="185" cy="30" r="18" fill="#F0FFF0"/>
+      <circle cx="185" cy="32" r="10" fill="#84CC16"/>
+      <circle cx="185" cy="30" r="6" fill="#3F6212"/>
+      <circle cx="188" cy="26" r="3" fill="#ffffff"/>
+    </g>
+    <path id="antenna-right" fill="#84CC16"
+      d="M305,108 C308,82 312,55 315,35 L308,35 C306,55 304,82 302,108 Z"/>
+    <path fill="none" stroke="#3F6212" stroke-width="2.5"
+      d="M305,108 C308,82 312,55 315,35"/>
+    <g id="antenna-eye-right">
+      <circle cx="315" cy="30" r="18" fill="#F0FFF0"/>
+      <circle cx="315" cy="32" r="10" fill="#84CC16"/>
+      <circle cx="315" cy="30" r="6" fill="#3F6212"/>
+      <circle cx="312" cy="26" r="3" fill="#ffffff"/>
+    </g>
+
+    <!-- ONE giant eye — no stroke, internal -->
+    <g id="eye1">
+      <ellipse cx="250" cy="230" rx="68" ry="70" fill="#F0FFF0"/>
+      <ellipse cx="250" cy="236" rx="35" ry="38" fill="#84CC16"/>
+      <circle cx="250" cy="230" r="20" fill="#3F6212"/>
+      <circle cx="258" cy="220" r="9" fill="#ffffff"/>
+      <circle cx="242" cy="238" r="5" fill="#ffffff"/>
+    </g>
+
+    <!-- Belly button (no stroke) -->
+    <ellipse id="belly-button" cx="250" cy="380" rx="10" ry="14" fill="#84CC16" opacity="0.6"/>
+
+    <!-- Spots (no stroke) -->
+    <circle id="spot1" cx="155" cy="200" r="15" fill="#65A30D" opacity="0.5"/>
+    <circle id="spot2" cx="355" cy="240" r="12" fill="#65A30D" opacity="0.5"/>
+    <circle id="spot3" cx="175" cy="400" r="10" fill="#65A30D" opacity="0.5"/>
+    <circle id="spot4" cx="340" cy="170" r="9" fill="#65A30D" opacity="0.5"/>
+
+    <!-- Warts (no stroke) -->
+    <circle id="wart1" cx="135" cy="280" r="6" fill="#65A30D"/>
+    <circle id="wart2" cx="375" cy="310" r="5" fill="#65A30D"/>
+    <circle id="wart3" cx="160" cy="350" r="4" fill="#65A30D"/>
+
+    <!-- Mouth — wide zigzag grin (wavy line) -->
+    <path id="mouth" fill="#3F6212"
+      d="M180,350 Q200,370 220,350 Q240,370 260,350 Q280,370 300,350 Q320,370 340,350 L340,360 Q320,380 300,360 Q280,380 260,360 Q240,380 220,360 Q200,380 180,360 Z"/>
+    <!-- Single big tooth poking up from bottom -->
+    <path id="tooth1" fill="#ffffff"
+      d="M242,360 Q250,345 258,360 Z"/>
+
+    <!-- Cheek blush (no stroke) -->
+    <ellipse id="blush-left" cx="148" cy="320" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="blush-right" cx="352" cy="320" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
+  </g>
+</svg>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Fluffy clouds scattered, very light gray -->
+  <!-- Cloud 1 - top left -->
+  <g opacity="0.15">
+    <circle cx="100" cy="80" r="30" fill="#c0c0c0"/>
+    <circle cx="130" cy="70" r="35" fill="#c0c0c0"/>
+    <circle cx="165" cy="75" r="28" fill="#c0c0c0"/>
+    <circle cx="145" cy="90" r="25" fill="#c0c0c0"/>
+  </g>
+  <!-- Cloud 2 - top right -->
+  <g opacity="0.12">
+    <circle cx="600" cy="60" r="25" fill="#d0d0d0"/>
+    <circle cx="625" cy="50" r="30" fill="#d0d0d0"/>
+    <circle cx="655" cy="55" r="22" fill="#d0d0d0"/>
+    <circle cx="640" cy="68" r="20" fill="#d0d0d0"/>
+  </g>
+  <!-- Cloud 3 - middle left -->
+  <g opacity="0.1">
+    <circle cx="50" cy="250" r="28" fill="#b8b8b8"/>
+    <circle cx="78" cy="240" r="32" fill="#b8b8b8"/>
+    <circle cx="110" cy="245" r="25" fill="#b8b8b8"/>
+    <circle cx="92" cy="258" r="22" fill="#b8b8b8"/>
+  </g>
+  <!-- Cloud 4 - center -->
+  <g opacity="0.13">
+    <circle cx="380" cy="200" r="22" fill="#c8c8c8"/>
+    <circle cx="402" cy="192" r="26" fill="#c8c8c8"/>
+    <circle cx="428" cy="196" r="20" fill="#c8c8c8"/>
+    <circle cx="412" cy="208" r="18" fill="#c8c8c8"/>
+  </g>
+  <!-- Cloud 5 - right -->
+  <g opacity="0.15">
+    <circle cx="680" cy="280" r="30" fill="#c0c0c0"/>
+    <circle cx="710" cy="270" r="35" fill="#c0c0c0"/>
+    <circle cx="745" cy="275" r="28" fill="#c0c0c0"/>
+    <circle cx="725" cy="290" r="25" fill="#c0c0c0"/>
+  </g>
+  <!-- Cloud 6 - lower left -->
+  <g opacity="0.1">
+    <circle cx="150" cy="420" r="25" fill="#d0d0d0"/>
+    <circle cx="175" cy="412" r="30" fill="#d0d0d0"/>
+    <circle cx="205" cy="416" r="22" fill="#d0d0d0"/>
+    <circle cx="188" cy="428" r="20" fill="#d0d0d0"/>
+  </g>
+  <!-- Cloud 7 - lower center -->
+  <g opacity="0.12">
+    <circle cx="450" cy="400" r="20" fill="#c8c8c8"/>
+    <circle cx="470" cy="393" r="24" fill="#c8c8c8"/>
+    <circle cx="494" cy="396" r="18" fill="#c8c8c8"/>
+    <circle cx="480" cy="407" r="16" fill="#c8c8c8"/>
+  </g>
+  <!-- Cloud 8 - bottom right -->
+  <g opacity="0.13">
+    <circle cx="620" cy="500" r="28" fill="#b8b8b8"/>
+    <circle cx="648" cy="490" r="32" fill="#b8b8b8"/>
+    <circle cx="680" cy="495" r="25" fill="#b8b8b8"/>
+    <circle cx="662" cy="508" r="22" fill="#b8b8b8"/>
+  </g>
+  <!-- Cloud 9 - small accent top center -->
+  <g opacity="0.08">
+    <circle cx="320" cy="50" r="15" fill="#d0d0d0"/>
+    <circle cx="338" cy="44" r="18" fill="#d0d0d0"/>
+    <circle cx="358" cy="47" r="14" fill="#d0d0d0"/>
+  </g>
+  <!-- Cloud 10 - small accent bottom left -->
+  <g opacity="0.1">
+    <circle cx="60" cy="540" r="18" fill="#c0c0c0"/>
+    <circle cx="80" cy="534" r="22" fill="#c0c0c0"/>
+    <circle cx="104" cy="537" r="16" fill="#c0c0c0"/>
+  </g>
+</svg>

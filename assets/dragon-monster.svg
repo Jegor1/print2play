@@ -1,0 +1,110 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="monster">
+    <!-- Wings drawn BEHIND body -->
+    <g id="wing-left">
+      <path id="wing-left-membrane" fill="#FDBA74"
+        d="M85,170 C55,130 30,95 25,75 C22,62 35,60 42,72 C55,95 72,135 90,175 Z"/>
+      <path id="wing-left-membrane2" fill="#FDBA74"
+        d="M90,175 C60,155 30,130 15,115 C5,105 15,95 25,105 C42,122 68,152 92,180 Z"/>
+      <path fill="none" stroke="#C2410C" stroke-width="3"
+        d="M85,170 C55,130 30,95 25,75 C22,62 35,60 42,72 C55,95 72,135 90,175"/>
+      <path fill="none" stroke="#C2410C" stroke-width="3"
+        d="M90,175 C60,155 30,130 15,115 C5,105 15,95 25,105 C42,122 68,152 92,180"/>
+      <!-- Wing struts (no stroke, internal) -->
+      <path id="wing-left-strut1" fill="#EA580C" opacity="0.4"
+        d="M88,174 C68,142 48,108 38,82 L42,80 C54,108 72,144 90,178 Z"/>
+      <path id="wing-left-strut2" fill="#EA580C" opacity="0.4"
+        d="M90,178 C68,158 42,132 28,115 L32,112 C48,130 72,158 92,180 Z"/>
+    </g>
+    <g id="wing-right">
+      <path id="wing-right-membrane" fill="#FDBA74"
+        d="M415,170 C445,130 470,95 475,75 C478,62 465,60 458,72 C445,95 428,135 410,175 Z"/>
+      <path id="wing-right-membrane2" fill="#FDBA74"
+        d="M410,175 C440,155 470,130 485,115 C495,105 485,95 475,105 C458,122 432,152 408,180 Z"/>
+      <path fill="none" stroke="#C2410C" stroke-width="3"
+        d="M415,170 C445,130 470,95 475,75 C478,62 465,60 458,72 C445,95 428,135 410,175"/>
+      <path fill="none" stroke="#C2410C" stroke-width="3"
+        d="M410,175 C440,155 470,130 485,115 C495,105 485,95 475,105 C458,122 432,152 408,180"/>
+      <path id="wing-right-strut1" fill="#EA580C" opacity="0.4"
+        d="M412,174 C432,142 452,108 462,82 L458,80 C446,108 428,144 410,178 Z"/>
+      <path id="wing-right-strut2" fill="#EA580C" opacity="0.4"
+        d="M410,178 C432,158 458,132 472,115 L468,112 C452,130 428,158 408,180 Z"/>
+    </g>
+
+    <!-- Chubby tail curling up behind body -->
+    <path id="tail" fill="#F97316"
+      d="M375,380 C400,375 430,360 450,335 C462,318 468,300 460,295 C452,290 440,305 428,325 C415,348 400,368 380,378 Z"/>
+    <path fill="none" stroke="#C2410C" stroke-width="3.5"
+      d="M375,380 C400,375 430,360 450,335 C462,318 468,300 460,295 C452,290 440,305 428,325 C415,348 400,368 380,378"/>
+    <!-- Tail tip spike (rounded) -->
+    <ellipse id="tail-tip" cx="458" cy="295" rx="12" ry="8" fill="#FBBF24" transform="rotate(-30 458 295)"/>
+
+    <!-- Small clawed feet (behind body) -->
+    <ellipse id="foot-left" cx="195" cy="470" rx="42" ry="16" fill="#EA580C"/>
+    <path fill="none" stroke="#C2410C" stroke-width="3"
+      d="M158,480 C168,488 182,490 195,490 C208,490 224,488 234,480"/>
+    <circle id="claw-left1" cx="165" cy="478" r="6" fill="#FBBF24"/>
+    <circle id="claw-left2" cx="180" cy="482" r="6" fill="#FBBF24"/>
+    <circle id="claw-left3" cx="210" cy="482" r="6" fill="#FBBF24"/>
+
+    <ellipse id="foot-right" cx="315" cy="470" rx="42" ry="16" fill="#EA580C"/>
+    <path fill="none" stroke="#C2410C" stroke-width="3"
+      d="M278,480 C288,488 302,490 315,490 C328,490 344,488 354,480"/>
+    <circle id="claw-right1" cx="300" cy="482" r="6" fill="#FBBF24"/>
+    <circle id="claw-right2" cx="330" cy="482" r="6" fill="#FBBF24"/>
+    <circle id="claw-right3" cx="345" cy="478" r="6" fill="#FBBF24"/>
+
+    <!-- Body — chubby dragon shape -->
+    <path id="body" fill="#F97316"
+      d="M250,100 C310,97 368,120 398,165 C428,210 432,268 425,325 C420,365 400,400 372,425 C348,445 318,458 285,462 C268,464 232,464 215,462 C182,458 152,445 128,425 C100,400 80,365 75,325 C68,268 72,210 102,165 C132,120 190,97 250,100 Z"/>
+    <!-- Body outline -->
+    <path fill="none" stroke="#C2410C" stroke-width="3.5"
+      d="M215,462 C182,458 152,445 128,425 C100,400 80,365 75,325 C68,268 72,210 102,165 C132,120 190,97 250,100 C310,97 368,120 398,165 C428,210 432,268 425,325 C420,365 400,400 372,425 C348,445 318,458 285,462"/>
+
+    <!-- Belly lighter area (no stroke) -->
+    <path id="belly" fill="#FDBA74"
+      d="M250,180 C298,178 340,198 355,238 C370,280 365,332 355,375 C348,402 322,425 282,435 L218,435 C178,425 152,402 145,375 C135,332 130,280 145,238 C160,198 202,178 250,180 Z"/>
+
+    <!-- Spikes along top of head (mohawk style, no stroke at base) -->
+    <ellipse id="spike1" cx="210" cy="102" rx="10" ry="22" fill="#FBBF24" transform="rotate(-15 210 102)"/>
+    <ellipse id="spike2" cx="235" cy="92" rx="10" ry="26" fill="#FBBF24" transform="rotate(-5 235 92)"/>
+    <ellipse id="spike3" cx="262" cy="88" rx="11" ry="28" fill="#FBBF24" transform="rotate(2 262 88)"/>
+    <ellipse id="spike4" cx="290" cy="92" rx="10" ry="26" fill="#FBBF24" transform="rotate(10 290 92)"/>
+    <ellipse id="spike5" cx="315" cy="102" rx="10" ry="22" fill="#FBBF24" transform="rotate(18 315 102)"/>
+
+    <!-- Snout (no stroke, internal) -->
+    <ellipse id="snout" cx="250" cy="310" rx="55" ry="35" fill="#FDBA74"/>
+    <!-- Nostrils (no stroke) -->
+    <ellipse id="nostril-left" cx="232" cy="305" rx="8" ry="6" fill="#EA580C"/>
+    <ellipse id="nostril-right" cx="268" cy="305" rx="8" ry="6" fill="#EA580C"/>
+
+    <!-- Eyes — no stroke, internal -->
+    <g id="eye1">
+      <ellipse cx="195" cy="225" rx="38" ry="40" fill="#F0FFF0"/>
+      <ellipse cx="200" cy="230" rx="18" ry="20" fill="#F97316"/>
+      <circle cx="202" cy="226" r="10" fill="#C2410C"/>
+      <circle cx="206" cy="220" r="5" fill="#ffffff"/>
+    </g>
+    <g id="eye2">
+      <ellipse cx="305" cy="225" rx="38" ry="40" fill="#F0FFF0"/>
+      <ellipse cx="300" cy="230" rx="18" ry="20" fill="#F97316"/>
+      <circle cx="298" cy="226" r="10" fill="#C2410C"/>
+      <circle cx="294" cy="220" r="5" fill="#ffffff"/>
+    </g>
+
+    <!-- Mouth — open playful grin showing tongue -->
+    <path id="mouth" fill="#C2410C"
+      d="M195,340 C210,345 230,348 250,348 C270,348 290,345 305,340 C300,365 280,385 250,385 C220,385 200,365 195,340 Z"/>
+    <!-- Small puff of smoke from nostril -->
+    <g id="smoke">
+      <circle id="smoke1" cx="218" cy="290" r="6" fill="#D1D5DB" opacity="0.4"/>
+      <circle id="smoke2" cx="210" cy="278" r="8" fill="#D1D5DB" opacity="0.3"/>
+      <circle id="smoke3" cx="205" cy="264" r="5" fill="#D1D5DB" opacity="0.2"/>
+    </g>
+
+    <!-- Cheek blush (no stroke) -->
+    <ellipse id="blush-left" cx="148" cy="290" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="blush-right" cx="352" cy="290" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
+  </g>
+</svg>
