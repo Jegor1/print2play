@@ -192,7 +192,7 @@
 
         .crossword-grid {
             border-collapse: collapse;
-            border: 2px solid var(--text);
+            border: none;
         }
 
         .crossword-grid td {
@@ -209,8 +209,8 @@
         }
 
         .crossword-grid td.black {
-            background: var(--surface);
-            border-color: var(--surface);
+            background: transparent;
+            border: none;
         }
 
         .crossword-grid td .cell-number {
@@ -813,7 +813,8 @@
         if (!currentPuzzle) return;
         const { grid, placed, rows, cols, numbers } = currentPuzzle;
 
-        // Build grid HTML
+        // Build grid HTML with contour borders
+        const isLetter = (r, c) => r >= 0 && r < rows && c >= 0 && c < cols && grid[r][c] !== null;
         let html = '';
         for (let r = 0; r < rows; r++) {
             html += '<tr>';
@@ -824,7 +825,12 @@
                 if (letter === null) {
                     html += '<td class="black"></td>';
                 } else {
-                    html += '<td>';
+                    // Thick border on edges adjacent to black/empty cells or grid boundary
+                    const bTop = !isLetter(r-1, c) ? '2px solid #1e293b' : '1px solid #e2e8f0';
+                    const bBottom = !isLetter(r+1, c) ? '2px solid #1e293b' : '1px solid #e2e8f0';
+                    const bLeft = !isLetter(r, c-1) ? '2px solid #1e293b' : '1px solid #e2e8f0';
+                    const bRight = !isLetter(r, c+1) ? '2px solid #1e293b' : '1px solid #e2e8f0';
+                    html += `<td style="border-top:${bTop};border-bottom:${bBottom};border-left:${bLeft};border-right:${bRight}">`;
                     if (num) html += `<span class="cell-number">${num}</span>`;
                     if (showingSolution) {
                         html += `<span class="cell-letter">${letter}</span>`;
