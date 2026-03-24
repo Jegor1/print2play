@@ -1,0 +1,64 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="pumpkin">
+    <!-- Stem drawn BEHIND pumpkin body -->
+    <path id="stem" data-size="medium" fill="#5D4037"
+      d="M240,105 C238,80 235,55 240,40 C245,28 255,25 260,38 C265,55 262,80 260,105 Z"/>
+    <path fill="none" stroke="#3E2723" stroke-width="3"
+      d="M240,105 C238,80 235,55 240,40 C245,28 255,25 260,38 C265,55 262,80 260,105"/>
+
+    <!-- Leaf -->
+    <path id="leaf" data-size="small" fill="#4CAF50"
+      d="M260,55 C275,42 298,35 310,42 C318,48 312,60 298,65 C285,70 268,68 260,60 Z"/>
+    <path id="leaf-vein" data-size="small" fill="none" stroke="#2E7D32" stroke-width="1.5"
+      d="M262,58 C278,50 295,48 308,48"/>
+
+    <!-- Vine curl -->
+    <path id="vine" data-size="small" fill="none" stroke="#4CAF50" stroke-width="2.5"
+      d="M242,48 C230,35 218,28 212,32 C206,38 215,50 228,52"/>
+
+    <!-- Pumpkin body (main shape covers stem base) -->
+    <path id="body" data-size="large" fill="#FF6D00"
+      d="M250,110 C330,105 405,155 430,240 C450,310 440,390 410,440 C385,480 340,505 290,510 C260,512 240,512 210,510 C160,505 115,480 90,440 C60,390 50,310 70,240 C95,155 170,105 250,110 Z"/>
+    <path fill="none" stroke="#E65100" stroke-width="3.5"
+      d="M250,110 C330,105 405,155 430,240 C450,310 440,390 410,440 C385,480 340,505 290,510 C260,512 240,512 210,510 C160,505 115,480 90,440 C60,390 50,310 70,240 C95,155 170,105 250,110"/>
+
+    <!-- Pumpkin segment ridges (no stroke, subtle) -->
+    <path id="ridge1" data-size="large" fill="#F57C00" opacity="0.4"
+      d="M165,120 C145,170 130,250 135,340 C140,410 160,465 185,495 C155,485 130,465 112,438 C85,395 78,320 88,250 C100,180 128,140 165,120 Z"/>
+    <path id="ridge2" data-size="large" fill="#F57C00" opacity="0.3"
+      d="M250,108 C240,108 230,110 220,115 C215,165 210,260 215,350 C218,415 228,465 240,498 C248,510 252,510 260,498 C272,465 282,415 285,350 C290,260 285,165 280,115 C270,110 260,108 250,108 Z"/>
+    <path id="ridge3" data-size="large" fill="#F57C00" opacity="0.4"
+      d="M335,120 C355,170 370,250 365,340 C360,410 340,465 315,495 C345,485 370,465 388,438 C415,395 422,320 412,250 C400,180 372,140 335,120 Z"/>
+
+    <!-- Lighter highlight -->
+    <path id="highlight" data-size="medium" fill="#FF8F00" opacity="0.4"
+      d="M180,150 C165,185 155,240 158,300 C160,345 170,385 185,415 C175,415 165,400 158,378 C145,340 140,280 148,225 C155,180 168,152 180,150 Z"/>
+
+    <!-- Carved eyes (cute triangles with highlights) -->
+    <path id="eye-left" data-size="medium" fill="#FFD54F"
+      d="M175,250 C190,215 220,215 225,250 C215,275 185,275 175,250 Z"/>
+    <circle id="eye-left-highlight" data-size="small" cx="195" cy="238" r="6" fill="#FFF9C4" opacity="0.7"/>
+    <path id="eye-right" data-size="medium" fill="#FFD54F"
+      d="M275,250 C290,215 320,215 325,250 C315,275 285,275 275,250 Z"/>
+    <circle id="eye-right-highlight" data-size="small" cx="295" cy="238" r="6" fill="#FFF9C4" opacity="0.7"/>
+
+    <!-- Cute carved nose (small triangle) -->
+    <path id="nose" data-size="small" fill="#FFD54F"
+      d="M240,310 C248,292 262,292 260,310 C255,322 245,322 240,310 Z"/>
+
+    <!-- Big cute smile -->
+    <path id="mouth" data-size="large" fill="#FFD54F"
+      d="M160,370 C180,355 220,345 250,345 C280,345 320,355 340,370 C335,405 310,430 250,435 C190,430 165,405 160,370 Z"/>
+    <!-- Smile glow -->
+    <path id="mouth-glow" data-size="medium" fill="#FFF9C4" opacity="0.4"
+      d="M180,368 C200,358 230,352 250,352 C270,352 300,358 320,368 C315,390 295,408 250,410 C205,408 185,390 180,368 Z"/>
+
+    <!-- Blush cheeks -->
+    <ellipse id="blush-left" data-size="small" cx="150" cy="320" rx="25" ry="14" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="blush-right" data-size="small" cx="350" cy="320" rx="25" ry="14" fill="#FF8FCF" opacity="0.3"/>
+
+    <!-- Ground shadow -->
+    <ellipse id="shadow" data-size="large" cx="250" cy="530" rx="120" ry="12" fill="#424242" opacity="0.15"/>
+  </g>
+</svg>

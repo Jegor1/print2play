@@ -1,0 +1,108 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="bat">
+    <!-- Wings drawn BEHIND body -->
+    <!-- Left wing -->
+    <path id="wing-left" data-size="large" fill="#4A148C"
+      d="M195,230 C155,205 95,170 40,155 C18,150 5,162 10,178 C18,200 50,230 85,252 C120,272 160,282 195,278 Z"/>
+    <path fill="none" stroke="#311B92" stroke-width="3.5"
+      d="M195,230 C155,205 95,170 40,155 C18,150 5,162 10,178 C18,200 50,230 85,252 C120,272 160,282 195,278"/>
+    <!-- Left wing scalloped edge detail -->
+    <path id="wing-left-edge" data-size="medium" fill="#4A148C"
+      d="M40,155 C30,175 25,195 30,210 C20,200 12,185 10,178 Z
+         M65,168 C58,188 55,210 60,225 C50,215 42,198 40,188 Z
+         M95,182 C90,202 88,222 92,238 C82,228 75,210 72,200 Z"/>
+
+    <!-- Right wing -->
+    <path id="wing-right" data-size="large" fill="#4A148C"
+      d="M315,230 C355,205 415,170 470,155 C492,150 505,162 500,178 C492,200 460,230 425,252 C390,272 350,282 315,278 Z"/>
+    <path fill="none" stroke="#311B92" stroke-width="3.5"
+      d="M315,230 C355,205 415,170 470,155 C492,150 505,162 500,178 C492,200 460,230 425,252 C390,272 350,282 315,278"/>
+    <!-- Right wing scalloped edge -->
+    <path id="wing-right-edge" data-size="medium" fill="#4A148C"
+      d="M470,155 C480,175 485,195 480,210 C490,200 498,185 500,178 Z
+         M445,168 C452,188 455,210 450,225 C460,215 468,198 470,188 Z
+         M415,182 C420,202 422,222 418,238 C428,228 435,210 438,200 Z"/>
+
+    <!-- Wing membrane lines -->
+    <path id="membrane-l1" data-size="small" fill="none" stroke="#6A1B9A" stroke-width="1.5"
+      d="M190,240 C145,218 85,190 45,175"/>
+    <path id="membrane-l2" data-size="small" fill="none" stroke="#6A1B9A" stroke-width="1.5"
+      d="M192,258 C150,242 100,218 65,205"/>
+    <path id="membrane-r1" data-size="small" fill="none" stroke="#6A1B9A" stroke-width="1.5"
+      d="M320,240 C365,218 425,190 465,175"/>
+    <path id="membrane-r2" data-size="small" fill="none" stroke="#6A1B9A" stroke-width="1.5"
+      d="M318,258 C360,242 410,218 445,205"/>
+
+    <!-- Feet hanging down -->
+    <path id="foot-left" data-size="small" fill="#4A148C"
+      d="M225,340 C222,365 218,390 215,410 C213,420 218,425 224,418 C228,408 230,385 232,360 Z"/>
+    <path fill="none" stroke="#311B92" stroke-width="2.5"
+      d="M225,340 C222,365 218,390 215,410 C213,420 218,425 224,418 C228,408 230,385 232,360"/>
+    <path id="foot-right" data-size="small" fill="#4A148C"
+      d="M285,340 C288,365 292,390 295,410 C297,420 292,425 286,418 C282,408 280,385 278,360 Z"/>
+    <path fill="none" stroke="#311B92" stroke-width="2.5"
+      d="M285,340 C288,365 292,390 295,410 C297,420 292,425 286,418 C282,408 280,385 278,360"/>
+    <!-- Foot claws -->
+    <circle id="claw-l1" data-size="small" cx="215" cy="415" r="4" fill="#7B1FA2"/>
+    <circle id="claw-l2" data-size="small" cx="210" cy="410" r="3.5" fill="#7B1FA2"/>
+    <circle id="claw-r1" data-size="small" cx="295" cy="415" r="4" fill="#7B1FA2"/>
+    <circle id="claw-r2" data-size="small" cx="300" cy="410" r="3.5" fill="#7B1FA2"/>
+
+    <!-- Body (covers wing joins) -->
+    <path id="body" data-size="large" fill="#4A148C"
+      d="M255,170 C290,165 320,182 338,210 C352,235 352,270 342,300 C335,322 318,340 295,348 C275,355 235,355 215,348 C192,340 175,322 168,300 C158,270 158,235 172,210 C190,182 222,165 255,170 Z"/>
+    <path fill="none" stroke="#311B92" stroke-width="3.5"
+      d="M215,348 C192,340 175,322 168,300 C158,270 158,235 172,210 C190,182 222,165 255,170 C290,165 320,182 338,210 C352,235 352,270 342,300 C335,322 318,340 295,348"/>
+
+    <!-- Belly lighter -->
+    <path id="belly" data-size="medium" fill="#6A1B9A"
+      d="M255,215 C280,212 302,225 312,248 C320,268 318,295 310,315 C304,330 292,340 276,342 C262,344 245,342 234,338 C218,330 208,315 202,295 C195,270 198,242 210,225 C222,212 240,210 255,215 Z"/>
+
+    <!-- Big ears -->
+    <path id="ear-left" data-size="medium" fill="#4A148C"
+      d="M205,175 C195,145 180,108 172,85 C168,72 172,65 180,72 C190,82 202,115 210,150 Z"/>
+    <path fill="none" stroke="#311B92" stroke-width="3"
+      d="M205,175 C195,145 180,108 172,85 C168,72 172,65 180,72 C190,82 202,115 210,150"/>
+    <path id="ear-right" data-size="medium" fill="#4A148C"
+      d="M305,175 C315,145 330,108 338,85 C342,72 338,65 330,72 C320,82 308,115 300,150 Z"/>
+    <path fill="none" stroke="#311B92" stroke-width="3"
+      d="M305,175 C315,145 330,108 338,85 C342,72 338,65 330,72 C320,82 308,115 300,150"/>
+    <!-- Inner ears -->
+    <path id="ear-inner-left" data-size="small" fill="#7B1FA2"
+      d="M205,168 C198,145 188,118 182,100 C186,105 198,135 206,160 Z"/>
+    <path id="ear-inner-right" data-size="small" fill="#7B1FA2"
+      d="M305,168 C312,145 322,118 328,100 C324,105 312,135 304,160 Z"/>
+
+    <!-- Big cute eyes -->
+    <g id="eye-left" data-size="large">
+      <ellipse cx="228" cy="235" rx="28" ry="30" fill="#FFF9C4"/>
+      <ellipse cx="232" cy="238" rx="16" ry="18" fill="#F44336"/>
+      <circle cx="234" cy="235" r="9" fill="#B71C1C"/>
+      <circle cx="237" cy="230" r="4" fill="#ffffff"/>
+    </g>
+    <g id="eye-right" data-size="large">
+      <ellipse cx="282" cy="235" rx="28" ry="30" fill="#FFF9C4"/>
+      <ellipse cx="278" cy="238" rx="16" ry="18" fill="#F44336"/>
+      <circle cx="276" cy="235" r="9" fill="#B71C1C"/>
+      <circle cx="273" cy="230" r="4" fill="#ffffff"/>
+    </g>
+
+    <!-- Tiny rounded fangs -->
+    <path id="fang-left" data-size="small" fill="#ffffff"
+      d="M238,300 Q242,315 246,300 Z"/>
+    <path id="fang-right" data-size="small" fill="#ffffff"
+      d="M264,300 Q268,315 272,300 Z"/>
+
+    <!-- Small smile -->
+    <path id="mouth" data-size="small" fill="#311B92"
+      d="M232,295 C242,290 268,290 278,295 C275,305 265,312 255,314 C245,312 235,305 232,295 Z"/>
+
+    <!-- Nose -->
+    <ellipse id="nose" data-size="small" cx="255" cy="275" rx="6" ry="4" fill="#7B1FA2"/>
+
+    <!-- Blush -->
+    <ellipse id="blush-left" data-size="small" cx="200" cy="268" rx="14" ry="8" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="blush-right" data-size="small" cx="310" cy="268" rx="14" ry="8" fill="#FF8FCF" opacity="0.3"/>
+  </g>
+</svg>

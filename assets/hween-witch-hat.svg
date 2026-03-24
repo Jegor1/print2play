@@ -1,0 +1,122 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="witch-cat">
+    <!-- Curled tail drawn BEHIND body -->
+    <path id="tail" data-size="large" fill="#424242"
+      d="M100,320 C75,305 45,275 30,245 C18,222 20,200 35,205 C50,212 65,240 80,270 C92,295 98,312 105,325 Z"/>
+    <path fill="none" stroke="#212121" stroke-width="3.5"
+      d="M100,320 C75,305 45,275 30,245 C18,222 20,200 35,205 C50,212 65,240 80,270 C92,295 98,312 105,325"/>
+    <!-- Tail curl tip -->
+    <path id="tail-tip" data-size="small" fill="#424242"
+      d="M30,245 C22,228 18,210 25,200 C32,192 42,198 45,212 C48,225 40,240 30,245 Z"/>
+
+    <!-- Back legs BEHIND body -->
+    <path id="leg-back-left" data-size="medium" fill="#424242"
+      d="M160,420 C155,450 148,478 142,502 C139,515 135,528 150,530 C165,532 163,516 164,505 C168,478 172,452 175,425 Z"/>
+    <path fill="none" stroke="#212121" stroke-width="3.5"
+      d="M160,420 C155,450 148,478 142,502 C139,515 135,528 150,530 C165,532 163,516 164,505 C168,478 172,452 175,425"/>
+    <path id="leg-back-right" data-size="medium" fill="#424242"
+      d="M215,422 C213,452 210,480 207,504 C205,517 202,530 217,532 C232,534 230,518 230,506 C232,480 233,452 234,426 Z"/>
+    <path fill="none" stroke="#212121" stroke-width="3.5"
+      d="M215,422 C213,452 210,480 207,504 C205,517 202,530 217,532 C232,534 230,518 230,506 C232,480 233,452 234,426"/>
+
+    <!-- Front legs BEHIND body -->
+    <path id="leg-front-left" data-size="medium" fill="#424242"
+      d="M310,418 C308,448 305,476 302,500 C300,513 297,526 312,528 C327,530 325,514 325,503 C327,476 328,448 328,422 Z"/>
+    <path fill="none" stroke="#212121" stroke-width="3.5"
+      d="M310,418 C308,448 305,476 302,500 C300,513 297,526 312,528 C327,530 325,514 325,503 C327,476 328,448 328,422"/>
+    <path id="leg-front-right" data-size="medium" fill="#424242"
+      d="M365,415 C363,445 360,473 358,498 C356,511 353,524 368,526 C383,528 381,512 381,500 C382,473 383,445 383,419 Z"/>
+    <path fill="none" stroke="#212121" stroke-width="3.5"
+      d="M365,415 C363,445 360,473 358,498 C356,511 353,524 368,526 C383,528 381,512 381,500 C382,473 383,445 383,419"/>
+
+    <!-- Paw details -->
+    <ellipse id="paw-bl" data-size="small" cx="150" cy="530" rx="14" ry="5" fill="#616161"/>
+    <ellipse id="paw-br" data-size="small" cx="218" cy="532" rx="14" ry="5" fill="#616161"/>
+    <ellipse id="paw-fl" data-size="small" cx="312" cy="528" rx="14" ry="5" fill="#616161"/>
+    <ellipse id="paw-fr" data-size="small" cx="368" cy="526" rx="14" ry="5" fill="#616161"/>
+
+    <!-- Body (covers tail and leg joins) -->
+    <path id="body" data-size="large" fill="#424242"
+      d="M250,230 C310,222 375,240 405,280 C428,312 425,360 408,398 C395,425 368,445 335,450 C295,455 200,453 168,445 C138,435 115,415 102,388 C85,350 88,300 110,268 C135,232 200,225 250,230 Z"/>
+    <path fill="none" stroke="#212121" stroke-width="3.5"
+      d="M168,445 C138,435 115,415 102,388 C85,350 88,300 110,268 C135,232 200,225 250,230 C310,222 375,240 405,280 C428,312 425,360 408,398 C395,425 368,445 335,450"/>
+
+    <!-- Belly/chest lighter -->
+    <path id="chest" data-size="medium" fill="#616161"
+      d="M330,290 C355,305 365,340 358,375 C352,400 335,420 312,428 C295,432 278,430 270,420 C260,405 262,380 272,355 C282,332 305,300 330,290 Z"/>
+
+    <!-- Ears BEHIND hat but on top of body -->
+    <path id="ear-left" data-size="medium" fill="#424242"
+      d="M340,190 C335,160 325,130 322,115 C320,105 326,100 332,108 C340,120 348,150 350,180 Z"/>
+    <path fill="none" stroke="#212121" stroke-width="3"
+      d="M340,190 C335,160 325,130 322,115 C320,105 326,100 332,108 C340,120 348,150 350,180"/>
+    <path id="ear-right" data-size="medium" fill="#424242"
+      d="M400,190 C402,160 408,130 412,115 C414,105 420,100 418,112 C415,125 408,155 404,182 Z"/>
+    <path fill="none" stroke="#212121" stroke-width="3"
+      d="M400,190 C402,160 408,130 412,115 C414,105 420,100 418,112 C415,125 408,155 404,182"/>
+    <!-- Inner ears -->
+    <path id="ear-inner-left" data-size="small" fill="#FF8A80"
+      d="M338,180 C335,158 330,138 328,128 C332,132 338,152 342,175 Z"/>
+    <path id="ear-inner-right" data-size="small" fill="#FF8A80"
+      d="M402,180 C404,158 408,138 410,128 C412,135 406,155 403,178 Z"/>
+
+    <!-- Head -->
+    <path id="head" data-size="large" fill="#424242"
+      d="M370,175 C400,170 425,185 438,210 C448,232 445,260 432,280 C420,298 398,308 375,310 C352,312 332,302 322,285 C312,265 315,238 325,218 C335,198 352,180 370,175 Z"/>
+    <path fill="none" stroke="#212121" stroke-width="3.5"
+      d="M322,285 C312,265 315,238 325,218 C335,198 352,180 370,175 C400,170 425,185 438,210 C448,232 445,260 432,280 C420,298 398,308 375,310 C352,312 332,302 322,285"/>
+
+    <!-- Big green eyes -->
+    <g id="eye-left" data-size="medium">
+      <ellipse cx="355" cy="235" rx="20" ry="22" fill="#E8F5E9"/>
+      <ellipse cx="358" cy="238" rx="12" ry="14" fill="#4CAF50"/>
+      <ellipse cx="360" cy="235" rx="6" ry="8" fill="#1B5E20"/>
+      <circle cx="362" cy="231" r="3" fill="#ffffff"/>
+    </g>
+    <g id="eye-right" data-size="medium">
+      <ellipse cx="405" cy="235" rx="20" ry="22" fill="#E8F5E9"/>
+      <ellipse cx="402" cy="238" rx="12" ry="14" fill="#4CAF50"/>
+      <ellipse cx="400" cy="235" rx="6" ry="8" fill="#1B5E20"/>
+      <circle cx="398" cy="231" r="3" fill="#ffffff"/>
+    </g>
+
+    <!-- Nose -->
+    <ellipse id="nose" data-size="small" cx="380" cy="262" rx="8" ry="5" fill="#FF8A80"/>
+
+    <!-- Whiskers -->
+    <line id="whisker-l1" data-size="small" x1="340" y1="258" x2="300" y2="250" stroke="#757575" stroke-width="1.5"/>
+    <line id="whisker-l2" data-size="small" x1="340" y1="265" x2="298" y2="268" stroke="#757575" stroke-width="1.5"/>
+    <line id="whisker-r1" data-size="small" x1="420" y1="258" x2="460" y2="250" stroke="#757575" stroke-width="1.5"/>
+    <line id="whisker-r2" data-size="small" x1="420" y1="265" x2="462" y2="268" stroke="#757575" stroke-width="1.5"/>
+
+    <!-- Small mouth -->
+    <path id="mouth" data-size="small" fill="#212121"
+      d="M370,272 C375,275 385,275 390,272 C388,280 382,284 380,284 C378,284 372,280 370,272 Z"/>
+
+    <!-- Witch hat -->
+    <path id="hat-brim" data-size="large" fill="#1A237E"
+      d="M310,185 C320,195 340,200 370,200 C400,200 425,195 440,185 C448,180 450,172 442,168 C430,162 400,158 370,158 C340,158 310,162 298,168 C290,172 292,180 310,185 Z"/>
+    <path id="hat-cone" data-size="large" fill="#1A237E"
+      d="M330,168 C340,130 355,85 365,50 C370,35 375,30 378,45 C385,80 395,130 405,168 Z"/>
+    <path fill="none" stroke="#0D1547" stroke-width="3"
+      d="M310,185 C320,195 340,200 370,200 C400,200 425,195 440,185 C448,180 450,172 442,168 C430,162 400,158 370,158 C340,158 310,162 298,168 C290,172 292,180 310,185"/>
+    <path fill="none" stroke="#0D1547" stroke-width="3"
+      d="M330,168 C340,130 355,85 365,50 C370,35 375,30 378,45 C385,80 395,130 405,168"/>
+
+    <!-- Hat buckle band -->
+    <rect id="hat-band" data-size="small" x="328" y="158" width="80" height="14" rx="3" fill="#FF6D00"/>
+    <!-- Buckle -->
+    <rect id="hat-buckle" data-size="small" x="358" y="155" width="20" height="20" rx="3" fill="#FFD54F"/>
+    <rect id="hat-buckle-inner" data-size="small" x="363" y="160" width="10" height="10" rx="2" fill="#1A237E"/>
+
+    <!-- Stars on hat -->
+    <circle id="star1" data-size="small" cx="350" cy="120" r="4" fill="#FFD54F" opacity="0.8"/>
+    <circle id="star2" data-size="small" cx="385" cy="95" r="3" fill="#FFD54F" opacity="0.7"/>
+    <circle id="star3" data-size="small" cx="365" cy="70" r="3.5" fill="#FFD54F" opacity="0.8"/>
+
+    <!-- Blush -->
+    <ellipse id="blush-left" data-size="small" cx="338" cy="270" rx="12" ry="7" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="blush-right" data-size="small" cx="422" cy="270" rx="12" ry="7" fill="#FF8FCF" opacity="0.3"/>
+  </g>
+</svg>

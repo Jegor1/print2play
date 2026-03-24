@@ -1,0 +1,90 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="stegosaurus">
+    <!-- Tail drawn BEHIND body -->
+    <path id="tail" data-size="large" fill="#2196F3"
+      d="M80,310 C55,300 25,275 10,250 C0,232 8,220 20,228 C35,238 55,265 72,288 C82,300 90,308 95,315 Z"/>
+    <path fill="none" stroke="#1565C0" stroke-width="3.5"
+      d="M80,310 C55,300 25,275 10,250 C0,232 8,220 20,228 C35,238 55,265 72,288 C82,300 90,308 95,315"/>
+
+    <!-- Tail spikes (rounded) -->
+    <ellipse id="tail-spike1" data-size="small" cx="18" cy="238" rx="10" ry="18" fill="#FF7043" transform="rotate(-30 18 238)"/>
+    <ellipse id="tail-spike2" data-size="small" cx="35" cy="258" rx="9" ry="16" fill="#FF5722" transform="rotate(-20 35 258)"/>
+    <ellipse id="tail-spike3" data-size="small" cx="52" cy="275" rx="8" ry="14" fill="#FF7043" transform="rotate(-10 52 275)"/>
+    <ellipse id="tail-spike4" data-size="small" cx="68" cy="290" rx="7" ry="12" fill="#FF5722" transform="rotate(-5 68 290)"/>
+
+    <!-- Legs drawn BEHIND body -->
+    <path id="leg-back-left" data-size="medium" fill="#2196F3"
+      d="M140,400 C135,435 130,470 125,500 C122,515 118,530 133,532 C148,534 148,518 150,505 C155,470 158,440 160,410 Z"/>
+    <path fill="none" stroke="#1565C0" stroke-width="3.5"
+      d="M140,400 C135,435 130,470 125,500 C122,515 118,530 133,532 C148,534 148,518 150,505 C155,470 158,440 160,410"/>
+    <path id="leg-back-right" data-size="medium" fill="#2196F3"
+      d="M200,405 C198,440 195,472 192,500 C190,515 186,530 201,532 C216,534 215,518 215,505 C217,472 218,440 218,410 Z"/>
+    <path fill="none" stroke="#1565C0" stroke-width="3.5"
+      d="M200,405 C198,440 195,472 192,500 C190,515 186,530 201,532 C216,534 215,518 215,505 C217,472 218,440 218,410"/>
+    <path id="leg-front-left" data-size="medium" fill="#2196F3"
+      d="M310,400 C308,435 305,470 302,500 C300,515 296,530 311,532 C326,534 325,518 325,505 C327,470 328,440 328,410 Z"/>
+    <path fill="none" stroke="#1565C0" stroke-width="3.5"
+      d="M310,400 C308,435 305,470 302,500 C300,515 296,530 311,532 C326,534 325,518 325,505 C327,470 328,440 328,410"/>
+    <path id="leg-front-right" data-size="medium" fill="#2196F3"
+      d="M365,400 C363,435 360,468 358,498 C356,513 352,528 367,530 C382,532 380,516 380,503 C382,468 383,435 383,405 Z"/>
+    <path fill="none" stroke="#1565C0" stroke-width="3.5"
+      d="M365,400 C363,435 360,468 358,498 C356,513 352,528 367,530 C382,532 380,516 380,503 C382,468 383,435 383,405"/>
+
+    <!-- Body (covers tail and leg joins) -->
+    <path id="body" data-size="large" fill="#2196F3"
+      d="M250,200 C310,190 380,210 410,260 C435,300 430,355 410,390 C395,415 365,430 330,435 C290,440 200,440 160,430 C125,420 100,400 88,370 C72,330 75,275 100,240 C130,200 195,195 250,200 Z"/>
+    <path fill="none" stroke="#1565C0" stroke-width="3.5"
+      d="M160,430 C125,420 100,400 88,370 C72,330 75,275 100,240 C130,200 195,195 250,200 C310,190 380,210 410,260 C435,300 430,355 410,390 C395,415 365,430 330,435"/>
+
+    <!-- Belly lighter -->
+    <path id="belly" data-size="large" fill="#64B5F6"
+      d="M250,260 C300,255 350,270 370,300 C385,325 382,360 370,385 C360,402 335,415 305,418 C270,422 220,420 190,415 C165,408 148,392 140,372 C130,345 135,305 155,280 C175,260 215,258 250,260 Z"/>
+
+    <!-- Back plates (colorful, different sizes) - drawn ON TOP of body -->
+    <path id="plate1" data-size="medium" fill="#FF9800"
+      d="M145,225 C148,195 160,170 175,165 C185,162 188,175 182,195 C178,210 165,228 152,232 Z"/>
+    <path id="plate2" data-size="large" fill="#E91E63"
+      d="M195,205 C200,168 215,138 235,130 C248,126 252,142 244,168 C238,190 220,212 205,218 Z"/>
+    <path id="plate3" data-size="large" fill="#FF9800"
+      d="M248,195 C255,155 272,122 292,112 C306,107 310,125 302,155 C295,180 275,205 260,212 Z"/>
+    <path id="plate4" data-size="large" fill="#E91E63"
+      d="M302,200 C310,162 328,132 348,124 C362,120 365,138 356,165 C350,188 330,210 316,216 Z"/>
+    <path id="plate5" data-size="medium" fill="#FF9800"
+      d="M352,215 C358,188 370,165 385,160 C395,157 397,172 390,192 C385,208 372,225 360,228 Z"/>
+
+    <!-- Small head -->
+    <path id="head" data-size="large" fill="#2196F3"
+      d="M410,260 C435,245 465,240 482,250 C495,258 498,278 488,298 C478,315 458,325 438,325 C418,325 402,315 398,298 C395,282 400,268 410,260 Z"/>
+    <path fill="none" stroke="#1565C0" stroke-width="3.5"
+      d="M398,298 C395,282 400,268 410,260 C435,245 465,240 482,250 C495,258 498,278 488,298 C478,315 458,325 438,325 C418,325 402,315 398,298"/>
+
+    <!-- Head lighter -->
+    <path id="head-belly" data-size="small" fill="#64B5F6"
+      d="M430,265 C448,260 468,262 478,272 C485,280 484,294 476,302 C468,310 452,314 440,310 C428,306 422,295 424,282 C425,273 427,268 430,265 Z"/>
+
+    <!-- Friendly eyes -->
+    <g id="eye" data-size="medium">
+      <ellipse cx="458" cy="270" rx="18" ry="20" fill="#FFFDE7"/>
+      <ellipse cx="460" cy="273" rx="10" ry="12" fill="#4E342E"/>
+      <circle cx="462" cy="270" r="5" fill="#1B0E06"/>
+      <circle cx="464" cy="266" r="2.5" fill="#ffffff"/>
+    </g>
+
+    <!-- Gentle smile -->
+    <path id="mouth" data-size="small" fill="#1565C0"
+      d="M470,295 C478,292 488,294 490,300 C488,308 478,312 468,310 C462,308 460,302 470,295 Z"/>
+
+    <!-- Nostril -->
+    <ellipse id="nostril" data-size="small" cx="490" cy="282" rx="3" ry="2.5" fill="#1565C0"/>
+
+    <!-- Blush cheek -->
+    <ellipse id="blush" data-size="small" cx="445" cy="305" rx="12" ry="7" fill="#FF8FCF" opacity="0.35"/>
+
+    <!-- Body spots -->
+    <circle id="spot1" data-size="small" cx="180" cy="350" r="10" fill="#1976D2" opacity="0.4"/>
+    <circle id="spot2" data-size="small" cx="280" cy="370" r="8" fill="#1976D2" opacity="0.4"/>
+    <circle id="spot3" data-size="small" cx="350" cy="340" r="12" fill="#1976D2" opacity="0.4"/>
+    <circle id="spot4" data-size="small" cx="230" cy="310" r="7" fill="#1976D2" opacity="0.4"/>
+  </g>
+</svg>

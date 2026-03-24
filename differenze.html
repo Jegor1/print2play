@@ -98,7 +98,7 @@
             letter-spacing: 0.04em;
         }
 
-        select, input[type="color"] {
+        select {
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             padding: 10px 14px;
@@ -110,14 +110,7 @@
             transition: border-color 0.15s;
         }
 
-        input[type="color"] {
-            height: 42px;
-            width: 100%;
-            cursor: pointer;
-            padding: 4px 6px;
-        }
-
-        select:focus, input[type="color"]:focus {
+        select:focus {
             border-color: var(--primary);
         }
 
@@ -269,14 +262,12 @@
     <main class="container">
         <div class="controls">
             <div class="control-group">
-                <label for="character-select">Personaggio</label>
-                <select id="character-select">
-                    <option value="tentacle">Mostro Tentacoli</option>
-                    <option value="blob">Blob</option>
-                    <option value="fluffy">Peloso</option>
-                    <option value="cyclops">Ciclope</option>
-                    <option value="dragon">Draghetto</option>
-                    <option value="robot">Robot</option>
+                <label for="scene-select">Scena</label>
+                <select id="scene-select">
+                    <option value="mostri">Mostri</option>
+                    <option value="dinosauri">Dinosauri</option>
+                    <option value="halloween">Halloween</option>
+                    <option value="animali">Animali</option>
                 </select>
             </div>
             <div class="control-group">
@@ -288,1205 +279,810 @@
                     <option value="estremo">Estremo</option>
                 </select>
             </div>
-            <div class="control-group">
-                <label for="bg-color">Sfondo</label>
-                <input type="color" id="bg-color" value="#E8F5E9">
-            </div>
             <button class="btn btn-primary" onclick="generate()">Genera</button>
             <button class="btn btn-secondary" onclick="window.print()">Stampa</button>
             <button class="btn btn-secondary" onclick="exportPDF()">PDF</button>
         </div>
 
-        <div class="scenes-wrapper" id="output">
-            <div class="placeholder-msg">Seleziona un personaggio e premi <strong>Genera</strong> per creare il gioco.</div>
+        <div class="scenes-wrapper" id="scenes-wrapper">
+            <p class="placeholder-msg">Premi "Genera" per creare una scena con le differenze!</p>
         </div>
     </main>
 
     <footer>
-        <p>Print2Play &mdash; Stampa, gioca, impara.</p>
-        <p>Illustrazioni originali create per Print2Play. Alcune illustrazioni da OpenClipart.org (CC0 Public Domain).</p>
+        <p>Mostri e dinosauri creati per Print2Play. Animali da OpenClipart.org (CC0) &mdash; artista: lemmling</p>
     </footer>
 
-    <!-- ==================== MONSTER SVG TEMPLATES ==================== -->
-
-    <template id="tpl-tentacle">
-        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Tentacles drawn BEHIND body so body covers the join seamlessly -->
-            <!-- Tentacle 1 (far left) -->
-            <path id="tentacle1" fill="#7B2FBE"
-              d="M155,380 C140,420 110,465 95,490 C80,515 68,535 82,542 C96,549 118,530 138,505 C158,480 168,440 175,400 Z"/>
-            <!-- Tentacle 2 (center-left) -->
-            <path id="tentacle2" fill="#7B2FBE"
-              d="M205,400 C198,435 182,475 172,500 C162,525 152,545 168,548 C184,551 202,525 215,498 C228,471 232,435 233,405 Z"/>
-            <!-- Tentacle 3 (center-right) -->
-            <path id="tentacle3" fill="#7B2FBE"
-              d="M275,405 C278,435 282,471 295,498 C308,525 326,551 342,548 C358,545 348,525 338,500 C328,475 312,435 305,400 Z"/>
-            <!-- Tentacle 4 (far right) -->
-            <path id="tentacle4" fill="#7B2FBE"
-              d="M335,400 C342,440 352,480 372,505 C392,530 414,549 428,542 C442,535 430,515 415,490 C400,465 370,420 355,380 Z"/>
-            <!-- Tentacle outer stroke only -->
-            <path fill="none" stroke="#4A1A72" stroke-width="3.5"
-              d="M155,380 C140,420 110,465 95,490 C80,515 68,535 82,542 C96,549 118,530 138,505 C158,480 168,440 175,400"/>
-            <path fill="none" stroke="#4A1A72" stroke-width="3.5"
-              d="M205,400 C198,435 182,475 172,500 C162,525 152,545 168,548 C184,551 202,525 215,498 C228,471 232,435 233,405"/>
-            <path fill="none" stroke="#4A1A72" stroke-width="3.5"
-              d="M275,405 C278,435 282,471 295,498 C308,525 326,551 342,548 C358,545 348,525 338,500 C328,475 312,435 305,400"/>
-            <path fill="none" stroke="#4A1A72" stroke-width="3.5"
-              d="M335,400 C342,440 352,480 372,505 C392,530 414,549 428,542 C442,535 430,515 415,490 C400,465 370,420 355,380"/>
-            <!-- Tentacle suckers -->
-            <circle id="sucker1a" cx="92" cy="518" r="6" fill="#9B4FDE"/>
-            <circle id="sucker1b" cx="110" cy="498" r="5" fill="#9B4FDE"/>
-            <circle id="sucker1c" cx="125" cy="478" r="4" fill="#9B4FDE"/>
-            <circle id="sucker2a" cx="175" cy="520" r="6" fill="#9B4FDE"/>
-            <circle id="sucker2b" cx="188" cy="500" r="5" fill="#9B4FDE"/>
-            <circle id="sucker3a" cx="333" cy="520" r="6" fill="#9B4FDE"/>
-            <circle id="sucker3b" cx="322" cy="500" r="5" fill="#9B4FDE"/>
-            <circle id="sucker4a" cx="418" cy="518" r="6" fill="#9B4FDE"/>
-            <circle id="sucker4b" cx="400" cy="498" r="5" fill="#9B4FDE"/>
-            <circle id="sucker4c" cx="385" cy="478" r="4" fill="#9B4FDE"/>
-
-            <!-- Body main blob -->
-            <path id="body" fill="#7B2FBE"
-              d="M250,80 C310,75 385,105 415,170 C445,235 438,305 420,355 C408,385 378,408 345,420 C320,428 290,432 250,432 C210,432 180,428 155,420 C122,408 92,385 80,355 C62,305 55,235 85,170 C115,105 190,75 250,80 Z"/>
-            <path fill="none" stroke="#4A1A72" stroke-width="3.5"
-              d="M155,420 C122,408 92,385 80,355 C62,305 55,235 85,170 C115,105 190,75 250,80 C310,75 385,105 415,170 C445,235 438,305 420,355 C408,385 378,408 345,420"/>
-
-            <!-- Body belly -->
-            <path id="belly" fill="#9B4FDE"
-              d="M250,155 C298,152 345,178 360,230 C375,282 370,335 355,372 C344,398 312,412 272,416 L228,416 C188,412 156,398 145,372 C130,335 125,282 140,230 C155,178 202,152 250,155 Z"/>
-
-            <!-- Spots -->
-            <circle id="spot1" cx="160" cy="210" r="18" fill="#6B25A8" opacity="0.5"/>
-            <circle id="spot2" cx="350" cy="250" r="14" fill="#6B25A8" opacity="0.5"/>
-            <circle id="spot3" cx="195" cy="360" r="12" fill="#6B25A8" opacity="0.5"/>
-            <circle id="spot4" cx="320" cy="170" r="10" fill="#6B25A8" opacity="0.5"/>
-
-            <!-- Horns -->
-            <path id="horn-left" fill="#FF6B35"
-              d="M185,100 C180,72 168,42 158,28 C152,20 160,14 167,20 C178,32 192,68 197,95 Z"/>
-            <path fill="none" stroke="#4A1A72" stroke-width="2.5"
-              d="M185,100 C180,72 168,42 158,28 C152,20 160,14 167,20 C178,32 192,68 197,95"/>
-            <path id="horn-right" fill="#FF6B35"
-              d="M315,100 C320,72 332,42 342,28 C348,20 340,14 333,20 C322,32 308,68 303,95 Z"/>
-            <path fill="none" stroke="#4A1A72" stroke-width="2.5"
-              d="M315,100 C320,72 332,42 342,28 C348,20 340,14 333,20 C322,32 308,68 303,95"/>
-
-            <!-- Horn tip balls -->
-            <circle id="horn-tip-left" cx="158" cy="24" r="9" fill="#FFD93D"/>
-            <circle cx="156" cy="21" r="3.5" fill="#FFF4B0" opacity="0.7"/>
-            <circle id="horn-tip-right" cx="342" cy="24" r="9" fill="#FFD93D"/>
-            <circle cx="344" cy="21" r="3.5" fill="#FFF4B0" opacity="0.7"/>
-
-            <!-- Eye 1 (top-left, large) -->
-            <g id="eye1">
-              <ellipse cx="195" cy="200" rx="42" ry="44" fill="#F0FFF0"/>
-              <ellipse cx="200" cy="205" rx="20" ry="22" fill="#2BAE66"/>
-              <circle cx="203" cy="200" r="11" fill="#1A6B3C"/>
-              <circle cx="207" cy="194" r="5" fill="#ffffff"/>
-            </g>
-            <!-- Eye 2 (top-right, large) -->
-            <g id="eye2">
-              <ellipse cx="305" cy="200" rx="42" ry="44" fill="#F0FFF0"/>
-              <ellipse cx="300" cy="205" rx="20" ry="22" fill="#2BAE66"/>
-              <circle cx="297" cy="200" r="11" fill="#1A6B3C"/>
-              <circle cx="293" cy="194" r="5" fill="#ffffff"/>
-            </g>
-            <!-- Eye 3 (bottom-left, small) -->
-            <g id="eye3">
-              <ellipse cx="220" cy="268" rx="24" ry="26" fill="#F0FFF0"/>
-              <ellipse cx="223" cy="271" rx="12" ry="14" fill="#2BAE66"/>
-              <circle cx="225" cy="268" r="7" fill="#1A6B3C"/>
-              <circle cx="227" cy="264" r="3" fill="#ffffff"/>
-            </g>
-            <!-- Eye 4 (bottom-right, small) -->
-            <g id="eye4">
-              <ellipse cx="280" cy="268" rx="24" ry="26" fill="#F0FFF0"/>
-              <ellipse cx="277" cy="271" rx="12" ry="14" fill="#2BAE66"/>
-              <circle cx="275" cy="268" r="7" fill="#1A6B3C"/>
-              <circle cx="273" cy="264" r="3" fill="#ffffff"/>
-            </g>
-
-            <!-- Mouth -->
-            <path id="mouth" fill="#3D0F5C"
-              d="M195,320 C205,310 220,308 250,310 C280,308 295,310 305,320 C300,355 280,375 250,378 C220,375 200,355 195,320 Z"/>
-            <!-- Tooth -->
-            <path id="tooth1" fill="#ffffff"
-              d="M218,318 Q222,338 228,318 Z"/>
-
-            <!-- Cheek blush -->
-            <ellipse id="blush-left" cx="148" cy="300" rx="22" ry="13" fill="#FF8FCF" opacity="0.35"/>
-            <ellipse id="blush-right" cx="352" cy="300" rx="22" ry="13" fill="#FF8FCF" opacity="0.35"/>
-
-            <!-- Small warts -->
-            <circle id="wart1" cx="135" cy="255" r="5" fill="#6B25A8"/>
-            <circle id="wart2" cx="370" cy="225" r="6" fill="#6B25A8"/>
-            <circle id="wart3" cx="310" cy="390" r="4" fill="#6B25A8"/>
-        </svg>
-    </template>
-
-    <template id="tpl-blob">
-        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Left arm -->
-            <path id="arm-left" fill="#2563EB"
-              d="M110,280 C85,290 55,310 40,330 C30,345 38,360 52,355 C62,350 78,335 95,315 C105,302 112,290 118,282 Z"/>
-            <path fill="none" stroke="#1E40AF" stroke-width="3.5"
-              d="M110,280 C85,290 55,310 40,330 C30,345 38,360 52,355 C62,350 78,335 95,315"/>
-            <circle id="hand-left-finger1" cx="42" cy="340" r="8" fill="#60A5FA"/>
-            <circle id="hand-left-finger2" cx="36" cy="350" r="7" fill="#60A5FA"/>
-            <circle id="hand-left-finger3" cx="45" cy="358" r="7" fill="#60A5FA"/>
-
-            <!-- Right arm -->
-            <path id="arm-right" fill="#2563EB"
-              d="M390,280 C415,290 445,310 460,330 C470,345 462,360 448,355 C438,350 422,335 405,315 C395,302 388,290 382,282 Z"/>
-            <path fill="none" stroke="#1E40AF" stroke-width="3.5"
-              d="M390,280 C415,290 445,310 460,330 C470,345 462,360 448,355 C438,350 422,335 405,315"/>
-            <circle id="hand-right-finger1" cx="458" cy="340" r="8" fill="#60A5FA"/>
-            <circle id="hand-right-finger2" cx="464" cy="350" r="7" fill="#60A5FA"/>
-            <circle id="hand-right-finger3" cx="455" cy="358" r="7" fill="#60A5FA"/>
-
-            <!-- Feet -->
-            <ellipse id="foot-left" cx="195" cy="465" rx="35" ry="18" fill="#2563EB"/>
-            <path fill="none" stroke="#1E40AF" stroke-width="3.5"
-              d="M165,478 C170,483 185,485 195,485 C205,485 220,483 228,475"/>
-            <ellipse id="foot-right" cx="310" cy="465" rx="35" ry="18" fill="#2563EB"/>
-            <path fill="none" stroke="#1E40AF" stroke-width="3.5"
-              d="M278,475 C285,483 298,485 310,485 C322,485 338,483 342,478"/>
-
-            <!-- Antennae -->
-            <path id="antenna-left" fill="#2563EB"
-              d="M200,130 C195,100 185,65 175,45 L185,45 C192,65 198,100 202,130 Z"/>
-            <path fill="none" stroke="#1E40AF" stroke-width="2.5"
-              d="M200,130 C195,100 185,65 175,45"/>
-            <circle id="antenna-ball-left" cx="175" cy="42" r="12" fill="#FFD93D"/>
-            <circle cx="173" cy="39" r="4" fill="#FFF4B0" opacity="0.7"/>
-
-            <path id="antenna-right" fill="#2563EB"
-              d="M300,130 C305,100 315,65 325,45 L315,45 C308,65 302,100 298,130 Z"/>
-            <path fill="none" stroke="#1E40AF" stroke-width="2.5"
-              d="M300,130 C305,100 315,65 325,45"/>
-            <circle id="antenna-ball-right" cx="325" cy="42" r="12" fill="#FFD93D"/>
-            <circle cx="327" cy="39" r="4" fill="#FFF4B0" opacity="0.7"/>
-
-            <!-- Body -->
-            <path id="body" fill="#3B82F6"
-              d="M250,110 C290,105 330,112 362,130 C395,150 418,185 428,225 C438,268 435,310 425,348 C418,375 400,400 375,420 C355,435 325,448 295,455 C270,460 230,460 205,455 C175,448 145,435 125,420 C100,400 82,375 75,348 C65,310 62,268 72,225 C82,185 105,150 138,130 C170,112 210,105 250,110 Z"/>
-            <path fill="none" stroke="#1E40AF" stroke-width="3.5"
-              d="M205,455 C175,448 145,435 125,420 C100,400 82,375 75,348 C65,310 62,268 72,225 C82,185 105,150 138,130 C170,112 210,105 250,110 C290,105 330,112 362,130 C395,150 418,185 428,225 C438,268 435,310 425,348 C418,375 400,400 375,420 C355,435 325,448 295,455"/>
-
-            <!-- Belly -->
-            <path id="belly" fill="#60A5FA"
-              d="M250,185 C295,182 338,200 352,240 C365,280 360,330 348,370 C340,395 315,415 280,425 L220,425 C185,415 160,395 152,370 C140,330 135,280 148,240 C162,200 205,182 250,185 Z"/>
-
-            <!-- Spots -->
-            <circle id="spot1" cx="150" cy="220" r="16" fill="#2563EB" opacity="0.5"/>
-            <circle id="spot2" cx="365" cy="260" r="13" fill="#2563EB" opacity="0.5"/>
-            <circle id="spot3" cx="180" cy="380" r="11" fill="#2563EB" opacity="0.5"/>
-            <circle id="spot4" cx="340" cy="180" r="9" fill="#2563EB" opacity="0.5"/>
-
-            <!-- Trumpet nose -->
-            <g id="nose">
-              <path id="nose-trunk" fill="#60A5FA"
-                d="M245,280 C242,290 238,305 232,318 C228,326 235,332 245,330 L258,330 C268,332 275,326 271,318 C265,305 261,290 258,280 Z"/>
-              <ellipse id="nose-bell" cx="251" cy="332" rx="18" ry="10" fill="#60A5FA"/>
-              <ellipse id="nostril-left" cx="244" cy="330" rx="5" ry="4" fill="#1E40AF"/>
-              <ellipse id="nostril-right" cx="258" cy="330" rx="5" ry="4" fill="#1E40AF"/>
-            </g>
-
-            <!-- Eye 1 (left, large) -->
-            <g id="eye1">
-              <ellipse cx="195" cy="230" rx="40" ry="42" fill="#F0FFF0"/>
-              <ellipse cx="200" cy="234" rx="18" ry="20" fill="#3B82F6"/>
-              <circle cx="203" cy="230" r="10" fill="#1E3A8A"/>
-              <circle cx="207" cy="224" r="5" fill="#ffffff"/>
-            </g>
-            <!-- Eye 2 (right, medium) -->
-            <g id="eye2">
-              <ellipse cx="310" cy="225" rx="35" ry="37" fill="#F0FFF0"/>
-              <ellipse cx="306" cy="229" rx="16" ry="18" fill="#3B82F6"/>
-              <circle cx="303" cy="225" r="9" fill="#1E3A8A"/>
-              <circle cx="299" cy="220" r="4.5" fill="#ffffff"/>
-            </g>
-            <!-- Eye 3 (center, small) -->
-            <g id="eye3">
-              <ellipse cx="252" cy="270" rx="22" ry="24" fill="#F0FFF0"/>
-              <ellipse cx="254" cy="273" rx="10" ry="12" fill="#3B82F6"/>
-              <circle cx="255" cy="270" r="6" fill="#1E3A8A"/>
-              <circle cx="257" cy="266" r="3" fill="#ffffff"/>
-            </g>
-
-            <!-- Mouth -->
-            <ellipse id="mouth" cx="252" cy="365" rx="40" ry="32" fill="#1E3A8A"/>
-            <!-- Teeth -->
-            <g id="teeth">
-              <ellipse id="tooth-left" cx="241" cy="348" rx="14" ry="18" fill="#ffffff"/>
-              <ellipse id="tooth-right" cx="263" cy="348" rx="14" ry="18" fill="#ffffff"/>
-            </g>
-
-            <!-- Cheek blush -->
-            <ellipse id="blush-left" cx="140" cy="310" rx="20" ry="12" fill="#FF8FCF" opacity="0.35"/>
-            <ellipse id="blush-right" cx="365" cy="305" rx="20" ry="12" fill="#FF8FCF" opacity="0.35"/>
-        </svg>
-    </template>
-
-    <template id="tpl-fluffy">
-        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Legs -->
-            <path id="leg-left" fill="#DB2777"
-              d="M175,400 C170,430 165,460 162,485 C160,500 170,510 182,508 C194,506 195,495 193,480 C190,460 188,435 190,410 Z"/>
-            <path fill="none" stroke="#9D174D" stroke-width="3.5"
-              d="M175,400 C170,430 165,460 162,485 C160,500 170,510 182,508 C194,506 195,495 193,480"/>
-            <ellipse id="foot-left" cx="175" cy="510" rx="25" ry="12" fill="#DB2777"/>
-            <path fill="none" stroke="#9D174D" stroke-width="3"
-              d="M152,515 C160,522 172,524 178,524 C185,524 195,520 200,515"/>
-
-            <path id="leg-right" fill="#DB2777"
-              d="M310,410 C312,435 310,460 307,480 C305,495 306,506 318,508 C330,510 340,500 338,485 C335,460 330,430 325,400 Z"/>
-            <path fill="none" stroke="#9D174D" stroke-width="3.5"
-              d="M325,400 C330,430 335,460 338,485 C340,500 330,510 318,508 C306,506 305,495 307,480"/>
-            <ellipse id="foot-right" cx="325" cy="510" rx="25" ry="12" fill="#DB2777"/>
-            <path fill="none" stroke="#9D174D" stroke-width="3"
-              d="M302,515 C308,522 318,524 325,524 C335,524 345,520 350,515"/>
-
-            <!-- Fluffy tail -->
-            <path id="tail" fill="#EC4899"
-              d="M385,320 C410,310 440,295 458,275 C470,260 475,250 465,248 C455,246 438,260 420,278 C405,295 392,310 385,320 Z"/>
-            <path fill="none" stroke="#9D174D" stroke-width="3"
-              d="M385,320 C410,310 440,295 458,275 C470,260 475,250 465,248 C455,246 438,260 420,278"/>
-            <circle id="tail-poof1" cx="462" cy="258" r="15" fill="#F9A8D4"/>
-            <circle id="tail-poof2" cx="470" cy="248" r="12" fill="#F9A8D4"/>
-            <circle id="tail-poof3" cx="458" cy="244" r="13" fill="#F9A8D4"/>
-
-            <!-- Body -->
-            <path id="body" fill="#EC4899"
-              d="M250,100 C275,98 300,102 322,112 C330,108 338,112 335,120 C358,132 375,150 386,172 C394,168 400,174 395,182 C406,200 412,222 414,245 C422,244 424,252 418,256 C418,278 414,300 406,320 C414,322 414,330 406,330 C396,348 382,362 365,375 C370,380 366,388 358,385 C340,396 318,404 295,408 C296,416 290,418 285,414 C272,417 258,418 245,418 C232,418 218,417 205,414 C200,418 194,416 195,408 C172,404 150,396 132,385 C124,388 120,380 125,375 C108,362 94,348 84,330 C76,330 76,322 84,320 C76,300 72,278 72,256 C66,252 68,244 76,245 C78,222 84,200 95,182 C90,174 96,168 104,172 C115,150 132,132 155,120 C152,112 160,108 168,112 C190,102 215,98 250,100 Z"/>
-            <path fill="none" stroke="#9D174D" stroke-width="3.5"
-              d="M195,408 C172,404 150,396 132,385 C124,388 120,380 125,375 C108,362 94,348 84,330 C76,330 76,322 84,320 C76,300 72,278 72,256 C66,252 68,244 76,245 C78,222 84,200 95,182 C90,174 96,168 104,172 C115,150 132,132 155,120 C152,112 160,108 168,112 C190,102 215,98 250,100 C275,98 300,102 322,112 C330,108 338,112 335,120 C358,132 375,150 386,172 C394,168 400,174 395,182 C406,200 412,222 414,245 C422,244 424,252 418,256 C418,278 414,300 406,320 C414,322 414,330 406,330 C396,348 382,362 365,375 C370,380 366,388 358,385 C340,396 318,404 295,408"/>
-
-            <!-- Belly -->
-            <path id="belly" fill="#F9A8D4"
-              d="M250,180 C295,178 335,200 345,240 C355,280 350,325 340,360 C332,382 310,400 275,408 L225,408 C190,400 168,382 160,360 C150,325 145,280 155,240 C165,200 205,178 250,180 Z"/>
-
-            <!-- Horn -->
-            <path id="horn" fill="#FBBF24"
-              d="M250,102 C248,78 245,52 250,35 C255,52 252,78 250,102 Z"/>
-            <path fill="none" stroke="#9D174D" stroke-width="2.5"
-              d="M248,102 C246,78 243,52 250,35 C257,52 254,78 252,102"/>
-
-            <!-- Trumpet ears -->
-            <g id="ear-left">
-              <path id="ear-left-shape" fill="#EC4899"
-                d="M115,175 C95,155 70,140 52,135 C40,132 35,142 42,150 C52,162 75,178 100,188 Z"/>
-              <path fill="none" stroke="#9D174D" stroke-width="3"
-                d="M115,175 C95,155 70,140 52,135 C40,132 35,142 42,150 C52,162 75,178 100,188"/>
-              <ellipse id="ear-left-inner" cx="58" cy="145" rx="14" ry="10" fill="#F9A8D4" transform="rotate(-35 58 145)"/>
-            </g>
-            <g id="ear-right">
-              <path id="ear-right-shape" fill="#EC4899"
-                d="M385,175 C405,155 430,140 448,135 C460,132 465,142 458,150 C448,162 425,178 400,188 Z"/>
-              <path fill="none" stroke="#9D174D" stroke-width="3"
-                d="M385,175 C405,155 430,140 448,135 C460,132 465,142 458,150 C448,162 425,178 400,188"/>
-              <ellipse id="ear-right-inner" cx="442" cy="145" rx="14" ry="10" fill="#F9A8D4" transform="rotate(35 442 145)"/>
-            </g>
-
-            <!-- Bow -->
-            <g id="bow">
-              <path id="bow-left-lobe" fill="#FF4081"
-                d="M280,108 C295,88 315,82 320,90 C325,98 308,105 290,112 Z"/>
-              <path id="bow-right-lobe" fill="#FF4081"
-                d="M290,112 C310,118 328,128 325,136 C322,144 305,132 290,118 Z"/>
-              <circle id="bow-center" cx="288" cy="112" r="8" fill="#E91E63"/>
-            </g>
-
-            <!-- Eye 1 (left, bigger) -->
-            <g id="eye1">
-              <ellipse cx="200" cy="235" rx="42" ry="45" fill="#F0FFF0"/>
-              <ellipse cx="205" cy="240" rx="20" ry="22" fill="#EC4899"/>
-              <circle cx="208" cy="236" r="11" fill="#9D174D"/>
-              <circle cx="212" cy="230" r="5" fill="#ffffff"/>
-            </g>
-            <!-- Eye 2 (right, smaller) -->
-            <g id="eye2">
-              <ellipse cx="310" cy="240" rx="34" ry="36" fill="#F0FFF0"/>
-              <ellipse cx="306" cy="244" rx="16" ry="18" fill="#EC4899"/>
-              <circle cx="303" cy="240" r="9" fill="#9D174D"/>
-              <circle cx="299" cy="235" r="4" fill="#ffffff"/>
-            </g>
-
-            <!-- Mouth -->
-            <path id="mouth" fill="none" stroke="#9D174D" stroke-width="3"
-              d="M195,320 Q222,348 250,348 Q278,348 305,320"/>
-
-            <!-- Cheek blush -->
-            <ellipse id="blush-left" cx="155" cy="300" rx="22" ry="14" fill="#FF8FCF" opacity="0.4"/>
-            <ellipse id="blush-right" cx="355" cy="300" rx="22" ry="14" fill="#FF8FCF" opacity="0.4"/>
-
-            <!-- Nose -->
-            <g id="nose">
-              <ellipse id="nose-shape" cx="255" cy="295" rx="14" ry="11" fill="#DB2777"/>
-              <ellipse id="nose-highlight" cx="253" cy="292" rx="5" ry="4" fill="#F9A8D4" opacity="0.5"/>
-            </g>
-        </svg>
-    </template>
-
-    <template id="tpl-cyclops">
-        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Arms -->
-            <path id="arm-left" fill="#65A30D"
-              d="M105,250 C75,290 50,360 40,420 C35,450 30,480 42,492 C54,504 65,490 68,465 C72,430 80,380 100,320 C108,295 112,270 115,258 Z"/>
-            <path fill="none" stroke="#3F6212" stroke-width="3.5"
-              d="M105,250 C75,290 50,360 40,420 C35,450 30,480 42,492 C54,504 65,490 68,465 C72,430 80,380 100,320"/>
-            <circle id="hand-left-finger1" cx="40" cy="482" r="9" fill="#A3E635"/>
-            <circle id="hand-left-finger2" cx="32" cy="490" r="8" fill="#A3E635"/>
-            <circle id="hand-left-finger3" cx="44" cy="497" r="8" fill="#A3E635"/>
-
-            <path id="arm-right" fill="#65A30D"
-              d="M395,258 C398,270 402,295 410,320 C430,380 438,430 442,465 C445,490 456,504 468,492 C480,480 475,450 470,420 C460,360 435,290 405,250 Z"/>
-            <path fill="none" stroke="#3F6212" stroke-width="3.5"
-              d="M405,250 C435,290 460,360 470,420 C475,450 480,480 468,492 C456,504 445,490 442,465 C438,430 430,380 410,320"/>
-            <circle id="hand-right-finger1" cx="470" cy="482" r="9" fill="#A3E635"/>
-            <circle id="hand-right-finger2" cx="478" cy="490" r="8" fill="#A3E635"/>
-            <circle id="hand-right-finger3" cx="466" cy="497" r="8" fill="#A3E635"/>
-
-            <!-- Feet -->
-            <ellipse id="foot-left" cx="195" cy="478" rx="50" ry="18" fill="#65A30D"/>
-            <path fill="none" stroke="#3F6212" stroke-width="3.5"
-              d="M150,490 C162,496 180,498 195,498 C210,498 230,496 242,490"/>
-            <ellipse id="foot-right" cx="310" cy="478" rx="50" ry="18" fill="#65A30D"/>
-            <path fill="none" stroke="#3F6212" stroke-width="3.5"
-              d="M264,490 C276,496 294,498 310,498 C326,498 344,496 356,490"/>
-
-            <!-- Tail -->
-            <path id="tail" fill="#65A30D"
-              d="M385,380 C405,395 428,398 445,390 C455,385 458,375 450,372 C442,369 425,375 408,378 C395,380 388,378 385,375 Z"/>
-            <path fill="none" stroke="#3F6212" stroke-width="3"
-              d="M385,380 C405,395 428,398 445,390 C455,385 458,375 450,372 C442,369 425,375 408,378"/>
-
-            <!-- Body -->
-            <path id="body" fill="#84CC16"
-              d="M250,90 C310,88 365,110 395,155 C425,200 430,260 425,320 C420,365 405,405 378,432 C355,455 320,468 285,472 C268,474 232,474 215,472 C180,468 145,455 122,432 C95,405 80,365 75,320 C70,260 75,200 105,155 C135,110 190,88 250,90 Z"/>
-            <path fill="none" stroke="#3F6212" stroke-width="3.5"
-              d="M215,472 C180,468 145,455 122,432 C95,405 80,365 75,320 C70,260 75,200 105,155 C135,110 190,88 250,90 C310,88 365,110 395,155 C425,200 430,260 425,320 C420,365 405,405 378,432 C355,455 320,468 285,472"/>
-
-            <!-- Belly -->
-            <path id="belly" fill="#BEF264"
-              d="M250,170 C298,168 340,190 355,230 C370,275 368,330 358,375 C350,405 325,430 285,442 L215,442 C175,430 150,405 142,375 C132,330 130,275 145,230 C160,190 202,168 250,170 Z"/>
-
-            <!-- Antennae with eyes -->
-            <path id="antenna-left" fill="#84CC16"
-              d="M195,108 C192,82 188,55 185,35 L192,35 C194,55 196,82 198,108 Z"/>
-            <path fill="none" stroke="#3F6212" stroke-width="2.5"
-              d="M195,108 C192,82 188,55 185,35"/>
-            <g id="antenna-eye-left">
-              <circle cx="185" cy="30" r="18" fill="#F0FFF0"/>
-              <circle cx="185" cy="32" r="10" fill="#84CC16"/>
-              <circle cx="185" cy="30" r="6" fill="#3F6212"/>
-              <circle cx="188" cy="26" r="3" fill="#ffffff"/>
-            </g>
-            <path id="antenna-right" fill="#84CC16"
-              d="M305,108 C308,82 312,55 315,35 L308,35 C306,55 304,82 302,108 Z"/>
-            <path fill="none" stroke="#3F6212" stroke-width="2.5"
-              d="M305,108 C308,82 312,55 315,35"/>
-            <g id="antenna-eye-right">
-              <circle cx="315" cy="30" r="18" fill="#F0FFF0"/>
-              <circle cx="315" cy="32" r="10" fill="#84CC16"/>
-              <circle cx="315" cy="30" r="6" fill="#3F6212"/>
-              <circle cx="312" cy="26" r="3" fill="#ffffff"/>
-            </g>
-
-            <!-- Giant eye -->
-            <g id="eye1">
-              <ellipse cx="250" cy="230" rx="68" ry="70" fill="#F0FFF0"/>
-              <ellipse cx="250" cy="236" rx="35" ry="38" fill="#84CC16"/>
-              <circle cx="250" cy="230" r="20" fill="#3F6212"/>
-              <circle cx="258" cy="220" r="9" fill="#ffffff"/>
-              <circle cx="242" cy="238" r="5" fill="#ffffff"/>
-            </g>
-
-            <!-- Belly button -->
-            <ellipse id="belly-button" cx="250" cy="380" rx="10" ry="14" fill="#84CC16" opacity="0.6"/>
-
-            <!-- Spots -->
-            <circle id="spot1" cx="155" cy="200" r="15" fill="#65A30D" opacity="0.5"/>
-            <circle id="spot2" cx="355" cy="240" r="12" fill="#65A30D" opacity="0.5"/>
-            <circle id="spot3" cx="175" cy="400" r="10" fill="#65A30D" opacity="0.5"/>
-            <circle id="spot4" cx="340" cy="170" r="9" fill="#65A30D" opacity="0.5"/>
-
-            <!-- Warts -->
-            <circle id="wart1" cx="135" cy="280" r="6" fill="#65A30D"/>
-            <circle id="wart2" cx="375" cy="310" r="5" fill="#65A30D"/>
-            <circle id="wart3" cx="160" cy="350" r="4" fill="#65A30D"/>
-
-            <!-- Mouth -->
-            <path id="mouth" fill="#3F6212"
-              d="M180,350 Q200,370 220,350 Q240,370 260,350 Q280,370 300,350 Q320,370 340,350 L340,360 Q320,380 300,360 Q280,380 260,360 Q240,380 220,360 Q200,380 180,360 Z"/>
-            <path id="tooth1" fill="#ffffff"
-              d="M242,360 Q250,345 258,360 Z"/>
-
-            <!-- Cheek blush -->
-            <ellipse id="blush-left" cx="148" cy="320" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
-            <ellipse id="blush-right" cx="352" cy="320" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
-        </svg>
-    </template>
-
-    <template id="tpl-dragon">
-        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Wings -->
-            <g id="wing-left">
-              <path id="wing-left-membrane" fill="#FDBA74"
-                d="M85,170 C55,130 30,95 25,75 C22,62 35,60 42,72 C55,95 72,135 90,175 Z"/>
-              <path id="wing-left-membrane2" fill="#FDBA74"
-                d="M90,175 C60,155 30,130 15,115 C5,105 15,95 25,105 C42,122 68,152 92,180 Z"/>
-              <path fill="none" stroke="#C2410C" stroke-width="3"
-                d="M85,170 C55,130 30,95 25,75 C22,62 35,60 42,72 C55,95 72,135 90,175"/>
-              <path fill="none" stroke="#C2410C" stroke-width="3"
-                d="M90,175 C60,155 30,130 15,115 C5,105 15,95 25,105 C42,122 68,152 92,180"/>
-              <path id="wing-left-strut1" fill="#EA580C" opacity="0.4"
-                d="M88,174 C68,142 48,108 38,82 L42,80 C54,108 72,144 90,178 Z"/>
-              <path id="wing-left-strut2" fill="#EA580C" opacity="0.4"
-                d="M90,178 C68,158 42,132 28,115 L32,112 C48,130 72,158 92,180 Z"/>
-            </g>
-            <g id="wing-right">
-              <path id="wing-right-membrane" fill="#FDBA74"
-                d="M415,170 C445,130 470,95 475,75 C478,62 465,60 458,72 C445,95 428,135 410,175 Z"/>
-              <path id="wing-right-membrane2" fill="#FDBA74"
-                d="M410,175 C440,155 470,130 485,115 C495,105 485,95 475,105 C458,122 432,152 408,180 Z"/>
-              <path fill="none" stroke="#C2410C" stroke-width="3"
-                d="M415,170 C445,130 470,95 475,75 C478,62 465,60 458,72 C445,95 428,135 410,175"/>
-              <path fill="none" stroke="#C2410C" stroke-width="3"
-                d="M410,175 C440,155 470,130 485,115 C495,105 485,95 475,105 C458,122 432,152 408,180"/>
-              <path id="wing-right-strut1" fill="#EA580C" opacity="0.4"
-                d="M412,174 C432,142 452,108 462,82 L458,80 C446,108 428,144 410,178 Z"/>
-              <path id="wing-right-strut2" fill="#EA580C" opacity="0.4"
-                d="M410,178 C432,158 458,132 472,115 L468,112 C452,130 428,158 408,180 Z"/>
-            </g>
-
-            <!-- Tail -->
-            <path id="tail" fill="#F97316"
-              d="M375,380 C400,375 430,360 450,335 C462,318 468,300 460,295 C452,290 440,305 428,325 C415,348 400,368 380,378 Z"/>
-            <path fill="none" stroke="#C2410C" stroke-width="3.5"
-              d="M375,380 C400,375 430,360 450,335 C462,318 468,300 460,295 C452,290 440,305 428,325 C415,348 400,368 380,378"/>
-            <ellipse id="tail-tip" cx="458" cy="295" rx="12" ry="8" fill="#FBBF24" transform="rotate(-30 458 295)"/>
-
-            <!-- Feet -->
-            <ellipse id="foot-left" cx="195" cy="470" rx="42" ry="16" fill="#EA580C"/>
-            <path fill="none" stroke="#C2410C" stroke-width="3"
-              d="M158,480 C168,488 182,490 195,490 C208,490 224,488 234,480"/>
-            <circle id="claw-left1" cx="165" cy="478" r="6" fill="#FBBF24"/>
-            <circle id="claw-left2" cx="180" cy="482" r="6" fill="#FBBF24"/>
-            <circle id="claw-left3" cx="210" cy="482" r="6" fill="#FBBF24"/>
-
-            <ellipse id="foot-right" cx="315" cy="470" rx="42" ry="16" fill="#EA580C"/>
-            <path fill="none" stroke="#C2410C" stroke-width="3"
-              d="M278,480 C288,488 302,490 315,490 C328,490 344,488 354,480"/>
-            <circle id="claw-right1" cx="300" cy="482" r="6" fill="#FBBF24"/>
-            <circle id="claw-right2" cx="330" cy="482" r="6" fill="#FBBF24"/>
-            <circle id="claw-right3" cx="345" cy="478" r="6" fill="#FBBF24"/>
-
-            <!-- Body -->
-            <path id="body" fill="#F97316"
-              d="M250,100 C310,97 368,120 398,165 C428,210 432,268 425,325 C420,365 400,400 372,425 C348,445 318,458 285,462 C268,464 232,464 215,462 C182,458 152,445 128,425 C100,400 80,365 75,325 C68,268 72,210 102,165 C132,120 190,97 250,100 Z"/>
-            <path fill="none" stroke="#C2410C" stroke-width="3.5"
-              d="M215,462 C182,458 152,445 128,425 C100,400 80,365 75,325 C68,268 72,210 102,165 C132,120 190,97 250,100 C310,97 368,120 398,165 C428,210 432,268 425,325 C420,365 400,400 372,425 C348,445 318,458 285,462"/>
-
-            <!-- Belly -->
-            <path id="belly" fill="#FDBA74"
-              d="M250,180 C298,178 340,198 355,238 C370,280 365,332 355,375 C348,402 322,425 282,435 L218,435 C178,425 152,402 145,375 C135,332 130,280 145,238 C160,198 202,178 250,180 Z"/>
-
-            <!-- Spikes -->
-            <ellipse id="spike1" cx="210" cy="102" rx="10" ry="22" fill="#FBBF24" transform="rotate(-15 210 102)"/>
-            <ellipse id="spike2" cx="235" cy="92" rx="10" ry="26" fill="#FBBF24" transform="rotate(-5 235 92)"/>
-            <ellipse id="spike3" cx="262" cy="88" rx="11" ry="28" fill="#FBBF24" transform="rotate(2 262 88)"/>
-            <ellipse id="spike4" cx="290" cy="92" rx="10" ry="26" fill="#FBBF24" transform="rotate(10 290 92)"/>
-            <ellipse id="spike5" cx="315" cy="102" rx="10" ry="22" fill="#FBBF24" transform="rotate(18 315 102)"/>
-
-            <!-- Snout -->
-            <ellipse id="snout" cx="250" cy="310" rx="55" ry="35" fill="#FDBA74"/>
-            <ellipse id="nostril-left" cx="232" cy="305" rx="8" ry="6" fill="#EA580C"/>
-            <ellipse id="nostril-right" cx="268" cy="305" rx="8" ry="6" fill="#EA580C"/>
-
-            <!-- Eyes -->
-            <g id="eye1">
-              <ellipse cx="195" cy="225" rx="38" ry="40" fill="#F0FFF0"/>
-              <ellipse cx="200" cy="230" rx="18" ry="20" fill="#F97316"/>
-              <circle cx="202" cy="226" r="10" fill="#C2410C"/>
-              <circle cx="206" cy="220" r="5" fill="#ffffff"/>
-            </g>
-            <g id="eye2">
-              <ellipse cx="305" cy="225" rx="38" ry="40" fill="#F0FFF0"/>
-              <ellipse cx="300" cy="230" rx="18" ry="20" fill="#F97316"/>
-              <circle cx="298" cy="226" r="10" fill="#C2410C"/>
-              <circle cx="294" cy="220" r="5" fill="#ffffff"/>
-            </g>
-
-            <!-- Mouth -->
-            <path id="mouth" fill="#C2410C"
-              d="M195,340 C210,345 230,348 250,348 C270,348 290,345 305,340 C300,365 280,385 250,385 C220,385 200,365 195,340 Z"/>
-
-            <!-- Smoke -->
-            <g id="smoke">
-              <circle id="smoke1" cx="218" cy="290" r="6" fill="#D1D5DB" opacity="0.4"/>
-              <circle id="smoke2" cx="210" cy="278" r="8" fill="#D1D5DB" opacity="0.3"/>
-              <circle id="smoke3" cx="205" cy="264" r="5" fill="#D1D5DB" opacity="0.2"/>
-            </g>
-
-            <!-- Cheek blush -->
-            <ellipse id="blush-left" cx="148" cy="290" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
-            <ellipse id="blush-right" cx="352" cy="290" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
-        </svg>
-    </template>
-
-    <template id="tpl-robot">
-        <svg viewBox="0 0 500 550" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Antenna -->
-            <path id="antenna-pole" fill="#0D9488"
-              d="M247,120 L247,55 L253,55 L253,120 Z"/>
-            <path fill="none" stroke="#115E59" stroke-width="2.5"
-              d="M250,120 L250,55"/>
-            <path id="antenna-dish" fill="#5EEAD4"
-              d="M225,55 C225,35 275,35 275,55 C275,65 225,65 225,55 Z"/>
-            <path fill="none" stroke="#115E59" stroke-width="2.5"
-              d="M225,55 C225,35 275,35 275,55"/>
-            <circle id="antenna-light" cx="250" cy="38" r="6" fill="#FF4081"/>
-            <circle cx="248" cy="36" r="2" fill="#ffffff" opacity="0.7"/>
-
-            <!-- Arms -->
-            <g id="arm-left">
-              <path id="arm-left-upper" fill="#0D9488"
-                d="M95,240 C75,255 55,280 40,310 C32,328 28,345 38,350 C48,355 58,342 65,325 C75,300 85,275 100,255 Z"/>
-              <path fill="none" stroke="#115E59" stroke-width="3.5"
-                d="M95,240 C75,255 55,280 40,310 C32,328 28,345 38,350 C48,355 58,342 65,325"/>
-              <path id="claw-left-top" fill="#5EEAD4"
-                d="M35,345 C25,335 18,325 22,320 C26,315 35,322 40,335 Z"/>
-              <path id="claw-left-bottom" fill="#5EEAD4"
-                d="M35,345 C22,352 12,358 12,365 C12,372 22,370 32,362 Z"/>
-              <circle id="claw-left-joint" cx="38" cy="348" r="5" fill="#2DD4BF"/>
-            </g>
-            <g id="arm-right">
-              <path id="arm-right-upper" fill="#0D9488"
-                d="M405,255 C415,275 425,300 435,325 C442,342 452,355 462,350 C472,345 468,328 460,310 C445,280 425,255 405,240 Z"/>
-              <path fill="none" stroke="#115E59" stroke-width="3.5"
-                d="M405,240 C425,255 445,280 460,310 C468,328 472,345 462,350 C452,355 442,342 435,325"/>
-              <path id="claw-right-top" fill="#5EEAD4"
-                d="M465,345 C475,335 482,325 478,320 C474,315 465,322 460,335 Z"/>
-              <path id="claw-right-bottom" fill="#5EEAD4"
-                d="M465,345 C478,352 488,358 488,365 C488,372 478,370 468,362 Z"/>
-              <circle id="claw-right-joint" cx="462" cy="348" r="5" fill="#2DD4BF"/>
-            </g>
-
-            <!-- Treads -->
-            <g id="treads">
-              <rect id="tread-left" x="145" y="455" rx="18" ry="18" width="90" height="36" fill="#115E59"/>
-              <rect id="tread-right" x="270" y="455" rx="18" ry="18" width="90" height="36" fill="#115E59"/>
-              <circle id="wheel-left1" cx="175" cy="473" r="12" fill="#0D9488"/>
-              <circle id="wheel-left2" cx="205" cy="473" r="12" fill="#0D9488"/>
-              <circle id="wheel-right1" cx="300" cy="473" r="12" fill="#0D9488"/>
-              <circle id="wheel-right2" cx="330" cy="473" r="12" fill="#0D9488"/>
-              <circle cx="175" cy="473" r="5" fill="#5EEAD4"/>
-              <circle cx="205" cy="473" r="5" fill="#5EEAD4"/>
-              <circle cx="300" cy="473" r="5" fill="#5EEAD4"/>
-              <circle cx="330" cy="473" r="5" fill="#5EEAD4"/>
-            </g>
-            <path fill="none" stroke="#115E59" stroke-width="3"
-              d="M150,488 C158,493 172,495 190,495 C208,495 222,493 230,488"/>
-            <path fill="none" stroke="#115E59" stroke-width="3"
-              d="M274,488 C282,493 296,495 315,495 C334,495 348,493 356,488"/>
-
-            <!-- Body -->
-            <rect id="body" x="110" y="120" rx="40" ry="40" width="280" height="340" fill="#14B8A6"/>
-            <path fill="none" stroke="#115E59" stroke-width="3.5"
-              d="M150,460 C130,460 115,450 112,430 L110,160 C110,138 128,120 150,120 L350,120 C372,120 390,138 390,160 L388,430 C385,450 370,460 350,460"/>
-
-            <!-- Belly panel -->
-            <rect id="belly-panel" x="180" y="320" rx="15" ry="15" width="140" height="100" fill="#0D9488"/>
-            <rect id="belly-screen" x="192" y="332" rx="10" ry="10" width="116" height="76" fill="#042F2E"/>
-            <path id="heart-symbol" fill="#FF4081"
-              d="M250,395 C240,385 218,368 218,355 C218,345 225,338 235,338 C242,338 248,342 250,348 C252,342 258,338 265,338 C275,338 282,345 282,355 C282,368 260,385 250,395 Z"/>
-
-            <!-- Bolts -->
-            <circle id="bolt1" cx="140" cy="155" r="7" fill="#5EEAD4"/>
-            <circle id="bolt2" cx="360" cy="155" r="7" fill="#5EEAD4"/>
-            <circle id="bolt3" cx="140" cy="425" r="7" fill="#5EEAD4"/>
-            <circle id="bolt4" cx="360" cy="425" r="7" fill="#5EEAD4"/>
-            <rect x="137" y="152" width="6" height="6" rx="1" fill="#14B8A6"/>
-            <rect x="357" y="152" width="6" height="6" rx="1" fill="#14B8A6"/>
-            <rect x="137" y="422" width="6" height="6" rx="1" fill="#14B8A6"/>
-            <rect x="357" y="422" width="6" height="6" rx="1" fill="#14B8A6"/>
-
-            <!-- Blinking lights -->
-            <circle id="light1" cx="175" cy="145" r="5" fill="#FF4081"/>
-            <circle id="light2" cx="210" cy="145" r="5" fill="#FBBF24"/>
-            <circle id="light3" cx="250" cy="145" r="5" fill="#4ADE80"/>
-            <circle id="light4" cx="290" cy="145" r="5" fill="#FBBF24"/>
-            <circle id="light5" cx="325" cy="145" r="5" fill="#FF4081"/>
-
-            <!-- Eyes -->
-            <g id="eye1">
-              <rect x="160" y="185" rx="12" ry="12" width="72" height="68" fill="#F0FFF0"/>
-              <rect x="178" y="200" rx="6" ry="6" width="38" height="40" fill="#14B8A6"/>
-              <rect id="pupil-left" x="188" y="206" rx="3" ry="3" width="18" height="28" fill="#042F2E"/>
-              <rect x="192" y="210" rx="2" ry="2" width="6" height="10" fill="#ffffff"/>
-            </g>
-            <g id="eye2">
-              <rect x="268" y="185" rx="12" ry="12" width="72" height="68" fill="#F0FFF0"/>
-              <rect x="284" y="200" rx="6" ry="6" width="38" height="40" fill="#14B8A6"/>
-              <rect id="pupil-right" x="294" y="206" rx="3" ry="3" width="18" height="28" fill="#042F2E"/>
-              <rect x="298" y="210" rx="2" ry="2" width="6" height="10" fill="#ffffff"/>
-            </g>
-
-            <!-- Mouth -->
-            <rect id="mouth" x="190" y="290" rx="8" ry="8" width="120" height="40" fill="#042F2E"/>
-            <!-- Pixel smile -->
-            <rect id="pixel1" x="200" y="302" width="8" height="8" rx="1" fill="#4ADE80"/>
-            <rect id="pixel2" x="212" y="310" width="8" height="8" rx="1" fill="#4ADE80"/>
-            <rect id="pixel3" x="224" y="314" width="8" height="8" rx="1" fill="#4ADE80"/>
-            <rect id="pixel4" x="236" y="316" width="8" height="8" rx="1" fill="#4ADE80"/>
-            <rect id="pixel5" x="252" y="316" width="8" height="8" rx="1" fill="#4ADE80"/>
-            <rect id="pixel6" x="264" y="314" width="8" height="8" rx="1" fill="#4ADE80"/>
-            <rect id="pixel7" x="276" y="310" width="8" height="8" rx="1" fill="#4ADE80"/>
-            <rect id="pixel8" x="288" y="302" width="8" height="8" rx="1" fill="#4ADE80"/>
-
-            <!-- Cheek blush -->
-            <ellipse id="blush-left" cx="158" cy="275" rx="18" ry="10" fill="#FF8FCF" opacity="0.3"/>
-            <ellipse id="blush-right" cx="342" cy="275" rx="18" ry="10" fill="#FF8FCF" opacity="0.3"/>
-        </svg>
-    </template>
-
-    <script>
-    // ========== UTILITIES ==========
-    function mulberry32(a) {
-        return function() {
-            a |= 0; a = a + 0x6D2B79F5 | 0;
-            var t = Math.imul(a ^ a >>> 15, 1 | a);
-            t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-            return ((t ^ t >>> 14) >>> 0) / 4294967296;
+<script>
+// ============================================================
+// SCENE BACKGROUNDS
+// ============================================================
+
+function bgMostri() {
+    return `
+    <defs>
+      <linearGradient id="bg-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0a0a2e"/>
+        <stop offset="60%" stop-color="#1a1050"/>
+        <stop offset="100%" stop-color="#2d1b69"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="700" fill="url(#bg-sky)"/>
+    <circle cx="80" cy="40" r="1.5" fill="#fff" opacity="0.8"/>
+    <circle cx="200" cy="80" r="1" fill="#fff" opacity="0.6"/>
+    <circle cx="350" cy="30" r="2" fill="#fff" opacity="0.9"/>
+    <circle cx="500" cy="60" r="1.2" fill="#fff" opacity="0.7"/>
+    <circle cx="650" cy="25" r="1.8" fill="#fff" opacity="0.8"/>
+    <circle cx="800" cy="55" r="1" fill="#fff" opacity="0.6"/>
+    <circle cx="950" cy="35" r="2.2" fill="#fff" opacity="0.9"/>
+    <circle cx="1100" cy="70" r="1.3" fill="#fff" opacity="0.7"/>
+    <circle cx="150" cy="120" r="1" fill="#fff" opacity="0.5"/>
+    <circle cx="450" cy="100" r="1.5" fill="#fff" opacity="0.6"/>
+    <circle cx="750" cy="90" r="1" fill="#fff" opacity="0.5"/>
+    <circle cx="1050" cy="110" r="1.8" fill="#fff" opacity="0.7"/>
+    <circle cx="1050" cy="120" r="30" fill="#5b3a8c" opacity="0.5"/>
+    <circle cx="1045" cy="115" r="28" fill="#6b4a9c" opacity="0.3"/>
+    <path d="M0,520 Q150,490 300,510 Q500,530 600,505 Q750,480 900,510 Q1050,540 1200,515 L1200,700 L0,700 Z" fill="#1a3a2a"/>
+    <path d="M0,540 Q200,520 400,535 Q600,550 800,530 Q1000,510 1200,535 L1200,700 L0,700 Z" fill="#0f2a1f"/>
+    <ellipse cx="250" cy="600" rx="60" ry="15" fill="#0a1f15" opacity="0.5"/>
+    <ellipse cx="900" cy="620" rx="45" ry="12" fill="#0a1f15" opacity="0.5"/>
+    `;
+}
+
+function bgDinosauri() {
+    return `
+    <defs>
+      <linearGradient id="bg-sky-dino" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ff9a56"/>
+        <stop offset="40%" stop-color="#ffcc80"/>
+        <stop offset="100%" stop-color="#a5d6a7"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="700" fill="url(#bg-sky-dino)"/>
+    <path d="M900,200 L950,500 L850,500 Z" fill="#795548"/>
+    <path d="M900,200 L920,260 L880,260 Z" fill="#d32f2f" opacity="0.7"/>
+    <ellipse cx="900" cy="205" rx="25" ry="10" fill="#ff5722" opacity="0.6"/>
+    <rect x="148" y="350" width="12" height="150" fill="#6d4c41" rx="3"/>
+    <ellipse cx="155" cy="345" rx="50" ry="18" fill="#388e3c" transform="rotate(-15 155 345)"/>
+    <ellipse cx="155" cy="350" rx="45" ry="16" fill="#43a047" transform="rotate(10 155 350)"/>
+    <ellipse cx="155" cy="340" rx="48" ry="17" fill="#2e7d32" transform="rotate(-30 155 340)"/>
+    <rect x="1038" y="380" width="10" height="120" fill="#6d4c41" rx="3"/>
+    <ellipse cx="1043" cy="375" rx="42" ry="15" fill="#388e3c" transform="rotate(-10 1043 375)"/>
+    <ellipse cx="1043" cy="380" rx="38" ry="14" fill="#43a047" transform="rotate(15 1043 380)"/>
+    <path d="M0,500 Q200,480 400,505 Q600,520 800,495 Q1000,475 1200,500 L1200,700 L0,700 Z" fill="#8d6e63"/>
+    <path d="M0,530 Q300,515 600,535 Q900,550 1200,530 L1200,700 L0,700 Z" fill="#795548"/>
+    <ellipse cx="500" cy="600" rx="80" ry="20" fill="#6d4c41" opacity="0.4"/>
+    `;
+}
+
+function bgHalloween() {
+    return `
+    <defs>
+      <linearGradient id="bg-sky-hw" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0d1b2a"/>
+        <stop offset="50%" stop-color="#1b2838"/>
+        <stop offset="100%" stop-color="#2c1e3f"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="700" fill="url(#bg-sky-hw)"/>
+    <circle cx="950" cy="100" r="60" fill="#fff9c4" opacity="0.9"/>
+    <circle cx="940" cy="90" r="55" fill="#fff176" opacity="0.3"/>
+    <circle cx="100" cy="50" r="1.5" fill="#fff" opacity="0.6"/>
+    <circle cx="300" cy="80" r="1" fill="#fff" opacity="0.5"/>
+    <circle cx="500" cy="40" r="2" fill="#fff" opacity="0.7"/>
+    <circle cx="700" cy="70" r="1.2" fill="#fff" opacity="0.5"/>
+    <circle cx="1100" cy="50" r="1.5" fill="#fff" opacity="0.6"/>
+    <path d="M100,520 L100,300 M100,350 Q70,310 50,280 M100,380 Q130,340 145,300 M100,330 Q80,300 60,320 M100,360 Q120,330 140,340" fill="none" stroke="#1a1a2e" stroke-width="6" stroke-linecap="round"/>
+    <path d="M1100,530 L1100,320 M1100,370 Q1070,330 1050,300 M1100,400 Q1130,360 1145,320 M1100,350 Q1080,320 1065,335" fill="none" stroke="#1a1a2e" stroke-width="5" stroke-linecap="round"/>
+    <g fill="none" stroke="#2a2a3e" stroke-width="3">
+      <line x1="0" y1="540" x2="1200" y2="540"/>
+      <line x1="200" y1="540" x2="200" y2="510"/><circle cx="200" cy="508" r="4" fill="#2a2a3e"/>
+      <line x1="250" y1="540" x2="250" y2="515"/><circle cx="250" cy="513" r="4" fill="#2a2a3e"/>
+      <line x1="300" y1="540" x2="300" y2="510"/><circle cx="300" cy="508" r="4" fill="#2a2a3e"/>
+      <line x1="850" y1="540" x2="850" y2="510"/><circle cx="850" cy="508" r="4" fill="#2a2a3e"/>
+      <line x1="900" y1="540" x2="900" y2="515"/><circle cx="900" cy="513" r="4" fill="#2a2a3e"/>
+      <line x1="950" y1="540" x2="950" y2="510"/><circle cx="950" cy="508" r="4" fill="#2a2a3e"/>
+    </g>
+    <path d="M0,540 Q300,530 600,545 Q900,555 1200,540 L1200,700 L0,700 Z" fill="#1a1a2e"/>
+    <ellipse cx="300" cy="560" rx="150" ry="15" fill="#2a2a4e" opacity="0.3"/>
+    <ellipse cx="800" cy="555" rx="120" ry="12" fill="#2a2a4e" opacity="0.3"/>
+    <rect x="430" y="510" width="30" height="35" rx="8" fill="#3a3a5e"/>
+    <rect x="700" y="505" width="35" height="40" rx="10" fill="#3a3a5e"/>
+    `;
+}
+
+function bgAnimali() {
+    return `
+    <defs>
+      <linearGradient id="bg-sky-farm" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#64b5f6"/>
+        <stop offset="100%" stop-color="#bbdefb"/>
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="700" fill="url(#bg-sky-farm)"/>
+    <circle cx="1050" cy="80" r="50" fill="#fff9c4"/>
+    <circle cx="1050" cy="80" r="40" fill="#ffee58"/>
+    <g fill="#fff" opacity="0.8">
+      <ellipse cx="200" cy="80" rx="60" ry="25"/>
+      <ellipse cx="240" cy="75" rx="50" ry="22"/>
+      <ellipse cx="170" cy="85" rx="40" ry="18"/>
+    </g>
+    <g fill="#fff" opacity="0.6">
+      <ellipse cx="700" cy="60" rx="55" ry="22"/>
+      <ellipse cx="735" cy="55" rx="45" ry="20"/>
+      <ellipse cx="670" cy="65" rx="35" ry="16"/>
+    </g>
+    <path d="M0,420 Q200,370 400,400 Q600,430 800,390 Q1000,360 1200,400 L1200,700 L0,700 Z" fill="#66bb6a"/>
+    <path d="M0,470 Q300,440 600,465 Q900,490 1200,460 L1200,700 L0,700 Z" fill="#4caf50"/>
+    <path d="M0,520 Q200,500 500,515 Q800,530 1200,510 L1200,700 L0,700 Z" fill="#43a047"/>
+    <g fill="#8d6e63" stroke="#6d4c41" stroke-width="1.5">
+      <rect x="60" y="440" width="8" height="50" rx="2"/>
+      <rect x="130" y="440" width="8" height="50" rx="2"/>
+      <rect x="200" y="440" width="8" height="50" rx="2"/>
+      <rect x="55" y="450" width="160" height="6" rx="2"/>
+      <rect x="55" y="468" width="160" height="6" rx="2"/>
+    </g>
+    <circle cx="350" cy="510" r="4" fill="#e91e63"/>
+    <line x1="352" y1="514" x2="352" y2="530" stroke="#388e3c" stroke-width="2"/>
+    <circle cx="680" cy="505" r="4" fill="#ff9800"/>
+    <line x1="682" y1="509" x2="682" y2="525" stroke="#388e3c" stroke-width="2"/>
+    `;
+}
+
+// ============================================================
+// CHARACTER SVG CONTENT
+// ============================================================
+
+function charTentacle(p) {
+    return `
+    <path id="${p}-tentacle1" fill="#7B2FBE" d="M155,380 C140,420 110,465 95,490 C80,515 68,535 82,542 C96,549 118,530 138,505 C158,480 168,440 175,400 Z"/>
+    <path id="${p}-tentacle2" fill="#7B2FBE" d="M205,400 C198,435 182,475 172,500 C162,525 152,545 168,548 C184,551 202,525 215,498 C228,471 232,435 233,405 Z"/>
+    <path id="${p}-tentacle3" fill="#7B2FBE" d="M275,405 C278,435 282,471 295,498 C308,525 326,551 342,548 C358,545 348,525 338,500 C328,475 312,435 305,400 Z"/>
+    <path id="${p}-tentacle4" fill="#7B2FBE" d="M335,400 C342,440 352,480 372,505 C392,530 414,549 428,542 C442,535 430,515 415,490 C400,465 370,420 355,380 Z"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="3.5" d="M155,380 C140,420 110,465 95,490 C80,515 68,535 82,542 C96,549 118,530 138,505 C158,480 168,440 175,400"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="3.5" d="M205,400 C198,435 182,475 172,500 C162,525 152,545 168,548 C184,551 202,525 215,498 C228,471 232,435 233,405"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="3.5" d="M275,405 C278,435 282,471 295,498 C308,525 326,551 342,548 C358,545 348,525 338,500 C328,475 312,435 305,400"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="3.5" d="M335,400 C342,440 352,480 372,505 C392,530 414,549 428,542 C442,535 430,515 415,490 C400,465 370,420 355,380"/>
+    <circle id="${p}-sucker1a" cx="92" cy="518" r="6" fill="#9B4FDE"/>
+    <circle id="${p}-sucker2a" cx="175" cy="520" r="6" fill="#9B4FDE"/>
+    <circle id="${p}-sucker3a" cx="333" cy="520" r="6" fill="#9B4FDE"/>
+    <circle id="${p}-sucker4a" cx="418" cy="518" r="6" fill="#9B4FDE"/>
+    <path id="${p}-body" fill="#7B2FBE" d="M250,80 C310,75 385,105 415,170 C445,235 438,305 420,355 C408,385 378,408 345,420 C320,428 290,432 250,432 C210,432 180,428 155,420 C122,408 92,385 80,355 C62,305 55,235 85,170 C115,105 190,75 250,80 Z"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="3.5" d="M155,420 C122,408 92,385 80,355 C62,305 55,235 85,170 C115,105 190,75 250,80 C310,75 385,105 415,170 C445,235 438,305 420,355 C408,385 378,408 345,420"/>
+    <path id="${p}-belly" fill="#9B4FDE" d="M250,155 C298,152 345,178 360,230 C375,282 370,335 355,372 C344,398 312,412 272,416 L228,416 C188,412 156,398 145,372 C130,335 125,282 140,230 C155,178 202,152 250,155 Z"/>
+    <circle id="${p}-spot1" cx="160" cy="210" r="18" fill="#6B25A8" opacity="0.5"/>
+    <circle id="${p}-spot2" cx="350" cy="250" r="14" fill="#6B25A8" opacity="0.5"/>
+    <circle id="${p}-spot3" cx="195" cy="360" r="12" fill="#6B25A8" opacity="0.5"/>
+    <path id="${p}-horn-left" fill="#FF6B35" d="M185,100 C180,72 168,42 158,28 C152,20 160,14 167,20 C178,32 192,68 197,95 Z"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="2.5" d="M185,100 C180,72 168,42 158,28 C152,20 160,14 167,20 C178,32 192,68 197,95"/>
+    <path id="${p}-horn-right" fill="#FF6B35" d="M315,100 C320,72 332,42 342,28 C348,20 340,14 333,20 C322,32 308,68 303,95 Z"/>
+    <path fill="none" stroke="#4A1A72" stroke-width="2.5" d="M315,100 C320,72 332,42 342,28 C348,20 340,14 333,20 C322,32 308,68 303,95"/>
+    <circle id="${p}-horn-tip-left" cx="158" cy="24" r="9" fill="#FFD93D"/>
+    <circle id="${p}-horn-tip-right" cx="342" cy="24" r="9" fill="#FFD93D"/>
+    <g id="${p}-eye1"><ellipse cx="195" cy="200" rx="42" ry="44" fill="#F0FFF0"/><ellipse cx="200" cy="205" rx="20" ry="22" fill="#2BAE66"/><circle cx="203" cy="200" r="11" fill="#1A6B3C"/><circle cx="207" cy="194" r="5" fill="#fff"/></g>
+    <g id="${p}-eye2"><ellipse cx="305" cy="200" rx="42" ry="44" fill="#F0FFF0"/><ellipse cx="300" cy="205" rx="20" ry="22" fill="#2BAE66"/><circle cx="297" cy="200" r="11" fill="#1A6B3C"/><circle cx="293" cy="194" r="5" fill="#fff"/></g>
+    <g id="${p}-eye3"><ellipse cx="220" cy="268" rx="24" ry="26" fill="#F0FFF0"/><ellipse cx="223" cy="271" rx="12" ry="14" fill="#2BAE66"/><circle cx="225" cy="268" r="7" fill="#1A6B3C"/></g>
+    <path id="${p}-mouth" fill="#3D0F5C" d="M195,320 C205,310 220,308 250,310 C280,308 295,310 305,320 C300,355 280,375 250,378 C220,375 200,355 195,320 Z"/>
+    <path id="${p}-tooth1" fill="#fff" d="M218,318 Q222,338 228,318 Z"/>
+    <ellipse id="${p}-blush-left" cx="148" cy="300" rx="22" ry="13" fill="#FF8FCF" opacity="0.35"/>
+    <ellipse id="${p}-blush-right" cx="352" cy="300" rx="22" ry="13" fill="#FF8FCF" opacity="0.35"/>
+    <circle id="${p}-wart1" cx="135" cy="255" r="5" fill="#6B25A8"/>
+    <circle id="${p}-wart2" cx="370" cy="225" r="6" fill="#6B25A8"/>`;
+}
+
+function charBlob(p) {
+    return `
+    <path id="${p}-arm-left" fill="#2563EB" d="M110,280 C85,290 55,310 40,330 C30,345 38,360 52,355 C62,350 78,335 95,315 C105,302 112,290 118,282 Z"/>
+    <path fill="none" stroke="#1E40AF" stroke-width="3.5" d="M110,280 C85,290 55,310 40,330 C30,345 38,360 52,355 C62,350 78,335 95,315"/>
+    <circle id="${p}-hand-left-f1" cx="42" cy="340" r="8" fill="#60A5FA"/>
+    <path id="${p}-arm-right" fill="#2563EB" d="M390,280 C415,290 445,310 460,330 C470,345 462,360 448,355 C438,350 422,335 405,315 C395,302 388,290 382,282 Z"/>
+    <path fill="none" stroke="#1E40AF" stroke-width="3.5" d="M390,280 C415,290 445,310 460,330 C470,345 462,360 448,355 C438,350 422,335 405,315"/>
+    <circle id="${p}-hand-right-f1" cx="458" cy="340" r="8" fill="#60A5FA"/>
+    <ellipse id="${p}-foot-left" cx="195" cy="465" rx="35" ry="18" fill="#2563EB"/>
+    <ellipse id="${p}-foot-right" cx="310" cy="465" rx="35" ry="18" fill="#2563EB"/>
+    <circle id="${p}-antenna-ball-left" cx="175" cy="42" r="12" fill="#FFD93D"/>
+    <circle id="${p}-antenna-ball-right" cx="325" cy="42" r="12" fill="#FFD93D"/>
+    <path id="${p}-body" fill="#3B82F6" d="M250,110 C290,105 330,112 362,130 C395,150 418,185 428,225 C438,268 435,310 425,348 C418,375 400,400 375,420 C355,435 325,448 295,455 C270,460 230,460 205,455 C175,448 145,435 125,420 C100,400 82,375 75,348 C65,310 62,268 72,225 C82,185 105,150 138,130 C170,112 210,105 250,110 Z"/>
+    <path fill="none" stroke="#1E40AF" stroke-width="3.5" d="M205,455 C175,448 145,435 125,420 C100,400 82,375 75,348 C65,310 62,268 72,225 C82,185 105,150 138,130 C170,112 210,105 250,110 C290,105 330,112 362,130 C395,150 418,185 428,225 C438,268 435,310 425,348 C418,375 400,400 375,420 C355,435 325,448 295,455"/>
+    <path id="${p}-belly" fill="#60A5FA" d="M250,185 C295,182 338,200 352,240 C365,280 360,330 348,370 C340,395 315,415 280,425 L220,425 C185,415 160,395 152,370 C140,330 135,280 148,240 C162,200 205,182 250,185 Z"/>
+    <circle id="${p}-spot1" cx="150" cy="220" r="16" fill="#2563EB" opacity="0.5"/>
+    <circle id="${p}-spot2" cx="365" cy="260" r="13" fill="#2563EB" opacity="0.5"/>
+    <g id="${p}-nose"><path id="${p}-nose-trunk" fill="#60A5FA" d="M245,280 C242,290 238,305 232,318 C228,326 235,332 245,330 L258,330 C268,332 275,326 271,318 C265,305 261,290 258,280 Z"/><ellipse id="${p}-nose-bell" cx="251" cy="332" rx="18" ry="10" fill="#60A5FA"/></g>
+    <g id="${p}-eye1"><ellipse cx="195" cy="230" rx="40" ry="42" fill="#F0FFF0"/><ellipse cx="200" cy="234" rx="18" ry="20" fill="#3B82F6"/><circle cx="203" cy="230" r="10" fill="#1E3A8A"/><circle cx="207" cy="224" r="5" fill="#fff"/></g>
+    <g id="${p}-eye2"><ellipse cx="310" cy="225" rx="35" ry="37" fill="#F0FFF0"/><ellipse cx="306" cy="229" rx="16" ry="18" fill="#3B82F6"/><circle cx="303" cy="225" r="9" fill="#1E3A8A"/><circle cx="299" cy="220" r="4.5" fill="#fff"/></g>
+    <ellipse id="${p}-mouth" cx="252" cy="365" rx="40" ry="32" fill="#1E3A8A"/>
+    <ellipse id="${p}-tooth-left" cx="241" cy="348" rx="14" ry="18" fill="#fff"/>
+    <ellipse id="${p}-tooth-right" cx="263" cy="348" rx="14" ry="18" fill="#fff"/>
+    <ellipse id="${p}-blush-left" cx="140" cy="310" rx="20" ry="12" fill="#FF8FCF" opacity="0.35"/>
+    <ellipse id="${p}-blush-right" cx="365" cy="305" rx="20" ry="12" fill="#FF8FCF" opacity="0.35"/>`;
+}
+
+function charFluffy(p) {
+    return `
+    <path id="${p}-leg-left" fill="#DB2777" d="M175,400 C170,430 165,460 162,485 C160,500 170,510 182,508 C194,506 195,495 193,480 C190,460 188,435 190,410 Z"/>
+    <ellipse id="${p}-foot-left" cx="175" cy="510" rx="25" ry="12" fill="#DB2777"/>
+    <path id="${p}-leg-right" fill="#DB2777" d="M310,410 C312,435 310,460 307,480 C305,495 306,506 318,508 C330,510 340,500 338,485 C335,460 330,430 325,400 Z"/>
+    <ellipse id="${p}-foot-right" cx="325" cy="510" rx="25" ry="12" fill="#DB2777"/>
+    <path id="${p}-tail" fill="#EC4899" d="M385,320 C410,310 440,295 458,275 C470,260 475,250 465,248 C455,246 438,260 420,278 C405,295 392,310 385,320 Z"/>
+    <circle id="${p}-tail-poof1" cx="462" cy="258" r="15" fill="#F9A8D4"/>
+    <circle id="${p}-tail-poof2" cx="470" cy="248" r="12" fill="#F9A8D4"/>
+    <path id="${p}-body" fill="#EC4899" d="M250,100 C275,98 300,102 322,112 C330,108 338,112 335,120 C358,132 375,150 386,172 C394,168 400,174 395,182 C406,200 412,222 414,245 C422,244 424,252 418,256 C418,278 414,300 406,320 C414,322 414,330 406,330 C396,348 382,362 365,375 C370,380 366,388 358,385 C340,396 318,404 295,408 C296,416 290,418 285,414 C272,417 258,418 245,418 C232,418 218,417 205,414 C200,418 194,416 195,408 C172,404 150,396 132,385 C124,388 120,380 125,375 C108,362 94,348 84,330 C76,330 76,322 84,320 C76,300 72,278 72,256 C66,252 68,244 76,245 C78,222 84,200 95,182 C90,174 96,168 104,172 C115,150 132,132 155,120 C152,112 160,108 168,112 C190,102 215,98 250,100 Z"/>
+    <path fill="none" stroke="#9D174D" stroke-width="3.5" d="M195,408 C172,404 150,396 132,385 C124,388 120,380 125,375 C108,362 94,348 84,330 C76,330 76,322 84,320 C76,300 72,278 72,256 C66,252 68,244 76,245 C78,222 84,200 95,182 C90,174 96,168 104,172 C115,150 132,132 155,120 C152,112 160,108 168,112 C190,102 215,98 250,100 C275,98 300,102 322,112 C330,108 338,112 335,120 C358,132 375,150 386,172 C394,168 400,174 395,182 C406,200 412,222 414,245 C422,244 424,252 418,256 C418,278 414,300 406,320 C414,322 414,330 406,330 C396,348 382,362 365,375 C370,380 366,388 358,385 C340,396 318,404 295,408"/>
+    <path id="${p}-belly" fill="#F9A8D4" d="M250,180 C295,178 335,200 345,240 C355,280 350,325 340,360 C332,382 310,400 275,408 L225,408 C190,400 168,382 160,360 C150,325 145,280 155,240 C165,200 205,178 250,180 Z"/>
+    <path id="${p}-horn" fill="#FBBF24" d="M250,102 C248,78 245,52 250,35 C255,52 252,78 250,102 Z"/>
+    <g id="${p}-bow"><path id="${p}-bow-left" fill="#FF4081" d="M280,108 C295,88 315,82 320,90 C325,98 308,105 290,112 Z"/><path id="${p}-bow-right" fill="#FF4081" d="M290,112 C310,118 328,128 325,136 C322,144 305,132 290,118 Z"/><circle id="${p}-bow-center" cx="288" cy="112" r="8" fill="#E91E63"/></g>
+    <g id="${p}-eye1"><ellipse cx="200" cy="235" rx="42" ry="45" fill="#F0FFF0"/><ellipse cx="205" cy="240" rx="20" ry="22" fill="#EC4899"/><circle cx="208" cy="236" r="11" fill="#9D174D"/><circle cx="212" cy="230" r="5" fill="#fff"/></g>
+    <g id="${p}-eye2"><ellipse cx="310" cy="240" rx="34" ry="36" fill="#F0FFF0"/><ellipse cx="306" cy="244" rx="16" ry="18" fill="#EC4899"/><circle cx="303" cy="240" r="9" fill="#9D174D"/><circle cx="299" cy="235" r="4" fill="#fff"/></g>
+    <path id="${p}-mouth" fill="none" stroke="#9D174D" stroke-width="3" d="M195,320 Q222,348 250,348 Q278,348 305,320"/>
+    <ellipse id="${p}-blush-left" cx="155" cy="300" rx="22" ry="14" fill="#FF8FCF" opacity="0.4"/>
+    <ellipse id="${p}-blush-right" cx="355" cy="300" rx="22" ry="14" fill="#FF8FCF" opacity="0.4"/>
+    <ellipse id="${p}-nose-shape" cx="255" cy="295" rx="14" ry="11" fill="#DB2777"/>`;
+}
+
+function charCyclops(p) {
+    return `
+    <path id="${p}-arm-left" fill="#65A30D" d="M105,250 C75,290 50,360 40,420 C35,450 30,480 42,492 C54,504 65,490 68,465 C72,430 80,380 100,320 C108,295 112,270 115,258 Z"/>
+    <path fill="none" stroke="#3F6212" stroke-width="3.5" d="M105,250 C75,290 50,360 40,420 C35,450 30,480 42,492 C54,504 65,490 68,465"/>
+    <circle id="${p}-hand-left-f1" cx="40" cy="482" r="9" fill="#A3E635"/>
+    <path id="${p}-arm-right" fill="#65A30D" d="M395,258 C398,270 402,295 410,320 C430,380 438,430 442,465 C445,490 456,504 468,492 C480,480 475,450 470,420 C460,360 435,290 405,250 Z"/>
+    <path fill="none" stroke="#3F6212" stroke-width="3.5" d="M405,250 C435,290 460,360 470,420 C475,450 480,480 468,492"/>
+    <circle id="${p}-hand-right-f1" cx="470" cy="482" r="9" fill="#A3E635"/>
+    <ellipse id="${p}-foot-left" cx="195" cy="478" rx="50" ry="18" fill="#65A30D"/>
+    <ellipse id="${p}-foot-right" cx="310" cy="478" rx="50" ry="18" fill="#65A30D"/>
+    <path id="${p}-tail" fill="#65A30D" d="M385,380 C405,395 428,398 445,390 C455,385 458,375 450,372 C442,369 425,375 408,378 Z"/>
+    <path id="${p}-body" fill="#84CC16" d="M250,90 C310,88 365,110 395,155 C425,200 430,260 425,320 C420,365 405,405 378,432 C355,455 320,468 285,472 C268,474 232,474 215,472 C180,468 145,455 122,432 C95,405 80,365 75,320 C70,260 75,200 105,155 C135,110 190,88 250,90 Z"/>
+    <path fill="none" stroke="#3F6212" stroke-width="3.5" d="M215,472 C180,468 145,455 122,432 C95,405 80,365 75,320 C70,260 75,200 105,155 C135,110 190,88 250,90 C310,88 365,110 395,155 C425,200 430,260 425,320 C420,365 405,405 378,432 C355,455 320,468 285,472"/>
+    <path id="${p}-belly" fill="#BEF264" d="M250,170 C298,168 340,190 355,230 C370,275 368,330 358,375 C350,405 325,430 285,442 L215,442 C175,430 150,405 142,375 C132,330 130,275 145,230 C160,190 202,168 250,170 Z"/>
+    <g id="${p}-eye1"><ellipse cx="250" cy="230" rx="68" ry="70" fill="#F0FFF0"/><ellipse cx="250" cy="236" rx="35" ry="38" fill="#84CC16"/><circle cx="250" cy="230" r="20" fill="#3F6212"/><circle cx="258" cy="220" r="9" fill="#fff"/></g>
+    <circle id="${p}-spot1" cx="155" cy="200" r="15" fill="#65A30D" opacity="0.5"/>
+    <circle id="${p}-spot2" cx="355" cy="240" r="12" fill="#65A30D" opacity="0.5"/>
+    <circle id="${p}-wart1" cx="135" cy="280" r="6" fill="#65A30D"/>
+    <circle id="${p}-wart2" cx="375" cy="310" r="5" fill="#65A30D"/>
+    <path id="${p}-mouth" fill="#3F6212" d="M180,350 Q200,370 220,350 Q240,370 260,350 Q280,370 300,350 Q320,370 340,350 L340,360 Q320,380 300,360 Q280,380 260,360 Q240,380 220,360 Q200,380 180,360 Z"/>
+    <path id="${p}-tooth1" fill="#fff" d="M242,360 Q250,345 258,360 Z"/>
+    <ellipse id="${p}-blush-left" cx="148" cy="320" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="${p}-blush-right" cx="352" cy="320" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>`;
+}
+
+function charDragon(p) {
+    return `
+    <path id="${p}-wing-left-m" fill="#FDBA74" d="M85,170 C55,130 30,95 25,75 C22,62 35,60 42,72 C55,95 72,135 90,175 Z"/>
+    <path id="${p}-wing-left-m2" fill="#FDBA74" d="M90,175 C60,155 30,130 15,115 C5,105 15,95 25,105 C42,122 68,152 92,180 Z"/>
+    <path fill="none" stroke="#C2410C" stroke-width="3" d="M85,170 C55,130 30,95 25,75 C22,62 35,60 42,72 C55,95 72,135 90,175"/>
+    <path id="${p}-wing-right-m" fill="#FDBA74" d="M415,170 C445,130 470,95 475,75 C478,62 465,60 458,72 C445,95 428,135 410,175 Z"/>
+    <path id="${p}-wing-right-m2" fill="#FDBA74" d="M410,175 C440,155 470,130 485,115 C495,105 485,95 475,105 C458,122 432,152 408,180 Z"/>
+    <path fill="none" stroke="#C2410C" stroke-width="3" d="M415,170 C445,130 470,95 475,75 C478,62 465,60 458,72 C445,95 428,135 410,175"/>
+    <path id="${p}-tail" fill="#F97316" d="M375,380 C400,375 430,360 450,335 C462,318 468,300 460,295 C452,290 440,305 428,325 C415,348 400,368 380,378 Z"/>
+    <path fill="none" stroke="#C2410C" stroke-width="3.5" d="M375,380 C400,375 430,360 450,335 C462,318 468,300 460,295 C452,290 440,305 428,325"/>
+    <ellipse id="${p}-tail-tip" cx="458" cy="295" rx="12" ry="8" fill="#FBBF24" transform="rotate(-30 458 295)"/>
+    <ellipse id="${p}-foot-left" cx="195" cy="470" rx="42" ry="16" fill="#EA580C"/>
+    <circle id="${p}-claw-left1" cx="165" cy="478" r="6" fill="#FBBF24"/>
+    <circle id="${p}-claw-left2" cx="180" cy="482" r="6" fill="#FBBF24"/>
+    <ellipse id="${p}-foot-right" cx="315" cy="470" rx="42" ry="16" fill="#EA580C"/>
+    <circle id="${p}-claw-right1" cx="300" cy="482" r="6" fill="#FBBF24"/>
+    <circle id="${p}-claw-right2" cx="330" cy="482" r="6" fill="#FBBF24"/>
+    <path id="${p}-body" fill="#F97316" d="M250,100 C310,97 368,120 398,165 C428,210 432,268 425,325 C420,365 400,400 372,425 C348,445 318,458 285,462 C268,464 232,464 215,462 C182,458 152,445 128,425 C100,400 80,365 75,325 C68,268 72,210 102,165 C132,120 190,97 250,100 Z"/>
+    <path fill="none" stroke="#C2410C" stroke-width="3.5" d="M215,462 C182,458 152,445 128,425 C100,400 80,365 75,325 C68,268 72,210 102,165 C132,120 190,97 250,100 C310,97 368,120 398,165 C428,210 432,268 425,325 C420,365 400,400 372,425 C348,445 318,458 285,462"/>
+    <path id="${p}-belly" fill="#FDBA74" d="M250,180 C298,178 340,198 355,238 C370,280 365,332 355,375 C348,402 322,425 282,435 L218,435 C178,425 152,402 145,375 C135,332 130,280 145,238 C160,198 202,178 250,180 Z"/>
+    <ellipse id="${p}-spike1" cx="210" cy="102" rx="10" ry="22" fill="#FBBF24" transform="rotate(-15 210 102)"/>
+    <ellipse id="${p}-spike2" cx="235" cy="92" rx="10" ry="26" fill="#FBBF24" transform="rotate(-5 235 92)"/>
+    <ellipse id="${p}-spike3" cx="262" cy="88" rx="11" ry="28" fill="#FBBF24" transform="rotate(2 262 88)"/>
+    <ellipse id="${p}-snout" cx="250" cy="310" rx="55" ry="35" fill="#FDBA74"/>
+    <ellipse id="${p}-nostril-left" cx="232" cy="305" rx="8" ry="6" fill="#EA580C"/>
+    <ellipse id="${p}-nostril-right" cx="268" cy="305" rx="8" ry="6" fill="#EA580C"/>
+    <g id="${p}-eye1"><ellipse cx="195" cy="225" rx="38" ry="40" fill="#F0FFF0"/><ellipse cx="200" cy="230" rx="18" ry="20" fill="#F97316"/><circle cx="202" cy="226" r="10" fill="#C2410C"/><circle cx="206" cy="220" r="5" fill="#fff"/></g>
+    <g id="${p}-eye2"><ellipse cx="305" cy="225" rx="38" ry="40" fill="#F0FFF0"/><ellipse cx="300" cy="230" rx="18" ry="20" fill="#F97316"/><circle cx="298" cy="226" r="10" fill="#C2410C"/><circle cx="294" cy="220" r="5" fill="#fff"/></g>
+    <path id="${p}-mouth" fill="#C2410C" d="M195,340 C210,345 230,348 250,348 C270,348 290,345 305,340 C300,365 280,385 250,385 C220,385 200,365 195,340 Z"/>
+    <circle id="${p}-smoke1" cx="218" cy="290" r="6" fill="#D1D5DB" opacity="0.4"/>
+    <circle id="${p}-smoke2" cx="210" cy="278" r="8" fill="#D1D5DB" opacity="0.3"/>
+    <ellipse id="${p}-blush-left" cx="148" cy="290" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="${p}-blush-right" cx="352" cy="290" rx="20" ry="12" fill="#FF8FCF" opacity="0.3"/>`;
+}
+
+// DINOSAURS
+function charDinoTrex(p) {
+    return `
+    <path id="${p}-tail" fill="#4CAF50" d="M95,320 C65,310 30,285 15,260 C5,245 10,230 22,235 C38,242 60,268 80,290 C95,305 105,315 115,325 Z"/>
+    <path fill="none" stroke="#2E7D32" stroke-width="3.5" d="M95,320 C65,310 30,285 15,260 C5,245 10,230 22,235 C38,242 60,268 80,290"/>
+    <path id="${p}-leg-left" fill="#4CAF50" d="M160,410 C155,445 148,475 140,500 C136,515 130,530 145,532 C160,534 165,518 168,505 C175,475 178,445 180,415 Z"/>
+    <path id="${p}-leg-right" fill="#4CAF50" d="M220,410 C218,445 215,475 210,500 C207,515 202,530 217,532 C232,534 235,518 235,505 C238,475 238,445 235,415 Z"/>
+    <path id="${p}-body" fill="#4CAF50" d="M190,150 C240,140 280,155 300,190 C320,225 315,290 300,340 C290,375 260,410 230,425 C200,435 165,430 140,415 C115,395 95,365 90,330 C82,285 85,230 105,190 C125,155 155,145 190,150 Z"/>
+    <path fill="none" stroke="#2E7D32" stroke-width="3.5" d="M140,415 C115,395 95,365 90,330 C82,285 85,230 105,190 C125,155 155,145 190,150 C240,140 280,155 300,190 C320,225 315,290 300,340 C290,375 260,410 230,425"/>
+    <path id="${p}-belly" fill="#81C784" d="M190,200 C220,195 250,210 260,240 C270,275 265,320 255,355 C248,380 228,400 205,408 C182,412 162,405 150,390 C138,370 130,340 132,305 C135,265 155,220 190,200 Z"/>
+    <circle id="${p}-spot1" cx="120" cy="250" r="12" fill="#388E3C" opacity="0.5"/>
+    <circle id="${p}-spot2" cx="140" cy="200" r="10" fill="#388E3C" opacity="0.5"/>
+    <circle id="${p}-spot3" cx="110" cy="310" r="8" fill="#388E3C" opacity="0.5"/>
+    <circle id="${p}-spot4" cx="155" cy="170" r="9" fill="#388E3C" opacity="0.5"/>
+    <path id="${p}-head" fill="#4CAF50" d="M310,80 C360,75 410,95 435,135 C460,175 455,225 430,260 C410,288 375,305 340,310 C310,315 280,308 260,290 C240,270 232,240 240,210 C248,175 270,120 310,80 Z"/>
+    <path fill="none" stroke="#2E7D32" stroke-width="3.5" d="M260,290 C240,270 232,240 240,210 C248,175 270,120 310,80 C360,75 410,95 435,135 C460,175 455,225 430,260 C410,288 375,305 340,310"/>
+    <path id="${p}-head-belly" fill="#81C784" d="M320,130 C350,125 385,140 400,165 C415,195 410,230 395,255 C382,272 360,282 340,280 C320,278 305,265 298,248 C288,225 290,180 320,130 Z"/>
+    <g id="${p}-eye-left"><ellipse cx="330" cy="150" rx="30" ry="32" fill="#FFFDE7"/><ellipse cx="335" cy="155" rx="15" ry="17" fill="#4E342E"/><circle cx="338" cy="150" r="8" fill="#1B0E06"/><circle cx="341" cy="145" r="4" fill="#fff"/></g>
+    <g id="${p}-eye-right"><ellipse cx="400" cy="150" rx="28" ry="30" fill="#FFFDE7"/><ellipse cx="395" cy="155" rx="14" ry="16" fill="#4E342E"/><circle cx="392" cy="150" r="7" fill="#1B0E06"/></g>
+    <ellipse id="${p}-nostril-left" cx="425" cy="180" rx="5" ry="4" fill="#2E7D32"/>
+    <ellipse id="${p}-nostril-right" cx="440" cy="180" rx="5" ry="4" fill="#2E7D32"/>
+    <path id="${p}-mouth" fill="#2E7D32" d="M340,220 C360,215 400,218 425,225 C430,240 420,260 400,268 C375,275 350,272 335,262 C322,252 325,235 340,220 Z"/>
+    <path id="${p}-tooth1" fill="#fff" d="M350,222 Q354,232 358,222 Z"/>
+    <path id="${p}-tooth2" fill="#fff" d="M368,219 Q372,229 376,219 Z"/>
+    <path id="${p}-tooth3" fill="#fff" d="M386,218 Q390,228 394,218 Z"/>
+    <ellipse id="${p}-blush-left" cx="298" cy="200" rx="18" ry="10" fill="#FF8FCF" opacity="0.35"/>
+    <ellipse id="${p}-blush-right" cx="445" cy="210" rx="18" ry="10" fill="#FF8FCF" opacity="0.35"/>`;
+}
+
+function charDinoStego(p) {
+    return `
+    <path id="${p}-tail" fill="#2196F3" d="M80,310 C55,300 25,275 10,250 C0,232 8,220 20,228 C35,238 55,265 72,288 C82,300 90,308 95,315 Z"/>
+    <ellipse id="${p}-tail-spike1" cx="18" cy="238" rx="10" ry="18" fill="#FF7043" transform="rotate(-30 18 238)"/>
+    <ellipse id="${p}-tail-spike2" cx="35" cy="258" rx="9" ry="16" fill="#FF5722" transform="rotate(-20 35 258)"/>
+    <ellipse id="${p}-tail-spike3" cx="52" cy="275" rx="8" ry="14" fill="#FF7043" transform="rotate(-10 52 275)"/>
+    <path id="${p}-leg-bl" fill="#2196F3" d="M140,400 C135,435 130,470 125,500 C122,515 118,530 133,532 C148,534 148,518 150,505 C155,470 158,440 160,410 Z"/>
+    <path id="${p}-leg-fl" fill="#2196F3" d="M310,400 C308,435 305,470 302,500 C300,515 296,530 311,532 C326,534 325,518 325,505 C327,470 328,440 328,410 Z"/>
+    <path id="${p}-body" fill="#2196F3" d="M250,200 C310,190 380,210 410,260 C435,300 430,355 410,390 C395,415 365,430 330,435 C290,440 200,440 160,430 C125,420 100,400 88,370 C72,330 75,275 100,240 C130,200 195,195 250,200 Z"/>
+    <path fill="none" stroke="#1565C0" stroke-width="3.5" d="M160,430 C125,420 100,400 88,370 C72,330 75,275 100,240 C130,200 195,195 250,200 C310,190 380,210 410,260 C435,300 430,355 410,390 C395,415 365,430 330,435"/>
+    <path id="${p}-belly" fill="#64B5F6" d="M250,260 C300,255 350,270 370,300 C385,325 382,360 370,385 C360,402 335,415 305,418 C270,422 220,420 190,415 C165,408 148,392 140,372 C130,345 135,305 155,280 C175,260 215,258 250,260 Z"/>
+    <path id="${p}-plate1" fill="#FF9800" d="M145,225 C148,195 160,170 175,165 C185,162 188,175 182,195 C178,210 165,228 152,232 Z"/>
+    <path id="${p}-plate2" fill="#E91E63" d="M195,205 C200,168 215,138 235,130 C248,126 252,142 244,168 C238,190 220,212 205,218 Z"/>
+    <path id="${p}-plate3" fill="#FF9800" d="M248,195 C255,155 272,122 292,112 C306,107 310,125 302,155 C295,180 275,205 260,212 Z"/>
+    <path id="${p}-plate4" fill="#E91E63" d="M302,200 C310,162 328,132 348,124 C362,120 365,138 356,165 C350,188 330,210 316,216 Z"/>
+    <path id="${p}-plate5" fill="#FF9800" d="M352,215 C358,188 370,165 385,160 C395,157 397,172 390,192 C385,208 372,225 360,228 Z"/>
+    <path id="${p}-head" fill="#2196F3" d="M410,260 C435,245 465,240 482,250 C495,258 498,278 488,298 C478,315 458,325 438,325 C418,325 402,315 398,298 C395,282 400,268 410,260 Z"/>
+    <path fill="none" stroke="#1565C0" stroke-width="3.5" d="M398,298 C395,282 400,268 410,260 C435,245 465,240 482,250 C495,258 498,278 488,298 C478,315 458,325 438,325 C418,325 402,315 398,298"/>
+    <g id="${p}-eye"><ellipse cx="458" cy="270" rx="18" ry="20" fill="#FFFDE7"/><ellipse cx="460" cy="273" rx="10" ry="12" fill="#4E342E"/><circle cx="462" cy="270" r="5" fill="#1B0E06"/></g>
+    <path id="${p}-mouth" fill="#1565C0" d="M470,295 C478,292 488,294 490,300 C488,308 478,312 468,310 C462,308 460,302 470,295 Z"/>
+    <ellipse id="${p}-nostril" cx="490" cy="282" rx="3" ry="2.5" fill="#1565C0"/>
+    <ellipse id="${p}-blush" cx="445" cy="305" rx="12" ry="7" fill="#FF8FCF" opacity="0.35"/>
+    <circle id="${p}-spot1" cx="180" cy="350" r="10" fill="#1976D2" opacity="0.4"/>
+    <circle id="${p}-spot2" cx="280" cy="370" r="8" fill="#1976D2" opacity="0.4"/>
+    <circle id="${p}-spot3" cx="350" cy="340" r="12" fill="#1976D2" opacity="0.4"/>`;
+}
+
+function charDinoTrice(p) {
+    return `
+    <path id="${p}-tail" fill="#FF9800" d="M75,330 C50,320 25,300 12,280 C4,266 10,255 22,262 C36,270 55,292 70,310 Z"/>
+    <path id="${p}-leg-bl" fill="#FF9800" d="M135,410 C130,445 125,475 120,500 C117,515 114,530 129,532 C144,534 145,518 146,505 C150,475 153,445 155,415 Z"/>
+    <path id="${p}-leg-fl" fill="#FF9800" d="M300,415 C298,448 295,478 292,502 C290,516 287,530 302,532 C317,534 316,518 316,505 C318,478 319,448 319,418 Z"/>
+    <path id="${p}-body" fill="#FF9800" d="M240,220 C300,210 370,225 400,270 C425,310 420,365 400,400 C385,425 355,440 320,445 C280,450 195,448 160,438 C125,425 100,405 88,375 C72,335 78,280 105,248 C132,218 190,215 240,220 Z"/>
+    <path fill="none" stroke="#E65100" stroke-width="3.5" d="M160,438 C125,425 100,405 88,375 C72,335 78,280 105,248 C132,218 190,215 240,220 C300,210 370,225 400,270 C425,310 420,365 400,400 C385,425 355,440 320,445"/>
+    <path id="${p}-belly" fill="#FFB74D" d="M240,275 C290,270 340,285 360,315 C375,340 372,375 360,398 C350,415 328,428 302,432 C270,436 215,435 188,428 C165,420 148,405 142,385 C132,358 138,318 158,295 C175,275 210,272 240,275 Z"/>
+    <path id="${p}-frill" fill="#FFB74D" d="M395,180 C430,170 465,175 480,200 C492,222 488,255 475,275 C462,295 440,308 418,310 C396,312 378,305 368,290 C355,270 355,235 365,210 C372,195 382,185 395,180 Z"/>
+    <path fill="none" stroke="#E65100" stroke-width="3.5" d="M395,180 C430,170 465,175 480,200 C492,222 488,255 475,275 C462,295 440,308 418,310 C396,312 378,305 368,290 C355,270 355,235 365,210 C372,195 382,185 395,180"/>
+    <circle id="${p}-frill-spot1" cx="430" cy="210" r="10" fill="#FF9800" opacity="0.6"/>
+    <circle id="${p}-frill-spot2" cx="460" cy="240" r="8" fill="#FF9800" opacity="0.6"/>
+    <circle id="${p}-frill-spot3" cx="425" cy="270" r="9" fill="#FF9800" opacity="0.6"/>
+    <path id="${p}-head" fill="#FF9800" d="M380,240 C400,225 430,220 452,230 C470,238 480,260 475,282 C470,302 452,318 432,322 C412,325 392,318 382,302 C372,286 372,260 380,240 Z"/>
+    <path fill="none" stroke="#E65100" stroke-width="3.5" d="M382,302 C372,286 372,260 380,240 C400,225 430,220 452,230 C470,238 480,260 475,282 C470,302 452,318 432,322 C412,325 392,318 382,302"/>
+    <path id="${p}-horn-top" fill="#FFF9C4" d="M425,220 C428,200 432,178 435,162 C437,152 440,148 438,158 C436,172 432,195 428,218 Z"/>
+    <path id="${p}-horn-left" fill="#FFF9C4" d="M395,238 C385,225 372,210 365,200 C360,194 362,190 368,196 C376,206 390,222 398,235 Z"/>
+    <ellipse id="${p}-nose-horn" cx="472" cy="265" rx="8" ry="6" fill="#FFF9C4" transform="rotate(20 472 265)"/>
+    <g id="${p}-eye"><ellipse cx="425" cy="258" rx="18" ry="20" fill="#FFFDE7"/><ellipse cx="428" cy="261" rx="10" ry="12" fill="#4E342E"/><circle cx="430" cy="258" r="5" fill="#1B0E06"/></g>
+    <path id="${p}-mouth" fill="#E65100" d="M450,290 C458,288 468,290 472,296 C470,305 460,310 450,308 C444,305 442,298 450,290 Z"/>
+    <ellipse id="${p}-nostril" cx="475" cy="275" rx="3" ry="2.5" fill="#E65100"/>
+    <ellipse id="${p}-blush" cx="445" cy="300" rx="12" ry="7" fill="#FF8FCF" opacity="0.35"/>
+    <circle id="${p}-spot1" cx="180" cy="340" r="12" fill="#F57C00" opacity="0.4"/>
+    <circle id="${p}-spot2" cx="260" cy="370" r="9" fill="#F57C00" opacity="0.4"/>`;
+}
+
+function charDinoPtero(p) {
+    return `
+    <path id="${p}-wing-left" fill="#9C27B0" d="M200,230 C160,210 100,180 50,170 C25,165 10,175 15,190 C22,210 55,235 90,252 C125,268 165,275 200,270 Z"/>
+    <path fill="none" stroke="#6A1B9A" stroke-width="3.5" d="M200,230 C160,210 100,180 50,170 C25,165 10,175 15,190 C22,210 55,235 90,252 C125,268 165,275 200,270"/>
+    <path id="${p}-wing-right" fill="#9C27B0" d="M310,230 C350,210 410,180 460,170 C485,165 500,175 495,190 C488,210 455,235 420,252 C385,268 345,275 310,270 Z"/>
+    <path fill="none" stroke="#6A1B9A" stroke-width="3.5" d="M310,230 C350,210 410,180 460,170 C485,165 500,175 495,190 C488,210 455,235 420,252 C385,268 345,275 310,270"/>
+    <path id="${p}-body" fill="#9C27B0" d="M255,190 C290,185 320,200 335,230 C348,258 345,295 335,325 C328,348 308,365 285,372 C265,378 240,376 222,365 C202,350 190,325 185,298 C178,265 182,228 198,208 C212,192 235,188 255,190 Z"/>
+    <path fill="none" stroke="#6A1B9A" stroke-width="3.5" d="M222,365 C202,350 190,325 185,298 C178,265 182,228 198,208 C212,192 235,188 255,190 C290,185 320,200 335,230 C348,258 345,295 335,325 C328,348 308,365 285,372"/>
+    <path id="${p}-belly" fill="#CE93D8" d="M255,235 C278,232 300,245 310,268 C318,290 316,318 308,340 C302,355 288,365 272,368 C258,370 242,366 232,355 C220,342 214,322 212,300 C208,275 215,248 232,238 C240,234 248,233 255,235 Z"/>
+    <path id="${p}-crest" fill="#9C27B0" d="M255,140 C260,120 270,95 280,75 C288,60 295,55 292,68 C288,85 278,112 270,135 Z"/>
+    <path id="${p}-head" fill="#9C27B0" d="M255,140 C280,132 310,138 328,158 C342,175 345,200 335,218 C325,235 305,245 282,245 C260,245 240,235 230,218 C220,200 222,172 235,155 C242,145 248,140 255,140 Z"/>
+    <path fill="none" stroke="#6A1B9A" stroke-width="3.5" d="M255,140 C280,132 310,138 328,158 C342,175 345,200 335,218 C325,235 305,245 282,245 C260,245 240,235 230,218 C220,200 222,172 235,155"/>
+    <path id="${p}-beak" fill="#FFB74D" d="M330,188 C348,185 372,190 388,200 C398,208 400,220 390,225 C378,230 358,228 340,222 C328,218 322,210 325,200 Z"/>
+    <path fill="none" stroke="#E65100" stroke-width="2.5" d="M330,188 C348,185 372,190 388,200 C398,208 400,220 390,225 C378,230 358,228 340,222"/>
+    <g id="${p}-eye-left"><ellipse cx="268" cy="185" rx="20" ry="22" fill="#FFFDE7"/><ellipse cx="272" cy="188" rx="11" ry="13" fill="#4E342E"/><circle cx="274" cy="185" r="6" fill="#1B0E06"/><circle cx="277" cy="181" r="3" fill="#fff"/></g>
+    <circle id="${p}-claw-l1" cx="215" cy="416" r="3" fill="#CE93D8"/>
+    <circle id="${p}-claw-r1" cx="295" cy="416" r="3" fill="#CE93D8"/>
+    <ellipse id="${p}-blush-left" cx="252" cy="215" rx="14" ry="8" fill="#FF8FCF" opacity="0.35"/>
+    <ellipse id="${p}-blush-right" cx="330" cy="218" rx="14" ry="8" fill="#FF8FCF" opacity="0.35"/>
+    <circle id="${p}-spot1" cx="240" cy="300" r="8" fill="#7B1FA2" opacity="0.4"/>
+    <circle id="${p}-spot2" cx="275" cy="330" r="6" fill="#7B1FA2" opacity="0.4"/>`;
+}
+
+function charDinoBronto(p) {
+    return `
+    <path id="${p}-tail" fill="#009688" d="M95,310 C65,300 35,280 15,255 C2,238 5,225 18,230 C32,238 55,262 75,285 C88,300 95,310 100,318 Z"/>
+    <path id="${p}-leg-bl" fill="#009688" d="M140,420 C136,452 132,480 128,505 C126,518 122,532 137,534 C152,536 150,520 151,508 C154,480 157,452 160,425 Z"/>
+    <path id="${p}-leg-fl" fill="#009688" d="M295,420 C293,452 290,480 287,505 C285,518 282,532 297,534 C312,536 310,520 310,508 C312,480 313,452 313,425 Z"/>
+    <path id="${p}-body" fill="#009688" d="M240,240 C300,232 365,248 395,290 C418,325 418,375 400,410 C385,438 358,455 325,460 C285,465 200,462 165,452 C130,440 105,418 92,388 C75,348 80,295 108,262 C135,232 195,235 240,240 Z"/>
+    <path fill="none" stroke="#00695C" stroke-width="3.5" d="M165,452 C130,440 105,418 92,388 C75,348 80,295 108,262 C135,232 195,235 240,240 C300,232 365,248 395,290 C418,325 418,375 400,410 C385,438 358,455 325,460"/>
+    <path id="${p}-belly" fill="#4DB6AC" d="M240,295 C290,290 340,305 360,335 C375,358 374,390 362,412 C352,428 332,440 308,444 C278,448 218,446 192,440 C170,432 155,418 148,398 C138,372 142,335 160,312 C178,292 215,290 240,295 Z"/>
+    <path id="${p}-neck" fill="#009688" d="M380,270 C400,245 418,210 430,175 C440,148 445,120 442,100 C440,85 432,78 425,88 C418,102 415,130 412,160 C408,190 398,225 385,255 Z"/>
+    <path fill="none" stroke="#00695C" stroke-width="3.5" d="M380,270 C400,245 418,210 430,175 C440,148 445,120 442,100 C440,85 432,78 425,88"/>
+    <path id="${p}-neck-light" fill="#4DB6AC" d="M390,260 C405,240 418,212 426,182 C432,160 435,135 434,115 C433,105 430,100 427,108 C422,122 420,148 416,175 C412,202 404,232 395,252 Z"/>
+    <path id="${p}-head" fill="#009688" d="M430,78 C448,68 470,70 482,82 C492,92 495,110 488,125 C480,138 465,145 450,142 C435,140 424,130 420,118 C416,105 418,88 430,78 Z"/>
+    <path fill="none" stroke="#00695C" stroke-width="3.5" d="M420,118 C416,105 418,88 430,78 C448,68 470,70 482,82 C492,92 495,110 488,125 C480,138 465,145 450,142 C435,140 424,130 420,118"/>
+    <g id="${p}-eye"><ellipse cx="458" cy="95" rx="14" ry="16" fill="#FFFDE7"/><ellipse cx="460" cy="98" rx="8" ry="10" fill="#4E342E"/><circle cx="462" cy="95" r="4.5" fill="#1B0E06"/></g>
+    <path id="${p}-mouth" fill="#00695C" d="M472,115 C478,112 486,115 488,120 C486,126 480,128 474,126 C470,124 468,120 472,115 Z"/>
+    <ellipse id="${p}-nostril" cx="486" cy="105" rx="2.5" ry="2" fill="#00695C"/>
+    <ellipse id="${p}-blush" cx="448" cy="125" rx="10" ry="6" fill="#FF8FCF" opacity="0.35"/>
+    <circle id="${p}-spot1" cx="180" cy="370" r="12" fill="#00796B" opacity="0.4"/>
+    <circle id="${p}-spot2" cx="270" cy="390" r="9" fill="#00796B" opacity="0.4"/>
+    <circle id="${p}-spot3" cx="340" cy="360" r="11" fill="#00796B" opacity="0.4"/>
+    <circle id="${p}-spot4" cx="220" cy="330" r="8" fill="#00796B" opacity="0.4"/>
+    <circle id="${p}-neck-spot1" cx="420" cy="180" r="5" fill="#00796B" opacity="0.4"/>
+    <circle id="${p}-neck-spot2" cx="428" cy="140" r="4" fill="#00796B" opacity="0.4"/>`;
+}
+
+// HALLOWEEN
+function charHweenGhost(p) {
+    return `
+    <path id="${p}-body" fill="#F5F5F5" d="M250,60 C320,55 385,85 415,145 C440,200 440,275 435,340 C432,380 428,420 425,450 C422,470 415,490 400,495 C385,500 378,480 375,460 C372,440 370,425 360,430 C350,435 348,460 340,480 C332,498 320,505 308,498 C296,490 292,468 285,448 C278,430 272,425 262,432 C252,440 248,465 240,485 C232,502 220,508 208,500 C196,492 190,468 185,448 C180,430 175,425 165,432 C155,440 150,465 142,485 C134,502 122,505 112,495 C102,485 95,458 90,430 C85,395 82,345 85,295 C88,235 100,175 130,130 C165,80 205,60 250,60 Z"/>
+    <path fill="none" stroke="#BDBDBD" stroke-width="3.5" d="M250,60 C320,55 385,85 415,145 C440,200 440,275 435,340 C432,380 428,420 425,450 C422,470 415,490 400,495 C385,500 378,480 375,460 C372,440 370,425 360,430 C350,435 348,460 340,480 C332,498 320,505 308,498 C296,490 292,468 285,448 C278,430 272,425 262,432 C252,440 248,465 240,485 C232,502 220,508 208,500 C196,492 190,468 185,448 C180,430 175,425 165,432 C155,440 150,465 142,485 C134,502 122,505 112,495 C102,485 95,458 90,430 C85,395 82,345 85,295 C88,235 100,175 130,130 C165,80 205,60 250,60"/>
+    <path id="${p}-inner-glow" fill="#FAFAFA" d="M250,110 C300,108 345,128 365,168 C382,205 382,260 378,310 C375,348 372,385 370,410 C340,408 310,415 290,415 C265,415 240,412 215,415 C190,418 165,410 140,412 C138,385 135,348 132,310 C128,260 130,200 150,165 C172,125 210,108 250,110 Z"/>
+    <path id="${p}-bow-left" fill="#FF80AB" d="M250,62 C235,50 215,42 210,48 C205,54 218,65 235,68 Z"/>
+    <path id="${p}-bow-right" fill="#FF80AB" d="M250,62 C265,50 285,42 290,48 C295,54 282,65 265,68 Z"/>
+    <circle id="${p}-bow-center" cx="250" cy="62" r="6" fill="#F50057"/>
+    <g id="${p}-eye-left"><ellipse cx="200" cy="200" rx="38" ry="42" fill="#E0E0E0"/><ellipse cx="205" cy="205" rx="22" ry="25" fill="#212121"/><circle cx="210" cy="198" r="10" fill="#424242"/><circle cx="215" cy="192" r="5" fill="#fff"/></g>
+    <g id="${p}-eye-right"><ellipse cx="310" cy="200" rx="38" ry="42" fill="#E0E0E0"/><ellipse cx="305" cy="205" rx="22" ry="25" fill="#212121"/><circle cx="300" cy="198" r="10" fill="#424242"/><circle cx="295" cy="192" r="5" fill="#fff"/></g>
+    <ellipse id="${p}-mouth" cx="255" cy="310" rx="22" ry="28" fill="#E0E0E0"/>
+    <ellipse id="${p}-mouth-inner" cx="255" cy="312" rx="15" ry="20" fill="#BDBDBD"/>
+    <ellipse id="${p}-blush-left" cx="165" cy="260" rx="25" ry="14" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="${p}-blush-right" cx="345" cy="260" rx="25" ry="14" fill="#FF8FCF" opacity="0.3"/>
+    <circle id="${p}-sparkle1" cx="150" cy="150" r="4" fill="#E0E0E0" opacity="0.6"/>
+    <circle id="${p}-sparkle2" cx="360" cy="130" r="3" fill="#E0E0E0" opacity="0.6"/>
+    <path id="${p}-arm-left" fill="#F5F5F5" d="M90,250 C75,240 60,235 55,242 C50,250 62,262 78,268 C88,272 92,265 90,250 Z"/>
+    <path id="${p}-arm-right" fill="#F5F5F5" d="M420,250 C435,240 450,235 455,242 C460,250 448,262 432,268 C422,272 418,265 420,250 Z"/>`;
+}
+
+function charHweenBat(p) {
+    return `
+    <path id="${p}-wing-left" fill="#4A148C" d="M195,230 C155,205 95,170 40,155 C18,150 5,162 10,178 C18,200 50,230 85,252 C120,272 160,282 195,278 Z"/>
+    <path fill="none" stroke="#311B92" stroke-width="3.5" d="M195,230 C155,205 95,170 40,155 C18,150 5,162 10,178 C18,200 50,230 85,252 C120,272 160,282 195,278"/>
+    <path id="${p}-wing-left-edge" fill="#4A148C" d="M40,155 C30,175 25,195 30,210 C20,200 12,185 10,178 Z M65,168 C58,188 55,210 60,225 C50,215 42,198 40,188 Z"/>
+    <path id="${p}-wing-right" fill="#4A148C" d="M315,230 C355,205 415,170 470,155 C492,150 505,162 500,178 C492,200 460,230 425,252 C390,272 350,282 315,278 Z"/>
+    <path fill="none" stroke="#311B92" stroke-width="3.5" d="M315,230 C355,205 415,170 470,155 C492,150 505,162 500,178 C492,200 460,230 425,252 C390,272 350,282 315,278"/>
+    <path id="${p}-wing-right-edge" fill="#4A148C" d="M470,155 C480,175 485,195 480,210 C490,200 498,185 500,178 Z M445,168 C452,188 455,210 450,225 C460,215 468,198 470,188 Z"/>
+    <path id="${p}-body" fill="#4A148C" d="M255,170 C290,165 320,182 338,210 C352,235 352,270 342,300 C335,322 318,340 295,348 C275,355 235,355 215,348 C192,340 175,322 168,300 C158,270 158,235 172,210 C190,182 222,165 255,170 Z"/>
+    <path fill="none" stroke="#311B92" stroke-width="3.5" d="M215,348 C192,340 175,322 168,300 C158,270 158,235 172,210 C190,182 222,165 255,170 C290,165 320,182 338,210 C352,235 352,270 342,300 C335,322 318,340 295,348"/>
+    <path id="${p}-belly" fill="#6A1B9A" d="M255,215 C280,212 302,225 312,248 C320,268 318,295 310,315 C304,330 292,340 276,342 C262,344 245,342 234,338 C218,330 208,315 202,295 C195,270 198,242 210,225 C222,212 240,210 255,215 Z"/>
+    <path id="${p}-ear-left" fill="#4A148C" d="M205,175 C195,145 180,108 172,85 C168,72 172,65 180,72 C190,82 202,115 210,150 Z"/>
+    <path id="${p}-ear-right" fill="#4A148C" d="M305,175 C315,145 330,108 338,85 C342,72 338,65 330,72 C320,82 308,115 300,150 Z"/>
+    <path id="${p}-ear-inner-left" fill="#7B1FA2" d="M205,168 C198,145 188,118 182,100 C186,105 198,135 206,160 Z"/>
+    <path id="${p}-ear-inner-right" fill="#7B1FA2" d="M305,168 C312,145 322,118 328,100 C324,105 312,135 304,160 Z"/>
+    <g id="${p}-eye-left"><ellipse cx="228" cy="235" rx="28" ry="30" fill="#FFF9C4"/><ellipse cx="232" cy="238" rx="16" ry="18" fill="#F44336"/><circle cx="234" cy="235" r="9" fill="#B71C1C"/><circle cx="237" cy="230" r="4" fill="#fff"/></g>
+    <g id="${p}-eye-right"><ellipse cx="282" cy="235" rx="28" ry="30" fill="#FFF9C4"/><ellipse cx="278" cy="238" rx="16" ry="18" fill="#F44336"/><circle cx="276" cy="235" r="9" fill="#B71C1C"/><circle cx="273" cy="230" r="4" fill="#fff"/></g>
+    <path id="${p}-fang-left" fill="#fff" d="M238,300 Q242,315 246,300 Z"/>
+    <path id="${p}-fang-right" fill="#fff" d="M264,300 Q268,315 272,300 Z"/>
+    <path id="${p}-mouth" fill="#311B92" d="M232,295 C242,290 268,290 278,295 C275,305 265,312 255,314 C245,312 235,305 232,295 Z"/>
+    <ellipse id="${p}-nose" cx="255" cy="275" rx="6" ry="4" fill="#7B1FA2"/>
+    <ellipse id="${p}-blush-left" cx="200" cy="268" rx="14" ry="8" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="${p}-blush-right" cx="310" cy="268" rx="14" ry="8" fill="#FF8FCF" opacity="0.3"/>
+    <circle id="${p}-claw-l1" cx="215" cy="415" r="4" fill="#7B1FA2"/>
+    <circle id="${p}-claw-r1" cx="295" cy="415" r="4" fill="#7B1FA2"/>`;
+}
+
+function charHweenSpider(p) {
+    return `
+    <path id="${p}-web-strand" fill="none" stroke="#9E9E9E" stroke-width="2" d="M250,0 L250,160"/>
+    <path id="${p}-web-detail1" fill="none" stroke="#BDBDBD" stroke-width="1" d="M250,40 C230,50 220,65 225,80"/>
+    <path id="${p}-web-detail2" fill="none" stroke="#BDBDBD" stroke-width="1" d="M250,40 C270,50 280,65 275,80"/>
+    <path fill="#212121" d="M195,240 C165,220 125,198 90,190 C70,186 58,195 65,208 C72,220 95,232 125,242 C150,250 178,252 195,248 Z"/>
+    <path fill="#212121" d="M190,275 C158,268 118,260 82,262 C62,264 52,275 60,285 C68,295 95,298 128,295 C155,292 180,282 190,278 Z"/>
+    <path fill="#212121" d="M315,240 C345,220 385,198 420,190 C440,186 452,195 445,208 C438,220 415,232 385,242 C360,250 332,252 315,248 Z"/>
+    <path fill="#212121" d="M320,275 C352,268 392,260 428,262 C448,264 458,275 450,285 C442,295 415,298 382,295 C355,292 330,282 320,278 Z"/>
+    <path fill="#212121" d="M192,310 C162,318 125,330 92,342 C72,350 62,362 72,370 C82,378 105,372 135,358 C160,345 182,325 192,315 Z"/>
+    <path fill="#212121" d="M318,310 C348,318 385,330 418,342 C438,350 448,362 438,370 C428,378 405,372 375,358 C350,345 328,325 318,315 Z"/>
+    <ellipse id="${p}-abdomen" cx="255" cy="350" rx="75" ry="85" fill="#212121"/>
+    <circle id="${p}-abd-spot1" cx="235" cy="330" r="12" fill="#E91E63" opacity="0.7"/>
+    <circle id="${p}-abd-spot2" cx="278" cy="340" r="10" fill="#2196F3" opacity="0.7"/>
+    <circle id="${p}-abd-spot3" cx="250" cy="375" r="14" fill="#FF9800" opacity="0.6"/>
+    <circle id="${p}-abd-spot4" cx="225" cy="395" r="8" fill="#4CAF50" opacity="0.6"/>
+    <ellipse id="${p}-head" cx="255" cy="235" rx="65" ry="70" fill="#212121"/>
+    <ellipse id="${p}-head-light" cx="255" cy="225" rx="45" ry="48" fill="#333333"/>
+    <g id="${p}-eye-top-left"><ellipse cx="232" cy="210" rx="22" ry="24" fill="#FFFDE7"/><ellipse cx="236" cy="213" rx="12" ry="14" fill="#4CAF50"/><circle cx="238" cy="210" r="6" fill="#1B5E20"/><circle cx="240" cy="206" r="3" fill="#fff"/></g>
+    <g id="${p}-eye-top-right"><ellipse cx="278" cy="210" rx="22" ry="24" fill="#FFFDE7"/><ellipse cx="274" cy="213" rx="12" ry="14" fill="#4CAF50"/><circle cx="272" cy="210" r="6" fill="#1B5E20"/><circle cx="270" cy="206" r="3" fill="#fff"/></g>
+    <path id="${p}-mouth" fill="#424242" d="M235,285 C242,280 268,280 275,285 C272,295 265,302 255,304 C245,302 238,295 235,285 Z"/>
+    <circle id="${p}-cheek-left" cx="225" cy="285" r="5" fill="#333333"/>
+    <circle id="${p}-cheek-right" cx="285" cy="285" r="5" fill="#333333"/>
+    <ellipse id="${p}-blush-left" cx="208" cy="258" rx="12" ry="7" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="${p}-blush-right" cx="302" cy="258" rx="12" ry="7" fill="#FF8FCF" opacity="0.3"/>`;
+}
+
+function charHweenWitchHat(p) {
+    return `
+    <path id="${p}-tail" fill="#424242" d="M100,320 C75,305 45,275 30,245 C18,222 20,200 35,205 C50,212 65,240 80,270 C92,295 98,312 105,325 Z"/>
+    <path id="${p}-leg-bl" fill="#424242" d="M160,420 C155,450 148,478 142,502 C139,515 135,528 150,530 C165,532 163,516 164,505 C168,478 172,452 175,425 Z"/>
+    <path id="${p}-leg-fl" fill="#424242" d="M310,418 C308,448 305,476 302,500 C300,513 297,526 312,528 C327,530 325,514 325,503 C327,476 328,448 328,422 Z"/>
+    <ellipse id="${p}-paw-bl" cx="150" cy="530" rx="14" ry="5" fill="#616161"/>
+    <ellipse id="${p}-paw-fl" cx="312" cy="528" rx="14" ry="5" fill="#616161"/>
+    <path id="${p}-body" fill="#424242" d="M250,230 C310,222 375,240 405,280 C428,312 425,360 408,398 C395,425 368,445 335,450 C295,455 200,453 168,445 C138,435 115,415 102,388 C85,350 88,300 110,268 C135,232 200,225 250,230 Z"/>
+    <path fill="none" stroke="#212121" stroke-width="3.5" d="M168,445 C138,435 115,415 102,388 C85,350 88,300 110,268 C135,232 200,225 250,230 C310,222 375,240 405,280 C428,312 425,360 408,398 C395,425 368,445 335,450"/>
+    <path id="${p}-chest" fill="#616161" d="M330,290 C355,305 365,340 358,375 C352,400 335,420 312,428 C295,432 278,430 270,420 C260,405 262,380 272,355 C282,332 305,300 330,290 Z"/>
+    <path id="${p}-ear-left" fill="#424242" d="M340,190 C335,160 325,130 322,115 C320,105 326,100 332,108 C340,120 348,150 350,180 Z"/>
+    <path id="${p}-ear-right" fill="#424242" d="M400,190 C402,160 408,130 412,115 C414,105 420,100 418,112 C415,125 408,155 404,182 Z"/>
+    <path id="${p}-ear-inner-left" fill="#FF8A80" d="M338,180 C335,158 330,138 328,128 C332,132 338,152 342,175 Z"/>
+    <path id="${p}-ear-inner-right" fill="#FF8A80" d="M402,180 C404,158 408,138 410,128 C412,135 406,155 403,178 Z"/>
+    <path id="${p}-head" fill="#424242" d="M370,175 C400,170 425,185 438,210 C448,232 445,260 432,280 C420,298 398,308 375,310 C352,312 332,302 322,285 C312,265 315,238 325,218 C335,198 352,180 370,175 Z"/>
+    <path fill="none" stroke="#212121" stroke-width="3.5" d="M322,285 C312,265 315,238 325,218 C335,198 352,180 370,175 C400,170 425,185 438,210 C448,232 445,260 432,280 C420,298 398,308 375,310 C352,312 332,302 322,285"/>
+    <g id="${p}-eye-left"><ellipse cx="355" cy="235" rx="20" ry="22" fill="#E8F5E9"/><ellipse cx="358" cy="238" rx="12" ry="14" fill="#4CAF50"/><ellipse cx="360" cy="235" rx="6" ry="8" fill="#1B5E20"/><circle cx="362" cy="231" r="3" fill="#fff"/></g>
+    <g id="${p}-eye-right"><ellipse cx="405" cy="235" rx="20" ry="22" fill="#E8F5E9"/><ellipse cx="402" cy="238" rx="12" ry="14" fill="#4CAF50"/><ellipse cx="400" cy="235" rx="6" ry="8" fill="#1B5E20"/><circle cx="398" cy="231" r="3" fill="#fff"/></g>
+    <ellipse id="${p}-nose" cx="380" cy="262" rx="8" ry="5" fill="#FF8A80"/>
+    <path id="${p}-mouth" fill="#212121" d="M370,272 C375,275 385,275 390,272 C388,280 382,284 380,284 C378,284 372,280 370,272 Z"/>
+    <path id="${p}-hat-brim" fill="#1A237E" d="M310,185 C320,195 340,200 370,200 C400,200 425,195 440,185 C448,180 450,172 442,168 C430,162 400,158 370,158 C340,158 310,162 298,168 C290,172 292,180 310,185 Z"/>
+    <path id="${p}-hat-cone" fill="#1A237E" d="M330,168 C340,130 355,85 365,50 C370,35 375,30 378,45 C385,80 395,130 405,168 Z"/>
+    <path fill="none" stroke="#0D1547" stroke-width="3" d="M310,185 C320,195 340,200 370,200 C400,200 425,195 440,185 C448,180 450,172 442,168 C430,162 400,158 370,158 C340,158 310,162 298,168 C290,172 292,180 310,185"/>
+    <path fill="none" stroke="#0D1547" stroke-width="3" d="M330,168 C340,130 355,85 365,50 C370,35 375,30 378,45 C385,80 395,130 405,168"/>
+    <rect id="${p}-hat-band" x="328" y="158" width="80" height="14" rx="3" fill="#FF6D00"/>
+    <rect id="${p}-hat-buckle" x="358" y="155" width="20" height="20" rx="3" fill="#FFD54F"/>
+    <circle id="${p}-star1" cx="350" cy="120" r="4" fill="#FFD54F" opacity="0.8"/>
+    <circle id="${p}-star2" cx="385" cy="95" r="3" fill="#FFD54F" opacity="0.7"/>
+    <circle id="${p}-star3" cx="365" cy="70" r="3.5" fill="#FFD54F" opacity="0.8"/>
+    <ellipse id="${p}-blush-left" cx="338" cy="270" rx="12" ry="7" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="${p}-blush-right" cx="422" cy="270" rx="12" ry="7" fill="#FF8FCF" opacity="0.3"/>`;
+}
+
+function charHweenPumpkin(p) {
+    return `
+    <path id="${p}-stem" fill="#5D4037" d="M240,105 C238,80 235,55 240,40 C245,28 255,25 260,38 C265,55 262,80 260,105 Z"/>
+    <path id="${p}-leaf" fill="#4CAF50" d="M260,55 C275,42 298,35 310,42 C318,48 312,60 298,65 C285,70 268,68 260,60 Z"/>
+    <path id="${p}-vine" fill="none" stroke="#4CAF50" stroke-width="2.5" d="M242,48 C230,35 218,28 212,32 C206,38 215,50 228,52"/>
+    <path id="${p}-body" fill="#FF6D00" d="M250,110 C330,105 405,155 430,240 C450,310 440,390 410,440 C385,480 340,505 290,510 C260,512 240,512 210,510 C160,505 115,480 90,440 C60,390 50,310 70,240 C95,155 170,105 250,110 Z"/>
+    <path fill="none" stroke="#E65100" stroke-width="3.5" d="M250,110 C330,105 405,155 430,240 C450,310 440,390 410,440 C385,480 340,505 290,510 C260,512 240,512 210,510 C160,505 115,480 90,440 C60,390 50,310 70,240 C95,155 170,105 250,110"/>
+    <path id="${p}-ridge1" fill="#F57C00" opacity="0.4" d="M165,120 C145,170 130,250 135,340 C140,410 160,465 185,495 C155,485 130,465 112,438 C85,395 78,320 88,250 C100,180 128,140 165,120 Z"/>
+    <path id="${p}-ridge2" fill="#F57C00" opacity="0.3" d="M250,108 C240,108 230,110 220,115 C215,165 210,260 215,350 C218,415 228,465 240,498 C248,510 252,510 260,498 C272,465 282,415 285,350 C290,260 285,165 280,115 C270,110 260,108 250,108 Z"/>
+    <path id="${p}-highlight" fill="#FF8F00" opacity="0.4" d="M180,150 C165,185 155,240 158,300 C160,345 170,385 185,415 C175,415 165,400 158,378 C145,340 140,280 148,225 C155,180 168,152 180,150 Z"/>
+    <path id="${p}-eye-left" fill="#FFD54F" d="M175,250 C190,215 220,215 225,250 C215,275 185,275 175,250 Z"/>
+    <circle id="${p}-eye-left-highlight" cx="195" cy="238" r="6" fill="#FFF9C4" opacity="0.7"/>
+    <path id="${p}-eye-right" fill="#FFD54F" d="M275,250 C290,215 320,215 325,250 C315,275 285,275 275,250 Z"/>
+    <circle id="${p}-eye-right-highlight" cx="295" cy="238" r="6" fill="#FFF9C4" opacity="0.7"/>
+    <path id="${p}-nose" fill="#FFD54F" d="M240,310 C248,292 262,292 260,310 C255,322 245,322 240,310 Z"/>
+    <path id="${p}-mouth" fill="#FFD54F" d="M160,370 C180,355 220,345 250,345 C280,345 320,355 340,370 C335,405 310,430 250,435 C190,430 165,405 160,370 Z"/>
+    <path id="${p}-mouth-glow" fill="#FFF9C4" opacity="0.4" d="M180,368 C200,358 230,352 250,352 C270,352 300,358 320,368 C315,390 295,408 250,410 C205,408 185,390 180,368 Z"/>
+    <ellipse id="${p}-blush-left" cx="150" cy="320" rx="25" ry="14" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="${p}-blush-right" cx="350" cy="320" rx="25" ry="14" fill="#FF8FCF" opacity="0.3"/>`;
+}
+
+// ANIMALS - use <image> tags referencing SVG files
+function charCow(p) { return `<image id="${p}-img" href="assets/cartoon-cow.svg" width="225" height="255"/>`; }
+function charSheep(p) { return `<image id="${p}-img" href="assets/cartoon-sheep.svg" width="244" height="254"/>`; }
+function charLion(p) { return `<image id="${p}-img" href="assets/cartoon-lion.svg" width="276" height="430"/>`; }
+function charPanda(p) { return `<image id="${p}-img" href="assets/cartoon-panda.svg" width="247" height="334"/>`; }
+function charOwl(p) { return `<image id="${p}-img" href="assets/cartoon-owl.svg" width="378" height="370"/>`; }
+function charBunny(p) { return `<image id="${p}-img" href="assets/cartoon-bunny.svg" width="374" height="586"/>`; }
+
+// ============================================================
+// SCENE DEFINITIONS
+// ============================================================
+
+const SCENES = {
+    mostri: {
+        bg: bgMostri,
+        characters: [
+            { fn: charTentacle, prefix: 'tentacle', x: 30, y: 180, s: 0.65 },
+            { fn: charBlob, prefix: 'blob', x: 260, y: 100, s: 0.55 },
+            { fn: charFluffy, prefix: 'fluffy', x: 490, y: 160, s: 0.6 },
+            { fn: charCyclops, prefix: 'cyclops', x: 700, y: 120, s: 0.58 },
+            { fn: charDragon, prefix: 'dragon', x: 930, y: 150, s: 0.62 }
+        ],
+        elements: {
+            large: ['tentacle-body','blob-body','fluffy-body','cyclops-body','dragon-body','tentacle-belly','blob-belly','fluffy-belly','cyclops-belly','dragon-belly'],
+            medium: ['tentacle-horn-left','tentacle-horn-right','blob-nose-trunk','blob-nose-bell','fluffy-horn','fluffy-bow-center','cyclops-foot-left','cyclops-foot-right','dragon-snout','dragon-spike1','dragon-spike2','dragon-spike3','tentacle-horn-tip-left','tentacle-horn-tip-right','blob-antenna-ball-left','blob-antenna-ball-right','blob-foot-left','blob-foot-right'],
+            small: ['tentacle-sucker1a','tentacle-sucker2a','tentacle-sucker3a','tentacle-sucker4a','tentacle-spot1','tentacle-spot2','tentacle-spot3','tentacle-wart1','tentacle-wart2','tentacle-tooth1','tentacle-blush-left','tentacle-blush-right','blob-spot1','blob-spot2','blob-hand-left-f1','blob-hand-right-f1','blob-tooth-left','blob-tooth-right','blob-blush-left','blob-blush-right','fluffy-tail-poof1','fluffy-tail-poof2','fluffy-bow-left','fluffy-bow-right','fluffy-nose-shape','fluffy-blush-left','fluffy-blush-right','cyclops-spot1','cyclops-spot2','cyclops-wart1','cyclops-wart2','cyclops-tooth1','cyclops-blush-left','cyclops-blush-right','cyclops-hand-left-f1','cyclops-hand-right-f1','dragon-tail-tip','dragon-claw-left1','dragon-claw-left2','dragon-claw-right1','dragon-claw-right2','dragon-smoke1','dragon-smoke2','dragon-nostril-left','dragon-nostril-right','dragon-blush-left','dragon-blush-right']
+        }
+    },
+    dinosauri: {
+        bg: bgDinosauri,
+        characters: [
+            { fn: charDinoTrex, prefix: 'trex', x: 50, y: 130, s: 0.6 },
+            { fn: charDinoStego, prefix: 'stego', x: 310, y: 110, s: 0.58 },
+            { fn: charDinoPtero, prefix: 'ptero', x: 480, y: 20, s: 0.5 },
+            { fn: charDinoTrice, prefix: 'trice', x: 650, y: 120, s: 0.58 },
+            { fn: charDinoBronto, prefix: 'bronto', x: 890, y: 100, s: 0.6 }
+        ],
+        elements: {
+            large: ['trex-body','trex-head','stego-body','stego-plate2','stego-plate3','stego-plate4','trice-body','trice-frill','trice-head','bronto-body','bronto-neck','ptero-body','ptero-wing-left','ptero-wing-right','ptero-head'],
+            medium: ['trex-head-belly','trex-mouth','stego-plate1','stego-plate5','stego-head','trice-horn-top','trice-belly','bronto-head','bronto-neck-light','bronto-belly','ptero-belly','ptero-crest','ptero-beak'],
+            small: ['trex-spot1','trex-spot2','trex-spot3','trex-spot4','trex-tooth1','trex-tooth2','trex-tooth3','trex-blush-left','trex-blush-right','trex-nostril-left','trex-nostril-right','stego-tail-spike1','stego-tail-spike2','stego-tail-spike3','stego-spot1','stego-spot2','stego-spot3','stego-blush','stego-nostril','trice-frill-spot1','trice-frill-spot2','trice-frill-spot3','trice-horn-left','trice-nose-horn','trice-spot1','trice-spot2','trice-blush','trice-nostril','bronto-spot1','bronto-spot2','bronto-spot3','bronto-spot4','bronto-neck-spot1','bronto-neck-spot2','bronto-blush','bronto-nostril','ptero-spot1','ptero-spot2','ptero-blush-left','ptero-blush-right','ptero-claw-l1','ptero-claw-r1']
+        }
+    },
+    halloween: {
+        bg: bgHalloween,
+        characters: [
+            { fn: charHweenGhost, prefix: 'ghost', x: 30, y: 90, s: 0.55 },
+            { fn: charHweenBat, prefix: 'bat', x: 290, y: 30, s: 0.45 },
+            { fn: charHweenSpider, prefix: 'spider', x: 490, y: 80, s: 0.5 },
+            { fn: charHweenWitchHat, prefix: 'witchcat', x: 660, y: 100, s: 0.55 },
+            { fn: charHweenPumpkin, prefix: 'pumpkin', x: 910, y: 150, s: 0.58 }
+        ],
+        elements: {
+            large: ['ghost-body','ghost-inner-glow','bat-body','bat-wing-left','bat-wing-right','spider-head','spider-abdomen','witchcat-body','witchcat-head','witchcat-hat-cone','witchcat-hat-brim','pumpkin-body','pumpkin-mouth','pumpkin-ridge1','pumpkin-ridge2'],
+            medium: ['ghost-mouth','bat-belly','bat-ear-left','bat-ear-right','bat-wing-left-edge','bat-wing-right-edge','spider-head-light','witchcat-chest','witchcat-ear-left','witchcat-ear-right','pumpkin-eye-left','pumpkin-eye-right','pumpkin-stem','pumpkin-highlight','pumpkin-mouth-glow'],
+            small: ['ghost-bow-left','ghost-bow-right','ghost-bow-center','ghost-mouth-inner','ghost-blush-left','ghost-blush-right','ghost-sparkle1','ghost-sparkle2','ghost-arm-left','ghost-arm-right','bat-fang-left','bat-fang-right','bat-nose','bat-blush-left','bat-blush-right','bat-ear-inner-left','bat-ear-inner-right','bat-claw-l1','bat-claw-r1','spider-web-detail1','spider-web-detail2','spider-abd-spot1','spider-abd-spot2','spider-abd-spot3','spider-abd-spot4','spider-cheek-left','spider-cheek-right','spider-blush-left','spider-blush-right','witchcat-nose','witchcat-hat-band','witchcat-hat-buckle','witchcat-star1','witchcat-star2','witchcat-star3','witchcat-blush-left','witchcat-blush-right','witchcat-ear-inner-left','witchcat-ear-inner-right','witchcat-paw-bl','witchcat-paw-fl','pumpkin-nose','pumpkin-leaf','pumpkin-vine','pumpkin-blush-left','pumpkin-blush-right','pumpkin-eye-left-highlight','pumpkin-eye-right-highlight']
+        }
+    },
+    animali: {
+        bg: bgAnimali,
+        characters: [
+            { fn: charCow, prefix: 'cow', x: 20, y: 200, s: 0.9 },
+            { fn: charSheep, prefix: 'sheep', x: 230, y: 210, s: 0.85 },
+            { fn: charLion, prefix: 'lion', x: 430, y: 120, s: 0.7 },
+            { fn: charPanda, prefix: 'panda', x: 660, y: 190, s: 0.75 },
+            { fn: charOwl, prefix: 'owl', x: 870, y: 170, s: 0.65 },
+            { fn: charBunny, prefix: 'bunny', x: 1020, y: 150, s: 0.5 }
+        ],
+        elements: {
+            large: ['cow-img','sheep-img','lion-img','panda-img','owl-img','bunny-img'],
+            medium: ['cow-img','sheep-img','lion-img','panda-img','owl-img','bunny-img'],
+            small: ['cow-img','sheep-img','lion-img','panda-img','owl-img','bunny-img']
         }
     }
+};
 
-    let rng = Math.random;
-    function randInt(min, max) { return Math.floor(rng() * (max - min + 1)) + min; }
-    function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
-    function shuffle(arr) {
-        const a = [...arr];
-        for (let i = a.length - 1; i > 0; i--) {
-            const j = randInt(0, i);
-            [a[i], a[j]] = [a[j], a[i]];
-        }
-        return a;
+// ============================================================
+// DIFFICULTY
+// ============================================================
+
+const DIFFICULTY = {
+    facile:    { count: 3, pools: ['large'] },
+    medio:     { count: 5, pools: ['large','medium'] },
+    difficile: { count: 6, pools: ['medium','small'] },
+    estremo:   { count: 8, pools: ['small'] }
+};
+
+const ALT_COLORS = [
+    '#e53935','#d81b60','#8e24aa','#5e35b1','#3949ab',
+    '#1e88e5','#039be5','#00acc1','#00897b','#43a047',
+    '#7cb342','#c0ca33','#fdd835','#ffb300','#fb8c00',
+    '#f4511e','#6d4c41','#546e7a','#ff6f00','#00bfa5'
+];
+
+// ============================================================
+// GENERATE
+// ============================================================
+
+function buildScene(sceneKey) {
+    const scene = SCENES[sceneKey];
+    let svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1200 700" width="100%">`;
+    svg += scene.bg();
+    for (const ch of scene.characters) {
+        svg += `<g transform="translate(${ch.x},${ch.y}) scale(${ch.s})">`;
+        svg += ch.fn(ch.prefix);
+        svg += `</g>`;
     }
+    svg += `</svg>`;
+    return svg;
+}
 
-    const W = 500, H = 550;
+function getElementColor(el) {
+    const styleFill = el.style.fill;
+    if (styleFill && styleFill !== 'none' && styleFill !== '') return { type: 'style', value: styleFill };
+    const attrFill = el.getAttribute('fill');
+    if (attrFill && attrFill !== 'none' && attrFill !== '' && !attrFill.startsWith('url(')) return { type: 'attr', value: attrFill };
+    const styleStroke = el.style.stroke;
+    if (styleStroke && styleStroke !== 'none' && styleStroke !== '') return { type: 'style-stroke', value: styleStroke };
+    const attrStroke = el.getAttribute('stroke');
+    if (attrStroke && attrStroke !== 'none' && attrStroke !== '' && !attrStroke.startsWith('url(')) return { type: 'attr-stroke', value: attrStroke };
+    return null;
+}
 
-    // ========== DIFFICULTY CONFIG ==========
-    const DIFFICULTY = {
-        facile:    { diffs: [3,3], sizes: ['large'] },
-        medio:     { diffs: [4,5], sizes: ['large','medium'] },
-        difficile: { diffs: [5,7], sizes: ['medium','small'] },
-        estremo:   { diffs: [7,9], sizes: ['small'] },
-    };
+function setElementColor(el, colorInfo, newColor) {
+    if (colorInfo.type === 'style') el.style.fill = newColor;
+    else if (colorInfo.type === 'attr') el.setAttribute('fill', newColor);
+    else if (colorInfo.type === 'style-stroke') el.style.stroke = newColor;
+    else if (colorInfo.type === 'attr-stroke') el.setAttribute('stroke', newColor);
+}
 
-    // ========== BRIGHT COLORS FOR RANDOM COLOR CHANGES ==========
-    const BRIGHT_COLORS = [
-        '#FF4757', '#FF6B6B', '#EE5A24', '#FFC312', '#F79F1F',
-        '#A3CB38', '#009432', '#12CBC4', '#1289A7', '#0652DD',
-        '#6F1E51', '#B53471', '#FDA7DF', '#ED4C67', '#D980FA',
-        '#9980FA', '#5758BB', '#0ABF5C', '#E84118', '#00E5FF',
-    ];
-
-    function getRandomBrightColor(avoid) {
-        var filtered = BRIGHT_COLORS.filter(function(c) {
-            return c.toLowerCase() !== avoid.toLowerCase();
-        });
-        return pick(filtered);
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+}
 
-    // ========== ELEMENT REGISTRY PER MONSTER ==========
-    // Each element: { id, size: 'large'|'medium'|'small', fill: original fill color }
-    // fill is the primary fill to change for color-change diffs
+function generate() {
+    const sceneKey = document.getElementById('scene-select').value;
+    const diff = document.getElementById('difficulty').value;
+    const settings = DIFFICULTY[diff];
+    const scene = SCENES[sceneKey];
 
-    const MONSTER_ELEMENTS = {
-        tentacle: [
-            // large
-            { id: 'body', size: 'large', fill: '#7B2FBE' },
-            { id: 'belly', size: 'large', fill: '#9B4FDE' },
-            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
-            { id: 'eye2', size: 'large', fill: '#F0FFF0' },
-            { id: 'tentacle1', size: 'large', fill: '#7B2FBE' },
-            { id: 'tentacle2', size: 'large', fill: '#7B2FBE' },
-            { id: 'mouth', size: 'large', fill: '#3D0F5C' },
-            // medium
-            { id: 'tentacle3', size: 'medium', fill: '#7B2FBE' },
-            { id: 'tentacle4', size: 'medium', fill: '#7B2FBE' },
-            { id: 'eye3', size: 'medium', fill: '#F0FFF0' },
-            { id: 'eye4', size: 'medium', fill: '#F0FFF0' },
-            { id: 'horn-left', size: 'medium', fill: '#FF6B35' },
-            { id: 'horn-right', size: 'medium', fill: '#FF6B35' },
-            // small
-            { id: 'spot1', size: 'small', fill: '#6B25A8' },
-            { id: 'spot2', size: 'small', fill: '#6B25A8' },
-            { id: 'spot3', size: 'small', fill: '#6B25A8' },
-            { id: 'spot4', size: 'small', fill: '#6B25A8' },
-            { id: 'horn-tip-left', size: 'small', fill: '#FFD93D' },
-            { id: 'horn-tip-right', size: 'small', fill: '#FFD93D' },
-            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
-            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
-            { id: 'tooth1', size: 'small', fill: '#ffffff' },
-            { id: 'wart1', size: 'small', fill: '#6B25A8' },
-            { id: 'wart2', size: 'small', fill: '#6B25A8' },
-            { id: 'wart3', size: 'small', fill: '#6B25A8' },
-            { id: 'sucker1a', size: 'small', fill: '#9B4FDE' },
-            { id: 'sucker1b', size: 'small', fill: '#9B4FDE' },
-            { id: 'sucker2a', size: 'small', fill: '#9B4FDE' },
-            { id: 'sucker3a', size: 'small', fill: '#9B4FDE' },
-            { id: 'sucker4a', size: 'small', fill: '#9B4FDE' },
-            { id: 'sucker4b', size: 'small', fill: '#9B4FDE' },
-        ],
-        blob: [
-            // large
-            { id: 'body', size: 'large', fill: '#3B82F6' },
-            { id: 'belly', size: 'large', fill: '#60A5FA' },
-            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
-            { id: 'eye2', size: 'large', fill: '#F0FFF0' },
-            { id: 'arm-left', size: 'large', fill: '#2563EB' },
-            { id: 'arm-right', size: 'large', fill: '#2563EB' },
-            { id: 'mouth', size: 'large', fill: '#1E3A8A' },
-            // medium
-            { id: 'eye3', size: 'medium', fill: '#F0FFF0' },
-            { id: 'nose', size: 'medium', fill: '#60A5FA' },
-            { id: 'teeth', size: 'medium', fill: '#ffffff' },
-            { id: 'foot-left', size: 'medium', fill: '#2563EB' },
-            { id: 'foot-right', size: 'medium', fill: '#2563EB' },
-            { id: 'antenna-ball-left', size: 'medium', fill: '#FFD93D' },
-            { id: 'antenna-ball-right', size: 'medium', fill: '#FFD93D' },
-            // small
-            { id: 'spot1', size: 'small', fill: '#2563EB' },
-            { id: 'spot2', size: 'small', fill: '#2563EB' },
-            { id: 'spot3', size: 'small', fill: '#2563EB' },
-            { id: 'spot4', size: 'small', fill: '#2563EB' },
-            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
-            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
-            { id: 'hand-left-finger1', size: 'small', fill: '#60A5FA' },
-            { id: 'hand-left-finger2', size: 'small', fill: '#60A5FA' },
-            { id: 'hand-left-finger3', size: 'small', fill: '#60A5FA' },
-            { id: 'hand-right-finger1', size: 'small', fill: '#60A5FA' },
-            { id: 'hand-right-finger2', size: 'small', fill: '#60A5FA' },
-            { id: 'hand-right-finger3', size: 'small', fill: '#60A5FA' },
-        ],
-        fluffy: [
-            // large
-            { id: 'body', size: 'large', fill: '#EC4899' },
-            { id: 'belly', size: 'large', fill: '#F9A8D4' },
-            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
-            { id: 'eye2', size: 'large', fill: '#F0FFF0' },
-            { id: 'mouth', size: 'large', fill: '#9D174D' },
-            { id: 'bow', size: 'large', fill: '#FF4081' },
-            // medium
-            { id: 'ear-left', size: 'medium', fill: '#EC4899' },
-            { id: 'ear-right', size: 'medium', fill: '#EC4899' },
-            { id: 'nose', size: 'medium', fill: '#DB2777' },
-            { id: 'horn', size: 'medium', fill: '#FBBF24' },
-            { id: 'tail', size: 'medium', fill: '#EC4899' },
-            { id: 'leg-left', size: 'medium', fill: '#DB2777' },
-            { id: 'leg-right', size: 'medium', fill: '#DB2777' },
-            // small
-            { id: 'foot-left', size: 'small', fill: '#DB2777' },
-            { id: 'foot-right', size: 'small', fill: '#DB2777' },
-            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
-            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
-            { id: 'ear-left-inner', size: 'small', fill: '#F9A8D4' },
-            { id: 'ear-right-inner', size: 'small', fill: '#F9A8D4' },
-            { id: 'bow-center', size: 'small', fill: '#E91E63' },
-            { id: 'tail-poof1', size: 'small', fill: '#F9A8D4' },
-            { id: 'tail-poof2', size: 'small', fill: '#F9A8D4' },
-            { id: 'tail-poof3', size: 'small', fill: '#F9A8D4' },
-            { id: 'nose-highlight', size: 'small', fill: '#F9A8D4' },
-        ],
-        cyclops: [
-            // large
-            { id: 'body', size: 'large', fill: '#84CC16' },
-            { id: 'belly', size: 'large', fill: '#BEF264' },
-            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
-            { id: 'mouth', size: 'large', fill: '#3F6212' },
-            { id: 'arm-left', size: 'large', fill: '#65A30D' },
-            { id: 'arm-right', size: 'large', fill: '#65A30D' },
-            // medium
-            { id: 'antenna-eye-left', size: 'medium', fill: '#F0FFF0' },
-            { id: 'antenna-eye-right', size: 'medium', fill: '#F0FFF0' },
-            { id: 'tail', size: 'medium', fill: '#65A30D' },
-            { id: 'foot-left', size: 'medium', fill: '#65A30D' },
-            { id: 'foot-right', size: 'medium', fill: '#65A30D' },
-            { id: 'tooth1', size: 'medium', fill: '#ffffff' },
-            // small
-            { id: 'spot1', size: 'small', fill: '#65A30D' },
-            { id: 'spot2', size: 'small', fill: '#65A30D' },
-            { id: 'spot3', size: 'small', fill: '#65A30D' },
-            { id: 'spot4', size: 'small', fill: '#65A30D' },
-            { id: 'wart1', size: 'small', fill: '#65A30D' },
-            { id: 'wart2', size: 'small', fill: '#65A30D' },
-            { id: 'wart3', size: 'small', fill: '#65A30D' },
-            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
-            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
-            { id: 'belly-button', size: 'small', fill: '#84CC16' },
-            { id: 'hand-left-finger1', size: 'small', fill: '#A3E635' },
-            { id: 'hand-left-finger2', size: 'small', fill: '#A3E635' },
-            { id: 'hand-left-finger3', size: 'small', fill: '#A3E635' },
-            { id: 'hand-right-finger1', size: 'small', fill: '#A3E635' },
-            { id: 'hand-right-finger2', size: 'small', fill: '#A3E635' },
-            { id: 'hand-right-finger3', size: 'small', fill: '#A3E635' },
-        ],
-        dragon: [
-            // large
-            { id: 'body', size: 'large', fill: '#F97316' },
-            { id: 'belly', size: 'large', fill: '#FDBA74' },
-            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
-            { id: 'eye2', size: 'large', fill: '#F0FFF0' },
-            { id: 'wing-left', size: 'large', fill: '#FDBA74' },
-            { id: 'wing-right', size: 'large', fill: '#FDBA74' },
-            { id: 'mouth', size: 'large', fill: '#C2410C' },
-            // medium
-            { id: 'tail', size: 'medium', fill: '#F97316' },
-            { id: 'snout', size: 'medium', fill: '#FDBA74' },
-            { id: 'foot-left', size: 'medium', fill: '#EA580C' },
-            { id: 'foot-right', size: 'medium', fill: '#EA580C' },
-            { id: 'smoke', size: 'medium', fill: '#D1D5DB' },
-            // small
-            { id: 'spike1', size: 'small', fill: '#FBBF24' },
-            { id: 'spike2', size: 'small', fill: '#FBBF24' },
-            { id: 'spike3', size: 'small', fill: '#FBBF24' },
-            { id: 'spike4', size: 'small', fill: '#FBBF24' },
-            { id: 'spike5', size: 'small', fill: '#FBBF24' },
-            { id: 'tail-tip', size: 'small', fill: '#FBBF24' },
-            { id: 'nostril-left', size: 'small', fill: '#EA580C' },
-            { id: 'nostril-right', size: 'small', fill: '#EA580C' },
-            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
-            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
-            { id: 'claw-left1', size: 'small', fill: '#FBBF24' },
-            { id: 'claw-left2', size: 'small', fill: '#FBBF24' },
-            { id: 'claw-left3', size: 'small', fill: '#FBBF24' },
-            { id: 'claw-right1', size: 'small', fill: '#FBBF24' },
-            { id: 'claw-right2', size: 'small', fill: '#FBBF24' },
-            { id: 'claw-right3', size: 'small', fill: '#FBBF24' },
-        ],
-        robot: [
-            // large
-            { id: 'body', size: 'large', fill: '#14B8A6' },
-            { id: 'eye1', size: 'large', fill: '#F0FFF0' },
-            { id: 'eye2', size: 'large', fill: '#F0FFF0' },
-            { id: 'mouth', size: 'large', fill: '#042F2E' },
-            { id: 'arm-left', size: 'large', fill: '#0D9488' },
-            { id: 'arm-right', size: 'large', fill: '#0D9488' },
-            { id: 'belly-panel', size: 'large', fill: '#0D9488' },
-            // medium
-            { id: 'treads', size: 'medium', fill: '#115E59' },
-            { id: 'antenna-dish', size: 'medium', fill: '#5EEAD4' },
-            { id: 'heart-symbol', size: 'medium', fill: '#FF4081' },
-            { id: 'belly-screen', size: 'medium', fill: '#042F2E' },
-            // small
-            { id: 'bolt1', size: 'small', fill: '#5EEAD4' },
-            { id: 'bolt2', size: 'small', fill: '#5EEAD4' },
-            { id: 'bolt3', size: 'small', fill: '#5EEAD4' },
-            { id: 'bolt4', size: 'small', fill: '#5EEAD4' },
-            { id: 'antenna-light', size: 'small', fill: '#FF4081' },
-            { id: 'light1', size: 'small', fill: '#FF4081' },
-            { id: 'light2', size: 'small', fill: '#FBBF24' },
-            { id: 'light3', size: 'small', fill: '#4ADE80' },
-            { id: 'light4', size: 'small', fill: '#FBBF24' },
-            { id: 'light5', size: 'small', fill: '#FF4081' },
-            { id: 'blush-left', size: 'small', fill: '#FF8FCF' },
-            { id: 'blush-right', size: 'small', fill: '#FF8FCF' },
-            { id: 'pixel1', size: 'small', fill: '#4ADE80' },
-            { id: 'pixel2', size: 'small', fill: '#4ADE80' },
-            { id: 'pixel3', size: 'small', fill: '#4ADE80' },
-            { id: 'pixel4', size: 'small', fill: '#4ADE80' },
-            { id: 'pixel5', size: 'small', fill: '#4ADE80' },
-            { id: 'pixel6', size: 'small', fill: '#4ADE80' },
-            { id: 'pixel7', size: 'small', fill: '#4ADE80' },
-            { id: 'pixel8', size: 'small', fill: '#4ADE80' },
-            { id: 'claw-left-joint', size: 'small', fill: '#2DD4BF' },
-            { id: 'claw-right-joint', size: 'small', fill: '#2DD4BF' },
-        ],
-    };
+    let pool = [];
+    for (const p of settings.pools) {
+        if (scene.elements[p]) pool = pool.concat(scene.elements[p]);
+    }
+    // Deduplicate
+    pool = [...new Set(pool)];
+    shuffle(pool);
 
-    // ========== DIFFERENCE GENERATOR ==========
+    const isAnimali = sceneKey === 'animali';
+    const count = Math.min(settings.count, pool.length);
+    const chosen = pool.slice(0, count);
 
-    function generateDifferences(elements, difficulty) {
-        var cfg = DIFFICULTY[difficulty];
-        var diffCount = randInt(cfg.diffs[0], cfg.diffs[1]);
-        var eligibleSizes = cfg.sizes;
+    const origHTML = buildScene(sceneKey);
+    const wrapper = document.getElementById('scenes-wrapper');
+    wrapper.innerHTML = `
+        <div class="scenes-container">
+            <div class="scene-box">
+                <div class="scene-label">Originale</div>
+                <div id="scene-orig">${origHTML}</div>
+            </div>
+            <div class="scene-box">
+                <div class="scene-label">Trova le differenze!</div>
+                <div id="scene-diff">${origHTML}</div>
+            </div>
+        </div>
+        <p class="challenge-text">Trova ${count} differenz${count === 1 ? 'a' : 'e'}!</p>
+    `;
 
-        var eligible = elements.filter(function(el) { return eligibleSizes.indexOf(el.size) !== -1; });
+    const diffContainer = document.getElementById('scene-diff');
+    const diffSvg = diffContainer.querySelector('svg');
 
-        // Expand size pool if not enough elements
-        if (eligible.length < diffCount) {
-            var allSizes = ['large', 'medium', 'small'];
-            var expandedSizes = eligibleSizes.slice();
-            for (var si = 0; si < allSizes.length; si++) {
-                if (expandedSizes.indexOf(allSizes[si]) === -1) expandedSizes.push(allSizes[si]);
-                var now = elements.filter(function(el) { return expandedSizes.indexOf(el.size) !== -1; });
-                if (now.length >= diffCount) {
-                    eligible = now;
-                    break;
-                }
-            }
-            if (eligible.length < diffCount) eligible = elements.slice();
-        }
+    for (const id of chosen) {
+        const el = diffSvg.getElementById(id);
+        if (!el) continue;
 
-        eligible = shuffle(eligible);
-        var chosen = eligible.slice(0, diffCount);
-
-        var diffs = [];
-        for (var i = 0; i < chosen.length; i++) {
-            var el = chosen[i];
-            var type;
-            // Decide color change vs removal based on size
-            if (el.size === 'large') {
-                type = rng() < 0.8 ? 'color' : 'remove';
-            } else if (el.size === 'medium') {
-                type = rng() < 0.5 ? 'color' : 'remove';
+        if (isAnimali) {
+            // For animal images: hide or change opacity
+            if (Math.random() < 0.5) {
+                el.style.display = 'none';
             } else {
-                type = rng() < 0.4 ? 'color' : 'remove';
+                el.style.opacity = '0.15';
             }
-            diffs.push({ elId: el.id, type: type, fill: el.fill });
-        }
-
-        return diffs;
-    }
-
-    // ========== APPLY DIFFERENCES TO CLONED SVG ==========
-
-    function applyDifferences(svgEl, diffs) {
-        for (var i = 0; i < diffs.length; i++) {
-            var diff = diffs[i];
-            var target = svgEl.querySelector('#' + diff.elId);
-            if (!target) continue;
-
-            if (diff.type === 'remove') {
-                target.style.display = 'none';
-            } else if (diff.type === 'color') {
-                var newColor = getRandomBrightColor(diff.fill);
-                // Apply color to the element itself and all children with a fill attribute
-                if (target.getAttribute('fill') && target.getAttribute('fill') !== 'none') {
-                    target.setAttribute('fill', newColor);
-                }
-                var children = target.querySelectorAll('[fill]');
-                for (var c = 0; c < children.length; c++) {
-                    var childFill = children[c].getAttribute('fill');
-                    if (childFill && childFill !== 'none' && childFill !== '#ffffff' && childFill.charAt(0) === '#') {
-                        children[c].setAttribute('fill', newColor);
-                    }
+        } else {
+            const action = Math.random() < 0.5 ? 'color' : 'remove';
+            if (action === 'remove') {
+                el.style.display = 'none';
+            } else {
+                const colorInfo = getElementColor(el);
+                if (colorInfo) {
+                    setElementColor(el, colorInfo, ALT_COLORS[Math.floor(Math.random() * ALT_COLORS.length)]);
+                } else {
+                    el.style.display = 'none';
                 }
             }
         }
     }
+}
 
-    // ========== CLONE SVG FROM TEMPLATE ==========
+// ============================================================
+// PDF
+// ============================================================
 
-    function cloneMonsterSvg(monsterType, bgColor) {
-        var tpl = document.getElementById('tpl-' + monsterType);
-        if (!tpl) return null;
-        var svg = tpl.content.querySelector('svg').cloneNode(true);
+async function exportPDF() {
+    const wrapper = document.getElementById('scenes-wrapper');
+    const svgs = wrapper.querySelectorAll('svg');
+    if (svgs.length === 0) { alert('Prima genera una scena!'); return; }
 
-        // Insert background rectangle as first child
-        var bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        bg.setAttribute('x', '0');
-        bg.setAttribute('y', '0');
-        bg.setAttribute('width', '500');
-        bg.setAttribute('height', '550');
-        bg.setAttribute('fill', bgColor);
-        bg.setAttribute('rx', '0');
-        svg.insertBefore(bg, svg.firstChild);
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageW = 297, pageH = 210, margin = 10;
+    const svgW = (pageW - margin * 3) / 2;
+    const svgH = pageH - margin * 2 - 20;
+    const labels = ['Originale', 'Trova le differenze!'];
 
-        // Add a subtle gradient overlay for depth
-        var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-        var grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-        grad.setAttribute('id', 'bgGrad');
-        grad.setAttribute('x1', '0');
-        grad.setAttribute('y1', '0');
-        grad.setAttribute('x2', '0');
-        grad.setAttribute('y2', '1');
-        var stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-        stop1.setAttribute('offset', '0%');
-        stop1.setAttribute('stop-color', '#ffffff');
-        stop1.setAttribute('stop-opacity', '0.3');
-        var stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-        stop2.setAttribute('offset', '100%');
-        stop2.setAttribute('stop-color', '#000000');
-        stop2.setAttribute('stop-opacity', '0.08');
-        grad.appendChild(stop1);
-        grad.appendChild(stop2);
-        defs.appendChild(grad);
-        svg.insertBefore(defs, svg.firstChild);
-
-        var overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        overlay.setAttribute('x', '0');
-        overlay.setAttribute('y', '0');
-        overlay.setAttribute('width', '500');
-        overlay.setAttribute('height', '550');
-        overlay.setAttribute('fill', 'url(#bgGrad)');
-        // Insert after the bg rect (which is after defs now)
-        svg.insertBefore(overlay, svg.children[2]);
-
-        return svg;
+    for (let i = 0; i < svgs.length; i++) {
+        const svg = svgs[i];
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+        const img = new Image();
+        await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = reject; img.src = url; });
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200; canvas.height = 700;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, 1200, 700);
+        URL.revokeObjectURL(url);
+        const imgData = canvas.toDataURL('image/png');
+        const x = margin + i * (svgW + margin);
+        pdf.setFontSize(10);
+        pdf.text(labels[i], x + svgW / 2, margin + 3, { align: 'center' });
+        pdf.addImage(imgData, 'PNG', x, margin + 6, svgW, svgH);
     }
 
-    // Make gradient/defs IDs unique per copy to avoid conflicts
-    function makeIdsUnique(svgEl, suffix) {
-        var defs = svgEl.querySelector('defs');
-        if (!defs) return;
-        var defsChildren = defs.querySelectorAll('[id]');
-        var idMap = {};
-        for (var i = 0; i < defsChildren.length; i++) {
-            var oldId = defsChildren[i].getAttribute('id');
-            var newId = oldId + suffix;
-            idMap[oldId] = newId;
-            defsChildren[i].setAttribute('id', newId);
-        }
-        var allEls = svgEl.querySelectorAll('*');
-        var urlAttrs = ['fill', 'stroke', 'filter'];
-        for (var i = 0; i < allEls.length; i++) {
-            for (var a = 0; a < urlAttrs.length; a++) {
-                var val = allEls[i].getAttribute(urlAttrs[a]);
-                if (val && val.indexOf('url(#') !== -1) {
-                    for (var oldId in idMap) {
-                        val = val.replace('url(#' + oldId + ')', 'url(#' + idMap[oldId] + ')');
-                    }
-                    allEls[i].setAttribute(urlAttrs[a], val);
-                }
-            }
-        }
+    const challengeEl = wrapper.querySelector('.challenge-text');
+    if (challengeEl) {
+        pdf.setFontSize(16);
+        pdf.text(challengeEl.textContent, pageW / 2, pageH - 5, { align: 'center' });
     }
+    pdf.save('trova-le-differenze.pdf');
+}
 
-    // ========== MAIN GENERATE ==========
-
-    function generate() {
-        var monsterType = document.getElementById('character-select').value;
-        var difficulty = document.getElementById('difficulty').value;
-        var bgColor = document.getElementById('bg-color').value;
-
-        var seed = Date.now();
-        rng = mulberry32(seed);
-
-        var elements = MONSTER_ELEMENTS[monsterType];
-        if (!elements) return;
-
-        var diffs = generateDifferences(elements, difficulty);
-
-        // Clone two copies of the SVG
-        var originalSvg = cloneMonsterSvg(monsterType, bgColor);
-        var modifiedSvg = cloneMonsterSvg(monsterType, bgColor);
-
-        if (!originalSvg || !modifiedSvg) return;
-
-        // Make gradient IDs unique to avoid conflicts between the two SVGs
-        makeIdsUnique(originalSvg, '-orig');
-        makeIdsUnique(modifiedSvg, '-mod');
-
-        // Apply differences to the modified copy
-        applyDifferences(modifiedSvg, diffs);
-
-        var diffCountText = diffs.length;
-        var origLeft = rng() > 0.5;
-
-        var output = document.getElementById('output');
-        output.innerHTML = '';
-
-        var container = document.createElement('div');
-        container.className = 'scenes-container';
-
-        var box1 = document.createElement('div');
-        box1.className = 'scene-box';
-        box1.appendChild(origLeft ? originalSvg : modifiedSvg);
-        var label1 = document.createElement('div');
-        label1.className = 'scene-label';
-        label1.textContent = 'Originale';
-        box1.appendChild(label1);
-
-        var box2 = document.createElement('div');
-        box2.className = 'scene-box';
-        box2.appendChild(origLeft ? modifiedSvg : originalSvg);
-        var label2 = document.createElement('div');
-        label2.className = 'scene-label';
-        label2.textContent = 'Trova le differenze!';
-        box2.appendChild(label2);
-
-        container.appendChild(box1);
-        container.appendChild(box2);
-        output.appendChild(container);
-
-        var challenge = document.createElement('div');
-        challenge.className = 'challenge-text';
-        challenge.textContent = 'Trova le ' + diffCountText + ' differenze!';
-        output.appendChild(challenge);
-    }
-
-    // ========== PDF EXPORT ==========
-
-    function exportPDF() {
-        var wrapper = document.getElementById('output');
-        var svgs = wrapper.querySelectorAll('svg');
-        if (svgs.length < 2) { alert('Genera prima un personaggio.'); return; }
-
-        var jsPDFLib = window.jspdf;
-        var pdf = new jsPDFLib.jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-        var pw = pdf.internal.pageSize.getWidth();
-        var ph = pdf.internal.pageSize.getHeight();
-
-        pdf.setFont('helvetica', 'bold');
-        pdf.setFontSize(20);
-        pdf.text('Trova le Differenze', pw / 2, 15, { align: 'center' });
-
-        var margin = 12;
-        var gap = 8;
-        var svgW = (pw - margin * 2 - gap) / 2;
-        var svgH = svgW * (H / W);
-        var topY = 24;
-        var loaded = 0;
-
-        for (var i = 0; i < 2; i++) {
-            (function(index) {
-                var svgEl = svgs[index];
-                var serializer = new XMLSerializer();
-                var svgStr = serializer.serializeToString(svgEl);
-                var svgBlob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
-                var url = URL.createObjectURL(svgBlob);
-
-                var img = new Image();
-                img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    canvas.width = W * 2;
-                    canvas.height = H * 2;
-                    var ctx = canvas.getContext('2d');
-                    ctx.fillStyle = '#fff';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    var dataUrl = canvas.toDataURL('image/png');
-
-                    var xPos = margin + index * (svgW + gap);
-                    pdf.addImage(dataUrl, 'PNG', xPos, topY, svgW, svgH);
-
-                    pdf.setFontSize(10);
-                    pdf.setFont('helvetica', 'normal');
-                    var label = svgEl.parentElement.querySelector('.scene-label');
-                    if (label) {
-                        pdf.text(label.textContent, xPos + svgW / 2, topY + svgH + 6, { align: 'center' });
-                    }
-
-                    URL.revokeObjectURL(url);
-                    loaded++;
-
-                    if (loaded === 2) {
-                        var challengeEl = wrapper.querySelector('.challenge-text');
-                        if (challengeEl) {
-                            pdf.setFont('helvetica', 'bold');
-                            pdf.setFontSize(16);
-                            pdf.text(challengeEl.textContent, pw / 2, topY + svgH + 16, { align: 'center' });
-                        }
-                        pdf.save('trova-le-differenze.pdf');
-                    }
-                };
-                img.src = url;
-            })(i);
-        }
-    }
-    </script>
+window.addEventListener('DOMContentLoaded', () => generate());
+</script>
 </body>
 </html>

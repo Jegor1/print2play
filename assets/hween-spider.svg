@@ -1,0 +1,126 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="spider">
+    <!-- Web strand from top -->
+    <path id="web-strand" data-size="large" fill="none" stroke="#9E9E9E" stroke-width="2"
+      d="M250,0 L250,160"/>
+    <!-- Web detail lines -->
+    <path id="web-detail1" data-size="small" fill="none" stroke="#BDBDBD" stroke-width="1"
+      d="M250,40 C230,50 220,65 225,80"/>
+    <path id="web-detail2" data-size="small" fill="none" stroke="#BDBDBD" stroke-width="1"
+      d="M250,40 C270,50 280,65 275,80"/>
+    <path id="web-detail3" data-size="small" fill="none" stroke="#BDBDBD" stroke-width="1"
+      d="M250,80 C235,90 225,105 230,120"/>
+    <path id="web-detail4" data-size="small" fill="none" stroke="#BDBDBD" stroke-width="1"
+      d="M250,80 C265,90 275,105 270,120"/>
+
+    <!-- 8 legs drawn BEHIND body (4 per side, curved) -->
+    <!-- Left legs -->
+    <path id="leg-l1" data-size="medium" fill="#212121"
+      d="M195,240 C165,220 125,198 90,190 C70,186 58,195 65,208 C72,220 95,232 125,242 C150,250 178,252 195,248 Z"/>
+    <path fill="none" stroke="#111111" stroke-width="3"
+      d="M195,240 C165,220 125,198 90,190 C70,186 58,195 65,208 C72,220 95,232 125,242 C150,250 178,252 195,248"/>
+    <path id="leg-l2" data-size="medium" fill="#212121"
+      d="M190,275 C158,268 118,260 82,262 C62,264 52,275 60,285 C68,295 95,298 128,295 C155,292 180,282 190,278 Z"/>
+    <path fill="none" stroke="#111111" stroke-width="3"
+      d="M190,275 C158,268 118,260 82,262 C62,264 52,275 60,285 C68,295 95,298 128,295 C155,292 180,282 190,278"/>
+    <path id="leg-l3" data-size="medium" fill="#212121"
+      d="M192,310 C162,318 125,330 92,342 C72,350 62,362 72,370 C82,378 105,372 135,358 C160,345 182,325 192,315 Z"/>
+    <path fill="none" stroke="#111111" stroke-width="3"
+      d="M192,310 C162,318 125,330 92,342 C72,350 62,362 72,370 C82,378 105,372 135,358 C160,345 182,325 192,315"/>
+    <path id="leg-l4" data-size="medium" fill="#212121"
+      d="M200,340 C178,358 148,382 125,405 C112,420 108,435 118,438 C130,440 150,425 172,405 C190,388 205,362 208,348 Z"/>
+    <path fill="none" stroke="#111111" stroke-width="3"
+      d="M200,340 C178,358 148,382 125,405 C112,420 108,435 118,438 C130,440 150,425 172,405 C190,388 205,362 208,348"/>
+
+    <!-- Right legs -->
+    <path id="leg-r1" data-size="medium" fill="#212121"
+      d="M315,240 C345,220 385,198 420,190 C440,186 452,195 445,208 C438,220 415,232 385,242 C360,250 332,252 315,248 Z"/>
+    <path fill="none" stroke="#111111" stroke-width="3"
+      d="M315,240 C345,220 385,198 420,190 C440,186 452,195 445,208 C438,220 415,232 385,242 C360,250 332,252 315,248"/>
+    <path id="leg-r2" data-size="medium" fill="#212121"
+      d="M320,275 C352,268 392,260 428,262 C448,264 458,275 450,285 C442,295 415,298 382,295 C355,292 330,282 320,278 Z"/>
+    <path fill="none" stroke="#111111" stroke-width="3"
+      d="M320,275 C352,268 392,260 428,262 C448,264 458,275 450,285 C442,295 415,298 382,295 C355,292 330,282 320,278"/>
+    <path id="leg-r3" data-size="medium" fill="#212121"
+      d="M318,310 C348,318 385,330 418,342 C438,350 448,362 438,370 C428,378 405,372 375,358 C350,345 328,325 318,315 Z"/>
+    <path fill="none" stroke="#111111" stroke-width="3"
+      d="M318,310 C348,318 385,330 418,342 C438,350 448,362 438,370 C428,378 405,372 375,358 C350,345 328,325 318,315"/>
+    <path id="leg-r4" data-size="medium" fill="#212121"
+      d="M310,340 C332,358 362,382 385,405 C398,420 402,435 392,438 C380,440 360,425 338,405 C320,388 305,362 302,348 Z"/>
+    <path fill="none" stroke="#111111" stroke-width="3"
+      d="M310,340 C332,358 362,382 385,405 C398,420 402,435 392,438 C380,440 360,425 338,405 C320,388 305,362 302,348"/>
+
+    <!-- Body (covers leg joins) -->
+    <ellipse id="abdomen" data-size="large" cx="255" cy="350" rx="75" ry="85" fill="#212121"/>
+    <path fill="none" stroke="#111111" stroke-width="3.5"
+      d="M180,350 C180,303 213,265 255,265 C297,265 330,303 330,350 C330,397 297,435 255,435 C213,435 180,397 180,350"/>
+
+    <!-- Abdomen colorful spots -->
+    <circle id="abd-spot1" data-size="small" cx="235" cy="330" r="12" fill="#E91E63" opacity="0.7"/>
+    <circle id="abd-spot2" data-size="small" cx="278" cy="340" r="10" fill="#2196F3" opacity="0.7"/>
+    <circle id="abd-spot3" data-size="small" cx="250" cy="375" r="14" fill="#FF9800" opacity="0.6"/>
+    <circle id="abd-spot4" data-size="small" cx="225" cy="395" r="8" fill="#4CAF50" opacity="0.6"/>
+    <circle id="abd-spot5" data-size="small" cx="280" cy="390" r="9" fill="#9C27B0" opacity="0.6"/>
+
+    <!-- Head/cephalothorax (covers front of body) -->
+    <ellipse id="head" data-size="large" cx="255" cy="235" rx="65" ry="70" fill="#212121"/>
+    <path fill="none" stroke="#111111" stroke-width="3.5"
+      d="M190,235 C190,196 219,165 255,165 C291,165 320,196 320,235 C320,274 291,305 255,305 C219,305 190,274 190,235"/>
+
+    <!-- Head lighter area -->
+    <ellipse id="head-light" data-size="medium" cx="255" cy="225" rx="45" ry="48" fill="#333333"/>
+
+    <!-- Multiple cute eyes (6 eyes, arranged in rows) -->
+    <!-- Top row (2 big eyes) -->
+    <g id="eye-top-left" data-size="medium">
+      <ellipse cx="232" cy="210" rx="22" ry="24" fill="#FFFDE7"/>
+      <ellipse cx="236" cy="213" rx="12" ry="14" fill="#4CAF50"/>
+      <circle cx="238" cy="210" r="6" fill="#1B5E20"/>
+      <circle cx="240" cy="206" r="3" fill="#ffffff"/>
+    </g>
+    <g id="eye-top-right" data-size="medium">
+      <ellipse cx="278" cy="210" rx="22" ry="24" fill="#FFFDE7"/>
+      <ellipse cx="274" cy="213" rx="12" ry="14" fill="#4CAF50"/>
+      <circle cx="272" cy="210" r="6" fill="#1B5E20"/>
+      <circle cx="270" cy="206" r="3" fill="#ffffff"/>
+    </g>
+    <!-- Middle row (2 medium eyes) -->
+    <g id="eye-mid-left" data-size="small">
+      <ellipse cx="220" cy="245" rx="14" ry="15" fill="#FFFDE7"/>
+      <ellipse cx="222" cy="247" rx="8" ry="9" fill="#4CAF50"/>
+      <circle cx="224" cy="245" r="4" fill="#1B5E20"/>
+      <circle cx="225" cy="242" r="2" fill="#ffffff"/>
+    </g>
+    <g id="eye-mid-right" data-size="small">
+      <ellipse cx="290" cy="245" rx="14" ry="15" fill="#FFFDE7"/>
+      <ellipse cx="288" cy="247" rx="8" ry="9" fill="#4CAF50"/>
+      <circle cx="286" cy="245" r="4" fill="#1B5E20"/>
+      <circle cx="285" cy="242" r="2" fill="#ffffff"/>
+    </g>
+    <!-- Bottom row (2 small eyes) -->
+    <g id="eye-bot-left" data-size="small">
+      <ellipse cx="238" cy="268" rx="10" ry="11" fill="#FFFDE7"/>
+      <ellipse cx="240" cy="270" rx="6" ry="7" fill="#4CAF50"/>
+      <circle cx="241" cy="268" r="3" fill="#1B5E20"/>
+      <circle cx="242" cy="266" r="1.5" fill="#ffffff"/>
+    </g>
+    <g id="eye-bot-right" data-size="small">
+      <ellipse cx="272" cy="268" rx="10" ry="11" fill="#FFFDE7"/>
+      <ellipse cx="270" cy="270" rx="6" ry="7" fill="#4CAF50"/>
+      <circle cx="269" cy="268" r="3" fill="#1B5E20"/>
+      <circle cx="268" cy="266" r="1.5" fill="#ffffff"/>
+    </g>
+
+    <!-- Silly smile -->
+    <path id="mouth" data-size="small" fill="#424242"
+      d="M235,285 C242,280 268,280 275,285 C272,295 265,302 255,304 C245,302 238,295 235,285 Z"/>
+    <!-- Tiny pedipalps / cheek bumps -->
+    <circle id="cheek-left" data-size="small" cx="225" cy="285" r="5" fill="#333333"/>
+    <circle id="cheek-right" data-size="small" cx="285" cy="285" r="5" fill="#333333"/>
+
+    <!-- Blush -->
+    <ellipse id="blush-left" data-size="small" cx="208" cy="258" rx="12" ry="7" fill="#FF8FCF" opacity="0.3"/>
+    <ellipse id="blush-right" data-size="small" cx="302" cy="258" rx="12" ry="7" fill="#FF8FCF" opacity="0.3"/>
+  </g>
+</svg>

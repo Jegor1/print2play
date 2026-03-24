@@ -1,0 +1,112 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="trex">
+    <!-- Tail drawn BEHIND body so body covers the join -->
+    <path id="tail" data-size="large" fill="#4CAF50"
+      d="M95,320 C65,310 30,285 15,260 C5,245 10,230 22,235 C38,242 60,268 80,290 C95,305 105,315 115,325 Z"/>
+    <path fill="none" stroke="#2E7D32" stroke-width="3.5"
+      d="M95,320 C65,310 30,285 15,260 C5,245 10,230 22,235 C38,242 60,268 80,290 C95,305 105,315 115,325"/>
+
+    <!-- Left leg drawn BEHIND body -->
+    <path id="leg-left" data-size="large" fill="#4CAF50"
+      d="M160,410 C155,445 148,475 140,500 C136,515 130,530 145,532 C160,534 165,518 168,505 C175,475 178,445 180,415 Z"/>
+    <path fill="none" stroke="#2E7D32" stroke-width="3.5"
+      d="M160,410 C155,445 148,475 140,500 C136,515 130,530 145,532 C160,534 165,518 168,505 C175,475 178,445 180,415"/>
+
+    <!-- Right leg drawn BEHIND body -->
+    <path id="leg-right" data-size="large" fill="#4CAF50"
+      d="M220,410 C218,445 215,475 210,500 C207,515 202,530 217,532 C232,534 235,518 235,505 C238,475 238,445 235,415 Z"/>
+    <path fill="none" stroke="#2E7D32" stroke-width="3.5"
+      d="M220,410 C218,445 215,475 210,500 C207,515 202,530 217,532 C232,534 235,518 235,505 C238,475 238,445 235,415"/>
+
+    <!-- Left foot -->
+    <path id="foot-left" data-size="medium" fill="#4CAF50"
+      d="M125,528 C120,535 112,542 108,540 C104,538 108,530 115,525 L125,528 Z
+         M138,530 C135,538 130,546 126,544 C122,542 126,533 132,528 L138,530 Z
+         M152,530 C150,538 148,546 144,544 C140,542 143,533 148,528 L152,530 Z"/>
+    <path id="foot-right" data-size="medium" fill="#4CAF50"
+      d="M200,528 C197,535 190,542 186,540 C182,538 186,530 192,525 L200,528 Z
+         M213,530 C210,538 206,546 202,544 C198,542 202,533 208,528 L213,530 Z
+         M226,530 C224,538 222,546 218,544 C214,542 217,533 222,528 L226,530 Z"/>
+
+    <!-- Tiny arms drawn BEHIND head -->
+    <path id="arm-left" data-size="small" fill="#4CAF50"
+      d="M290,260 C280,270 268,282 260,288 C254,292 248,288 252,282 C258,274 270,262 282,252 Z"/>
+    <path fill="none" stroke="#2E7D32" stroke-width="2.5"
+      d="M290,260 C280,270 268,282 260,288 C254,292 248,288 252,282 C258,274 270,262 282,252"/>
+    <path id="arm-right" data-size="small" fill="#4CAF50"
+      d="M330,260 C340,270 352,282 360,288 C366,292 372,288 368,282 C362,274 350,262 338,252 Z"/>
+    <path fill="none" stroke="#2E7D32" stroke-width="2.5"
+      d="M330,260 C340,270 352,282 360,288 C366,292 372,288 368,282 C362,274 350,262 338,252"/>
+
+    <!-- Body (covers tail and leg joins) -->
+    <path id="body" data-size="large" fill="#4CAF50"
+      d="M190,150 C240,140 280,155 300,190 C320,225 315,290 300,340 C290,375 260,410 230,425 C200,435 165,430 140,415 C115,395 95,365 90,330 C82,285 85,230 105,190 C125,155 155,145 190,150 Z"/>
+    <!-- Body outline stops before leg/tail areas -->
+    <path fill="none" stroke="#2E7D32" stroke-width="3.5"
+      d="M140,415 C115,395 95,365 90,330 C82,285 85,230 105,190 C125,155 155,145 190,150 C240,140 280,155 300,190 C320,225 315,290 300,340 C290,375 260,410 230,425"/>
+
+    <!-- Belly (lighter, no stroke) -->
+    <path id="belly" data-size="large" fill="#81C784"
+      d="M190,200 C220,195 250,210 260,240 C270,275 265,320 255,355 C248,380 228,400 205,408 C182,412 162,405 150,390 C138,370 130,340 132,305 C135,265 155,220 190,200 Z"/>
+
+    <!-- Spots on back -->
+    <circle id="spot1" data-size="small" cx="120" cy="250" r="12" fill="#388E3C" opacity="0.5"/>
+    <circle id="spot2" data-size="small" cx="140" cy="200" r="10" fill="#388E3C" opacity="0.5"/>
+    <circle id="spot3" data-size="small" cx="110" cy="310" r="8" fill="#388E3C" opacity="0.5"/>
+    <circle id="spot4" data-size="small" cx="155" cy="170" r="9" fill="#388E3C" opacity="0.5"/>
+
+    <!-- Head (big, overlaps body top-right) -->
+    <path id="head" data-size="large" fill="#4CAF50"
+      d="M310,80 C360,75 410,95 435,135 C460,175 455,225 430,260 C410,288 375,305 340,310 C310,315 280,308 260,290 C240,270 232,240 240,210 C248,175 270,120 310,80 Z"/>
+    <!-- Head outline -->
+    <path fill="none" stroke="#2E7D32" stroke-width="3.5"
+      d="M260,290 C240,270 232,240 240,210 C248,175 270,120 310,80 C360,75 410,95 435,135 C460,175 455,225 430,260 C410,288 375,305 340,310"/>
+
+    <!-- Head lighter area -->
+    <path id="head-belly" data-size="medium" fill="#81C784"
+      d="M320,130 C350,125 385,140 400,165 C415,195 410,230 395,255 C382,272 360,282 340,280 C320,278 305,265 298,248 C288,225 290,180 320,130 Z"/>
+
+    <!-- Eye left -->
+    <g id="eye-left" data-size="medium">
+      <ellipse cx="330" cy="150" rx="30" ry="32" fill="#FFFDE7"/>
+      <ellipse cx="335" cy="155" rx="15" ry="17" fill="#4E342E"/>
+      <circle cx="338" cy="150" r="8" fill="#1B0E06"/>
+      <circle cx="341" cy="145" r="4" fill="#ffffff"/>
+    </g>
+    <!-- Eye right -->
+    <g id="eye-right" data-size="medium">
+      <ellipse cx="400" cy="150" rx="28" ry="30" fill="#FFFDE7"/>
+      <ellipse cx="395" cy="155" rx="14" ry="16" fill="#4E342E"/>
+      <circle cx="392" cy="150" r="7" fill="#1B0E06"/>
+      <circle cx="389" cy="145" r="3.5" fill="#ffffff"/>
+    </g>
+
+    <!-- Nostrils -->
+    <ellipse id="nostril-left" data-size="small" cx="425" cy="180" rx="5" ry="4" fill="#2E7D32"/>
+    <ellipse id="nostril-right" data-size="small" cx="440" cy="180" rx="5" ry="4" fill="#2E7D32"/>
+
+    <!-- Wide smile with teeth -->
+    <path id="mouth" data-size="medium" fill="#2E7D32"
+      d="M340,220 C360,215 400,218 425,225 C430,240 420,260 400,268 C375,275 350,272 335,262 C322,252 325,235 340,220 Z"/>
+    <!-- Teeth (small rounded) -->
+    <path id="tooth1" data-size="small" fill="#ffffff"
+      d="M350,222 Q354,232 358,222 Z"/>
+    <path id="tooth2" data-size="small" fill="#ffffff"
+      d="M368,219 Q372,229 376,219 Z"/>
+    <path id="tooth3" data-size="small" fill="#ffffff"
+      d="M386,218 Q390,228 394,218 Z"/>
+    <path id="tooth4" data-size="small" fill="#ffffff"
+      d="M404,220 Q408,230 412,220 Z"/>
+
+    <!-- Cheek blush -->
+    <ellipse id="blush-left" data-size="small" cx="298" cy="200" rx="18" ry="10" fill="#FF8FCF" opacity="0.35"/>
+    <ellipse id="blush-right" data-size="small" cx="445" cy="210" rx="18" ry="10" fill="#FF8FCF" opacity="0.35"/>
+
+    <!-- Arm claws (tiny) -->
+    <circle id="claw-left1" data-size="small" cx="256" cy="290" r="3" fill="#81C784"/>
+    <circle id="claw-left2" data-size="small" cx="250" cy="286" r="3" fill="#81C784"/>
+    <circle id="claw-right1" data-size="small" cx="364" cy="290" r="3" fill="#81C784"/>
+    <circle id="claw-right2" data-size="small" cx="370" cy="286" r="3" fill="#81C784"/>
+  </g>
+</svg>

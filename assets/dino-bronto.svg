@@ -1,0 +1,87 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="brontosaurus">
+    <!-- Long tail drawn BEHIND body -->
+    <path id="tail" data-size="large" fill="#009688"
+      d="M95,310 C65,300 35,280 15,255 C2,238 5,225 18,230 C32,238 55,262 75,285 C88,300 95,310 100,318 Z"/>
+    <path fill="none" stroke="#00695C" stroke-width="3.5"
+      d="M95,310 C65,300 35,280 15,255 C2,238 5,225 18,230 C32,238 55,262 75,285 C88,300 95,310 100,318"/>
+
+    <!-- Legs BEHIND body -->
+    <path id="leg-back-left" data-size="medium" fill="#009688"
+      d="M140,420 C136,452 132,480 128,505 C126,518 122,532 137,534 C152,536 150,520 151,508 C154,480 157,452 160,425 Z"/>
+    <path fill="none" stroke="#00695C" stroke-width="3.5"
+      d="M140,420 C136,452 132,480 128,505 C126,518 122,532 137,534 C152,536 150,520 151,508 C154,480 157,452 160,425"/>
+    <path id="leg-back-right" data-size="medium" fill="#009688"
+      d="M198,425 C196,455 193,482 190,507 C188,520 185,533 200,535 C215,537 213,521 213,508 C215,482 216,455 217,428 Z"/>
+    <path fill="none" stroke="#00695C" stroke-width="3.5"
+      d="M198,425 C196,455 193,482 190,507 C188,520 185,533 200,535 C215,537 213,521 213,508 C215,482 216,455 217,428"/>
+    <path id="leg-front-left" data-size="medium" fill="#009688"
+      d="M295,420 C293,452 290,480 287,505 C285,518 282,532 297,534 C312,536 310,520 310,508 C312,480 313,452 313,425 Z"/>
+    <path fill="none" stroke="#00695C" stroke-width="3.5"
+      d="M295,420 C293,452 290,480 287,505 C285,518 282,532 297,534 C312,536 310,520 310,508 C312,480 313,452 313,425"/>
+    <path id="leg-front-right" data-size="medium" fill="#009688"
+      d="M350,418 C348,450 345,478 343,503 C341,516 338,530 353,532 C368,534 366,518 366,505 C367,478 368,450 368,422 Z"/>
+    <path fill="none" stroke="#00695C" stroke-width="3.5"
+      d="M350,418 C348,450 345,478 343,503 C341,516 338,530 353,532 C368,534 366,518 366,505 C367,478 368,450 368,422"/>
+
+    <!-- Big round body -->
+    <path id="body" data-size="large" fill="#009688"
+      d="M240,240 C300,232 365,248 395,290 C418,325 418,375 400,410 C385,438 358,455 325,460 C285,465 200,462 165,452 C130,440 105,418 92,388 C75,348 80,295 108,262 C135,232 195,235 240,240 Z"/>
+    <path fill="none" stroke="#00695C" stroke-width="3.5"
+      d="M165,452 C130,440 105,418 92,388 C75,348 80,295 108,262 C135,232 195,235 240,240 C300,232 365,248 395,290 C418,325 418,375 400,410 C385,438 358,455 325,460"/>
+
+    <!-- Belly -->
+    <path id="belly" data-size="large" fill="#4DB6AC"
+      d="M240,295 C290,290 340,305 360,335 C375,358 374,390 362,412 C352,428 332,440 308,444 C278,448 218,446 192,440 C170,432 155,418 148,398 C138,372 142,335 160,312 C178,292 215,290 240,295 Z"/>
+
+    <!-- Long neck (extends from body up and right) -->
+    <path id="neck" data-size="large" fill="#009688"
+      d="M380,270 C400,245 418,210 430,175 C440,148 445,120 442,100 C440,85 432,78 425,88 C418,102 415,130 412,160 C408,190 398,225 385,255 Z"/>
+    <path fill="none" stroke="#00695C" stroke-width="3.5"
+      d="M380,270 C400,245 418,210 430,175 C440,148 445,120 442,100 C440,85 432,78 425,88 C418,102 415,130 412,160 C408,190 398,225 385,255"/>
+
+    <!-- Neck lighter side -->
+    <path id="neck-light" data-size="medium" fill="#4DB6AC"
+      d="M390,260 C405,240 418,212 426,182 C432,160 435,135 434,115 C433,105 430,100 427,108 C422,122 420,148 416,175 C412,202 404,232 395,252 Z"/>
+
+    <!-- Small head -->
+    <path id="head" data-size="medium" fill="#009688"
+      d="M430,78 C448,68 470,70 482,82 C492,92 495,110 488,125 C480,138 465,145 450,142 C435,140 424,130 420,118 C416,105 418,88 430,78 Z"/>
+    <path fill="none" stroke="#00695C" stroke-width="3.5"
+      d="M420,118 C416,105 418,88 430,78 C448,68 470,70 482,82 C492,92 495,110 488,125 C480,138 465,145 450,142 C435,140 424,130 420,118"/>
+
+    <!-- Head lighter -->
+    <path id="head-light" data-size="small" fill="#4DB6AC"
+      d="M445,85 C458,80 472,84 478,94 C483,103 482,115 475,122 C468,128 458,130 450,126 C442,122 438,112 438,102 C438,93 440,87 445,85 Z"/>
+
+    <!-- Gentle eyes -->
+    <g id="eye" data-size="medium">
+      <ellipse cx="458" cy="95" rx="14" ry="16" fill="#FFFDE7"/>
+      <ellipse cx="460" cy="98" rx="8" ry="10" fill="#4E342E"/>
+      <circle cx="462" cy="95" r="4.5" fill="#1B0E06"/>
+      <circle cx="464" cy="92" r="2" fill="#ffffff"/>
+    </g>
+
+    <!-- Small smile -->
+    <path id="mouth" data-size="small" fill="#00695C"
+      d="M472,115 C478,112 486,115 488,120 C486,126 480,128 474,126 C470,124 468,120 472,115 Z"/>
+
+    <!-- Nostril -->
+    <ellipse id="nostril" data-size="small" cx="486" cy="105" rx="2.5" ry="2" fill="#00695C"/>
+
+    <!-- Blush -->
+    <ellipse id="blush" data-size="small" cx="448" cy="125" rx="10" ry="6" fill="#FF8FCF" opacity="0.35"/>
+
+    <!-- Body spots -->
+    <circle id="spot1" data-size="small" cx="180" cy="370" r="12" fill="#00796B" opacity="0.4"/>
+    <circle id="spot2" data-size="small" cx="270" cy="390" r="9" fill="#00796B" opacity="0.4"/>
+    <circle id="spot3" data-size="small" cx="340" cy="360" r="11" fill="#00796B" opacity="0.4"/>
+    <circle id="spot4" data-size="small" cx="220" cy="330" r="8" fill="#00796B" opacity="0.4"/>
+    <circle id="spot5" data-size="small" cx="310" cy="310" r="7" fill="#00796B" opacity="0.4"/>
+
+    <!-- Neck spots -->
+    <circle id="neck-spot1" data-size="small" cx="420" cy="180" r="5" fill="#00796B" opacity="0.4"/>
+    <circle id="neck-spot2" data-size="small" cx="428" cy="140" r="4" fill="#00796B" opacity="0.4"/>
+  </g>
+</svg>

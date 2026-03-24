@@ -1,0 +1,101 @@
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 550" fill="none" stroke="none" stroke-linecap="round" stroke-linejoin="round">
+  <g id="pterodactyl">
+    <!-- Wings drawn BEHIND body -->
+    <!-- Left wing -->
+    <path id="wing-left" data-size="large" fill="#9C27B0"
+      d="M200,230 C160,210 100,180 50,170 C25,165 10,175 15,190 C22,210 55,235 90,252 C125,268 165,275 200,270 Z"/>
+    <path fill="none" stroke="#6A1B9A" stroke-width="3.5"
+      d="M200,230 C160,210 100,180 50,170 C25,165 10,175 15,190 C22,210 55,235 90,252 C125,268 165,275 200,270"/>
+    <!-- Left wing membrane lines -->
+    <path id="wing-membrane-l1" data-size="small" fill="none" stroke="#7B1FA2" stroke-width="1.5"
+      d="M190,235 C150,220 100,195 60,185"/>
+    <path id="wing-membrane-l2" data-size="small" fill="none" stroke="#7B1FA2" stroke-width="1.5"
+      d="M195,248 C155,238 105,218 70,210"/>
+    <path id="wing-membrane-l3" data-size="small" fill="none" stroke="#7B1FA2" stroke-width="1.5"
+      d="M198,260 C162,255 118,242 85,238"/>
+
+    <!-- Right wing -->
+    <path id="wing-right" data-size="large" fill="#9C27B0"
+      d="M310,230 C350,210 410,180 460,170 C485,165 500,175 495,190 C488,210 455,235 420,252 C385,268 345,275 310,270 Z"/>
+    <path fill="none" stroke="#6A1B9A" stroke-width="3.5"
+      d="M310,230 C350,210 410,180 460,170 C485,165 500,175 495,190 C488,210 455,235 420,252 C385,268 345,275 310,270"/>
+    <!-- Right wing membrane lines -->
+    <path id="wing-membrane-r1" data-size="small" fill="none" stroke="#7B1FA2" stroke-width="1.5"
+      d="M320,235 C360,220 410,195 450,185"/>
+    <path id="wing-membrane-r2" data-size="small" fill="none" stroke="#7B1FA2" stroke-width="1.5"
+      d="M315,248 C355,238 405,218 440,210"/>
+    <path id="wing-membrane-r3" data-size="small" fill="none" stroke="#7B1FA2" stroke-width="1.5"
+      d="M312,260 C348,255 392,242 425,238"/>
+
+    <!-- Small feet hanging down -->
+    <path id="foot-left" data-size="small" fill="#9C27B0"
+      d="M230,350 C225,370 220,390 215,408 C212,418 218,422 224,415 C228,405 232,385 235,365 Z"/>
+    <path fill="none" stroke="#6A1B9A" stroke-width="2.5"
+      d="M230,350 C225,370 220,390 215,408 C212,418 218,422 224,415 C228,405 232,385 235,365"/>
+    <path id="foot-right" data-size="small" fill="#9C27B0"
+      d="M280,350 C285,370 290,390 295,408 C298,418 292,422 286,415 C282,405 278,385 275,365 Z"/>
+    <path fill="none" stroke="#6A1B9A" stroke-width="2.5"
+      d="M280,350 C285,370 290,390 295,408 C298,418 292,422 286,415 C282,405 278,385 275,365"/>
+    <!-- Foot claws -->
+    <circle id="claw-l1" data-size="small" cx="215" cy="416" r="3" fill="#CE93D8"/>
+    <circle id="claw-l2" data-size="small" cx="210" cy="412" r="3" fill="#CE93D8"/>
+    <circle id="claw-r1" data-size="small" cx="295" cy="416" r="3" fill="#CE93D8"/>
+    <circle id="claw-r2" data-size="small" cx="300" cy="412" r="3" fill="#CE93D8"/>
+
+    <!-- Body (covers wing joins) -->
+    <path id="body" data-size="large" fill="#9C27B0"
+      d="M255,190 C290,185 320,200 335,230 C348,258 345,295 335,325 C328,348 308,365 285,372 C265,378 240,376 222,365 C202,350 190,325 185,298 C178,265 182,228 198,208 C212,192 235,188 255,190 Z"/>
+    <path fill="none" stroke="#6A1B9A" stroke-width="3.5"
+      d="M222,365 C202,350 190,325 185,298 C178,265 182,228 198,208 C212,192 235,188 255,190 C290,185 320,200 335,230 C348,258 345,295 335,325 C328,348 308,365 285,372"/>
+
+    <!-- Belly lighter -->
+    <path id="belly" data-size="medium" fill="#CE93D8"
+      d="M255,235 C278,232 300,245 310,268 C318,290 316,318 308,340 C302,355 288,365 272,368 C258,370 242,366 232,355 C220,342 214,322 212,300 C208,275 215,248 232,238 C240,234 248,233 255,235 Z"/>
+
+    <!-- Head crest -->
+    <path id="crest" data-size="medium" fill="#9C27B0"
+      d="M255,140 C260,120 270,95 280,75 C288,60 295,55 292,68 C288,85 278,112 270,135 Z"/>
+    <path fill="none" stroke="#6A1B9A" stroke-width="2.5"
+      d="M255,140 C260,120 270,95 280,75 C288,60 295,55 292,68 C288,85 278,112 270,135"/>
+
+    <!-- Head -->
+    <path id="head" data-size="large" fill="#9C27B0"
+      d="M255,140 C280,132 310,138 328,158 C342,175 345,200 335,218 C325,235 305,245 282,245 C260,245 240,235 230,218 C220,200 222,172 235,155 C242,145 248,140 255,140 Z"/>
+    <path fill="none" stroke="#6A1B9A" stroke-width="3.5"
+      d="M255,140 C280,132 310,138 328,158 C342,175 345,200 335,218 C325,235 305,245 282,245 C260,245 240,235 230,218 C220,200 222,172 235,155 C242,145 248,140 255,140"/>
+
+    <!-- Head lighter -->
+    <path id="head-light" data-size="medium" fill="#CE93D8"
+      d="M268,158 C288,155 308,165 318,180 C325,193 324,210 315,222 C308,230 295,236 280,236 C266,236 254,228 248,218 C240,205 242,185 252,172 C258,164 263,160 268,158 Z"/>
+
+    <!-- Beak (rounded) -->
+    <path id="beak" data-size="medium" fill="#FFB74D"
+      d="M330,188 C348,185 372,190 388,200 C398,208 400,220 390,225 C378,230 358,228 340,222 C328,218 322,210 325,200 Z"/>
+    <path fill="none" stroke="#E65100" stroke-width="2.5"
+      d="M330,188 C348,185 372,190 388,200 C398,208 400,220 390,225 C378,230 358,228 340,222 C328,218 322,210 325,200"/>
+
+    <!-- Big eyes -->
+    <g id="eye-left" data-size="medium">
+      <ellipse cx="268" cy="185" rx="20" ry="22" fill="#FFFDE7"/>
+      <ellipse cx="272" cy="188" rx="11" ry="13" fill="#4E342E"/>
+      <circle cx="274" cy="185" r="6" fill="#1B0E06"/>
+      <circle cx="277" cy="181" r="3" fill="#ffffff"/>
+    </g>
+    <g id="eye-right" data-size="medium">
+      <ellipse cx="310" cy="188" rx="16" ry="18" fill="#FFFDE7"/>
+      <ellipse cx="313" cy="191" rx="9" ry="11" fill="#4E342E"/>
+      <circle cx="315" cy="188" r="5" fill="#1B0E06"/>
+      <circle cx="317" cy="185" r="2.5" fill="#ffffff"/>
+    </g>
+
+    <!-- Blush -->
+    <ellipse id="blush-left" data-size="small" cx="252" cy="215" rx="14" ry="8" fill="#FF8FCF" opacity="0.35"/>
+    <ellipse id="blush-right" data-size="small" cx="330" cy="218" rx="14" ry="8" fill="#FF8FCF" opacity="0.35"/>
+
+    <!-- Body spots -->
+    <circle id="spot1" data-size="small" cx="240" cy="300" r="8" fill="#7B1FA2" opacity="0.4"/>
+    <circle id="spot2" data-size="small" cx="275" cy="330" r="6" fill="#7B1FA2" opacity="0.4"/>
+    <circle id="spot3" data-size="small" cx="210" cy="265" r="7" fill="#7B1FA2" opacity="0.4"/>
+  </g>
+</svg>
