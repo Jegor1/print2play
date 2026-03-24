@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Schede di Matematica - Print2Play</title>
+<title>Avventure con i Numeri! - Print2Play</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -22,6 +22,12 @@
   --radius: 12px;
   --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
   --shadow-lg: 0 4px 24px rgba(0,0,0,0.10);
+  --card-bg-1: #fef9ef;
+  --card-bg-2: #f0f7fe;
+  --card-bg-3: #fef0f5;
+  --card-bg-4: #f0fef4;
+  --card-bg-5: #f5f0fe;
+  --card-bg-6: #fefff0;
 }
 
 body {
@@ -131,62 +137,6 @@ header {
   box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
 }
 
-.toggle-group {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.toggle-group span {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text);
-}
-
-.toggle {
-  position: relative;
-  width: 44px;
-  height: 24px;
-}
-
-.toggle input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.toggle-slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--border);
-  border-radius: 24px;
-  transition: 0.2s;
-}
-
-.toggle-slider::before {
-  content: '';
-  position: absolute;
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background: white;
-  border-radius: 50%;
-  transition: 0.2s;
-}
-
-.toggle input:checked + .toggle-slider {
-  background: var(--primary);
-}
-
-.toggle input:checked + .toggle-slider::before {
-  transform: translateX(20px);
-}
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -246,89 +196,147 @@ header {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   width: 100%;
-  max-width: 720px;
+  max-width: 780px;
   padding: 40px;
 }
 
 .worksheet-header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   padding-bottom: 20px;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 2px dashed var(--border);
 }
 
 .worksheet-header h2 {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: var(--primary);
-  margin-bottom: 16px;
+  margin-bottom: 6px;
 }
 
-.worksheet-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  font-size: 1rem;
-  color: var(--text);
-}
-
-.worksheet-meta span {
+.worksheet-header .subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
   font-weight: 500;
 }
 
-.meta-line {
-  display: inline-block;
-  border-bottom: 1.5px solid var(--text-muted);
-  min-width: 120px;
-  margin-left: 4px;
-}
-
-.score-line {
-  min-width: 40px;
-}
-
-.problems-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-}
-
-.problem {
+.problems-list {
   display: flex;
-  align-items: center;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--border);
-  font-size: 1.15rem;
-  gap: 8px;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.problem:nth-child(odd) {
-  border-right: 1px solid var(--border);
+.problem-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: box-shadow 0.15s;
+}
+
+.problem-card:nth-child(6n+1) { background: var(--card-bg-1); }
+.problem-card:nth-child(6n+2) { background: var(--card-bg-2); }
+.problem-card:nth-child(6n+3) { background: var(--card-bg-3); }
+.problem-card:nth-child(6n+4) { background: var(--card-bg-4); }
+.problem-card:nth-child(6n+5) { background: var(--card-bg-5); }
+.problem-card:nth-child(6n+6) { background: var(--card-bg-6); }
+
+.problem-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .problem-num {
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
   color: var(--primary);
-  min-width: 32px;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  min-width: 28px;
+  flex-shrink: 0;
+  padding-top: 1px;
 }
 
-.problem-expr {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 500;
-  white-space: nowrap;
+.problem-story {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--text);
 }
 
-.problem-answer {
-  display: inline-block;
-  border-bottom: 2px solid var(--text-muted);
-  min-width: 60px;
-  text-align: center;
-  margin-left: 4px;
+.problem-equation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 38px;
   font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
   font-weight: 600;
+  color: var(--text);
+}
+
+.problem-equation .blank {
+  display: inline-block;
+  border-bottom: 2.5px solid var(--primary);
+  min-width: 56px;
+  height: 28px;
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 28px;
+}
+
+.solutions-section {
+  margin-top: 32px;
+  border-top: 2px dashed var(--border);
+  padding-top: 20px;
+}
+
+.solutions-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 12px;
+}
+
+.solutions-btn:hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+.solutions-grid {
+  display: none;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 6px 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.solutions-grid.visible {
+  display: grid;
+}
+
+.solutions-grid .sol-item {
+  display: flex;
+  gap: 4px;
+}
+
+.solutions-grid .sol-num {
+  font-weight: 700;
   color: var(--primary);
 }
 
@@ -371,7 +379,7 @@ header {
     border-radius: 0;
     box-shadow: none;
     max-width: 100%;
-    padding: 20px;
+    padding: 16px;
   }
 
   .worksheet-header {
@@ -383,25 +391,44 @@ header {
     -webkit-text-fill-color: #000;
   }
 
-  .problem {
-    border-bottom: 1px solid #ccc;
+  .problem-card {
+    border: 1px solid #ccc;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    padding: 12px 14px;
   }
 
-  .problem:nth-child(odd) {
-    border-right: 1px solid #ccc;
+  .problem-card:nth-child(6n+1),
+  .problem-card:nth-child(6n+2),
+  .problem-card:nth-child(6n+3),
+  .problem-card:nth-child(6n+4),
+  .problem-card:nth-child(6n+5),
+  .problem-card:nth-child(6n+6) {
+    background: #fafafa !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   .problem-num {
     color: #333;
   }
 
-  .problem-answer {
+  .problem-equation .blank {
+    border-bottom-color: #333;
     color: #333;
-    border-bottom-color: #666;
   }
 
-  .meta-line {
-    border-bottom-color: #333;
+  .solutions-section {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  .solutions-btn {
+    display: none !important;
+  }
+
+  .solutions-grid {
+    display: grid !important;
   }
 }
 
@@ -439,8 +466,8 @@ header {
 
 <header>
   <div class="header-left">
-    <h1>Schede di Matematica</h1>
-    <p>Genera esercizi di matematica stampabili</p>
+    <h1>Avventure con i Numeri!</h1>
+    <p>Problemi divertenti per giocare con la matematica</p>
   </div>
   <a href="index.html" class="back-link">&larr; Torna alla home</a>
 </header>
@@ -454,39 +481,22 @@ header {
         <option value="sub">Sottrazioni</option>
         <option value="mul">Moltiplicazioni</option>
         <option value="div">Divisioni</option>
-        <option value="mix">Mix</option>
+        <option value="mix">Mix di tutto!</option>
       </select>
     </div>
 
     <div class="control-group">
-      <label>Difficolt&agrave;</label>
+      <label>Livello</label>
       <select id="difficulty">
-        <option value="easy">Facile (1 &ndash; 10)</option>
-        <option value="medium">Medio (1 &ndash; 50)</option>
-        <option value="hard">Difficile (1 &ndash; 100)</option>
+        <option value="facile">Facile (4&ndash;7 anni)</option>
+        <option value="medio">Medio (6&ndash;9 anni)</option>
+        <option value="difficile">Difficile (8&ndash;12 anni)</option>
+        <option value="esperto">Esperto (10+ anni)</option>
       </select>
-    </div>
-
-    <div class="control-group">
-      <label>Numero di esercizi</label>
-      <select id="count">
-        <option value="10">10</option>
-        <option value="15">15</option>
-        <option value="20" selected>20</option>
-        <option value="30">30</option>
-      </select>
-    </div>
-
-    <div class="toggle-group">
-      <span>Mostra risposte</span>
-      <label class="toggle">
-        <input type="checkbox" id="showAnswers">
-        <span class="toggle-slider"></span>
-      </label>
     </div>
 
     <div class="btn-group">
-      <button class="btn btn-primary" onclick="generate()">Genera esercizi</button>
+      <button class="btn btn-primary" onclick="generate()">Nuova avventura!</button>
       <button class="btn btn-secondary" onclick="window.print()">Stampa</button>
       <button class="btn btn-secondary" onclick="exportPDF()">Esporta PDF</button>
     </div>
@@ -495,229 +505,517 @@ header {
   <main class="main-area">
     <div class="worksheet" id="worksheet">
       <div class="empty-state" id="emptyState">
-        <div class="icon">&#x1F522;</div>
-        <p>Scegli le opzioni e clicca <strong>Genera esercizi</strong></p>
+        <div class="icon">&#x1F3B2;</div>
+        <p>Scegli il livello e clicca <strong>Nuova avventura!</strong></p>
       </div>
     </div>
   </main>
 </div>
 
 <script>
-const opNames = {
-  add: 'Addizioni',
-  sub: 'Sottrazioni',
-  mul: 'Moltiplicazioni',
-  div: 'Divisioni',
-  mix: 'Operazioni Miste'
+// ─── Configuration ───────────────────────────────────────────────
+const LEVEL_CONFIG = {
+  facile:    { count: 8,  maxNum: 10,  ops: ['add','sub'], label: 'Facile', age: '4-7 anni' },
+  medio:    { count: 10, maxNum: 20,  ops: ['add','sub','mul'], label: 'Medio', age: '6-9 anni' },
+  difficile: { count: 12, maxNum: 50,  ops: ['add','sub','mul','div'], label: 'Difficile', age: '8-12 anni' },
+  esperto:   { count: 12, maxNum: 100, ops: ['add','sub','mul','div'], label: 'Esperto', age: '10+ anni', twoStep: true }
 };
 
-const diffNames = {
-  easy: 'Facile',
-  medium: 'Medio',
-  hard: 'Difficile'
-};
+// ─── Names & Objects ─────────────────────────────────────────────
+const NAMES = ['Marco','Sofia','Luca','Giulia','Emma','Matteo','Chiara','Alessandro','Valentina','Lorenzo','Anna','Federico','Elena','Tommaso','Giorgia','Riccardo','Martina','Andrea','Sara','Filippo'];
 
-const maxByDiff = { easy: 10, medium: 50, hard: 100 };
+const OBJECTS = [
+  { name: 'mele', singular: 'mela', emoji: '' },
+  { name: 'caramelle', singular: 'caramella', emoji: '' },
+  { name: 'palloncini', singular: 'palloncino', emoji: '' },
+  { name: 'figurine', singular: 'figurina', emoji: '' },
+  { name: 'biscotti', singular: 'biscotto', emoji: '' },
+  { name: 'fiori', singular: 'fiore', emoji: '' },
+  { name: 'farfalle', singular: 'farfalla', emoji: '' },
+  { name: 'stelle', singular: 'stella', emoji: '' },
+  { name: 'pesci', singular: 'pesce', emoji: '' },
+  { name: 'gelati', singular: 'gelato', emoji: '' },
+  { name: 'macchinine', singular: 'macchinina', emoji: '' },
+  { name: 'pennarelli', singular: 'pennarello', emoji: '' },
+  { name: 'adesivi', singular: 'adesivo', emoji: '' },
+  { name: 'conchiglie', singular: 'conchiglia', emoji: '' },
+  { name: 'cioccolatini', singular: 'cioccolatino', emoji: '' },
+  { name: 'matite colorate', singular: 'matita colorata', emoji: '' },
+  { name: 'biglie', singular: 'biglia', emoji: '' },
+  { name: 'foglie', singular: 'foglia', emoji: '' },
+  { name: 'bottoni', singular: 'bottone', emoji: '' },
+  { name: 'sassolini', singular: 'sassolino', emoji: '' }
+];
+
+const CONTAINERS = [
+  { name: 'scatole', singular: 'scatola' },
+  { name: 'sacchetti', singular: 'sacchetto' },
+  { name: 'cestini', singular: 'cestino' },
+  { name: 'piatti', singular: 'piatto' },
+  { name: 'barattoli', singular: 'barattolo' },
+  { name: 'tasche', singular: 'tasca' },
+  { name: 'vasetti', singular: 'vasetto' },
+  { name: 'cassetti', singular: 'cassetto' }
+];
+
+const SUB_VERBS = ['mangiato','regalato','dato via','perso','usato','dato a un amico','nascosto','lanciato in aria'];
+
+const PLACES = ['nel giardino','al parco','in spiaggia','al mercato','in cucina','nella cameretta','nel cortile','alla festa'];
+
+// ─── Story Templates ─────────────────────────────────────────────
+// Each returns { story, equation, result }
+// N1, N2 are numbers; name1, name2 are character names; obj is object; place is location
+
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function pick2Names() {
+  const a = pickRandom(NAMES);
+  let b;
+  do { b = pickRandom(NAMES); } while (b === a);
+  return [a, b];
+}
 
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function generateProblem(op, max) {
-  let a, b, result, symbol;
+// ─── Addition templates ──────────────────────────────────────────
+const ADD_TEMPLATES = [
+  (a, b, n1, n2, obj) => `${n1} ha ${a} ${obj.name}. ${n2} gliene regala ${b}. Quanti ${obj.name} ha ora ${n1}?`,
+  (a, b, n1, n2, obj) => `${pickRandom(PLACES).charAt(0).toUpperCase() + pickRandom(PLACES).slice(1)} ci sono ${a} ${obj.name}. Ne arrivano altre ${b}. Quanti ${obj.name} ci sono ora in tutto?`,
+  (a, b, n1, n2, obj) => `${n1} raccoglie ${a} ${obj.name}. Poi ne trova altre ${b}. Quanti ${obj.name} ha raccolto in tutto?`,
+  (a, b, n1, n2, obj) => `Sul tavolo ci sono ${a} ${obj.name}. ${n1} ne aggiunge ${b}. Quanti ${obj.name} ci sono sul tavolo?`,
+  (a, b, n1, n2, obj) => `${n1} ha ${a} ${obj.name} nella tasca destra e ${b} nella tasca sinistra. Quanti ${obj.name} ha in tutto?`,
+  (a, b, n1, n2, obj) => `La mamma d\u00e0 ${a} ${obj.name} a ${n1} e ${b} ${obj.name} a ${n2}. Quanti ${obj.name} ha dato in tutto la mamma?`,
+  (a, b, n1, n2, obj) => `${n1} compra ${a} ${obj.name} al mattino e ${b} al pomeriggio. Quanti ${obj.name} ha comprato in tutto?`,
+  (a, b, n1, n2, obj) => `In un ${pickRandom(CONTAINERS).singular} ci sono ${a} ${obj.name}. ${n1} ne mette dentro altre ${b}. Quanti ${obj.name} ci sono nel ${pickRandom(CONTAINERS).singular}?`,
+  (a, b, n1, n2, obj) => `${n1} disegna ${a} ${obj.name}. ${n2} ne disegna ${b}. Quanti ${obj.name} hanno disegnato insieme?`,
+  (a, b, n1, n2, obj) => `Al parco ${n1} vede ${a} ${obj.name}. Poco dopo ne arrivano altre ${b}. Quanti ${obj.name} vede ora ${n1}?`,
+  (a, b, n1, n2, obj) => `${n1} porta ${a} ${obj.name} a scuola. L'amico ${n2} gliene presta ${b}. Quanti ${obj.name} ha ora ${n1}?`,
+  (a, b, n1, n2, obj) => `Nel cestino ci sono ${a} ${obj.name}. Il nonno ne aggiunge ${b}. Quanti ${obj.name} ci sono nel cestino?`,
+  (a, b, n1, n2, obj) => `${n1} conta ${a} ${obj.name} sulla mensola. Poi ne appoggia altre ${b}. Quanti ${obj.name} ci sono ora sulla mensola?`,
+  (a, b, n1, n2, obj) => `Nella scatola di ${n1} ci sono ${a} ${obj.name}. La zia gliene regala ${b}. Quanti ${obj.name} ha nella scatola?`,
+  (a, b, n1, n2, obj) => `${n1} ha trovato ${a} ${obj.name} ieri e ${b} oggi. Quanti ${obj.name} ha trovato in tutto?`,
+  (a, b, n1, n2, obj) => `${n1} e ${n2} giocano insieme. ${n1} porta ${a} ${obj.name} e ${n2} ne porta ${b}. Quanti ${obj.name} hanno in tutto?`,
+  (a, b, n1, n2, obj) => `In giardino sbocciano ${a} ${obj.name}. Il giorno dopo ne sbocciano altre ${b}. Quanti ${obj.name} sono sbocciati in tutto?`,
+  (a, b, n1, n2, obj) => `${n1} riceve ${a} ${obj.name} dal pap\u00e0 e ${b} dalla mamma. Quanti ${obj.name} ha ricevuto?`,
+  (a, b, n1, n2, obj) => `Alla festa ci sono ${a} ${obj.name} sul tavolo. ${n1} ne porta altre ${b}. Quanti ${obj.name} ci sono alla festa?`,
+  (a, b, n1, n2, obj) => `${n1} aveva gi\u00e0 ${a} ${obj.name}. Per il compleanno ne riceve ${b} in pi\u00f9. Quanti ${obj.name} ha adesso?`
+];
 
-  switch (op) {
-    case 'add':
-      a = randInt(1, max);
-      b = randInt(1, max);
-      result = a + b;
-      symbol = '+';
-      break;
-    case 'sub':
-      a = randInt(1, max);
-      b = randInt(1, a); // b <= a so result >= 0
-      result = a - b;
-      symbol = '\u2212';
-      break;
-    case 'mul':
-      if (max <= 10) {
-        a = randInt(1, max);
-        b = randInt(1, max);
-      } else if (max <= 50) {
-        a = randInt(1, 20);
-        b = randInt(1, 10);
-      } else {
-        a = randInt(1, 30);
-        b = randInt(1, 12);
-      }
-      result = a * b;
-      symbol = '\u00D7';
-      break;
-    case 'div':
-      if (max <= 10) {
-        b = randInt(1, max);
-        result = randInt(1, max);
-      } else if (max <= 50) {
-        b = randInt(1, 12);
-        result = randInt(1, 20);
-      } else {
-        b = randInt(2, 12);
-        result = randInt(1, 30);
-      }
-      a = b * result; // ensures whole number division
-      symbol = '\u00F7';
-      break;
+// ─── Subtraction templates ───────────────────────────────────────
+const SUB_TEMPLATES = [
+  (a, b, n1, n2, obj) => `${n1} aveva ${a} ${obj.name}. Ne ha ${pickRandom(SUB_VERBS)} ${b}. Quanti ${obj.name} gli restano?`,
+  (a, b, n1, n2, obj) => `Su un albero ci sono ${a} ${obj.name}. Ne cadono ${b}. Quanti ${obj.name} restano sull'albero?`,
+  (a, b, n1, n2, obj) => `${n1} ha ${a} ${obj.name}. Ne regala ${b} a ${n2}. Quanti ${obj.name} ha ancora ${n1}?`,
+  (a, b, n1, n2, obj) => `Nella scatola ci sono ${a} ${obj.name}. ${n1} ne prende ${b}. Quanti ${obj.name} restano nella scatola?`,
+  (a, b, n1, n2, obj) => `${n1} porta ${a} ${obj.name} al parco. Ne perde ${b} lungo la strada. Quanti ${obj.name} arrivano al parco?`,
+  (a, b, n1, n2, obj) => `Sul tavolo ci sono ${a} ${obj.name}. Il vento ne fa volare via ${b}. Quanti ${obj.name} restano?`,
+  (a, b, n1, n2, obj) => `${n1} ha comprato ${a} ${obj.name}. Ne d\u00e0 ${b} al fratellino. Quanti ${obj.name} tiene per s\u00e9?`,
+  (a, b, n1, n2, obj) => `In giardino ci sono ${a} ${obj.name}. ${b} vengono raccolti. Quanti ${obj.name} restano in giardino?`,
+  (a, b, n1, n2, obj) => `${n1} ha ${a} ${obj.name} nel sacchetto. Ne mangia ${b} durante la passeggiata. Quanti ${obj.name} gli restano?`,
+  (a, b, n1, n2, obj) => `Al mattino ${n1} aveva ${a} ${obj.name}. Durante il giorno ne usa ${b}. Quanti ${obj.name} ha alla sera?`,
+  (a, b, n1, n2, obj) => `La nonna prepara ${a} ${obj.name}. I nipotini ne mangiano ${b}. Quanti ${obj.name} restano?`,
+  (a, b, n1, n2, obj) => `${n1} conta ${a} ${obj.name} nel barattolo. Ne toglie ${b}. Quanti ${obj.name} restano?`,
+  (a, b, n1, n2, obj) => `In spiaggia ${n1} aveva ${a} ${obj.name}. L'onda ne porta via ${b}. Quanti ${obj.name} gli restano?`,
+  (a, b, n1, n2, obj) => `${n1} ha ${a} ${obj.name}. Ne presta ${b} a ${n2}. Quanti ${obj.name} ha ancora?`,
+  (a, b, n1, n2, obj) => `Nel piatto ci sono ${a} ${obj.name}. ${n1} ne prende ${b}. Quanti ${obj.name} rimangono nel piatto?`,
+  (a, b, n1, n2, obj) => `${n1} aveva collezionato ${a} ${obj.name}. Ne perde ${b} giocando. Quanti ${obj.name} ha ancora nella collezione?`,
+  (a, b, n1, n2, obj) => `Sulla spiaggia ci sono ${a} ${obj.name}. ${n1} ne raccoglie ${b}. Quanti ${obj.name} restano sulla spiaggia?`,
+  (a, b, n1, n2, obj) => `${n1} prepara ${a} ${obj.name} per la merenda. Ne distribuisce ${b} agli amici. Quanti ${obj.name} gli rimangono?`,
+  (a, b, n1, n2, obj) => `Nel cesto del pic-nic ci sono ${a} ${obj.name}. La famiglia ne mangia ${b}. Quanti ${obj.name} avanzano?`,
+  (a, b, n1, n2, obj) => `${n1} stava giocando con ${a} ${obj.name}. ${b} rotolano sotto il divano. Con quanti ${obj.name} pu\u00f2 ancora giocare?`
+];
+
+// ─── Multiplication templates ────────────────────────────────────
+const MUL_TEMPLATES = [
+  (a, b, n1, n2, obj, cont) => `Ci sono ${a} ${cont.name}. In ogni ${cont.singular} ci sono ${b} ${obj.name}. Quanti ${obj.name} ci sono in tutto?`,
+  (a, b, n1, n2, obj, cont) => `${n1} ha ${a} gruppi di ${obj.name}. Ogni gruppo ha ${b} ${obj.name}. Quanti ${obj.name} ha in tutto?`,
+  (a, b, n1, n2, obj, cont) => `Alla festa ci sono ${a} bambini. Ognuno riceve ${b} ${obj.name}. Quanti ${obj.name} servono in tutto?`,
+  (a, b, n1, n2, obj, cont) => `${n1} compra ${a} pacchetti di ${obj.name}. Ogni pacchetto contiene ${b} ${obj.name}. Quanti ${obj.name} ha comprato in tutto?`,
+  (a, b, n1, n2, obj, cont) => `In ogni fila ci sono ${b} ${obj.name}. Ci sono ${a} file. Quanti ${obj.name} ci sono in tutto?`,
+  (a, b, n1, n2, obj, cont) => `La mamma prepara ${a} ${cont.name} con ${b} ${obj.name} ciascuno. Quanti ${obj.name} ha preparato?`,
+  (a, b, n1, n2, obj, cont) => `${n1} ha ${a} amici e regala ${b} ${obj.name} a ciascuno. Quanti ${obj.name} ha regalato in tutto?`,
+  (a, b, n1, n2, obj, cont) => `In ogni ${cont.singular} ci sono ${b} ${obj.name}. ${n1} ha ${a} ${cont.name}. Quanti ${obj.name} ha?`,
+  (a, b, n1, n2, obj, cont) => `Il pap\u00e0 mette ${b} ${obj.name} in ognuno dei ${a} ${cont.name}. Quanti ${obj.name} ha usato?`,
+  (a, b, n1, n2, obj, cont) => `${n1} gioca per ${a} giorni. Ogni giorno trova ${b} ${obj.name}. Quanti ${obj.name} ha trovato in tutto?`,
+  (a, b, n1, n2, obj, cont) => `Ci sono ${a} tavoli. Su ogni tavolo ci sono ${b} ${obj.name}. Quanti ${obj.name} ci sono in tutto?`,
+  (a, b, n1, n2, obj, cont) => `${n1} fa ${a} giri del parco e in ogni giro raccoglie ${b} ${obj.name}. Quanti ${obj.name} raccoglie in tutto?`,
+  (a, b, n1, n2, obj, cont) => `La maestra distribuisce ${b} ${obj.name} a ciascuno dei ${a} bambini. Quanti ${obj.name} distribuisce?`,
+  (a, b, n1, n2, obj, cont) => `${n1} mette ${b} ${obj.name} su ognuna delle ${a} mensole. Quanti ${obj.name} ha sistemato?`,
+  (a, b, n1, n2, obj, cont) => `Ogni ${cont.singular} contiene ${b} ${obj.name}. Ce ne sono ${a}. Quanti ${obj.name} in totale?`,
+  (a, b, n1, n2, obj, cont) => `${n1} prepara ${a} regalini, ognuno con ${b} ${obj.name} dentro. Quanti ${obj.name} servono?`,
+  (a, b, n1, n2, obj, cont) => `Per ${a} settimane, ${n1} riceve ${b} ${obj.name} ogni settimana. Quanti ${obj.name} ha alla fine?`,
+  (a, b, n1, n2, obj, cont) => `In cucina ci sono ${a} ${cont.name}. In ognuno ci sono ${b} ${obj.name}. Quanti ${obj.name} ci sono in cucina?`,
+  (a, b, n1, n2, obj, cont) => `${n1} e i suoi ${a - 1} amici vogliono ${b} ${obj.name} a testa. Quanti ${obj.name} servono per tutti e ${a}?`,
+  (a, b, n1, n2, obj, cont) => `Al mercato vendono ${obj.name} in ${cont.name} da ${b}. ${n1} compra ${a} ${cont.name}. Quanti ${obj.name} ha?`
+];
+
+// ─── Division templates ──────────────────────────────────────────
+const DIV_TEMPLATES = [
+  (total, div, n1, n2, obj) => `${n1} ha ${total} ${obj.name} e vuole dividerli in parti uguali tra ${div} amici. Quanti ${obj.name} riceve ogni amico?`,
+  (total, div, n1, n2, obj) => `Ci sono ${total} ${obj.name} da mettere in ${div} ${pickRandom(CONTAINERS).name}. Quanti ${obj.name} vanno in ogni ${pickRandom(CONTAINERS).singular}?`,
+  (total, div, n1, n2, obj) => `${n1} deve dividere ${total} ${obj.name} equamente su ${div} tavoli. Quanti ${obj.name} su ogni tavolo?`,
+  (total, div, n1, n2, obj) => `La mamma ha preparato ${total} ${obj.name}. Li divide tra i ${div} figli. Quanti ${obj.name} riceve ogni figlio?`,
+  (total, div, n1, n2, obj) => `${n1} ha ${total} ${obj.name} e li mette in file da ${div}. Quante file pu\u00f2 fare?`,
+  (total, div, n1, n2, obj) => `Al parco ${div} bambini si dividono ${total} ${obj.name} in parti uguali. Quanti ${obj.name} ha ciascuno?`,
+  (total, div, n1, n2, obj) => `${n1} vuole mettere ${total} ${obj.name} in ${div} scatole uguali. Quanti ${obj.name} in ogni scatola?`,
+  (total, div, n1, n2, obj) => `Ci sono ${total} ${obj.name} per ${div} bambini. Quanti ${obj.name} tocca a ognuno?`,
+  (total, div, n1, n2, obj) => `Il nonno regala ${total} ${obj.name} ai suoi ${div} nipotini. Quanti ${obj.name} prende ciascuno?`,
+  (total, div, n1, n2, obj) => `${n1} ha raccolto ${total} ${obj.name}. Li sistema in ${div} ${pickRandom(CONTAINERS).name} uguali. Quanti ne mette in ognuno?`,
+  (total, div, n1, n2, obj) => `Alla merenda ci sono ${total} ${obj.name}. ${div} amici li dividono equamente. Quanti ne mangia ciascuno?`,
+  (total, div, n1, n2, obj) => `${n1} ha ${total} ${obj.name}. Ne d\u00e0 lo stesso numero a ${div} amici. Quanti ${obj.name} riceve ciascuno?`,
+  (total, div, n1, n2, obj) => `In una scatola ci sono ${total} ${obj.name}. Vengono distribuiti equamente a ${div} bambini. Quanti ne riceve ognuno?`,
+  (total, div, n1, n2, obj) => `${total} ${obj.name} devono essere divisi equamente in ${div} gruppetti. Quanti ${obj.name} per gruppo?`,
+  (total, div, n1, n2, obj) => `La zia porta ${total} ${obj.name}. Li divide equamente tra ${n1}, ${n2} e altri ${div - 2} cugini. Quanti ne riceve ciascuno?`,
+  (total, div, n1, n2, obj) => `${n1} ha ${total} ${obj.name} e vuole fare ${div} mucchietti uguali. Quanti ${obj.name} in ogni mucchietto?`,
+  (total, div, n1, n2, obj) => `Il pasticciere ha ${total} ${obj.name} e li mette in ${div} vassoi uguali. Quanti ${obj.name} per vassoio?`,
+  (total, div, n1, n2, obj) => `${n1} mette ${total} ${obj.name} in fila. Ogni fila ha ${div} ${obj.name}. Quante file ha fatto?`,
+  (total, div, n1, n2, obj) => `Per una gara, ${total} ${obj.name} vanno divisi equamente tra ${div} squadre. Quanti ${obj.name} per squadra?`,
+  (total, div, n1, n2, obj) => `${n1} vuole regalare ${total} ${obj.name} a ${div} compagni, in parti uguali. Quanti ne d\u00e0 a ciascuno?`
+];
+
+// ─── Two-step templates (Esperto) ────────────────────────────────
+const TWO_STEP_TEMPLATES = [
+  // add then sub
+  (n1, n2, obj, a, b, c) => {
+    const result = a + b - c;
+    return { story: `${n1} ha ${a} ${obj.name}. Ne riceve ${b} da ${n2}, ma poi ne regala ${c} alla sorellina. Quanti ${obj.name} ha ora?`, result, equation: `${a} + ${b} \u2212 ${c} = ` };
+  },
+  // sub then sub
+  (n1, n2, obj, a, b, c) => {
+    const result = a - b - c;
+    return { story: `${n1} aveva ${a} ${obj.name}. Ne regala ${b} a ${n2} e ${c} a un compagno. Quanti ${obj.name} gli restano?`, result, equation: `${a} \u2212 ${b} \u2212 ${c} = ` };
+  },
+  // mul then add
+  (n1, n2, obj, a, b, c) => {
+    const result = a * b + c;
+    return { story: `${n1} compra ${a} pacchetti da ${b} ${obj.name} ciascuno. Poi ne trova ${c} in tasca. Quanti ${obj.name} ha in tutto?`, result, equation: `${a} \u00d7 ${b} + ${c} = ` };
+  },
+  // add then add
+  (n1, n2, obj, a, b, c) => {
+    const result = a + b + c;
+    return { story: `${n1} raccoglie ${a} ${obj.name} al mattino, ${b} a pranzo e ${c} alla sera. Quanti ${obj.name} ha raccolto in tutto?`, result, equation: `${a} + ${b} + ${c} = ` };
+  },
+  // mul then sub
+  (n1, n2, obj, a, b, c) => {
+    const result = a * b - c;
+    return { story: `${n1} ha ${a} ${pickRandom(CONTAINERS).name} con ${b} ${obj.name} ciascuno. Ne regala ${c} a ${n2}. Quanti ${obj.name} gli restano?`, result, equation: `${a} \u00d7 ${b} \u2212 ${c} = ` };
+  },
+  // sub then add
+  (n1, n2, obj, a, b, c) => {
+    const result = a - b + c;
+    return { story: `${n1} aveva ${a} ${obj.name}. Ne perde ${b}, ma poi ne trova ${c} nuovi. Quanti ${obj.name} ha ora?`, result, equation: `${a} \u2212 ${b} + ${c} = ` };
+  },
+  // add then mul (rewritten so it makes sense)
+  (n1, n2, obj, a, b, c) => {
+    const result = a + b * c;
+    return { story: `${n1} ha ${a} ${obj.name}. Poi compra ${b} scatole da ${c} ${obj.name} ciascuna. Quanti ${obj.name} ha adesso?`, result, equation: `${a} + ${b} \u00d7 ${c} = ` };
+  },
+  // div then add
+  (n1, n2, obj, a, b, c) => {
+    const result = (a * b) / b + c; // = a + c
+    return { story: `${n1} divide ${a * b} ${obj.name} in ${b} gruppi uguali e ne prende uno. Poi trova altri ${c} ${obj.name}. Quanti ne ha?`, result: a + c, equation: `${a * b} \u00f7 ${b} + ${c} = ` };
   }
+];
 
-  return { a, b, result, symbol };
+// ─── Problem Generators ──────────────────────────────────────────
+
+function generateAddProblem(maxNum) {
+  const a = randInt(1, maxNum - 1);
+  const b = randInt(1, maxNum - a);
+  const result = a + b;
+  const [n1, n2] = pick2Names();
+  const obj = pickRandom(OBJECTS);
+  const template = pickRandom(ADD_TEMPLATES);
+  const story = template(a, b, n1, n2, obj);
+  return { story, equation: `${a} + ${b} = `, result };
 }
 
+function generateSubProblem(maxNum) {
+  const a = randInt(2, maxNum);
+  const b = randInt(1, a);
+  const result = a - b;
+  const [n1, n2] = pick2Names();
+  const obj = pickRandom(OBJECTS);
+  const template = pickRandom(SUB_TEMPLATES);
+  const story = template(a, b, n1, n2, obj);
+  return { story, equation: `${a} \u2212 ${b} = `, result };
+}
+
+function generateMulProblem(maxNum) {
+  let a, b;
+  if (maxNum <= 20) {
+    a = randInt(2, 5);
+    b = randInt(2, 5);
+  } else if (maxNum <= 50) {
+    a = randInt(2, 8);
+    b = randInt(2, 6);
+  } else {
+    a = randInt(2, 12);
+    b = randInt(2, 10);
+  }
+  const result = a * b;
+  const [n1, n2] = pick2Names();
+  const obj = pickRandom(OBJECTS);
+  const cont = pickRandom(CONTAINERS);
+  const template = pickRandom(MUL_TEMPLATES);
+  const story = template(a, b, n1, n2, obj, cont);
+  return { story, equation: `${a} \u00d7 ${b} = `, result };
+}
+
+function generateDivProblem(maxNum) {
+  let divisor, quotient;
+  if (maxNum <= 20) {
+    divisor = randInt(2, 5);
+    quotient = randInt(1, 5);
+  } else if (maxNum <= 50) {
+    divisor = randInt(2, 8);
+    quotient = randInt(1, 8);
+  } else {
+    divisor = randInt(2, 12);
+    quotient = randInt(1, 10);
+  }
+  const total = divisor * quotient;
+  const [n1, n2] = pick2Names();
+  const obj = pickRandom(OBJECTS);
+  const template = pickRandom(DIV_TEMPLATES);
+  const story = template(total, divisor, n1, n2, obj);
+  return { story, equation: `${total} \u00f7 ${divisor} = `, result: quotient };
+}
+
+function generateTwoStepProblem(maxNum) {
+  const [n1, n2] = pick2Names();
+  const obj = pickRandom(OBJECTS);
+  const template = pickRandom(TWO_STEP_TEMPLATES);
+
+  // Generate appropriate numbers with several attempts for valid results
+  for (let attempt = 0; attempt < 50; attempt++) {
+    let a, b, c;
+    a = randInt(5, Math.min(maxNum, 50));
+    b = randInt(2, Math.min(Math.floor(maxNum / 3), 20));
+    c = randInt(1, Math.min(Math.floor(maxNum / 4), 15));
+
+    const prob = template(n1, n2, obj, a, b, c);
+    if (prob.result >= 0 && prob.result <= maxNum * 2 && Number.isInteger(prob.result)) {
+      return prob;
+    }
+  }
+  // Fallback
+  return generateAddProblem(maxNum);
+}
+
+function generateProblem(op, maxNum, isTwoStep) {
+  if (isTwoStep) return generateTwoStepProblem(maxNum);
+  switch (op) {
+    case 'add': return generateAddProblem(maxNum);
+    case 'sub': return generateSubProblem(maxNum);
+    case 'mul': return generateMulProblem(maxNum);
+    case 'div': return generateDivProblem(maxNum);
+  }
+}
+
+// ─── Main Generate Function ─────────────────────────────────────
+
+const LEVEL_TITLES = {
+  facile: 'Avventure con i Numeri!',
+  medio: 'Sfida Matematica!',
+  difficile: 'Missione Numeri!',
+  esperto: 'Campioni di Matematica!'
+};
+
+const LEVEL_SUBTITLES = {
+  facile: 'Piccole storie, grandi calcoli!',
+  medio: 'Mettiti alla prova!',
+  difficile: 'Per i pi\u00f9 coraggiosi!',
+  esperto: 'Problemi a pi\u00f9 passaggi!'
+};
+
+let currentProblems = [];
+
 function generate() {
-  const op = document.getElementById('operation').value;
+  const opChoice = document.getElementById('operation').value;
   const diff = document.getElementById('difficulty').value;
-  const count = parseInt(document.getElementById('count').value);
-  const showAnswers = document.getElementById('showAnswers').checked;
-  const max = maxByDiff[diff];
+  const config = LEVEL_CONFIG[diff];
+  const count = config.count;
+  const maxNum = config.maxNum;
+  const isTwoStep = !!config.twoStep;
 
-  const ops = op === 'mix' ? ['add', 'sub', 'mul', 'div'] : [op];
-  const problems = [];
-
-  for (let i = 0; i < count; i++) {
-    const chosenOp = ops[Math.floor(Math.random() * ops.length)];
-    problems.push(generateProblem(chosenOp, max));
+  // Determine which operations to use
+  let availableOps;
+  if (opChoice === 'mix') {
+    availableOps = config.ops;
+  } else {
+    // Use chosen op only if the level supports it
+    if (config.ops.includes(opChoice)) {
+      availableOps = [opChoice];
+    } else {
+      availableOps = config.ops;
+    }
   }
 
-  const opLabel = opNames[op];
-  const diffLabel = diffNames[diff];
+  const problems = [];
+  for (let i = 0; i < count; i++) {
+    const op = pickRandom(availableOps);
+    // For esperto, ~50% are two-step problems when mix
+    const useTwoStep = isTwoStep && (opChoice === 'mix' ? Math.random() < 0.5 : false);
+    problems.push(generateProblem(op, maxNum, useTwoStep));
+  }
+
+  currentProblems = problems;
+
+  const title = LEVEL_TITLES[diff];
+  const subtitle = LEVEL_SUBTITLES[diff];
 
   let html = `
     <div class="worksheet-header">
-      <h2>Scheda di Matematica &mdash; ${opLabel}</h2>
-      <div class="worksheet-meta">
-        <div>
-          <span>Nome:</span> <span class="meta-line">&nbsp;</span>
-        </div>
-        <div>
-          <span>Data:</span> <span class="meta-line">&nbsp;</span>
-        </div>
-        <div>
-          <span>Punteggio:</span>
-          <span class="meta-line score-line">&nbsp;</span> / ${count}
-        </div>
-      </div>
+      <h2>${title}</h2>
+      <div class="subtitle">${subtitle} &mdash; Livello ${config.label} (${config.age})</div>
     </div>
-    <div class="problems-grid">
+    <div class="problems-list">
   `;
 
   problems.forEach((p, i) => {
-    const num = String(i + 1).padStart(2, '0');
-    const answerText = showAnswers ? p.result : '&nbsp;';
     html += `
-      <div class="problem">
-        <span class="problem-num">${num}.</span>
-        <span class="problem-expr">${p.a} ${p.symbol} ${p.b} =</span>
-        <span class="problem-answer">${answerText}</span>
+      <div class="problem-card">
+        <div class="problem-top">
+          <span class="problem-num">${i + 1}.</span>
+          <span class="problem-story">${p.story}</span>
+        </div>
+        <div class="problem-equation">
+          <span>${p.equation}</span>
+          <span class="blank" data-answer="${p.result}">&nbsp;</span>
+        </div>
       </div>
     `;
   });
 
-  html += '</div>';
+  html += `</div>`;
+
+  // Solutions section
+  html += `
+    <div class="solutions-section">
+      <button class="solutions-btn" onclick="toggleSolutions()">Mostra le soluzioni</button>
+      <div class="solutions-grid" id="solutionsGrid">
+  `;
+  problems.forEach((p, i) => {
+    html += `<div class="sol-item"><span class="sol-num">${i + 1}.</span> <span>${p.result}</span></div>`;
+  });
+  html += `</div></div>`;
 
   document.getElementById('worksheet').innerHTML = html;
 }
 
+function toggleSolutions() {
+  const grid = document.getElementById('solutionsGrid');
+  const btn = grid.previousElementSibling;
+  if (grid.classList.contains('visible')) {
+    grid.classList.remove('visible');
+    btn.textContent = 'Mostra le soluzioni';
+  } else {
+    grid.classList.add('visible');
+    btn.textContent = 'Nascondi le soluzioni';
+  }
+}
+
+// ─── PDF Export ──────────────────────────────────────────────────
+
 function exportPDF() {
   const worksheet = document.getElementById('worksheet');
   if (worksheet.querySelector('.empty-state')) {
-    alert('Prima genera gli esercizi!');
+    alert('Prima genera i problemi!');
     return;
   }
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF('p', 'mm', 'a4');
   const pageW = 210;
+  const pageH = 297;
   const margin = 15;
   const contentW = pageW - margin * 2;
 
-  // Get data from DOM
+  // Get data
   const title = worksheet.querySelector('.worksheet-header h2').textContent;
-  const problems = worksheet.querySelectorAll('.problem');
-  const count = problems.length;
+  const subtitle = worksheet.querySelector('.subtitle').textContent;
+  const cards = worksheet.querySelectorAll('.problem-card');
 
   // Title
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(18);
-  doc.text(title, pageW / 2, 20, { align: 'center' });
+  doc.setFontSize(20);
+  doc.text(title, pageW / 2, 22, { align: 'center' });
 
-  // Meta line
-  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  const metaY = 30;
-  doc.text('Nome: ___________________', margin, metaY);
-  doc.text('Data: ____________', pageW / 2, metaY);
-  doc.text('Punteggio: ___ / ' + count, pageW - margin - 35, metaY);
+  doc.setFontSize(10);
+  doc.setTextColor(100);
+  doc.text(subtitle, pageW / 2, 30, { align: 'center' });
+  doc.setTextColor(0);
 
   // Divider
   doc.setLineWidth(0.5);
-  doc.line(margin, metaY + 4, pageW - margin, metaY + 4);
+  doc.line(margin, 34, pageW - margin, 34);
 
-  // Problems in 2 columns
-  const colW = contentW / 2;
-  const startY = metaY + 14;
-  const rowH = 10;
-  let y = startY;
+  let y = 42;
 
-  doc.setFontSize(12);
+  cards.forEach((card, i) => {
+    const storyEl = card.querySelector('.problem-story');
+    const eqEl = card.querySelector('.problem-equation span');
+    const story = (i + 1) + '. ' + storyEl.textContent;
+    const eq = '     ' + eqEl.textContent + '______';
 
-  for (let i = 0; i < problems.length; i += 2) {
-    if (y > 275) {
+    // Wrap story text
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    const lines = doc.splitTextToSize(story, contentW);
+    const blockH = lines.length * 5 + 10;
+
+    // Check page break
+    if (y + blockH > pageH - 20) {
       doc.addPage();
       y = 20;
     }
 
-    // Left column
-    const p1 = problems[i];
-    const num1 = p1.querySelector('.problem-num').textContent;
-    const expr1 = p1.querySelector('.problem-expr').textContent;
-    const ans1 = p1.querySelector('.problem-answer').textContent.trim();
-    const line1 = num1 + ' ' + expr1 + ' ' + (ans1 && ans1 !== '\u00a0' ? ans1 : '______');
+    // Draw card background
+    doc.setFillColor(250, 250, 250);
+    doc.setDrawColor(220);
+    doc.roundedRect(margin, y - 3, contentW, blockH, 2, 2, 'FD');
 
+    doc.setTextColor(0);
+    doc.text(lines, margin + 4, y + 3);
+
+    // Equation line
     doc.setFont('helvetica', 'bold');
-    doc.text(num1, margin, y);
+    doc.setFontSize(12);
+    doc.text(eq, margin + 4, y + blockH - 4);
+
     doc.setFont('helvetica', 'normal');
-    doc.text(expr1 + ' ' + (ans1 && ans1 !== '\u00a0' ? ans1 : '______'), margin + 10, y);
+    y += blockH + 4;
+  });
 
-    // Right column
-    if (i + 1 < problems.length) {
-      const p2 = problems[i + 1];
-      const num2 = p2.querySelector('.problem-num').textContent;
-      const expr2 = p2.querySelector('.problem-expr').textContent;
-      const ans2 = p2.querySelector('.problem-answer').textContent.trim();
+  // Solutions on new page
+  doc.addPage();
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.text('Soluzioni', pageW / 2, 20, { align: 'center' });
+  doc.setLineWidth(0.3);
+  doc.line(margin, 24, pageW - margin, 24);
 
-      doc.setFont('helvetica', 'bold');
-      doc.text(num2, margin + colW, y);
-      doc.setFont('helvetica', 'normal');
-      doc.text(expr2 + ' ' + (ans2 && ans2 !== '\u00a0' ? ans2 : '______'), margin + colW + 10, y);
-    }
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
+  let solY = 32;
+  const colW = contentW / 4;
 
-    // Row separator
-    doc.setDrawColor(200);
-    doc.setLineWidth(0.2);
-    doc.line(margin, y + 3, pageW - margin, y + 3);
+  currentProblems.forEach((p, i) => {
+    const col = i % 4;
+    const row = Math.floor(i / 4);
+    const x = margin + col * colW;
+    const sy = solY + row * 8;
+    doc.text(`${i + 1}. ${p.result}`, x, sy);
+  });
 
-    y += rowH;
-  }
-
-  doc.save('scheda-matematica.pdf');
+  doc.save('avventure-numeri.pdf');
 }
-
-// Toggle answers reactivity
-document.getElementById('showAnswers').addEventListener('change', function() {
-  const answers = document.querySelectorAll('.problem-answer');
-  if (answers.length === 0) return;
-  // Re-generate to apply
-  generate();
-});
 
 // Auto-generate on load
 generate();

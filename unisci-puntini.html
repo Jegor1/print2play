@@ -263,13 +263,13 @@ input[type="range"]::-webkit-slider-thumb {
 .dot-number {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  fill: var(--primary);
+  fill: #1a1a2e;
   pointer-events: none;
   user-select: none;
 }
 
 .dot-circle {
-  fill: var(--text);
+  fill: #1a1a2e;
 }
 
 .hint-line {
@@ -382,10 +382,1091 @@ input[type="range"]::-webkit-slider-thumb {
 </div>
 
 <script>
+// ===================== SCENE BACKGROUNDS =====================
+// Each scene is drawn as SVG elements providing rich contextual illustration.
+// Colors are muted so dots remain clearly visible.
+
+const sceneRenderers = {
+  star(svg, w, h) {
+    // Night sky with moon, small stars, clouds, rolling hills, telescope
+    // Sky gradient
+    const defs = el('defs');
+    const grad = el('linearGradient', {id:'skyGrad', x1:'0', y1:'0', x2:'0', y2:'1'});
+    grad.appendChild(el('stop', {offset:'0%', 'stop-color':'#1a1a3e'}));
+    grad.appendChild(el('stop', {offset:'60%', 'stop-color':'#2d2b55'}));
+    grad.appendChild(el('stop', {offset:'100%', 'stop-color':'#3b3872'}));
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+
+    svg.appendChild(el('rect', {x:0, y:0, width:w, height:h, fill:'url(#skyGrad)'}));
+
+    // Moon
+    const moonG = el('g', {opacity:'0.85'});
+    moonG.appendChild(el('circle', {cx:520, cy:90, r:45, fill:'#f5e6b8', stroke:'#e6d5a0', 'stroke-width':'2'}));
+    moonG.appendChild(el('circle', {cx:535, cy:80, r:38, fill:'url(#skyGrad)'})); // crescent cut
+    // Moon craters (small circles on the visible part)
+    moonG.appendChild(el('circle', {cx:505, cy:95, r:5, fill:'#e6d5a0', opacity:'0.4'}));
+    moonG.appendChild(el('circle', {cx:515, cy:110, r:3, fill:'#e6d5a0', opacity:'0.3'}));
+    svg.appendChild(moonG);
+
+    // Small pre-drawn stars scattered
+    const starPositions = [[50,40],[120,80],[200,30],[350,60],[450,140],[80,160],[180,130],[530,200],[570,50],[30,250],[490,40],[280,55],[400,25],[560,160],[150,210]];
+    starPositions.forEach(([sx,sy]) => {
+      const size = 2 + Math.random()*3;
+      svg.appendChild(el('path', {
+        d: makeStarPath(sx, sy, size, size*0.4, 4),
+        fill: '#f5e6b8',
+        opacity: (0.3 + Math.random()*0.4).toFixed(2)
+      }));
+    });
+
+    // Twinkling dots (tiny circles)
+    for(let i=0; i<20; i++){
+      svg.appendChild(el('circle', {
+        cx: Math.random()*w, cy: Math.random()*h*0.6,
+        r: 0.5 + Math.random()*1,
+        fill:'#fff', opacity:(0.2+Math.random()*0.3).toFixed(2)
+      }));
+    }
+
+    // Clouds (soft, dark-ish translucent)
+    drawCloud(svg, 60, 200, 1, '#4a4680', 0.35);
+    drawCloud(svg, 400, 170, 0.8, '#4a4680', 0.3);
+
+    // Rolling hills silhouette
+    svg.appendChild(el('path', {
+      d: 'M0,620 Q80,560 160,590 Q240,530 320,570 Q400,520 480,560 Q540,530 600,570 L600,700 L0,700 Z',
+      fill: '#1e1e38', stroke: '#2a2a50', 'stroke-width':'2'
+    }));
+    svg.appendChild(el('path', {
+      d: 'M0,650 Q100,600 200,630 Q300,590 400,620 Q500,580 600,620 L600,700 L0,700 Z',
+      fill: '#16162e', stroke: '#222248', 'stroke-width':'2'
+    }));
+
+    // Telescope on hill
+    const tg = el('g', {transform:'translate(480,555)', opacity:'0.7'});
+    // tripod legs
+    tg.appendChild(el('line', {x1:0, y1:0, x2:-15, y2:40, stroke:'#8b8bb0', 'stroke-width':'2.5', 'stroke-linecap':'round'}));
+    tg.appendChild(el('line', {x1:0, y1:0, x2:15, y2:40, stroke:'#8b8bb0', 'stroke-width':'2.5', 'stroke-linecap':'round'}));
+    tg.appendChild(el('line', {x1:0, y1:0, x2:0, y2:42, stroke:'#8b8bb0', 'stroke-width':'2.5', 'stroke-linecap':'round'}));
+    // tube
+    tg.appendChild(el('rect', {x:-4, y:-30, width:8, height:32, rx:3, fill:'#9090b8', stroke:'#7070a0', 'stroke-width':'1.5', transform:'rotate(-25,0,0)'}));
+    // lens
+    tg.appendChild(el('ellipse', {cx:8, cy:-32, rx:6, ry:4, fill:'#a8c8e8', stroke:'#7070a0', 'stroke-width':'1.5', transform:'rotate(-25,0,0)'}));
+    svg.appendChild(tg);
+
+    // Small child silhouette looking up
+    const child = el('g', {transform:'translate(100,610)', opacity:'0.5'});
+    child.appendChild(el('circle', {cx:0, cy:-30, r:8, fill:'#1a1a2e'})); // head
+    child.appendChild(el('path', {d:'M-6,-22 L-8,0 L8,0 L6,-22 Z', fill:'#1a1a2e'})); // body
+    child.appendChild(el('line', {x1:-6, y1:-15, x2:-14, y2:-25, stroke:'#1a1a2e', 'stroke-width':'3', 'stroke-linecap':'round'})); // arm pointing up
+    child.appendChild(el('line', {x1:6, y1:-10, x2:10, y2:0, stroke:'#1a1a2e', 'stroke-width':'3', 'stroke-linecap':'round'}));
+    svg.appendChild(child);
+  },
+
+  house(svg, w, h) {
+    // Neighborhood scene: path, garden, fence, background houses, trees, mailbox
+    // Sky
+    const defs = el('defs');
+    const grad = el('linearGradient', {id:'houseSky', x1:'0', y1:'0', x2:'0', y2:'1'});
+    grad.appendChild(el('stop', {offset:'0%', 'stop-color':'#b8d4f0'}));
+    grad.appendChild(el('stop', {offset:'100%', 'stop-color':'#dce8f5'}));
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+    svg.appendChild(el('rect', {x:0, y:0, width:w, height:h, fill:'url(#houseSky)'}));
+
+    // Sun
+    svg.appendChild(el('circle', {cx:520, cy:70, r:35, fill:'#f9e076', opacity:'0.6', stroke:'#f0d060', 'stroke-width':'2'}));
+    // Sun rays
+    for(let i=0;i<8;i++){
+      const a = i*Math.PI/4;
+      svg.appendChild(el('line', {
+        x1: 520+42*Math.cos(a), y1: 70+42*Math.sin(a),
+        x2: 520+55*Math.cos(a), y2: 70+55*Math.sin(a),
+        stroke:'#f0d060', 'stroke-width':'2', opacity:'0.4', 'stroke-linecap':'round'
+      }));
+    }
+
+    // Clouds
+    drawCloud(svg, 80, 50, 0.8, '#fff', 0.5);
+    drawCloud(svg, 350, 35, 0.6, '#fff', 0.45);
+
+    // Ground
+    svg.appendChild(el('path', {
+      d: 'M0,520 Q150,510 300,520 Q450,515 600,520 L600,700 L0,700 Z',
+      fill: '#8cc47a', stroke:'#7ab568', 'stroke-width':'2'
+    }));
+
+    // Path / road
+    svg.appendChild(el('path', {
+      d: 'M250,700 Q260,620 270,560 Q280,530 300,520',
+      fill:'none', stroke:'#c4a882', 'stroke-width':'30', 'stroke-linecap':'round', opacity:'0.7'
+    }));
+    svg.appendChild(el('path', {
+      d: 'M250,700 Q260,620 270,560 Q280,530 300,520',
+      fill:'none', stroke:'#d4b892', 'stroke-width':'24', 'stroke-linecap':'round', opacity:'0.5'
+    }));
+
+    // Fence left
+    for(let i=0; i<5; i++){
+      const fx = 20 + i*22;
+      svg.appendChild(el('rect', {x:fx, y:490, width:5, height:35, fill:'#d4b892', stroke:'#b89870', 'stroke-width':'1'}));
+      svg.appendChild(el('path', {d:`M${fx},490 L${fx+2.5},483 L${fx+5},490`, fill:'#d4b892', stroke:'#b89870', 'stroke-width':'1'}));
+    }
+    svg.appendChild(el('rect', {x:20, y:500, width:110, height:4, fill:'#d4b892', stroke:'#b89870', 'stroke-width':'1'}));
+    svg.appendChild(el('rect', {x:20, y:515, width:110, height:4, fill:'#d4b892', stroke:'#b89870', 'stroke-width':'1'}));
+
+    // Fence right
+    for(let i=0; i<5; i++){
+      const fx = 480 + i*22;
+      svg.appendChild(el('rect', {x:fx, y:490, width:5, height:35, fill:'#d4b892', stroke:'#b89870', 'stroke-width':'1'}));
+      svg.appendChild(el('path', {d:`M${fx},490 L${fx+2.5},483 L${fx+5},490`, fill:'#d4b892', stroke:'#b89870', 'stroke-width':'1'}));
+    }
+    svg.appendChild(el('rect', {x:480, y:500, width:110, height:4, fill:'#d4b892', stroke:'#b89870', 'stroke-width':'1'}));
+    svg.appendChild(el('rect', {x:480, y:515, width:110, height:4, fill:'#d4b892', stroke:'#b89870', 'stroke-width':'1'}));
+
+    // Background houses (small, far away)
+    drawSmallHouse(svg, 40, 460, '#e8b8b8', '#c47070', 0.5);
+    drawSmallHouse(svg, 520, 455, '#b8c8e8', '#7088b0', 0.5);
+
+    // Trees
+    drawCartoonTree(svg, 560, 480, 0.6, 0.55);
+    drawCartoonTree(svg, 30, 475, 0.5, 0.5);
+
+    // Garden flowers near ground
+    [[320,540],[340,550],[360,535],[380,545],[160,535],[170,550]].forEach(([fx,fy]) => {
+      drawFlower(svg, fx, fy, 0.5);
+    });
+
+    // Mailbox
+    const mb = el('g', {transform:'translate(430,500)', opacity:'0.65'});
+    mb.appendChild(el('rect', {x:-3, y:0, width:6, height:30, fill:'#888', stroke:'#666', 'stroke-width':'1.5'}));
+    mb.appendChild(el('path', {d:'M-12,-2 Q-12,-14 0,-14 Q12,-14 12,-2 L12,6 L-12,6 Z', fill:'#d04040', stroke:'#a03030', 'stroke-width':'2'}));
+    mb.appendChild(el('rect', {x:-10, y:0, width:20, height:2, fill:'#a03030'}));
+    // flag
+    mb.appendChild(el('line', {x1:12, y1:-12, x2:12, y2:2, stroke:'#a03030', 'stroke-width':'2'}));
+    mb.appendChild(el('path', {d:'M12,-12 L20,-9 L12,-6 Z', fill:'#d04040', stroke:'#a03030', 'stroke-width':'1'}));
+    svg.appendChild(mb);
+  },
+
+  cat(svg, w, h) {
+    // Living room: sofa, yarn ball, fish bowl, window with curtains, rug
+    // Wall
+    svg.appendChild(el('rect', {x:0, y:0, width:w, height:h, fill:'#f5ede0'}));
+
+    // Wallpaper subtle pattern stripes
+    for(let i=0;i<w;i+=40){
+      svg.appendChild(el('line', {x1:i, y1:0, x2:i, y2:h, stroke:'#ede5d6', 'stroke-width':'1'}));
+    }
+
+    // Floor
+    svg.appendChild(el('rect', {x:0, y:520, width:w, height:180, fill:'#c4a67a', stroke:'#b09060', 'stroke-width':'2'}));
+    // Floor boards
+    for(let i=530;i<700;i+=25){
+      svg.appendChild(el('line', {x1:0, y1:i, x2:w, y2:i, stroke:'#b89868', 'stroke-width':'0.8', opacity:'0.5'}));
+    }
+
+    // Rug (oval, patterned)
+    svg.appendChild(el('ellipse', {cx:300, cy:620, rx:160, ry:50, fill:'#d45050', stroke:'#b03030', 'stroke-width':'2.5', opacity:'0.6'}));
+    svg.appendChild(el('ellipse', {cx:300, cy:620, rx:120, ry:35, fill:'#e07070', stroke:'#c04040', 'stroke-width':'2', opacity:'0.5'}));
+    svg.appendChild(el('ellipse', {cx:300, cy:620, rx:70, ry:20, fill:'#d45050', stroke:'#b03030', 'stroke-width':'1.5', opacity:'0.5'}));
+    // Rug fringe
+    for(let i=-160;i<=160;i+=12){
+      const fAngle = Math.acos(i/160);
+      svg.appendChild(el('line', {
+        x1: 300+i, y1: 620+50*Math.sin(fAngle),
+        x2: 300+i, y2: 620+50*Math.sin(fAngle)+8,
+        stroke:'#b03030', 'stroke-width':'1.5', opacity:'0.4'
+      }));
+    }
+
+    // Window with curtains (top right)
+    const wg = el('g', {opacity:'0.6'});
+    wg.appendChild(el('rect', {x:430, y:80, width:130, height:150, rx:4, fill:'#a8d8f0', stroke:'#8090a0', 'stroke-width':'3'}));
+    // Window cross
+    wg.appendChild(el('line', {x1:495, y1:80, x2:495, y2:230, stroke:'#8090a0', 'stroke-width':'2.5'}));
+    wg.appendChild(el('line', {x1:430, y1:155, x2:560, y2:155, stroke:'#8090a0', 'stroke-width':'2.5'}));
+    // Curtains
+    wg.appendChild(el('path', {d:'M425,75 Q445,150 430,240 L425,240 L425,75 Z', fill:'#d4a0a0', stroke:'#c08080', 'stroke-width':'2'}));
+    wg.appendChild(el('path', {d:'M565,75 Q545,150 560,240 L565,240 L565,75 Z', fill:'#d4a0a0', stroke:'#c08080', 'stroke-width':'2'}));
+    // Curtain rod
+    wg.appendChild(el('line', {x1:420, y1:75, x2:570, y2:75, stroke:'#b08060', 'stroke-width':'4', 'stroke-linecap':'round'}));
+    wg.appendChild(el('circle', {cx:420, cy:75, r:5, fill:'#b08060'}));
+    wg.appendChild(el('circle', {cx:570, cy:75, r:5, fill:'#b08060'}));
+    svg.appendChild(wg);
+
+    // Sofa (left side, behind where cat will be)
+    const sofa = el('g', {opacity:'0.55'});
+    // Back
+    sofa.appendChild(el('path', {
+      d:'M20,350 Q20,280 60,270 L200,270 Q240,280 240,350 Z',
+      fill:'#7090c0', stroke:'#506890', 'stroke-width':'2.5'
+    }));
+    // Seat
+    sofa.appendChild(el('path', {
+      d:'M15,350 L245,350 Q250,420 240,440 L20,440 Q10,420 15,350 Z',
+      fill:'#80a0d0', stroke:'#506890', 'stroke-width':'2.5'
+    }));
+    // Armrests
+    sofa.appendChild(el('path', {
+      d:'M5,300 Q0,290 10,280 Q20,275 25,285 L25,440 Q15,445 5,440 Z',
+      fill:'#6080b0', stroke:'#506890', 'stroke-width':'2'
+    }));
+    sofa.appendChild(el('path', {
+      d:'M255,300 Q260,290 250,280 Q240,275 235,285 L235,440 Q245,445 255,440 Z',
+      fill:'#6080b0', stroke:'#506890', 'stroke-width':'2'
+    }));
+    // Cushion
+    sofa.appendChild(el('ellipse', {cx:130, cy:360, rx:55, ry:18, fill:'#90b0e0', stroke:'#6888b8', 'stroke-width':'2'}));
+    // Legs
+    sofa.appendChild(el('rect', {x:25, y:440, width:8, height:15, rx:2, fill:'#806040', stroke:'#604020', 'stroke-width':'1'}));
+    sofa.appendChild(el('rect', {x:227, y:440, width:8, height:15, rx:2, fill:'#806040', stroke:'#604020', 'stroke-width':'1'}));
+    svg.appendChild(sofa);
+
+    // Ball of yarn
+    const yarn = el('g', {transform:'translate(480,490)', opacity:'0.6'});
+    yarn.appendChild(el('circle', {cx:0, cy:0, r:18, fill:'#e06080', stroke:'#c04060', 'stroke-width':'2'}));
+    // yarn pattern
+    yarn.appendChild(el('path', {d:'M-12,-5 Q0,-15 12,-5', fill:'none', stroke:'#d05070', 'stroke-width':'1.5'}));
+    yarn.appendChild(el('path', {d:'M-10,5 Q0,-5 10,5', fill:'none', stroke:'#d05070', 'stroke-width':'1.5'}));
+    yarn.appendChild(el('path', {d:'M-8,12 Q0,5 8,12', fill:'none', stroke:'#d05070', 'stroke-width':'1.5'}));
+    // trailing string
+    yarn.appendChild(el('path', {d:'M18,0 Q30,10 40,5 Q55,0 60,15', fill:'none', stroke:'#e06080', 'stroke-width':'1.5', 'stroke-linecap':'round'}));
+    svg.appendChild(yarn);
+
+    // Fish bowl (on a small table)
+    const fb = el('g', {transform:'translate(520,320)', opacity:'0.55'});
+    // small table
+    fb.appendChild(el('rect', {x:-25, y:30, width:50, height:5, rx:2, fill:'#b08060', stroke:'#906040', 'stroke-width':'1.5'}));
+    fb.appendChild(el('rect', {x:-5, y:35, width:10, height:40, rx:2, fill:'#b08060', stroke:'#906040', 'stroke-width':'1.5'}));
+    // bowl
+    fb.appendChild(el('path', {
+      d:'M-20,20 Q-25,-10 -15,-20 Q0,-30 15,-20 Q25,-10 20,20 Q10,30 -10,30 Z',
+      fill:'#c0e8f8', stroke:'#80b0c8', 'stroke-width':'2'
+    }));
+    // water line
+    fb.appendChild(el('path', {d:'M-18,5 Q0,0 18,5', fill:'none', stroke:'#80c0e0', 'stroke-width':'1'}));
+    // tiny fish
+    fb.appendChild(el('path', {d:'M-5,8 Q0,3 5,8 Q0,13 -5,8 Z', fill:'#f09030', stroke:'#d07020', 'stroke-width':'1'}));
+    fb.appendChild(el('path', {d:'M5,8 L10,4 L10,12 Z', fill:'#f09030'}));
+    svg.appendChild(fb);
+
+    // Picture frame on wall
+    const pf = el('g', {opacity:'0.45'});
+    pf.appendChild(el('rect', {x:80, y:100, width:80, height:60, rx:3, fill:'#f5e8d0', stroke:'#b08060', 'stroke-width':'3'}));
+    pf.appendChild(el('path', {d:'M95,150 Q110,130 125,140 Q140,125 150,150 Z', fill:'#90c080', stroke:'#70a060', 'stroke-width':'1'}));
+    pf.appendChild(el('circle', {cx:140, cy:115, r:8, fill:'#f0d060', opacity:'0.6'}));
+    svg.appendChild(pf);
+  },
+
+  fish(svg, w, h) {
+    // Underwater: seaweed, coral, bubbles, small fish, treasure chest, starfish, sandy bottom
+    // Water gradient
+    const defs = el('defs');
+    const grad = el('linearGradient', {id:'waterGrad', x1:'0', y1:'0', x2:'0', y2:'1'});
+    grad.appendChild(el('stop', {offset:'0%', 'stop-color':'#4da8da'}));
+    grad.appendChild(el('stop', {offset:'50%', 'stop-color':'#2980b9'}));
+    grad.appendChild(el('stop', {offset:'100%', 'stop-color':'#1a5276'}));
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+    svg.appendChild(el('rect', {x:0, y:0, width:w, height:h, fill:'url(#waterGrad)'}));
+
+    // Light rays from surface
+    for(let i=0;i<5;i++){
+      const lx = 80 + i*120;
+      svg.appendChild(el('path', {
+        d:`M${lx},0 L${lx-30},300 L${lx+30},300 Z`,
+        fill:'#fff', opacity:'0.04'
+      }));
+    }
+
+    // Sandy bottom
+    svg.appendChild(el('path', {
+      d:'M0,620 Q50,610 120,625 Q200,615 280,630 Q360,618 440,628 Q520,615 600,625 L600,700 L0,700 Z',
+      fill:'#e8c878', stroke:'#d4b060', 'stroke-width':'2'
+    }));
+    svg.appendChild(el('path', {
+      d:'M0,640 Q80,635 150,645 Q250,635 350,645 Q450,632 550,642 L600,640 L600,700 L0,700 Z',
+      fill:'#dcc070', stroke:'#c8a858', 'stroke-width':'1'
+    }));
+
+    // Seaweed
+    [[40,620],[100,625],[520,622],[560,628]].forEach(([sx,sy]) => {
+      drawSeaweed(svg, sx, sy, 0.5);
+    });
+
+    // Coral reef
+    const coral = el('g', {opacity:'0.55'});
+    // Branch coral
+    coral.appendChild(el('path', {
+      d:'M440,625 Q445,580 430,550 Q425,540 435,530',
+      fill:'none', stroke:'#e08080', 'stroke-width':'6', 'stroke-linecap':'round'
+    }));
+    coral.appendChild(el('path', {
+      d:'M445,580 Q460,560 455,545',
+      fill:'none', stroke:'#e08080', 'stroke-width':'5', 'stroke-linecap':'round'
+    }));
+    coral.appendChild(el('path', {
+      d:'M440,595 Q425,575 430,560',
+      fill:'none', stroke:'#e08080', 'stroke-width':'4', 'stroke-linecap':'round'
+    }));
+    // Brain coral
+    coral.appendChild(el('ellipse', {cx:490, cy:615, rx:25, ry:18, fill:'#e0a0d0', stroke:'#c080b0', 'stroke-width':'2'}));
+    coral.appendChild(el('path', {d:'M472,612 Q480,608 490,615 Q500,608 508,612', fill:'none', stroke:'#c080b0', 'stroke-width':'1.5'}));
+    coral.appendChild(el('path', {d:'M475,620 Q485,615 495,620 Q505,616 510,620', fill:'none', stroke:'#c080b0', 'stroke-width':'1.5'}));
+    svg.appendChild(coral);
+
+    // Bubbles
+    [[80,200],[120,350],[500,180],[460,300],[300,150],[50,400],[540,400],[200,250]].forEach(([bx,by]) => {
+      const br = 3 + Math.random()*6;
+      svg.appendChild(el('circle', {cx:bx, cy:by, r:br, fill:'none', stroke:'#a0d8f0', 'stroke-width':'1.5', opacity:(0.25+Math.random()*0.2).toFixed(2)}));
+      svg.appendChild(el('ellipse', {cx:bx-br*0.25, cy:by-br*0.3, rx:br*0.25, ry:br*0.15, fill:'#fff', opacity:'0.2'}));
+    });
+
+    // Small pre-drawn fish
+    drawSmallFish(svg, 80, 300, '#f0a040', '#d08020', 1, 0.5, false);
+    drawSmallFish(svg, 500, 120, '#70c0a0', '#50a080', -1, 0.4, false);
+    drawSmallFish(svg, 530, 450, '#e08080', '#c06060', -1, 0.35, false);
+
+    // Treasure chest
+    const tc = el('g', {transform:'translate(140,600)', opacity:'0.5'});
+    // chest body
+    tc.appendChild(el('rect', {x:-25, y:-15, width:50, height:30, rx:3, fill:'#8B4513', stroke:'#5C2E00', 'stroke-width':'2.5'}));
+    // lid (slightly open)
+    tc.appendChild(el('path', {d:'M-25,-15 Q-25,-30 0,-32 Q25,-30 25,-15', fill:'#A0522D', stroke:'#5C2E00', 'stroke-width':'2.5'}));
+    // metal bands
+    tc.appendChild(el('rect', {x:-25, y:-5, width:50, height:4, fill:'#d4a800', stroke:'#b08800', 'stroke-width':'1'}));
+    tc.appendChild(el('rect', {x:-2, y:-15, width:4, height:30, fill:'#d4a800', stroke:'#b08800', 'stroke-width':'1'}));
+    // lock
+    tc.appendChild(el('circle', {cx:0, cy:-5, r:4, fill:'#d4a800', stroke:'#b08800', 'stroke-width':'1.5'}));
+    // gold sparkle
+    tc.appendChild(el('circle', {cx:-8, cy:-25, r:2, fill:'#ffd700', opacity:'0.6'}));
+    tc.appendChild(el('circle', {cx:5, cy:-28, r:1.5, fill:'#ffd700', opacity:'0.5'}));
+    svg.appendChild(tc);
+
+    // Starfish on sandy bottom
+    svg.appendChild(el('path', {
+      d: makeStarPath(350, 645, 12, 5, 5),
+      fill:'#e8a060', stroke:'#d08840', 'stroke-width':'2', opacity:'0.55'
+    }));
+    svg.appendChild(el('path', {
+      d: makeStarPath(250, 655, 8, 3, 5),
+      fill:'#e0a888', stroke:'#c88868', 'stroke-width':'1.5', opacity:'0.45'
+    }));
+  },
+
+  heart(svg, w, h) {
+    // Valentine scene: clouds, flowers, butterflies, ribbons, gift boxes
+    // Soft pink sky
+    const defs = el('defs');
+    const grad = el('linearGradient', {id:'heartSky', x1:'0', y1:'0', x2:'0', y2:'1'});
+    grad.appendChild(el('stop', {offset:'0%', 'stop-color':'#fce4ec'}));
+    grad.appendChild(el('stop', {offset:'100%', 'stop-color':'#f8bbd0'}));
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+    svg.appendChild(el('rect', {x:0, y:0, width:w, height:h, fill:'url(#heartSky)'}));
+
+    // Soft clouds
+    drawCloud(svg, 50, 60, 0.9, '#fff', 0.4);
+    drawCloud(svg, 400, 40, 0.7, '#fff', 0.35);
+    drawCloud(svg, 250, 90, 0.5, '#fff', 0.3);
+
+    // Ground with flowers
+    svg.appendChild(el('path', {
+      d:'M0,600 Q100,580 200,595 Q300,575 400,590 Q500,578 600,595 L600,700 L0,700 Z',
+      fill:'#a8d98a', stroke:'#90c070', 'stroke-width':'2'
+    }));
+
+    // Flowers scattered on ground
+    [[60,585],[140,590],[220,580],[350,585],[450,588],[530,582],[100,600],[400,595],[300,592]].forEach(([fx,fy]) => {
+      drawFlower(svg, fx, fy, 0.55);
+    });
+
+    // Butterflies
+    drawButterfly(svg, 80, 200, 0.4, '#e080c0');
+    drawButterfly(svg, 500, 150, 0.35, '#c080e0');
+    drawButterfly(svg, 180, 120, 0.3, '#f0a0a0');
+
+    // Ribbons (curly decorative)
+    svg.appendChild(el('path', {
+      d:'M30,300 Q60,280 50,320 Q40,360 70,340 Q100,320 90,370',
+      fill:'none', stroke:'#e080a0', 'stroke-width':'2.5', 'stroke-linecap':'round', opacity:'0.4'
+    }));
+    svg.appendChild(el('path', {
+      d:'M530,250 Q560,230 550,270 Q540,310 570,290 Q600,270 580,320',
+      fill:'none', stroke:'#c080d0', 'stroke-width':'2.5', 'stroke-linecap':'round', opacity:'0.4'
+    }));
+
+    // Gift boxes
+    // Box 1
+    const g1 = el('g', {transform:'translate(80,540)', opacity:'0.5'});
+    g1.appendChild(el('rect', {x:-20, y:-25, width:40, height:30, rx:3, fill:'#e060a0', stroke:'#c04080', 'stroke-width':'2.5'}));
+    g1.appendChild(el('rect', {x:-20, y:-30, width:40, height:8, rx:2, fill:'#f080b0', stroke:'#c04080', 'stroke-width':'2'}));
+    g1.appendChild(el('line', {x1:0, y1:-30, x2:0, y2:5, stroke:'#ffd700', 'stroke-width':'3'}));
+    g1.appendChild(el('line', {x1:-20, y1:-12, x2:20, y2:-12, stroke:'#ffd700', 'stroke-width':'3'}));
+    // bow
+    g1.appendChild(el('path', {d:'M0,-30 Q-10,-42 0,-38 Q10,-42 0,-30', fill:'#ffd700', stroke:'#e0b800', 'stroke-width':'1.5'}));
+    svg.appendChild(g1);
+
+    // Box 2
+    const g2 = el('g', {transform:'translate(500,550)', opacity:'0.45'});
+    g2.appendChild(el('rect', {x:-15, y:-20, width:30, height:25, rx:3, fill:'#8080e0', stroke:'#6060c0', 'stroke-width':'2.5'}));
+    g2.appendChild(el('rect', {x:-15, y:-24, width:30, height:7, rx:2, fill:'#9090f0', stroke:'#6060c0', 'stroke-width':'2'}));
+    g2.appendChild(el('line', {x1:0, y1:-24, x2:0, y2:5, stroke:'#f0a0c0', 'stroke-width':'2.5'}));
+    g2.appendChild(el('line', {x1:-15, y1:-8, x2:15, y2:-8, stroke:'#f0a0c0', 'stroke-width':'2.5'}));
+    svg.appendChild(g2);
+
+    // Small hearts floating
+    [[150,180],[420,220],[300,100],[530,350],[70,400]].forEach(([hx,hy]) => {
+      const hs = 6 + Math.random()*6;
+      svg.appendChild(el('path', {
+        d: `M${hx},${hy+hs*0.3} C${hx-hs},${hy-hs*0.5} ${hx},${hy-hs} ${hx},${hy+hs*0.3} C${hx},${hy-hs} ${hx+hs},${hy-hs*0.5} ${hx},${hy+hs*0.3} Z`,
+        fill:'#f06090', stroke:'#d04070', 'stroke-width':'1.5', opacity:(0.2+Math.random()*0.2).toFixed(2)
+      }));
+    });
+  },
+
+  tree(svg, w, h) {
+    // Forest scene: mushrooms, woodland path, smaller trees, squirrel, flowers, birds
+    // Sky
+    const defs = el('defs');
+    const grad = el('linearGradient', {id:'forestSky', x1:'0', y1:'0', x2:'0', y2:'1'});
+    grad.appendChild(el('stop', {offset:'0%', 'stop-color':'#b8d8f0'}));
+    grad.appendChild(el('stop', {offset:'100%', 'stop-color':'#d0e8d0'}));
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+    svg.appendChild(el('rect', {x:0, y:0, width:w, height:h, fill:'url(#forestSky)'}));
+
+    // Sun peeking
+    svg.appendChild(el('circle', {cx:540, cy:60, r:30, fill:'#f9e076', opacity:'0.5'}));
+
+    // Background trees (smaller, muted)
+    drawCartoonTree(svg, 30, 380, 0.8, 0.35);
+    drawCartoonTree(svg, 90, 390, 0.7, 0.3);
+    drawCartoonTree(svg, 520, 370, 0.9, 0.35);
+    drawCartoonTree(svg, 570, 385, 0.6, 0.3);
+
+    // Ground
+    svg.appendChild(el('path', {
+      d:'M0,480 Q100,470 200,478 Q300,465 400,475 Q500,468 600,480 L600,700 L0,700 Z',
+      fill:'#6aaa50', stroke:'#58964a', 'stroke-width':'2'
+    }));
+
+    // Darker undergrowth
+    svg.appendChild(el('path', {
+      d:'M0,520 Q80,510 160,520 Q240,505 320,515 Q400,508 480,518 Q550,505 600,515 L600,700 L0,700 Z',
+      fill:'#5a9a48', stroke:'#4a8840', 'stroke-width':'1'
+    }));
+
+    // Woodland path
+    svg.appendChild(el('path', {
+      d:'M200,700 Q210,650 230,600 Q260,550 300,520 Q340,550 370,600 Q390,650 400,700',
+      fill:'#c4a070', stroke:'#b09060', 'stroke-width':'2', opacity:'0.6'
+    }));
+
+    // Mushrooms
+    drawMushroom(svg, 100, 510, 0.55);
+    drawMushroom(svg, 480, 505, 0.45);
+    drawMushroom(svg, 150, 530, 0.35);
+
+    // Flowers on ground
+    [[60,510],[180,520],[420,515],[530,520],[350,530],[270,540]].forEach(([fx,fy]) => {
+      drawFlower(svg, fx, fy, 0.4);
+    });
+
+    // Squirrel on the right
+    const sq = el('g', {transform:'translate(510,460)', opacity:'0.5'});
+    // body
+    sq.appendChild(el('ellipse', {cx:0, cy:0, rx:10, ry:14, fill:'#c07030', stroke:'#a05020', 'stroke-width':'2'}));
+    // head
+    sq.appendChild(el('circle', {cx:-5, cy:-18, r:8, fill:'#c07030', stroke:'#a05020', 'stroke-width':'2'}));
+    // ear
+    sq.appendChild(el('path', {d:'M-10,-24 L-8,-32 L-4,-24', fill:'#c07030', stroke:'#a05020', 'stroke-width':'1.5'}));
+    // eye
+    sq.appendChild(el('circle', {cx:-8, cy:-19, r:1.5, fill:'#1a1a2e'}));
+    // tail (fluffy)
+    sq.appendChild(el('path', {d:'M8,0 Q25,-10 20,-30 Q15,-15 10,-8', fill:'#d08040', stroke:'#a05020', 'stroke-width':'1.5'}));
+    // acorn in paws
+    sq.appendChild(el('ellipse', {cx:-10, cy:-8, rx:3, ry:4, fill:'#b08030', stroke:'#906020', 'stroke-width':'1'}));
+    svg.appendChild(sq);
+
+    // Birds in sky
+    drawBird(svg, 120, 100, 0.5);
+    drawBird(svg, 160, 80, 0.4);
+    drawBird(svg, 450, 120, 0.45);
+  },
+
+  rocket(svg, w, h) {
+    // Space scene: stars, planets, moon, astronaut, space station
+    // Deep space
+    svg.appendChild(el('rect', {x:0, y:0, width:w, height:h, fill:'#0a0a2e'}));
+
+    // Nebula glow
+    svg.appendChild(el('ellipse', {cx:150, cy:500, rx:200, ry:150, fill:'#1a0a3e', opacity:'0.5'}));
+    svg.appendChild(el('ellipse', {cx:450, cy:200, rx:180, ry:120, fill:'#0a1a3e', opacity:'0.4'}));
+
+    // Stars
+    for(let i=0;i<60;i++){
+      svg.appendChild(el('circle', {
+        cx: Math.random()*w, cy: Math.random()*h,
+        r: 0.3+Math.random()*1.5,
+        fill:'#fff', opacity:(0.2+Math.random()*0.5).toFixed(2)
+      }));
+    }
+
+    // Twinkling stars (4-point)
+    [[50,80],[200,150],[450,50],[550,300],[100,450],[500,550]].forEach(([sx,sy]) => {
+      svg.appendChild(el('path', {
+        d: makeStarPath(sx, sy, 4, 1.5, 4),
+        fill:'#fff', opacity:'0.4'
+      }));
+    });
+
+    // Earth (bottom left)
+    const earth = el('g', {transform:'translate(80,600)', opacity:'0.5'});
+    earth.appendChild(el('circle', {cx:0, cy:0, r:60, fill:'#2060a0', stroke:'#1850a0', 'stroke-width':'2'}));
+    earth.appendChild(el('path', {d:'M-20,-40 Q0,-30 10,-40 Q20,-35 15,-20 Q5,-15 -15,-25 Z', fill:'#40a060', opacity:'0.7'}));
+    earth.appendChild(el('path', {d:'M-30,10 Q-10,5 0,15 Q-20,30 -35,20 Z', fill:'#40a060', opacity:'0.6'}));
+    earth.appendChild(el('path', {d:'M20,-10 Q35,-5 30,10 Q20,20 15,10 Z', fill:'#40a060', opacity:'0.65'}));
+    // atmosphere glow
+    earth.appendChild(el('circle', {cx:0, cy:0, r:62, fill:'none', stroke:'#60a0d0', 'stroke-width':'3', opacity:'0.3'}));
+    svg.appendChild(earth);
+
+    // Saturn (top right)
+    const saturn = el('g', {transform:'translate(520,120)', opacity:'0.5'});
+    saturn.appendChild(el('circle', {cx:0, cy:0, r:28, fill:'#d4a860', stroke:'#c09040', 'stroke-width':'2'}));
+    // Rings
+    saturn.appendChild(el('ellipse', {cx:0, cy:0, rx:50, ry:12, fill:'none', stroke:'#d4b878', 'stroke-width':'3', transform:'rotate(-15)'}));
+    saturn.appendChild(el('ellipse', {cx:0, cy:0, rx:42, ry:9, fill:'none', stroke:'#c4a868', 'stroke-width':'2', transform:'rotate(-15)'}));
+    // bands on planet
+    saturn.appendChild(el('path', {d:'M-25,5 Q0,10 25,5', fill:'none', stroke:'#c09848', 'stroke-width':'2', opacity:'0.5'}));
+    saturn.appendChild(el('path', {d:'M-20,-10 Q0,-5 20,-10', fill:'none', stroke:'#c09848', 'stroke-width':'1.5', opacity:'0.4'}));
+    svg.appendChild(saturn);
+
+    // Moon with craters
+    const moon = el('g', {transform:'translate(450,550)', opacity:'0.45'});
+    moon.appendChild(el('circle', {cx:0, cy:0, r:35, fill:'#d0d0c8', stroke:'#b0b0a8', 'stroke-width':'2'}));
+    moon.appendChild(el('circle', {cx:-10, cy:-8, r:8, fill:'#c0c0b8', stroke:'#a8a8a0', 'stroke-width':'1'}));
+    moon.appendChild(el('circle', {cx:12, cy:5, r:5, fill:'#c0c0b8', stroke:'#a8a8a0', 'stroke-width':'1'}));
+    moon.appendChild(el('circle', {cx:-5, cy:15, r:4, fill:'#c0c0b8', stroke:'#a8a8a0', 'stroke-width':'1'}));
+    moon.appendChild(el('circle', {cx:15, cy:-15, r:3, fill:'#c0c0b8', stroke:'#a8a8a0', 'stroke-width':'1'}));
+    svg.appendChild(moon);
+
+    // Astronaut (small, floating)
+    const astro = el('g', {transform:'translate(100,200) scale(0.6)', opacity:'0.5'});
+    // helmet
+    astro.appendChild(el('circle', {cx:0, cy:0, r:18, fill:'#e0e0e0', stroke:'#a0a0a0', 'stroke-width':'2.5'}));
+    // visor
+    astro.appendChild(el('path', {d:'M-12,-5 Q-12,-15 0,-15 Q12,-15 12,-5 Q12,5 0,5 Q-12,5 -12,-5 Z', fill:'#40608a', stroke:'#304868', 'stroke-width':'2'}));
+    // visor glare
+    astro.appendChild(el('path', {d:'M-8,-10 Q-4,-13 2,-10', fill:'none', stroke:'#80a0c0', 'stroke-width':'1.5', opacity:'0.6'}));
+    // body
+    astro.appendChild(el('rect', {x:-14, y:18, width:28, height:30, rx:8, fill:'#e0e0e0', stroke:'#a0a0a0', 'stroke-width':'2'}));
+    // backpack
+    astro.appendChild(el('rect', {x:10, y:20, width:10, height:22, rx:3, fill:'#c0c0c0', stroke:'#a0a0a0', 'stroke-width':'1.5'}));
+    // arms
+    astro.appendChild(el('path', {d:'M-14,25 Q-30,20 -35,30', stroke:'#e0e0e0', 'stroke-width':'6', fill:'none', 'stroke-linecap':'round'}));
+    astro.appendChild(el('path', {d:'M14,25 Q30,20 32,35', stroke:'#e0e0e0', 'stroke-width':'6', fill:'none', 'stroke-linecap':'round'}));
+    // legs
+    astro.appendChild(el('path', {d:'M-6,48 L-10,65', stroke:'#e0e0e0', 'stroke-width':'6', fill:'none', 'stroke-linecap':'round'}));
+    astro.appendChild(el('path', {d:'M6,48 L10,65', stroke:'#e0e0e0', 'stroke-width':'6', fill:'none', 'stroke-linecap':'round'}));
+    svg.appendChild(astro);
+
+    // Space station (simplified, far away)
+    const ss = el('g', {transform:'translate(180,80)', opacity:'0.35'});
+    // main module
+    ss.appendChild(el('rect', {x:-20, y:-6, width:40, height:12, rx:6, fill:'#c0c0c0', stroke:'#a0a0a0', 'stroke-width':'2'}));
+    // solar panels
+    ss.appendChild(el('rect', {x:-50, y:-15, width:25, height:30, rx:1, fill:'#3060a0', stroke:'#204080', 'stroke-width':'1.5'}));
+    ss.appendChild(el('rect', {x:25, y:-15, width:25, height:30, rx:1, fill:'#3060a0', stroke:'#204080', 'stroke-width':'1.5'}));
+    // panel lines
+    ss.appendChild(el('line', {x1:-37, y1:-15, x2:-37, y2:15, stroke:'#204080', 'stroke-width':'0.8'}));
+    ss.appendChild(el('line', {x1:-50, y1:0, x2:-25, y2:0, stroke:'#204080', 'stroke-width':'0.8'}));
+    ss.appendChild(el('line', {x1:37, y1:-15, x2:37, y2:15, stroke:'#204080', 'stroke-width':'0.8'}));
+    ss.appendChild(el('line', {x1:25, y1:0, x2:50, y2:0, stroke:'#204080', 'stroke-width':'0.8'}));
+    svg.appendChild(ss);
+  },
+
+  butterfly(svg, w, h) {
+    // Garden scene: flowers, grass, sun, ladybug, caterpillar, dewdrops, fence
+    // Sky
+    const defs = el('defs');
+    const grad = el('linearGradient', {id:'gardenSky', x1:'0', y1:'0', x2:'0', y2:'1'});
+    grad.appendChild(el('stop', {offset:'0%', 'stop-color':'#87CEEB'}));
+    grad.appendChild(el('stop', {offset:'100%', 'stop-color':'#c8e8c0'}));
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+    svg.appendChild(el('rect', {x:0, y:0, width:w, height:h, fill:'url(#gardenSky)'}));
+
+    // Sun
+    svg.appendChild(el('circle', {cx:80, cy:70, r:40, fill:'#f9e076', opacity:'0.55', stroke:'#f0d060', 'stroke-width':'2'}));
+    for(let i=0;i<10;i++){
+      const a = i*Math.PI/5;
+      svg.appendChild(el('line', {
+        x1: 80+48*Math.cos(a), y1: 70+48*Math.sin(a),
+        x2: 80+62*Math.cos(a), y2: 70+62*Math.sin(a),
+        stroke:'#f0d060', 'stroke-width':'2.5', opacity:'0.35', 'stroke-linecap':'round'
+      }));
+    }
+
+    // Clouds
+    drawCloud(svg, 250, 50, 0.7, '#fff', 0.4);
+    drawCloud(svg, 480, 80, 0.5, '#fff', 0.35);
+
+    // Ground / grass
+    svg.appendChild(el('path', {
+      d:'M0,520 Q100,505 200,515 Q300,500 400,512 Q500,502 600,515 L600,700 L0,700 Z',
+      fill:'#6ab04c', stroke:'#58964a', 'stroke-width':'2'
+    }));
+
+    // Grass blades
+    for(let i=0;i<w;i+=8){
+      const gh = 10+Math.random()*15;
+      const gx = i + Math.random()*4;
+      const gy = 515 + Math.random()*5;
+      svg.appendChild(el('path', {
+        d:`M${gx},${gy} Q${gx+3},${gy-gh} ${gx+1},${gy-gh-3}`,
+        fill:'none', stroke:'#58964a', 'stroke-width':'1.5', opacity:'0.4'
+      }));
+    }
+
+    // Fence in background
+    const fenceY = 480;
+    for(let i=30;i<w-30;i+=35){
+      svg.appendChild(el('rect', {x:i, y:fenceY-5, width:5, height:40, fill:'#d4c0a0', stroke:'#b8a480', 'stroke-width':'1', opacity:'0.35'}));
+      svg.appendChild(el('path', {d:`M${i},${fenceY-5} L${i+2.5},${fenceY-12} L${i+5},${fenceY-5}`, fill:'#d4c0a0', stroke:'#b8a480', 'stroke-width':'1', opacity:'0.35'}));
+    }
+    svg.appendChild(el('rect', {x:30, y:fenceY+5, width:w-60, height:4, fill:'#d4c0a0', stroke:'#b8a480', 'stroke-width':'1', opacity:'0.35'}));
+    svg.appendChild(el('rect', {x:30, y:fenceY+22, width:w-60, height:4, fill:'#d4c0a0', stroke:'#b8a480', 'stroke-width':'1', opacity:'0.35'}));
+
+    // Flowers (various, larger)
+    drawFlower(svg, 80, 510, 0.8);
+    drawFlower(svg, 160, 505, 0.7);
+    drawFlower(svg, 350, 508, 0.75);
+    drawFlower(svg, 480, 512, 0.65);
+    drawFlower(svg, 550, 505, 0.8);
+    drawFlower(svg, 260, 515, 0.6);
+
+    // Flower stems with leaves and dewdrops
+    [[120,505],[400,508],[520,505]].forEach(([lx,ly]) => {
+      // leaf
+      svg.appendChild(el('path', {
+        d:`M${lx},${ly} Q${lx-15},${ly-10} ${lx-5},${ly-20}`,
+        fill:'#4a8838', stroke:'#3a7028', 'stroke-width':'1.5', opacity:'0.5'
+      }));
+      // dewdrop on leaf
+      svg.appendChild(el('ellipse', {cx:lx-10, cy:ly-12, rx:2.5, ry:3.5, fill:'#a0d8f0', stroke:'#80b8d0', 'stroke-width':'0.8', opacity:'0.5'}));
+      svg.appendChild(el('ellipse', {cx:lx-11, cy:ly-14, rx:1, ry:0.7, fill:'#fff', opacity:'0.4'}));
+    });
+
+    // Ladybug
+    const lb = el('g', {transform:'translate(430,540)', opacity:'0.55'});
+    lb.appendChild(el('ellipse', {cx:0, cy:0, rx:8, ry:10, fill:'#e03030', stroke:'#a02020', 'stroke-width':'2'}));
+    lb.appendChild(el('line', {x1:0, y1:-10, x2:0, y2:10, stroke:'#1a1a2e', 'stroke-width':'1.5'}));
+    lb.appendChild(el('circle', {cx:0, cy:-12, r:5, fill:'#1a1a2e'}));
+    lb.appendChild(el('circle', {cx:-4, cy:-2, r:2, fill:'#1a1a2e'}));
+    lb.appendChild(el('circle', {cx:4, cy:3, r:2, fill:'#1a1a2e'}));
+    lb.appendChild(el('circle', {cx:-3, cy:6, r:1.5, fill:'#1a1a2e'}));
+    // antennae
+    lb.appendChild(el('path', {d:'M-2,-16 Q-6,-22 -4,-26', fill:'none', stroke:'#1a1a2e', 'stroke-width':'1', 'stroke-linecap':'round'}));
+    lb.appendChild(el('path', {d:'M2,-16 Q6,-22 4,-26', fill:'none', stroke:'#1a1a2e', 'stroke-width':'1', 'stroke-linecap':'round'}));
+    svg.appendChild(lb);
+
+    // Caterpillar
+    const cat = el('g', {transform:'translate(150,550)', opacity:'0.5'});
+    for(let i=0;i<5;i++){
+      cat.appendChild(el('circle', {cx:i*10, cy:0, r:6, fill:'#70c040', stroke:'#50a020', 'stroke-width':'1.5'}));
+    }
+    // head
+    cat.appendChild(el('circle', {cx:50, cy:0, r:7, fill:'#60b030', stroke:'#40900a', 'stroke-width':'2'}));
+    cat.appendChild(el('circle', {cx:48, cy:-3, r:1.5, fill:'#1a1a2e'}));
+    // antennae
+    cat.appendChild(el('path', {d:'M52,-6 Q55,-14 53,-18', fill:'none', stroke:'#40900a', 'stroke-width':'1', 'stroke-linecap':'round'}));
+    cat.appendChild(el('path', {d:'M48,-6 Q45,-14 47,-18', fill:'none', stroke:'#40900a', 'stroke-width':'1', 'stroke-linecap':'round'}));
+    cat.appendChild(el('circle', {cx:53, cy:-18, r:1.5, fill:'#40900a'}));
+    cat.appendChild(el('circle', {cx:47, cy:-18, r:1.5, fill:'#40900a'}));
+    svg.appendChild(cat);
+  },
+
+  dinosaur(svg, w, h) {
+    // Prehistoric: volcano, palm trees, ferns, rocks, pterodactyl, fossils
+    // Hot sky
+    const defs = el('defs');
+    const grad = el('linearGradient', {id:'preHSky', x1:'0', y1:'0', x2:'0', y2:'1'});
+    grad.appendChild(el('stop', {offset:'0%', 'stop-color':'#f0a860'}));
+    grad.appendChild(el('stop', {offset:'40%', 'stop-color':'#e8c888'}));
+    grad.appendChild(el('stop', {offset:'100%', 'stop-color':'#c8d8a0'}));
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+    svg.appendChild(el('rect', {x:0, y:0, width:w, height:h, fill:'url(#preHSky)'}));
+
+    // Volcano in background
+    const vol = el('g', {opacity:'0.5'});
+    vol.appendChild(el('path', {
+      d:'M440,500 L490,200 Q500,180 510,200 L560,500 Z',
+      fill:'#806050', stroke:'#604030', 'stroke-width':'3'
+    }));
+    // Lava/smoke at top
+    vol.appendChild(el('path', {
+      d:'M490,200 Q485,170 495,150 Q500,140 505,155 Q510,170 510,200',
+      fill:'#e05030', stroke:'#c04020', 'stroke-width':'2', opacity:'0.7'
+    }));
+    // Smoke puffs
+    vol.appendChild(el('circle', {cx:498, cy:130, r:12, fill:'#808080', opacity:'0.3'}));
+    vol.appendChild(el('circle', {cx:490, cy:110, r:10, fill:'#909090', opacity:'0.25'}));
+    vol.appendChild(el('circle', {cx:505, cy:95, r:14, fill:'#888', opacity:'0.2'}));
+    vol.appendChild(el('circle', {cx:495, cy:75, r:11, fill:'#999', opacity:'0.15'}));
+    // volcano stripes
+    vol.appendChild(el('path', {d:'M460,450 Q475,380 490,300', fill:'none', stroke:'#705040', 'stroke-width':'2', opacity:'0.4'}));
+    vol.appendChild(el('path', {d:'M540,450 Q525,380 510,300', fill:'none', stroke:'#705040', 'stroke-width':'2', opacity:'0.4'}));
+    svg.appendChild(vol);
+
+    // Ground
+    svg.appendChild(el('path', {
+      d:'M0,500 Q100,490 200,505 Q300,488 400,498 Q500,492 600,500 L600,700 L0,700 Z',
+      fill:'#8aa858', stroke:'#788a48', 'stroke-width':'2'
+    }));
+    svg.appendChild(el('path', {
+      d:'M0,540 Q150,530 300,545 Q450,532 600,540 L600,700 L0,700 Z',
+      fill:'#7a9848', stroke:'#688838', 'stroke-width':'1'
+    }));
+
+    // Palm trees
+    drawPalmTree(svg, 60, 470, 0.8, 0.5);
+    drawPalmTree(svg, 550, 480, 0.7, 0.45);
+    drawPalmTree(svg, 140, 490, 0.5, 0.4);
+
+    // Ferns
+    [[200,500],[350,505],[450,510],[100,520]].forEach(([fx,fy]) => {
+      drawFern(svg, fx, fy, 0.45);
+    });
+
+    // Rocks
+    svg.appendChild(el('path', {
+      d:'M380,530 Q385,510 400,508 Q420,505 425,520 Q430,535 410,538 Q390,540 380,530 Z',
+      fill:'#a09080', stroke:'#887060', 'stroke-width':'2', opacity:'0.5'
+    }));
+    svg.appendChild(el('path', {
+      d:'M50,540 Q55,525 70,522 Q85,520 88,532 Q92,542 75,545 Q58,548 50,540 Z',
+      fill:'#908070', stroke:'#786858', 'stroke-width':'2', opacity:'0.45'
+    }));
+
+    // Pterodactyl in sky
+    const pt = el('g', {transform:'translate(180,100)', opacity:'0.45'});
+    // body
+    pt.appendChild(el('ellipse', {cx:0, cy:0, rx:12, ry:6, fill:'#70805a', stroke:'#506040', 'stroke-width':'2'}));
+    // head
+    pt.appendChild(el('path', {d:'M12,0 L30,-5 L28,0 L12,2 Z', fill:'#70805a', stroke:'#506040', 'stroke-width':'1.5'}));
+    // beak
+    pt.appendChild(el('path', {d:'M28,-2 L38,-4 L28,1 Z', fill:'#a0805a', stroke:'#806040', 'stroke-width':'1'}));
+    // crest
+    pt.appendChild(el('path', {d:'M20,-5 Q22,-15 15,-12', fill:'#70805a', stroke:'#506040', 'stroke-width':'1.5'}));
+    // wings
+    pt.appendChild(el('path', {d:'M-5,-3 Q-25,-35 -40,-25 Q-20,-15 -5,0', fill:'#809068', stroke:'#506040', 'stroke-width':'2'}));
+    pt.appendChild(el('path', {d:'M-5,3 Q-25,35 -40,25 Q-20,15 -5,0', fill:'#809068', stroke:'#506040', 'stroke-width':'2'}));
+    // eye
+    pt.appendChild(el('circle', {cx:22, cy:-2, r:1.5, fill:'#1a1a2e'}));
+    svg.appendChild(pt);
+
+    // Fossils / bones on ground
+    const bone = el('g', {transform:'translate(280,560)', opacity:'0.35'});
+    bone.appendChild(el('line', {x1:-12, y1:0, x2:12, y2:0, stroke:'#e8e0d0', 'stroke-width':'3', 'stroke-linecap':'round'}));
+    bone.appendChild(el('circle', {cx:-14, cy:-3, r:3, fill:'#e8e0d0', stroke:'#d0c8b8', 'stroke-width':'1'}));
+    bone.appendChild(el('circle', {cx:-14, cy:3, r:3, fill:'#e8e0d0', stroke:'#d0c8b8', 'stroke-width':'1'}));
+    bone.appendChild(el('circle', {cx:14, cy:-3, r:3, fill:'#e8e0d0', stroke:'#d0c8b8', 'stroke-width':'1'}));
+    bone.appendChild(el('circle', {cx:14, cy:3, r:3, fill:'#e8e0d0', stroke:'#d0c8b8', 'stroke-width':'1'}));
+    svg.appendChild(bone);
+
+    // Another fossil
+    const bone2 = el('g', {transform:'translate(480,570) rotate(30)', opacity:'0.3'});
+    bone2.appendChild(el('line', {x1:-8, y1:0, x2:8, y2:0, stroke:'#e0d8c8', 'stroke-width':'2.5', 'stroke-linecap':'round'}));
+    bone2.appendChild(el('circle', {cx:-10, cy:-2, r:2.5, fill:'#e0d8c8'}));
+    bone2.appendChild(el('circle', {cx:-10, cy:2, r:2.5, fill:'#e0d8c8'}));
+    bone2.appendChild(el('circle', {cx:10, cy:-2, r:2.5, fill:'#e0d8c8'}));
+    bone2.appendChild(el('circle', {cx:10, cy:2, r:2.5, fill:'#e0d8c8'}));
+    svg.appendChild(bone2);
+  },
+
+  car(svg, w, h) {
+    // City/road: traffic lights, road, buildings, trees, pedestrian crossing
+    // Sky
+    const defs = el('defs');
+    const grad = el('linearGradient', {id:'citySky', x1:'0', y1:'0', x2:'0', y2:'1'});
+    grad.appendChild(el('stop', {offset:'0%', 'stop-color':'#a0c8e8'}));
+    grad.appendChild(el('stop', {offset:'100%', 'stop-color':'#d0e0f0'}));
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+    svg.appendChild(el('rect', {x:0, y:0, width:w, height:h, fill:'url(#citySky)'}));
+
+    // Clouds
+    drawCloud(svg, 150, 40, 0.7, '#fff', 0.4);
+    drawCloud(svg, 420, 60, 0.6, '#fff', 0.35);
+
+    // Buildings in background
+    // Building 1
+    const b1 = el('g', {opacity:'0.4'});
+    b1.appendChild(el('rect', {x:20, y:200, width:80, height:250, fill:'#c0b0a0', stroke:'#a09080', 'stroke-width':'2'}));
+    for(let row=210;row<440;row+=30) for(let col=30;col<90;col+=20){
+      b1.appendChild(el('rect', {x:col, y:row, width:12, height:16, rx:1, fill:'#f0e8a0', stroke:'#c0b880', 'stroke-width':'0.8'}));
+    }
+    svg.appendChild(b1);
+
+    // Building 2
+    const b2 = el('g', {opacity:'0.35'});
+    b2.appendChild(el('rect', {x:110, y:250, width:60, height:200, fill:'#b8a8c0', stroke:'#988898', 'stroke-width':'2'}));
+    for(let row=260;row<440;row+=25) for(let col=118;col<165;col+=22){
+      b2.appendChild(el('rect', {x:col, y:row, width:14, height:12, rx:1, fill:'#a0d0f0', stroke:'#80b0d0', 'stroke-width':'0.8'}));
+    }
+    svg.appendChild(b2);
+
+    // Building 3
+    const b3 = el('g', {opacity:'0.38'});
+    b3.appendChild(el('rect', {x:460, y:220, width:70, height:230, fill:'#c8b8a8', stroke:'#a89880', 'stroke-width':'2'}));
+    for(let row=230;row<440;row+=28) for(let col=470;col<525;col+=22){
+      b3.appendChild(el('rect', {x:col, y:row, width:12, height:14, rx:1, fill:'#f0e8a0', stroke:'#c0b880', 'stroke-width':'0.8'}));
+    }
+    svg.appendChild(b3);
+
+    // Building 4
+    const b4 = el('g', {opacity:'0.32'});
+    b4.appendChild(el('rect', {x:540, y:280, width:60, height:170, fill:'#a8b8c8', stroke:'#8898a8', 'stroke-width':'2'}));
+    for(let row=290;row<440;row+=22) for(let col=548;col<595;col+=20){
+      b4.appendChild(el('rect', {x:col, y:row, width:10, height:10, rx:1, fill:'#a0c8e0', stroke:'#80a8c0', 'stroke-width':'0.8'}));
+    }
+    svg.appendChild(b4);
+
+    // Sidewalk
+    svg.appendChild(el('rect', {x:0, y:445, width:w, height:20, fill:'#d0c8c0', stroke:'#b8b0a8', 'stroke-width':'1'}));
+
+    // Road
+    svg.appendChild(el('rect', {x:0, y:465, width:w, height:180, fill:'#606060', stroke:'#505050', 'stroke-width':'1'}));
+
+    // Road center line (dashed)
+    for(let i=0;i<w;i+=40){
+      svg.appendChild(el('rect', {x:i+5, y:552, width:22, height:4, fill:'#f0e070', opacity:'0.6'}));
+    }
+
+    // Pedestrian crossing (right side)
+    for(let i=0;i<7;i++){
+      svg.appendChild(el('rect', {x:500+i*14, y:465, width:8, height:180, fill:'#fff', opacity:'0.35'}));
+    }
+
+    // Road surface under the road
+    svg.appendChild(el('rect', {x:0, y:645, width:w, height:55, fill:'#d0c8c0', stroke:'#b8b0a8', 'stroke-width':'1'}));
+
+    // Trees along road
+    drawCartoonTree(svg, 180, 435, 0.5, 0.4);
+    drawCartoonTree(svg, 380, 435, 0.5, 0.4);
+
+    // Traffic light (left side)
+    const tl = el('g', {transform:'translate(220,380)', opacity:'0.55'});
+    // pole
+    tl.appendChild(el('rect', {x:-3, y:0, width:6, height:65, fill:'#606060', stroke:'#404040', 'stroke-width':'1.5'}));
+    // box
+    tl.appendChild(el('rect', {x:-10, y:-50, width:20, height:52, rx:4, fill:'#303030', stroke:'#202020', 'stroke-width':'2'}));
+    // lights
+    tl.appendChild(el('circle', {cx:0, cy:-36, r:6, fill:'#e03030', stroke:'#a02020', 'stroke-width':'1.5'}));
+    tl.appendChild(el('circle', {cx:0, cy:-20, r:6, fill:'#e8c020', stroke:'#b8a010', 'stroke-width':'1.5'}));
+    tl.appendChild(el('circle', {cx:0, cy:-4, r:6, fill:'#30a030', stroke:'#208020', 'stroke-width':'1.5'}));
+    svg.appendChild(tl);
+
+    // Road markings (edge lines)
+    svg.appendChild(el('line', {x1:0, y1:468, x2:w, y2:468, stroke:'#fff', 'stroke-width':'2', opacity:'0.4'}));
+    svg.appendChild(el('line', {x1:0, y1:642, x2:w, y2:642, stroke:'#fff', 'stroke-width':'2', opacity:'0.4'}));
+  }
+};
+
+// ===================== HELPER DRAWING FUNCTIONS =====================
+
+function el(tag, attrs) {
+  const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  if (attrs) {
+    for (const [k, v] of Object.entries(attrs)) {
+      e.setAttribute(k, v);
+    }
+  }
+  return e;
+}
+
+function makeStarPath(cx, cy, outerR, innerR, points) {
+  let d = '';
+  for (let i = 0; i < points * 2; i++) {
+    const r = i % 2 === 0 ? outerR : innerR;
+    const a = -Math.PI / 2 + (i * Math.PI / points);
+    const x = cx + r * Math.cos(a);
+    const y = cy + r * Math.sin(a);
+    d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  }
+  return d + 'Z';
+}
+
+function drawCloud(svg, x, y, scale, color, opacity) {
+  const g = el('g', {transform:`translate(${x},${y}) scale(${scale})`, opacity: opacity});
+  g.appendChild(el('circle', {cx:0, cy:0, r:25, fill:color}));
+  g.appendChild(el('circle', {cx:25, cy:-8, r:30, fill:color}));
+  g.appendChild(el('circle', {cx:55, cy:0, r:22, fill:color}));
+  g.appendChild(el('circle', {cx:15, cy:10, r:20, fill:color}));
+  g.appendChild(el('circle', {cx:40, cy:8, r:24, fill:color}));
+  svg.appendChild(g);
+}
+
+function drawSmallHouse(svg, x, y, wallColor, roofColor, opacity) {
+  const g = el('g', {transform:`translate(${x},${y})`, opacity: opacity});
+  // wall
+  g.appendChild(el('rect', {x:0, y:0, width:40, height:35, fill:wallColor, stroke:roofColor, 'stroke-width':'2'}));
+  // roof
+  g.appendChild(el('path', {d:'M-5,0 L20,-25 L45,0 Z', fill:roofColor, stroke:roofColor, 'stroke-width':'2'}));
+  // door
+  g.appendChild(el('rect', {x:14, y:15, width:12, height:20, rx:1, fill:'#806040', stroke:'#604020', 'stroke-width':'1'}));
+  // window
+  g.appendChild(el('rect', {x:5, y:8, width:8, height:8, fill:'#a0d0f0', stroke:roofColor, 'stroke-width':'1'}));
+  svg.appendChild(g);
+}
+
+function drawCartoonTree(svg, x, y, scale, opacity) {
+  const g = el('g', {transform:`translate(${x},${y}) scale(${scale})`, opacity: opacity});
+  // trunk
+  g.appendChild(el('rect', {x:-8, y:-10, width:16, height:50, rx:3, fill:'#8B6040', stroke:'#704830', 'stroke-width':'2.5'}));
+  // canopy (overlapping circles)
+  g.appendChild(el('circle', {cx:0, cy:-35, r:30, fill:'#5a9a40', stroke:'#488830', 'stroke-width':'2.5'}));
+  g.appendChild(el('circle', {cx:-22, cy:-20, r:24, fill:'#4a8a30', stroke:'#388020', 'stroke-width':'2.5'}));
+  g.appendChild(el('circle', {cx:22, cy:-20, r:24, fill:'#4a8a30', stroke:'#388020', 'stroke-width':'2.5'}));
+  g.appendChild(el('circle', {cx:-10, cy:-45, r:18, fill:'#60a048', stroke:'#508838', 'stroke-width':'2'}));
+  g.appendChild(el('circle', {cx:12, cy:-42, r:20, fill:'#60a048', stroke:'#508838', 'stroke-width':'2'}));
+  svg.appendChild(g);
+}
+
+function drawFlower(svg, x, y, opacity) {
+  const g = el('g', {transform:`translate(${x},${y})`, opacity: opacity});
+  // stem
+  g.appendChild(el('line', {x1:0, y1:0, x2:0, y2:-20, stroke:'#4a8838', 'stroke-width':'2', 'stroke-linecap':'round'}));
+  // petals
+  const colors = ['#f06080','#e080c0','#f0a040','#e06060','#f080a0','#d060d0'];
+  const c = colors[Math.floor(Math.random()*colors.length)];
+  for(let i=0;i<5;i++){
+    const a = i*Math.PI*2/5 - Math.PI/2;
+    g.appendChild(el('ellipse', {cx:5*Math.cos(a), cy:-20+5*Math.sin(a), rx:4, ry:6, fill:c, stroke:'none', transform:`rotate(${i*72},${5*Math.cos(a)},${-20+5*Math.sin(a)})`}));
+  }
+  // center
+  g.appendChild(el('circle', {cx:0, cy:-20, r:3, fill:'#f0d040'}));
+  svg.appendChild(g);
+}
+
+function drawButterfly(svg, x, y, scale, color) {
+  const g = el('g', {transform:`translate(${x},${y}) scale(${scale})`, opacity:'0.45'});
+  // wings
+  g.appendChild(el('path', {d:'M0,0 Q-20,-15 -18,-30 Q-10,-35 0,-15 Z', fill:color, stroke:'none'}));
+  g.appendChild(el('path', {d:'M0,0 Q20,-15 18,-30 Q10,-35 0,-15 Z', fill:color, stroke:'none'}));
+  g.appendChild(el('path', {d:'M0,0 Q-15,10 -16,25 Q-8,28 0,10 Z', fill:color, stroke:'none', opacity:'0.8'}));
+  g.appendChild(el('path', {d:'M0,0 Q15,10 16,25 Q8,28 0,10 Z', fill:color, stroke:'none', opacity:'0.8'}));
+  // body
+  g.appendChild(el('ellipse', {cx:0, cy:0, rx:2, ry:12, fill:'#333'}));
+  // antennae
+  g.appendChild(el('path', {d:'M0,-12 Q-5,-20 -8,-22', fill:'none', stroke:'#333', 'stroke-width':'1'}));
+  g.appendChild(el('path', {d:'M0,-12 Q5,-20 8,-22', fill:'none', stroke:'#333', 'stroke-width':'1'}));
+  svg.appendChild(g);
+}
+
+function drawSmallFish(svg, x, y, bodyColor, finColor, dir, opacity) {
+  const g = el('g', {transform:`translate(${x},${y}) scale(${dir},1)`, opacity: opacity});
+  // body
+  g.appendChild(el('ellipse', {cx:0, cy:0, rx:16, ry:9, fill:bodyColor, stroke:finColor, 'stroke-width':'2'}));
+  // tail
+  g.appendChild(el('path', {d:'M-16,0 L-28,-10 L-28,10 Z', fill:finColor, stroke:finColor, 'stroke-width':'1.5'}));
+  // eye
+  g.appendChild(el('circle', {cx:8, cy:-2, r:3, fill:'#fff', stroke:'#333', 'stroke-width':'1'}));
+  g.appendChild(el('circle', {cx:9, cy:-2, r:1.5, fill:'#333'}));
+  // fin on top
+  g.appendChild(el('path', {d:'M-2,-8 Q2,-18 8,-8', fill:finColor, stroke:finColor, 'stroke-width':'1'}));
+  svg.appendChild(g);
+}
+
+function drawSeaweed(svg, x, y, opacity) {
+  const g = el('g', {opacity: opacity});
+  const h = 50 + Math.random()*40;
+  g.appendChild(el('path', {
+    d:`M${x},${y} Q${x+10},${y-h*0.3} ${x-5},${y-h*0.6} Q${x+8},${y-h*0.8} ${x},${y-h}`,
+    fill:'none', stroke:'#40805a', 'stroke-width':'4', 'stroke-linecap':'round'
+  }));
+  g.appendChild(el('path', {
+    d:`M${x+8},${y} Q${x+18},${y-h*0.25} ${x+5},${y-h*0.5} Q${x+15},${y-h*0.7} ${x+8},${y-h*0.85}`,
+    fill:'none', stroke:'#388050', 'stroke-width':'3', 'stroke-linecap':'round'
+  }));
+  svg.appendChild(g);
+}
+
+function drawMushroom(svg, x, y, opacity) {
+  const g = el('g', {transform:`translate(${x},${y})`, opacity: opacity});
+  // stem
+  g.appendChild(el('rect', {x:-5, y:-5, width:10, height:18, rx:3, fill:'#f0e8d0', stroke:'#d0c8b0', 'stroke-width':'2'}));
+  // cap
+  g.appendChild(el('path', {d:'M-16,-5 Q-16,-25 0,-28 Q16,-25 16,-5 Z', fill:'#e04040', stroke:'#c03030', 'stroke-width':'2'}));
+  // spots
+  g.appendChild(el('circle', {cx:-5, cy:-18, r:3, fill:'#f0e8d0'}));
+  g.appendChild(el('circle', {cx:6, cy:-14, r:2.5, fill:'#f0e8d0'}));
+  g.appendChild(el('circle', {cx:0, cy:-10, r:2, fill:'#f0e8d0'}));
+  svg.appendChild(g);
+}
+
+function drawBird(svg, x, y, opacity) {
+  const g = el('g', {transform:`translate(${x},${y})`, opacity: opacity});
+  g.appendChild(el('path', {d:`M-12,0 Q-6,-8 0,0 Q6,-8 12,0`, fill:'none', stroke:'#404040', 'stroke-width':'2', 'stroke-linecap':'round'}));
+  svg.appendChild(g);
+}
+
+function drawPalmTree(svg, x, y, scale, opacity) {
+  const g = el('g', {transform:`translate(${x},${y}) scale(${scale})`, opacity: opacity});
+  // trunk (slightly curved)
+  g.appendChild(el('path', {
+    d:'M0,0 Q5,-40 -3,-80 Q-8,-120 0,-150',
+    fill:'none', stroke:'#8B6840', 'stroke-width':'10', 'stroke-linecap':'round'
+  }));
+  // trunk texture
+  for(let i=-20;i>-140;i-=15){
+    g.appendChild(el('path', {d:`M-5,${i} Q0,${i-5} 5,${i}`, fill:'none', stroke:'#7a5830', 'stroke-width':'1.5'}));
+  }
+  // fronds
+  const fronds = [[-1,-0.3],[0.8,-0.5],[-0.6,-0.8],[0.3,-0.9],[1.2,0.1],[-1.1,0.2]];
+  fronds.forEach(([dx,dy]) => {
+    const ex = dx*70;
+    const ey = -150 + dy*40;
+    g.appendChild(el('path', {
+      d:`M0,-150 Q${ex*0.5},${ey-10} ${ex},${ey}`,
+      fill:'none', stroke:'#4a8838', 'stroke-width':'4', 'stroke-linecap':'round'
+    }));
+    // leaf edges
+    for(let t=0.2;t<0.9;t+=0.15){
+      const mx = ex*t*0.5;
+      const my = -150 + (ey+150)*t -10;
+      g.appendChild(el('path', {
+        d:`M${mx},${my} Q${mx+dx*8},${my+5} ${mx+dx*12},${my+10}`,
+        fill:'none', stroke:'#3a7828', 'stroke-width':'2', 'stroke-linecap':'round'
+      }));
+    }
+  });
+  svg.appendChild(g);
+}
+
+function drawFern(svg, x, y, opacity) {
+  const g = el('g', {transform:`translate(${x},${y})`, opacity: opacity});
+  // main stem
+  g.appendChild(el('path', {d:'M0,0 Q-5,-20 0,-40', fill:'none', stroke:'#4a8838', 'stroke-width':'2', 'stroke-linecap':'round'}));
+  // leaflets
+  for(let i=1;i<6;i++){
+    const ty = -i*7;
+    const spread = 8+i*2;
+    g.appendChild(el('path', {d:`M${-1+i*0.2},${ty} Q${-spread},${ty-5} ${-spread-3},${ty-2}`, fill:'none', stroke:'#3a7828', 'stroke-width':'1.5', 'stroke-linecap':'round'}));
+    g.appendChild(el('path', {d:`M${1-i*0.2},${ty} Q${spread},${ty-5} ${spread+3},${ty-2}`, fill:'none', stroke:'#3a7828', 'stroke-width':'1.5', 'stroke-linecap':'round'}));
+  }
+  svg.appendChild(g);
+}
+
+
+// ===================== SHAPES DATA =====================
+
 const shapes = {
   star: {
     name: 'Stella',
-    // 5-pointed star
     getPath() {
       const cx = 300, cy = 310, outerR = 220, innerR = 90;
       const pts = [];
@@ -402,14 +1483,11 @@ const shapes = {
     name: 'Casa',
     getPath() {
       return [
-        [150, 350], [150, 580], [450, 580], [450, 350], // walls
-        [300, 130], // roof peak
-        [150, 350], // back to wall top-left
-        // door
+        [150, 350], [150, 580], [450, 580], [450, 350],
+        [300, 130],
+        [150, 350],
         [240, 580], [240, 460], [360, 460], [360, 580],
-        // window left
         [180, 390], [180, 440], [230, 440], [230, 390], [180, 390],
-        // chimney
         [380, 260], [380, 170], [420, 170], [420, 310]
       ];
     }
@@ -418,24 +1496,14 @@ const shapes = {
     name: 'Gatto',
     getPath() {
       const pts = [];
-      // body outline - sitting cat facing right
-      // left ear
       pts.push([220, 180], [200, 90], [250, 140]);
-      // head top
       pts.push([280, 110], [330, 100], [360, 120]);
-      // right ear
       pts.push([380, 80], [400, 160]);
-      // right cheek
       pts.push([410, 200], [400, 250]);
-      // body right
       pts.push([420, 320], [430, 400], [420, 480]);
-      // tail
       pts.push([440, 520], [480, 500], [500, 450], [490, 400]);
-      // bottom
       pts.push([420, 560], [350, 580], [250, 580], [180, 560]);
-      // body left
       pts.push([170, 480], [165, 400], [170, 320]);
-      // left cheek
       pts.push([190, 250], [200, 200]);
       return pts;
     }
@@ -445,21 +1513,15 @@ const shapes = {
     getPath() {
       const pts = [];
       const cx = 280, cy = 340;
-      // fish body (elliptical) + tail
-      // top of body
       for (let i = 0; i <= 8; i++) {
         const t = i / 8;
         const x = 120 + t * 320;
         const y = cy - 140 * Math.sin(t * Math.PI) * (1 - t * 0.3);
         pts.push([x, y]);
       }
-      // tail top
       pts.push([480, 250], [520, 200]);
-      // tail tip
       pts.push([530, 340]);
-      // tail bottom
       pts.push([520, 480], [480, 430]);
-      // bottom of body (reverse)
       for (let i = 8; i >= 0; i--) {
         const t = i / 8;
         const x = 120 + t * 320;
@@ -476,10 +1538,8 @@ const shapes = {
       const steps = 30;
       for (let i = 0; i <= steps; i++) {
         const t = (i / steps) * 2 * Math.PI;
-        // heart parametric equations
         let x = 16 * Math.pow(Math.sin(t), 3);
         let y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-        // scale and center
         x = 300 + x * 14;
         y = 320 + y * 14;
         pts.push([x, y]);
@@ -491,21 +1551,13 @@ const shapes = {
     name: 'Albero',
     getPath() {
       return [
-        // trunk base
         [270, 580], [270, 460],
-        // lower branches
         [140, 460], [300, 320],
-        // middle branches
         [170, 320], [300, 200],
-        // upper branches
         [200, 200], [300, 100],
-        // top to right side
         [400, 200], [330, 200],
-        // right middle
         [430, 320], [330, 320],
-        // right lower
         [460, 460], [330, 460],
-        // trunk right
         [330, 580]
       ];
     }
@@ -514,17 +1566,11 @@ const shapes = {
     name: 'Razzo',
     getPath() {
       const pts = [];
-      // nose cone
       pts.push([300, 60]);
-      // right side of body
       pts.push([340, 140], [355, 240], [360, 360]);
-      // right fin
       pts.push([420, 480], [440, 560], [370, 500]);
-      // bottom
       pts.push([360, 540], [330, 580], [300, 600], [270, 580], [240, 540]);
-      // left fin
       pts.push([230, 500], [160, 560], [180, 480]);
-      // left side of body
       pts.push([240, 360], [245, 240], [260, 140]);
       return pts;
     }
@@ -534,21 +1580,13 @@ const shapes = {
     getPath() {
       const pts = [];
       const cx = 300, cy = 340;
-      // body top
       pts.push([cx, 130]);
-      // right upper wing
       pts.push([340, 150], [430, 130], [490, 180], [500, 260], [460, 310], [380, 320]);
-      // body middle
       pts.push([cx, 340]);
-      // right lower wing
       pts.push([370, 360], [450, 400], [470, 480], [430, 540], [360, 550], [320, 500]);
-      // body bottom
       pts.push([cx, 570]);
-      // left lower wing
       pts.push([280, 500], [240, 550], [170, 540], [130, 480], [150, 400], [230, 360]);
-      // body middle again
       pts.push([cx, 340]);
-      // left upper wing
       pts.push([220, 320], [140, 310], [100, 260], [110, 180], [170, 130], [260, 150]);
       return pts;
     }
@@ -556,27 +1594,16 @@ const shapes = {
   dinosaur: {
     name: 'Dinosauro',
     getPath() {
-      // brontosaurus / long-neck side view
       return [
-        // tail
         [80, 360], [100, 320], [130, 340],
-        // back
         [170, 300], [220, 280], [280, 270], [340, 280],
-        // neck going up
         [370, 250], [380, 200], [390, 150], [400, 110],
-        // head
         [420, 95], [450, 90], [470, 100], [475, 120], [460, 140], [430, 145],
-        // neck going down
         [410, 170], [400, 220], [390, 280],
-        // belly
         [400, 340], [410, 400],
-        // back right leg
         [420, 470], [430, 560], [450, 570], [440, 560], [420, 480],
-        // belly continued
         [380, 430], [320, 440], [260, 440],
-        // front left leg
         [220, 470], [210, 560], [190, 570], [200, 560], [220, 480],
-        // belly to tail
         [180, 430], [140, 400], [100, 390]
       ];
     }
@@ -585,29 +1612,17 @@ const shapes = {
     name: 'Auto',
     getPath() {
       return [
-        // bottom left (before front wheel)
         [90, 420],
-        // front
         [90, 360], [100, 340], [130, 320],
-        // hood
         [180, 310], [220, 300],
-        // windshield
         [240, 240], [280, 200],
-        // roof
         [330, 190], [400, 190],
-        // rear window
         [440, 220], [470, 280],
-        // trunk
         [490, 310], [510, 340], [520, 360],
-        // bottom right
         [520, 420],
-        // rear wheel area
         [490, 420], [470, 450], [440, 460], [410, 450], [390, 420],
-        // undercarriage
         [280, 420],
-        // front wheel area
         [250, 420], [230, 450], [200, 460], [170, 450], [150, 420],
-        // connect back
         [110, 420]
       ];
     }
@@ -651,7 +1666,6 @@ printBtn.addEventListener('click', () => window.print());
 pdfBtn.addEventListener('click', exportPDF);
 
 function resamplePath(origPoints, targetCount) {
-  // Calculate total path length
   let totalLen = 0;
   const segments = [];
   for (let i = 0; i < origPoints.length - 1; i++) {
@@ -662,7 +1676,6 @@ function resamplePath(origPoints, targetCount) {
     totalLen += len;
   }
 
-  // Place points evenly along path
   const spacing = totalLen / (targetCount - 1);
   const result = [[...origPoints[0]]];
 
@@ -692,12 +1705,10 @@ function resamplePath(origPoints, targetCount) {
     }
   }
 
-  // Ensure we have the last point
   if (result.length < targetCount) {
     result.push([...origPoints[origPoints.length - 1]]);
   }
 
-  // Trim or pad to exact count
   while (result.length > targetCount) result.pop();
   while (result.length < targetCount) {
     result.push([...origPoints[origPoints.length - 1]]);
@@ -717,6 +1728,12 @@ function generate() {
   const svgW = 600, svgH = 700;
   const margin = 50;
 
+  // Draw the scene background FIRST
+  const sceneRenderer = sceneRenderers[currentShape];
+  if (sceneRenderer) {
+    sceneRenderer(svgEl, svgW, svgH);
+  }
+
   // Scale points to fit within margins
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   for (const [x, y] of points) {
@@ -729,7 +1746,7 @@ function generate() {
   const rangeX = maxX - minX || 1;
   const rangeY = maxY - minY || 1;
   const drawW = svgW - margin * 2;
-  const drawH = svgH - margin * 2 - 40; // extra space for title
+  const drawH = svgH - margin * 2 - 40;
   const scale = Math.min(drawW / rangeX, drawH / rangeY);
   const offsetX = margin + (drawW - rangeX * scale) / 2;
   const offsetY = margin + 40 + (drawH - rangeY * scale) / 2;
@@ -739,23 +1756,32 @@ function generate() {
     offsetY + (y - minY) * scale
   ]);
 
-  // Title
+  // Title with background for readability
+  const titleBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  titleBg.setAttribute('x', svgW / 2 - 180);
+  titleBg.setAttribute('y', 5);
+  titleBg.setAttribute('width', 360);
+  titleBg.setAttribute('height', 58);
+  titleBg.setAttribute('rx', 8);
+  titleBg.setAttribute('fill', '#fff');
+  titleBg.setAttribute('opacity', '0.85');
+  svgEl.appendChild(titleBg);
+
   const title = document.createElementNS('http://www.w3.org/2000/svg', 'text');
   title.setAttribute('x', svgW / 2);
-  title.setAttribute('y', 35);
+  title.setAttribute('y', 32);
   title.setAttribute('class', 'title-text');
   title.setAttribute('font-size', '22');
   title.textContent = `Unisci i Puntini: ${shape.name}`;
   svgEl.appendChild(title);
 
-  // Subtitle
   const sub = document.createElementNS('http://www.w3.org/2000/svg', 'text');
   sub.setAttribute('x', svgW / 2);
-  sub.setAttribute('y', 58);
+  sub.setAttribute('y', 52);
   sub.setAttribute('text-anchor', 'middle');
   sub.setAttribute('font-family', 'Inter, sans-serif');
-  sub.setAttribute('font-size', '13');
-  sub.setAttribute('fill', '#64748b');
+  sub.setAttribute('font-size', '12');
+  sub.setAttribute('fill', '#555');
   sub.textContent = `Collega i numeri da 1 a ${dotCount} per scoprire il disegno!`;
   svgEl.appendChild(sub);
 
@@ -773,12 +1799,21 @@ function generate() {
 
   // Determine good font size based on dot count
   const baseFontSize = dotCount <= 30 ? 14 : dotCount <= 50 ? 12 : 10;
-  const dotRadius = dotCount <= 30 ? 4.5 : dotCount <= 50 ? 3.5 : 3;
+  const dotRadius = dotCount <= 30 ? 5 : dotCount <= 50 ? 4 : 3.5;
 
   // Draw dots and numbers
   for (let i = 0; i < scaled.length; i++) {
     const [x, y] = scaled[i];
     const num = i + 1;
+
+    // White halo behind dot for visibility
+    const halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    halo.setAttribute('cx', x);
+    halo.setAttribute('cy', y);
+    halo.setAttribute('r', dotRadius + 2);
+    halo.setAttribute('fill', '#fff');
+    halo.setAttribute('opacity', '0.8');
+    svgEl.appendChild(halo);
 
     // Dot
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -788,19 +1823,17 @@ function generate() {
     circle.setAttribute('class', 'dot-circle');
     svgEl.appendChild(circle);
 
-    // Number label - position it to avoid overlap with the line
-    const labelOffset = dotRadius + baseFontSize * 0.6;
+    // Number label positioning
+    const labelOffset = dotRadius + baseFontSize * 0.7;
 
-    // Determine best label position (avoid overlapping with adjacent lines)
     let angle = 0;
     const prevPt = i > 0 ? scaled[i-1] : null;
     const nextPt = i < scaled.length - 1 ? scaled[i+1] : null;
 
     if (prevPt && nextPt) {
-      // Average direction of incoming and outgoing segments
       const ax = (prevPt[0] + nextPt[0]) / 2 - x;
       const ay = (prevPt[1] + nextPt[1]) / 2 - y;
-      angle = Math.atan2(ay, ax) + Math.PI; // opposite direction
+      angle = Math.atan2(ay, ax) + Math.PI;
     } else if (prevPt) {
       angle = Math.atan2(prevPt[1] - y, prevPt[0] - x) + Math.PI / 2;
     } else if (nextPt) {
@@ -810,9 +1843,17 @@ function generate() {
     const lx = x + labelOffset * Math.cos(angle);
     const ly = y + labelOffset * Math.sin(angle);
 
-    // Clamp to SVG bounds
     const clampedX = Math.max(15, Math.min(svgW - 15, lx));
     const clampedY = Math.max(20, Math.min(svgH - 5, ly));
+
+    // White background behind number for readability
+    const numBg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    numBg.setAttribute('cx', clampedX);
+    numBg.setAttribute('cy', clampedY);
+    numBg.setAttribute('r', baseFontSize * 0.6);
+    numBg.setAttribute('fill', '#fff');
+    numBg.setAttribute('opacity', '0.75');
+    svgEl.appendChild(numBg);
 
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     text.setAttribute('x', clampedX);
@@ -825,16 +1866,15 @@ function generate() {
     svgEl.appendChild(text);
   }
 
-  // Start/finish indicators
+  // Start marker
   if (scaled.length > 0) {
-    // Start marker
     const startCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     startCircle.setAttribute('cx', scaled[0][0]);
     startCircle.setAttribute('cy', scaled[0][1]);
-    startCircle.setAttribute('r', dotRadius + 4);
+    startCircle.setAttribute('r', dotRadius + 5);
     startCircle.setAttribute('fill', 'none');
     startCircle.setAttribute('stroke', '#059669');
-    startCircle.setAttribute('stroke-width', '2');
+    startCircle.setAttribute('stroke-width', '2.5');
     svgEl.appendChild(startCircle);
   }
 }

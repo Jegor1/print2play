@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cruciverba - Print2Play</title>
+    <title>Cruciverba per tutta la famiglia - Print2Play</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -379,22 +379,22 @@
     <header>
         <a href="index.html" class="back-link">&larr; Torna alla home</a>
         <h1>Cruciverba</h1>
-        <p>Genera un cruciverba con definizioni semplici, stampalo e divertiti a risolverlo!</p>
+        <p>Quante parole conosci? Stampa il cruciverba e giocate insieme in famiglia!</p>
     </header>
 
     <main class="container">
         <div class="controls">
             <div class="control-group">
-                <label for="difficulty">Difficolt&agrave;</label>
+                <label for="difficulty">Scegli il livello</label>
                 <select id="difficulty">
-                    <option value="facile">Facile (6-8 parole)</option>
-                    <option value="medio" selected>Medio (8-12 parole)</option>
-                    <option value="difficile">Difficile (12-16 parole)</option>
+                    <option value="facile">Per i piccoli (6-8 parole)</option>
+                    <option value="medio" selected>Per tutta la famiglia (8-12 parole)</option>
+                    <option value="difficile">Per i campioni (12-16 parole)</option>
                 </select>
             </div>
-            <button class="btn btn-primary" onclick="generateCrossword()">Genera cruciverba</button>
-            <button class="btn btn-solution" id="solutionBtn" onclick="toggleSolution()">Mostra soluzione</button>
-            <button class="btn btn-secondary btn-print" onclick="window.print()">Stampa</button>
+            <button class="btn btn-primary" onclick="generateCrossword()">Nuovo cruciverba!</button>
+            <button class="btn btn-solution" id="solutionBtn" onclick="toggleSolution()">Sbircia la soluzione</button>
+            <button class="btn btn-secondary btn-print" onclick="window.print()">Stampa e gioca!</button>
         </div>
 
         <div class="crossword-area" id="crosswordArea">

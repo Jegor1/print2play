@@ -98,7 +98,7 @@
             letter-spacing: 0.04em;
         }
 
-        select, input[type="number"] {
+        select {
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             padding: 10px 14px;
@@ -110,7 +110,7 @@
             transition: border-color 0.15s;
         }
 
-        select:focus, input[type="number"]:focus {
+        select:focus {
             border-color: var(--primary);
         }
 
@@ -270,14 +270,12 @@
                 </select>
             </div>
             <div class="control-group">
-                <label for="diff-count">Differenze</label>
-                <select id="diff-count">
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5" selected>5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
+                <label for="difficulty">Difficolt&agrave;</label>
+                <select id="difficulty">
+                    <option value="facile">Facile</option>
+                    <option value="medio" selected>Medio</option>
+                    <option value="difficile">Difficile</option>
+                    <option value="estremo">Estremo</option>
                 </select>
             </div>
             <button class="btn btn-primary" onclick="generate()">Genera</button>
@@ -295,7 +293,7 @@
     </footer>
 
     <script>
-    // Seeded random for reproducibility
+    // ========== UTILITIES ==========
     function mulberry32(a) {
         return function() {
             a |= 0; a = a + 0x6D2B79F5 | 0;
@@ -306,8 +304,8 @@
     }
 
     let rng = Math.random;
-
     function randInt(min, max) { return Math.floor(rng() * (max - min + 1)) + min; }
+    function randFloat(min, max) { return rng() * (max - min) + min; }
     function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
     function shuffle(arr) {
         const a = [...arr];
@@ -318,919 +316,1431 @@
         return a;
     }
 
-    // Color palettes
+    const W = 500, H = 400;
+    const AREA = W * H;
+
+    // Stroke style for cartoon outlines
+    const OL = 'stroke="#2a1f14" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"';
+    const OLthin = 'stroke="#2a1f14" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"';
+    const OLthick = 'stroke="#2a1f14" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
+
+    // Color palettes - bold & saturated cartoon colors
     const COLORS = {
-        sky: ['#87CEEB', '#B0E0FF', '#7EC8E3', '#A0D2DB'],
-        grass: ['#4CAF50', '#66BB6A', '#81C784', '#388E3C'],
-        tree: ['#2E7D32', '#388E3C', '#43A047', '#1B5E20'],
-        trunk: ['#795548', '#6D4C41', '#8D6E63', '#5D4037'],
-        flower: ['#E91E63', '#FF5722', '#FF9800', '#9C27B0', '#F44336', '#FFEB3B'],
-        house: ['#EF5350', '#FFA726', '#AB47BC', '#42A5F5', '#FFEE58'],
-        roof: ['#C62828', '#E65100', '#6A1B9A', '#1565C0', '#F57F17'],
-        sun: ['#FFD600', '#FFAB00', '#FF6F00'],
-        water: ['#1E88E5', '#2196F3', '#42A5F5', '#1565C0'],
-        sand: ['#FFE0B2', '#FFCC80', '#FFB74D', '#F9A825'],
-        skin: ['#FFCCBC', '#FFE0CC', '#D7CCC8'],
-        furniture: ['#8D6E63', '#A1887F', '#6D4C41', '#BCAAA4'],
+        sky: ['#5CC8FF', '#74D4FF', '#8AE0FF', '#64CDFF'],
+        grass: ['#3CB44B', '#4ECB5C', '#5ED86A', '#32A83E'],
+        tree_leaf: ['#28A745', '#34C759', '#20913A', '#3DDC63'],
+        trunk: ['#8B5E3C', '#A0714E', '#7A4F30', '#6B4226'],
+        flower_petal: ['#FF3B6F', '#FF6B35', '#FFB800', '#C850FF', '#FF4757', '#FF69B4'],
+        flower_center: ['#FFD600', '#FFC107', '#FFAB00'],
+        house_wall: ['#FF6B6B', '#FFA94D', '#C678FF', '#51A0FF', '#FFE066'],
+        roof: ['#D32F2F', '#E65100', '#7B1FA2', '#1565C0', '#F57F17'],
+        door: ['#6D4C41', '#5D4037', '#4E342E'],
+        window_glass: ['#B3E5FC', '#81D4FA', '#E1F5FE'],
+        sun: ['#FFD600', '#FFAB00', '#FF9100'],
+        cloud: ['#FFFFFF', '#F5F5F5'],
+        water: ['#1E88E5', '#2979FF', '#448AFF'],
+        sand: ['#FFD180', '#FFCC80', '#FFB74D'],
+        skin: ['#FFCCBC', '#FFE0CC', '#FFDAB9'],
+        furniture: ['#8D6E63', '#A1887F', '#795548', '#6D4C41'],
         wall: ['#FFF9C4', '#FFECB3', '#E1F5FE', '#F3E5F5', '#E8F5E9'],
         floor: ['#BCAAA4', '#D7CCC8', '#A1887F'],
-        star: ['#FFD600', '#FFF176', '#FFEE58', '#FFD54F'],
+        star: ['#FFD600', '#FFF176', '#FFEE58'],
         planet: ['#EF5350', '#AB47BC', '#26A69A', '#FF7043', '#5C6BC0'],
+        red: ['#FF4757', '#EF5350', '#F44336'],
+        blue: ['#2196F3', '#42A5F5', '#1E88E5'],
+        green: ['#4CAF50', '#66BB6A', '#43A047'],
+        purple: ['#AB47BC', '#CE93D8', '#9C27B0'],
+        orange: ['#FF9800', '#FFA726', '#FB8C00'],
+        yellow: ['#FFEB3B', '#FFC107', '#FFD600'],
+        pink: ['#FF69B4', '#FF3B6F', '#E91E63'],
+        brown: ['#8D6E63', '#795548', '#6D4C41'],
     };
-
     function col(cat) { return pick(COLORS[cat]); }
 
-    // ====== SCENE BUILDERS ======
-    // Each returns an array of "elements". Each element: { id, svg, x, y, w, h, type }
-    // type is used for diff generation
-
-    const W = 500, H = 400;
-
-    function svgRect(x, y, w, h, fill, rx=0, extra='') {
-        return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" rx="${rx}" ${extra}/>`;
-    }
-    function svgCircle(cx, cy, r, fill, extra='') {
-        return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" ${extra}/>`;
-    }
-    function svgEllipse(cx, cy, rx, ry, fill, extra='') {
-        return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${fill}" ${extra}/>`;
-    }
-    function svgPoly(points, fill, extra='') {
-        return `<polygon points="${points}" fill="${fill}" ${extra}/>`;
-    }
-    function svgText(x, y, text, size, fill, extra='') {
-        return `<text x="${x}" y="${y}" font-size="${size}" fill="${fill}" font-family="Arial, sans-serif" text-anchor="middle" ${extra}>${text}</text>`;
+    // Compute element size category based on bounding box vs image area
+    function sizeCategory(w, h) {
+        const pct = (w * h) / AREA;
+        if (pct > 0.15) return 'large';
+        if (pct > 0.05) return 'medium';
+        return 'small';
     }
 
-    function buildTree(x, y, scale=1) {
-        const s = scale;
-        const trunkC = col('trunk');
-        const leafC = col('tree');
-        let svg = '';
-        svg += svgRect(x - 8*s, y - 50*s, 16*s, 50*s, trunkC, 3);
-        svg += svgCircle(x, y - 55*s, 30*s, leafC);
-        svg += svgCircle(x - 20*s, y - 45*s, 22*s, leafC);
-        svg += svgCircle(x + 20*s, y - 45*s, 22*s, leafC);
-        return { svg, x: x-35*s, y: y-85*s, w: 70*s, h: 85*s };
+    // Difficulty config
+    const DIFFICULTY = {
+        facile:    { diffs: [3,4], sizes: ['large'], objectCount: [5,7] },
+        medio:     { diffs: [4,5], sizes: ['large','medium'], objectCount: [7,10] },
+        difficile: { diffs: [5,7], sizes: ['medium','small'], objectCount: [10,14] },
+        estremo:   { diffs: [7,9], sizes: ['small'], objectCount: [14,18] },
+    };
+
+    // ========== SVG SHAPE HELPERS (cartoon paths, no bare rects) ==========
+
+    function cartoonRect(x, y, w, h, fill, ol) {
+        ol = ol || OL;
+        const r = Math.min(4, w*0.08, h*0.08);
+        return '<path d="M'+(x+r)+','+y+' L'+(x+w-r)+','+y+' Q'+(x+w)+','+y+' '+(x+w)+','+(y+r)+' L'+(x+w)+','+(y+h-r)+' Q'+(x+w)+','+(y+h)+' '+(x+w-r)+','+(y+h)+' L'+(x+r)+','+(y+h)+' Q'+x+','+(y+h)+' '+x+','+(y+h-r)+' L'+x+','+(y+r)+' Q'+x+','+y+' '+(x+r)+','+y+' Z" fill="'+fill+'" '+ol+'/>';
     }
 
-    function buildFlower(x, y) {
-        const pc = col('flower');
-        const cc = '#FFD600';
-        let svg = '';
-        svg += svgRect(x - 2, y - 25, 4, 25, '#4CAF50');
-        for (let a = 0; a < 360; a += 60) {
-            const rad = a * Math.PI / 180;
-            svg += svgCircle(x + Math.cos(rad)*8, y - 30 + Math.sin(rad)*8, 6, pc);
+    function cartoonCircle(cx, cy, r, fill, ol) {
+        ol = ol || OL;
+        return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+fill+'" '+ol+'/>';
+    }
+
+    function cartoonEllipse(cx, cy, rx, ry, fill, ol) {
+        ol = ol || OL;
+        return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+fill+'" '+ol+'/>';
+    }
+
+    function cartoonPath(d, fill, ol) {
+        ol = ol || OL;
+        return '<path d="'+d+'" fill="'+fill+'" '+ol+'/>';
+    }
+
+    function cartoonPoly(points, fill, ol) {
+        ol = ol || OL;
+        return '<polygon points="'+points+'" fill="'+fill+'" '+ol+'/>';
+    }
+
+    // ========== OBJECT BUILDERS ==========
+
+    function buildSun(cx, cy) {
+        var c = col('sun');
+        var svg = '';
+        for (var a = 0; a < 360; a += 30) {
+            var rad = a * Math.PI / 180;
+            var x1 = cx + Math.cos(rad) * 38;
+            var y1 = cy + Math.sin(rad) * 38;
+            var x2 = cx + Math.cos(rad) * 52;
+            var y2 = cy + Math.sin(rad) * 52;
+            svg += '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+c+'" stroke-width="4" stroke-linecap="round"/>';
         }
-        svg += svgCircle(x, y - 30, 5, cc);
-        return { svg, x: x-14, y: y-38, w: 28, h: 38 };
+        svg += cartoonCircle(cx, cy, 32, c, OLthick);
+        svg += '<circle cx="'+(cx-10)+'" cy="'+(cy-6)+'" r="3.5" fill="#2a1f14" stroke="none"/>';
+        svg += '<circle cx="'+(cx+10)+'" cy="'+(cy-6)+'" r="3.5" fill="#2a1f14" stroke="none"/>';
+        svg += '<path d="M'+(cx-10)+','+(cy+8)+' Q'+cx+','+(cy+18)+' '+(cx+10)+','+(cy+8)+'" stroke="#2a1f14" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+        return { svg: svg, x: cx-54, y: cy-54, w: 108, h: 108, parts: [
+            { id: 'sun-body', fill: c }
+        ]};
     }
 
-    function buildSun(x, y) {
-        const c = col('sun');
-        let svg = '';
-        svg += svgCircle(x, y, 30, c);
-        for (let a = 0; a < 360; a += 30) {
-            const rad = a * Math.PI / 180;
-            const x1 = x + Math.cos(rad) * 35;
-            const y1 = y + Math.sin(rad) * 35;
-            const x2 = x + Math.cos(rad) * 48;
-            const y2 = y + Math.sin(rad) * 48;
-            svg += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="3" stroke-linecap="round"/>`;
+    function buildCloud(cx, cy) {
+        var svg = '';
+        svg += cartoonEllipse(cx, cy, 40, 22, '#fff', OL);
+        svg += cartoonEllipse(cx-24, cy+4, 26, 16, '#fff', OL);
+        svg += cartoonEllipse(cx+26, cy+4, 28, 16, '#fff', OL);
+        svg += '<ellipse cx="'+cx+'" cy="'+(cy+4)+'" rx="30" ry="16" fill="#fff" stroke="none"/>';
+        return { svg: svg, x: cx-60, y: cy-22, w: 120, h: 44, parts: [
+            { id: 'cloud-body', fill: '#fff' }
+        ]};
+    }
+
+    function buildTree(x, groundY, scale) {
+        scale = scale || 1;
+        var s = scale;
+        var trunkC = col('trunk');
+        var leafC = col('tree_leaf');
+        var svg = '';
+        var tx = x, bw = 14*s;
+        svg += cartoonPath('M'+(tx-bw/2)+','+groundY+' C'+(tx-bw/2-3*s)+','+(groundY-30*s)+' '+(tx-bw*0.3)+','+(groundY-55*s)+' '+(tx-2*s)+','+(groundY-60*s)+' L'+(tx+2*s)+','+(groundY-60*s)+' C'+(tx+bw*0.3)+','+(groundY-55*s)+' '+(tx+bw/2+3*s)+','+(groundY-30*s)+' '+(tx+bw/2)+','+groundY+' Z', trunkC, OL);
+        svg += cartoonPath('M'+(tx-35*s)+','+(groundY-55*s)+' C'+(tx-42*s)+','+(groundY-75*s)+' '+(tx-25*s)+','+(groundY-100*s)+' '+tx+','+(groundY-95*s)+' C'+(tx+25*s)+','+(groundY-100*s)+' '+(tx+42*s)+','+(groundY-75*s)+' '+(tx+35*s)+','+(groundY-55*s)+' C'+(tx+20*s)+','+(groundY-50*s)+' '+(tx-20*s)+','+(groundY-50*s)+' '+(tx-35*s)+','+(groundY-55*s)+' Z', leafC, OLthick);
+        svg += cartoonCircle(tx-20*s, groundY-78*s, 18*s, leafC, OL);
+        svg += cartoonCircle(tx+20*s, groundY-78*s, 18*s, leafC, OL);
+        svg += cartoonCircle(tx, groundY-88*s, 20*s, leafC, OL);
+        svg += '<circle cx="'+tx+'" cy="'+(groundY-78*s)+'" r="'+(22*s)+'" fill="'+leafC+'" stroke="none"/>';
+        return { svg: svg, x: tx-44*s, y: groundY-108*s, w: 88*s, h: 108*s, parts: [
+            { id: 'trunk', fill: trunkC },
+            { id: 'canopy', fill: leafC }
+        ]};
+    }
+
+    function buildFlower(x, groundY, petalC) {
+        petalC = petalC || col('flower_petal');
+        var centerC = col('flower_center');
+        var stemC = '#2E7D32';
+        var svg = '';
+        svg += '<path d="M'+x+','+groundY+' C'+(x-3)+','+(groundY-12)+' '+(x+3)+','+(groundY-22)+' '+x+','+(groundY-28)+'" stroke="'+stemC+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
+        svg += cartoonPath('M'+x+','+(groundY-14)+' Q'+(x+12)+','+(groundY-20)+' '+(x+6)+','+(groundY-10), '#43A047', OLthin);
+        for (var a = 0; a < 360; a += 60) {
+            var rad = a * Math.PI / 180;
+            var px = x + Math.cos(rad)*10;
+            var py = (groundY-32) + Math.sin(rad)*10;
+            svg += cartoonEllipse(px, py, 7, 5, petalC, OLthin+' transform="rotate('+a+' '+px+' '+py+')"');
         }
-        return { svg, x: x-50, y: y-50, w: 100, h: 100 };
+        svg += cartoonCircle(x, groundY-32, 6, centerC, OLthin);
+        return { svg: svg, x: x-18, y: groundY-44, w: 36, h: 44, parts: [
+            { id: 'petals', fill: petalC },
+            { id: 'center', fill: centerC }
+        ]};
     }
 
-    function buildCloud(x, y) {
-        let svg = '';
-        svg += svgEllipse(x, y, 35, 18, '#fff');
-        svg += svgEllipse(x - 20, y + 3, 22, 14, '#fff');
-        svg += svgEllipse(x + 22, y + 3, 24, 14, '#fff');
-        return { svg, x: x-55, y: y-18, w: 110, h: 36 };
+    function buildHouse(x, groundY) {
+        var wallC = col('house_wall');
+        var roofC = col('roof');
+        var doorC = col('door');
+        var winC = col('window_glass');
+        var hw = 100, hh = 75;
+        var roofH = 50;
+        var baseY = groundY - hh;
+        var svg = '';
+        svg += cartoonPath('M'+x+','+baseY+' L'+(x+hw)+','+baseY+' L'+(x+hw)+','+groundY+' L'+x+','+groundY+' Z', wallC, OLthick);
+        svg += cartoonPath('M'+(x-8)+','+(baseY+2)+' L'+(x+hw/2)+','+(baseY-roofH)+' L'+(x+hw+8)+','+(baseY+2)+' Z', roofC, OLthick);
+        svg += cartoonRect(x+hw-25, baseY-roofH+10, 16, 28, roofC, OL);
+        svg += cartoonPath('M'+(x+38)+','+groundY+' L'+(x+38)+','+(groundY-35)+' Q'+(x+50)+','+(groundY-42)+' '+(x+62)+','+(groundY-35)+' L'+(x+62)+','+groundY+' Z', doorC, OL);
+        svg += cartoonCircle(x+57, groundY-16, 3, '#FFD600', OLthin);
+        svg += cartoonRect(x+10, baseY+14, 22, 22, winC, OL);
+        svg += '<line x1="'+(x+10)+'" y1="'+(baseY+25)+'" x2="'+(x+32)+'" y2="'+(baseY+25)+'" stroke="#2a1f14" stroke-width="1.5"/>';
+        svg += '<line x1="'+(x+21)+'" y1="'+(baseY+14)+'" x2="'+(x+21)+'" y2="'+(baseY+36)+'" stroke="#2a1f14" stroke-width="1.5"/>';
+        svg += cartoonRect(x+70, baseY+14, 22, 22, winC, OL);
+        svg += '<line x1="'+(x+70)+'" y1="'+(baseY+25)+'" x2="'+(x+92)+'" y2="'+(baseY+25)+'" stroke="#2a1f14" stroke-width="1.5"/>';
+        svg += '<line x1="'+(x+81)+'" y1="'+(baseY+14)+'" x2="'+(x+81)+'" y2="'+(baseY+36)+'" stroke="#2a1f14" stroke-width="1.5"/>';
+        return { svg: svg, x: x-8, y: baseY-roofH, w: hw+16, h: groundY-(baseY-roofH), parts: [
+            { id: 'wall', fill: wallC },
+            { id: 'roof', fill: roofC },
+            { id: 'door', fill: doorC },
+            { id: 'window-left', fill: winC },
+            { id: 'window-right', fill: winC },
+            { id: 'chimney', fill: roofC }
+        ]};
     }
 
-    function buildHouse(x, y) {
-        const wallC = col('house');
-        const roofC = col('roof');
-        let svg = '';
-        svg += svgRect(x, y, 80, 60, wallC, 2);
-        svg += svgPoly(`${x-5},${y} ${x+40},${y-40} ${x+85},${y}`, roofC);
-        svg += svgRect(x + 30, y + 25, 20, 35, '#5D4037', 2);
-        svg += svgRect(x + 10, y + 12, 18, 18, '#B3E5FC', 2);
-        svg += svgRect(x + 55, y + 12, 18, 18, '#B3E5FC', 2);
-        return { svg, x: x-5, y: y-40, w: 90, h: 100 };
+    function buildSwing(cx, groundY) {
+        var svg = '';
+        var topY = groundY - 95;
+        var frameC = '#78909C';
+        var seatC = '#F44336';
+        svg += cartoonPath('M'+(cx-35)+','+groundY+' L'+(cx-25)+','+topY+' L'+(cx+25)+','+topY+' L'+(cx+35)+','+groundY, frameC, OLthick);
+        svg += cartoonRect(cx-28, topY, 56, 6, frameC, OL);
+        svg += '<line x1="'+(cx-10)+'" y1="'+(topY+6)+'" x2="'+(cx-12)+'" y2="'+(groundY-25)+'" stroke="#8D6E63" stroke-width="3" stroke-linecap="round"/>';
+        svg += '<line x1="'+(cx+10)+'" y1="'+(topY+6)+'" x2="'+(cx+12)+'" y2="'+(groundY-25)+'" stroke="#8D6E63" stroke-width="3" stroke-linecap="round"/>';
+        svg += cartoonRect(cx-16, groundY-27, 32, 7, seatC, OL);
+        return { svg: svg, x: cx-37, y: topY, w: 74, h: groundY-topY, parts: [
+            { id: 'frame', fill: frameC },
+            { id: 'seat', fill: seatC }
+        ]};
     }
 
-    function buildBird(x, y) {
-        let svg = `<path d="M${x},${y} Q${x-10},${y-10} ${x-20},${y} M${x},${y} Q${x+10},${y-10} ${x+20},${y}" stroke="#333" stroke-width="2" fill="none"/>`;
-        return { svg, x: x-20, y: y-12, w: 40, h: 14 };
-    }
-
-    function buildButterfly(x, y) {
-        const c1 = col('flower');
-        const c2 = col('flower');
-        let svg = '';
-        svg += svgEllipse(x - 10, y - 6, 10, 7, c1, 'opacity="0.8"');
-        svg += svgEllipse(x + 10, y - 6, 10, 7, c2, 'opacity="0.8"');
-        svg += svgEllipse(x - 8, y + 4, 8, 5, c1, 'opacity="0.8"');
-        svg += svgEllipse(x + 8, y + 4, 8, 5, c2, 'opacity="0.8"');
-        svg += svgRect(x - 1, y - 10, 2, 20, '#333', 1);
-        return { svg, x: x-20, y: y-14, w: 40, h: 28 };
-    }
-
-    function buildSwing(x, y) {
-        let svg = '';
-        svg += svgRect(x - 30, y, 60, 6, '#795548', 2);
-        svg += svgRect(x - 32, y, 4, -80, '#9E9E9E', 1);
-        svg += svgRect(x + 28, y, 4, -80, '#9E9E9E', 1);
-        svg += svgRect(x - 34, y - 80, 68, 5, '#9E9E9E', 2);
-        // seat
-        svg += `<line x1="${x-10}" y1="${y-75}" x2="${x-10}" y2="${y-20}" stroke="#8D6E63" stroke-width="2"/>`;
-        svg += `<line x1="${x+10}" y1="${y-75}" x2="${x+10}" y2="${y-20}" stroke="#8D6E63" stroke-width="2"/>`;
-        svg += svgRect(x - 14, y - 20, 28, 5, '#F44336', 2);
-        return { svg, x: x-34, y: y-80, w: 68, h: 86 };
-    }
-
-    function buildSlide(x, y) {
-        let svg = '';
-        const slideC = '#2196F3';
-        svg += svgRect(x, y, 6, -70, '#9E9E9E', 1);
-        svg += svgRect(x + 4, y, 6, -70, '#9E9E9E', 1);
-        // ladder steps
-        for (let i = 0; i < 5; i++) {
-            svg += svgRect(x - 2, y - 14*i - 10, 16, 3, '#9E9E9E', 1);
+    function buildSlide(x, groundY) {
+        var svg = '';
+        var slideC = '#2196F3';
+        var ladderC = '#78909C';
+        var topY = groundY - 80;
+        svg += cartoonPath('M'+x+','+groundY+' L'+x+','+topY+' L'+(x+12)+','+topY+' L'+(x+12)+','+groundY+' Z', ladderC, OL);
+        for (var i = 1; i <= 5; i++) {
+            var ry = topY + i * 13;
+            svg += '<line x1="'+x+'" y1="'+ry+'" x2="'+(x+12)+'" y2="'+ry+'" stroke="#2a1f14" stroke-width="2"/>';
         }
-        // slide surface
-        svg += `<path d="M${x+10},${y-65} Q${x+40},${y-60} ${x+60},${y}" stroke="${slideC}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
-        svg += `<path d="M${x+10},${y-65} Q${x+40},${y-55} ${x+60},${y+5}" stroke="${slideC}" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.3"/>`;
-        return { svg, x: x-2, y: y-70, w: 64, h: 76 };
+        svg += cartoonPath('M'+(x+12)+','+(topY+2)+' C'+(x+35)+','+(topY+5)+' '+(x+55)+','+(groundY-30)+' '+(x+65)+','+groundY+' L'+(x+58)+','+groundY+' C'+(x+50)+','+(groundY-25)+' '+(x+32)+','+(topY+12)+' '+(x+12)+','+(topY+9)+' Z', slideC, OL);
+        return { svg: svg, x: x-2, y: topY, w: 69, h: groundY-topY, parts: [
+            { id: 'slide-surface', fill: slideC },
+            { id: 'ladder', fill: ladderC }
+        ]};
     }
 
-    function buildBed(x, y) {
-        const c = col('furniture');
-        let svg = '';
-        svg += svgRect(x, y, 90, 50, c, 4);
-        svg += svgRect(x, y - 5, 90, 8, c, 3);
-        svg += svgRect(x + 2, y + 5, 86, 35, '#BBDEFB', 2);
-        svg += svgRect(x + 5, y + 8, 25, 15, '#fff', 4);
-        svg += svgRect(x - 4, y - 5, 8, 55, c, 2);
-        svg += svgRect(x + 86, y + 20, 8, 30, c, 2);
-        return { svg, x: x-4, y: y-5, w: 98, h: 60 };
+    function buildBird(cx, cy) {
+        var bodyC = col('orange');
+        var svg = '';
+        svg += cartoonEllipse(cx, cy, 10, 7, bodyC, OLthin);
+        svg += cartoonPath('M'+(cx-3)+','+(cy-2)+' Q'+(cx-14)+','+(cy-12)+' '+(cx-6)+','+(cy+2), col('yellow'), OLthin);
+        svg += cartoonPoly((cx+10)+','+( cy-1)+' '+(cx+17)+','+(cy+1)+' '+(cx+10)+','+(cy+3), '#FF8F00', OLthin);
+        svg += '<circle cx="'+(cx+6)+'" cy="'+(cy-2)+'" r="2" fill="#2a1f14" stroke="none"/>';
+        svg += cartoonPath('M'+(cx-10)+','+cy+' Q'+(cx-18)+','+(cy-6)+' '+(cx-16)+','+(cy+4), bodyC, OLthin);
+        return { svg: svg, x: cx-18, y: cy-14, w: 36, h: 22, parts: [
+            { id: 'bird-body', fill: bodyC }
+        ]};
     }
 
-    function buildLamp(x, y) {
-        const shadeC = col('flower');
-        let svg = '';
-        svg += svgRect(x - 3, y, 6, 40, '#9E9E9E', 2);
-        svg += svgPoly(`${x-18},${y} ${x+18},${y} ${x+12},${y-25} ${x-12},${y-25}`, shadeC);
-        svg += svgRect(x - 10, y + 38, 20, 4, '#9E9E9E', 2);
-        return { svg, x: x-18, y: y-25, w: 36, h: 67 };
+    function buildButterfly(cx, cy) {
+        var c1 = col('flower_petal');
+        var c2 = col('purple');
+        var svg = '';
+        svg += cartoonPath('M'+cx+','+cy+' C'+(cx-20)+','+(cy-22)+' '+(cx-28)+','+(cy-8)+' '+(cx-16)+','+(cy+4)+' Q'+(cx-8)+','+(cy+10)+' '+cx+','+cy, c1, OLthin);
+        svg += cartoonPath('M'+cx+','+cy+' C'+(cx+20)+','+(cy-22)+' '+(cx+28)+','+(cy-8)+' '+(cx+16)+','+(cy+4)+' Q'+(cx+8)+','+(cy+10)+' '+cx+','+cy, c1, OLthin);
+        svg += cartoonPath('M'+cx+','+cy+' C'+(cx-16)+','+(cy+4)+' '+(cx-22)+','+(cy+16)+' '+(cx-8)+','+(cy+14)+' Q'+(cx-2)+','+(cy+10)+' '+cx+','+cy, c2, OLthin);
+        svg += cartoonPath('M'+cx+','+cy+' C'+(cx+16)+','+(cy+4)+' '+(cx+22)+','+(cy+16)+' '+(cx+8)+','+(cy+14)+' Q'+(cx+2)+','+(cy+10)+' '+cx+','+cy, c2, OLthin);
+        svg += cartoonEllipse(cx, cy+2, 3, 10, '#2a1f14', 'stroke="none"');
+        svg += '<path d="M'+(cx-1)+','+(cy-7)+' Q'+(cx-8)+','+(cy-18)+' '+(cx-12)+','+(cy-16)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
+        svg += '<path d="M'+(cx+1)+','+(cy-7)+' Q'+(cx+8)+','+(cy-18)+' '+(cx+12)+','+(cy-16)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
+        return { svg: svg, x: cx-30, y: cy-20, w: 60, h: 38, parts: [
+            { id: 'wing-upper', fill: c1 },
+            { id: 'wing-lower', fill: c2 }
+        ]};
     }
 
-    function buildTable(x, y) {
-        const c = col('furniture');
-        let svg = '';
-        svg += svgRect(x, y, 80, 6, c, 2);
-        svg += svgRect(x + 5, y + 6, 6, 35, c, 1);
-        svg += svgRect(x + 69, y + 6, 6, 35, c, 1);
-        return { svg, x, y, w: 80, h: 41 };
+    function buildBench(x, groundY) {
+        var c = '#8D6E63';
+        var seatY = groundY - 22;
+        var svg = '';
+        svg += cartoonRect(x+4, seatY+4, 6, 18, c, OLthin);
+        svg += cartoonRect(x+55, seatY+4, 6, 18, c, OLthin);
+        svg += cartoonRect(x, seatY-22, 65, 5, c, OL);
+        svg += cartoonRect(x, seatY-14, 65, 5, c, OL);
+        svg += cartoonRect(x-2, seatY, 69, 6, c, OL);
+        svg += cartoonRect(x+2, seatY-24, 5, 26, c, OLthin);
+        svg += cartoonRect(x+58, seatY-24, 5, 26, c, OLthin);
+        return { svg: svg, x: x-2, y: seatY-24, w: 71, h: groundY-(seatY-24), parts: [
+            { id: 'bench-body', fill: c }
+        ]};
     }
 
-    function buildChair(x, y) {
-        const c = col('furniture');
-        let svg = '';
-        svg += svgRect(x, y, 30, 5, c, 2);
-        svg += svgRect(x + 2, y + 5, 5, 25, c, 1);
-        svg += svgRect(x + 23, y + 5, 5, 25, c, 1);
-        svg += svgRect(x, y - 30, 30, 32, c, 3);
-        return { svg, x, y: y-30, w: 30, h: 60 };
+    function buildBed(x, groundY) {
+        var frameC = col('furniture');
+        var blanketC = col('blue');
+        var pillowC = '#FFFFFF';
+        var bh = 55, bw = 110;
+        var baseY = groundY - bh;
+        var svg = '';
+        svg += cartoonRect(x, baseY+10, bw, bh-10, frameC, OL);
+        svg += cartoonPath('M'+(x-4)+','+(baseY+10)+' L'+(x-4)+','+(baseY-8)+' Q'+(x+bw/2)+','+(baseY-20)+' '+(x+bw+4)+','+(baseY-8)+' L'+(x+bw+4)+','+(baseY+10)+' Z', frameC, OLthick);
+        svg += cartoonRect(x+4, baseY+14, bw-8, bh-22, '#F5F5F5', OLthin);
+        svg += cartoonPath('M'+(x+30)+','+(baseY+14)+' L'+(x+bw-4)+','+(baseY+14)+' L'+(x+bw-4)+','+(groundY-8)+' L'+(x+28)+','+(groundY-8)+' Q'+(x+25)+','+(baseY+30)+' '+(x+30)+','+(baseY+14), blanketC, OL);
+        svg += cartoonEllipse(x+20, baseY+24, 16, 10, pillowC, OL);
+        svg += cartoonRect(x+bw-2, groundY-16, 8, 16, frameC, OLthin);
+        return { svg: svg, x: x-4, y: baseY-20, w: bw+12, h: groundY-(baseY-20), parts: [
+            { id: 'frame', fill: frameC },
+            { id: 'blanket', fill: blanketC },
+            { id: 'pillow', fill: pillowC }
+        ]};
     }
 
-    function buildFridge(x, y) {
-        let svg = '';
-        svg += svgRect(x, y, 45, 80, '#ECEFF1', 3);
-        svg += svgRect(x + 2, y + 2, 41, 35, '#CFD8DC', 2);
-        svg += svgRect(x + 2, y + 40, 41, 38, '#CFD8DC', 2);
-        svg += svgRect(x + 37, y + 15, 4, 10, '#9E9E9E', 2);
-        svg += svgRect(x + 37, y + 55, 4, 10, '#9E9E9E', 2);
-        return { svg, x, y, w: 45, h: 80 };
+    function buildLamp(x, groundY) {
+        var shadeC = col('flower_petal');
+        var svg = '';
+        var baseY2 = groundY;
+        svg += cartoonEllipse(x, baseY2-2, 14, 5, '#9E9E9E', OLthin);
+        svg += cartoonRect(x-3, baseY2-48, 6, 46, '#BDBDBD', OLthin);
+        svg += cartoonPath('M'+(x-22)+','+(baseY2-48)+' Q'+x+','+(baseY2-72)+' '+(x+22)+','+(baseY2-48)+' Z', shadeC, OL);
+        svg += '<ellipse cx="'+x+'" cy="'+(baseY2-46)+'" rx="8" ry="4" fill="#FFF9C4" stroke="none" opacity="0.6"/>';
+        return { svg: svg, x: x-22, y: baseY2-72, w: 44, h: 72, parts: [
+            { id: 'shade', fill: shadeC }
+        ]};
     }
 
-    function buildPot(x, y) {
-        const c = col('house');
-        let svg = '';
-        svg += svgEllipse(x, y, 18, 6, c);
-        svg += svgRect(x - 18, y, 36, -25, c, 0);
-        svg += svgEllipse(x, y - 25, 18, 6, c);
-        // steam
-        svg += `<path d="M${x-5},${y-33} Q${x-8},${y-45} ${x-3},${y-50}" stroke="#ccc" stroke-width="2" fill="none"/>`;
-        svg += `<path d="M${x+5},${y-33} Q${x+8},${y-48} ${x+3},${y-55}" stroke="#ccc" stroke-width="2" fill="none"/>`;
-        return { svg, x: x-18, y: y-55, w: 36, h: 61 };
-    }
-
-    function buildUmbrella(x, y) {
-        const c = col('flower');
-        let svg = '';
-        svg += svgRect(x - 2, y - 60, 4, 70, '#795548', 2);
-        svg += `<path d="M${x-35},${y-55} Q${x},${y-90} ${x+35},${y-55}" fill="${c}"/>`;
-        svg += `<path d="M${x+2},${y+10} Q${x+10},${y+15} ${x+8},${y+6}" stroke="#795548" stroke-width="2.5" fill="none"/>`;
-        return { svg, x: x-35, y: y-90, w: 70, h: 105 };
-    }
-
-    function buildSandcastle(x, y) {
-        let svg = '';
-        svg += svgRect(x, y, 50, 30, '#FFB74D', 0);
-        svg += svgRect(x + 5, y - 20, 15, 22, '#FFB74D', 0);
-        svg += svgRect(x + 30, y - 20, 15, 22, '#FFB74D', 0);
-        svg += svgPoly(`${x+5},${y-20} ${x+12},${y-28} ${x+20},${y-20}`, '#FFB74D');
-        svg += svgPoly(`${x+30},${y-20} ${x+37},${y-28} ${x+45},${y-20}`, '#FFB74D');
-        // flag
-        svg += svgRect(x + 11, y - 40, 2, 20, '#795548');
-        svg += svgPoly(`${x+13},${y-40} ${x+24},${y-36} ${x+13},${y-32}`, '#F44336');
-        return { svg, x, y: y-40, w: 50, h: 70 };
-    }
-
-    function buildBoat(x, y) {
-        const c = col('house');
-        let svg = '';
-        svg += `<path d="M${x},${y} L${x+60},${y} L${x+50},${y+20} L${x+10},${y+20} Z" fill="${c}"/>`;
-        svg += svgRect(x + 28, y - 40, 4, 42, '#795548');
-        svg += svgPoly(`${x+32},${y-38} ${x+55},${y-15} ${x+32},${y-5}`, '#fff');
-        return { svg, x, y: y-40, w: 60, h: 60 };
-    }
-
-    function buildDesk(x, y) {
-        const c = '#A1887F';
-        let svg = '';
-        svg += svgRect(x, y, 90, 6, c, 2);
-        svg += svgRect(x + 5, y + 6, 5, 30, c, 0);
-        svg += svgRect(x + 80, y + 6, 5, 30, c, 0);
-        // book on desk
-        svg += svgRect(x + 20, y - 8, 25, 8, '#42A5F5', 1);
-        svg += svgRect(x + 55, y - 6, 15, 6, '#66BB6A', 1);
-        return { svg, x, y: y-8, w: 90, h: 44 };
-    }
-
-    function buildBlackboard(x, y) {
-        let svg = '';
-        svg += svgRect(x, y, 120, 70, '#2E7D32', 3);
-        svg += svgRect(x + 2, y + 2, 116, 66, '#1B5E20', 2);
-        svg += svgText(x + 60, y + 40, 'ABC', 22, '#FFEB3B');
-        svg += svgRect(x + 10, y + 70, 100, 4, '#8D6E63', 2);
-        return { svg, x, y, w: 120, h: 74 };
-    }
-
-    function buildCow(x, y) {
-        let svg = '';
-        svg += svgEllipse(x, y, 28, 18, '#fff');
-        // spots
-        svg += svgEllipse(x - 10, y - 5, 8, 6, '#333');
-        svg += svgEllipse(x + 12, y + 3, 6, 5, '#333');
-        // head
-        svg += svgCircle(x + 30, y - 5, 12, '#fff');
-        svg += svgCircle(x + 35, y - 9, 3, '#333');
-        // horns
-        svg += `<path d="M${x+25},${y-16} L${x+22},${y-26}" stroke="#FFB74D" stroke-width="3" stroke-linecap="round"/>`;
-        svg += `<path d="M${x+35},${y-16} L${x+38},${y-26}" stroke="#FFB74D" stroke-width="3" stroke-linecap="round"/>`;
-        // legs
-        svg += svgRect(x - 18, y + 14, 5, 18, '#ddd', 1);
-        svg += svgRect(x - 6, y + 14, 5, 18, '#ddd', 1);
-        svg += svgRect(x + 8, y + 14, 5, 18, '#ddd', 1);
-        svg += svgRect(x + 18, y + 14, 5, 18, '#ddd', 1);
-        return { svg, x: x-28, y: y-26, w: 70, h: 58 };
-    }
-
-    function buildChicken(x, y) {
-        let svg = '';
-        svg += svgEllipse(x, y, 14, 11, '#FFE082');
-        svg += svgCircle(x + 14, y - 6, 8, '#FFE082');
-        svg += svgCircle(x + 18, y - 8, 2, '#333');
-        // beak
-        svg += svgPoly(`${x+22},${y-6} ${x+28},${y-5} ${x+22},${y-3}`, '#FF8F00');
-        // comb
-        svg += svgCircle(x + 14, y - 14, 4, '#F44336');
-        svg += svgCircle(x + 10, y - 14, 3, '#F44336');
-        // legs
-        svg += `<line x1="${x-4}" y1="${y+10}" x2="${x-6}" y2="${y+20}" stroke="#FF8F00" stroke-width="2"/>`;
-        svg += `<line x1="${x+4}" y1="${y+10}" x2="${x+6}" y2="${y+20}" stroke="#FF8F00" stroke-width="2"/>`;
-        return { svg, x: x-14, y: y-14, w: 42, h: 34 };
-    }
-
-    function buildBarn(x, y) {
-        let svg = '';
-        svg += svgRect(x, y, 80, 60, '#C62828', 2);
-        svg += svgPoly(`${x-5},${y} ${x+40},${y-35} ${x+85},${y}`, '#D32F2F');
-        svg += svgRect(x + 28, y + 20, 24, 40, '#5D4037', 2);
-        svg += svgRect(x + 10, y + 10, 15, 15, '#FFECB3', 1);
-        svg += svgRect(x + 55, y + 10, 15, 15, '#FFECB3', 1);
-        return { svg, x: x-5, y: y-35, w: 90, h: 95 };
-    }
-
-    function buildRocket(x, y) {
-        const c = col('planet');
-        let svg = '';
-        svg += svgEllipse(x, y, 15, 35, '#ECEFF1');
-        svg += svgEllipse(x, y - 25, 10, 12, c);
-        svg += svgCircle(x, y - 5, 6, '#42A5F5');
-        // fins
-        svg += svgPoly(`${x-15},${y+15} ${x-25},${y+35} ${x-10},${y+25}`, c);
-        svg += svgPoly(`${x+15},${y+15} ${x+25},${y+35} ${x+10},${y+25}`, c);
-        // flame
-        svg += svgPoly(`${x-8},${y+33} ${x},${y+50} ${x+8},${y+33}`, '#FF6F00');
-        svg += svgPoly(`${x-4},${y+33} ${x},${y+43} ${x+4},${y+33}`, '#FFD600');
-        return { svg, x: x-25, y: y-37, w: 50, h: 87 };
-    }
-
-    function buildPlanet(x, y, size) {
-        const c = col('planet');
-        const s = size || randInt(15, 30);
-        let svg = '';
-        svg += svgCircle(x, y, s, c);
-        // ring maybe
-        if (rng() > 0.5) {
-            svg += svgEllipse(x, y, s * 1.6, s * 0.3, 'none', `stroke="${c}" stroke-width="2" opacity="0.5"`);
-        }
-        return { svg, x: x-s*1.6, y: y-s, w: s*3.2, h: s*2 };
-    }
-
-    function buildStar(x, y, size) {
-        const s = size || randInt(3, 8);
-        const c = col('star');
-        let pts = '';
-        for (let i = 0; i < 5; i++) {
-            const a1 = (i * 72 - 90) * Math.PI / 180;
-            const a2 = ((i * 72) + 36 - 90) * Math.PI / 180;
-            pts += `${x + Math.cos(a1)*s},${y + Math.sin(a1)*s} `;
-            pts += `${x + Math.cos(a2)*s*0.4},${y + Math.sin(a2)*s*0.4} `;
-        }
-        let svg = svgPoly(pts.trim(), c);
-        return { svg, x: x-s, y: y-s, w: s*2, h: s*2 };
-    }
-
-    function buildBookshelf(x, y) {
-        let svg = '';
-        svg += svgRect(x, y, 60, 70, '#8D6E63', 2);
-        svg += svgRect(x + 2, y + 2, 56, 22, '#D7CCC8', 1);
-        svg += svgRect(x + 2, y + 26, 56, 22, '#D7CCC8', 1);
-        svg += svgRect(x + 2, y + 50, 56, 18, '#D7CCC8', 1);
-        // books
-        const bookColors = ['#E53935','#1E88E5','#43A047','#FB8C00','#8E24AA','#00ACC1'];
-        for (let row = 0; row < 3; row++) {
-            let bx = x + 5;
-            for (let b = 0; b < 4 + randInt(0,1); b++) {
-                const bw = randInt(6, 11);
-                svg += svgRect(bx, y + 4 + row * 24, bw, 18, pick(bookColors), 1);
-                bx += bw + 1;
+    function buildBookshelf(x, groundY) {
+        var woodC = '#8D6E63';
+        var shelfH = 80, shelfW = 70;
+        var baseY = groundY - shelfH;
+        var svg = '';
+        svg += cartoonRect(x, baseY, shelfW, shelfH, woodC, OL);
+        svg += cartoonRect(x+3, baseY+3, shelfW-6, shelfH/3-4, '#D7CCC8', 'stroke="none"');
+        svg += cartoonRect(x+3, baseY+shelfH/3+1, shelfW-6, shelfH/3-4, '#D7CCC8', 'stroke="none"');
+        svg += cartoonRect(x+3, baseY+2*shelfH/3+1, shelfW-6, shelfH/3-4, '#D7CCC8', 'stroke="none"');
+        var bookColors = ['#E53935','#1E88E5','#43A047','#FB8C00','#8E24AA','#00ACC1','#FF6F00','#7B1FA2'];
+        for (var row = 0; row < 3; row++) {
+            var bx = x + 6;
+            var rowY = baseY + 5 + row * (shelfH/3);
+            for (var b = 0; b < 5; b++) {
+                var bww = randInt(7, 11);
+                var bhh = randInt(16, 22);
+                svg += cartoonRect(bx, rowY + (24-bhh), bww, bhh, pick(bookColors), OLthin);
+                bx += bww + 2;
+                if (bx > x + shelfW - 10) break;
             }
         }
-        return { svg, x, y, w: 60, h: 70 };
+        return { svg: svg, x: x, y: baseY, w: shelfW, h: shelfH, parts: [
+            { id: 'shelf-frame', fill: woodC }
+        ]};
     }
 
     function buildWindow(x, y) {
-        let svg = '';
-        svg += svgRect(x, y, 35, 35, '#B3E5FC', 2);
-        svg += svgRect(x, y, 35, 35, 'none', 2, 'stroke="#8D6E63" stroke-width="3"');
-        svg += `<line x1="${x}" y1="${y+17}" x2="${x+35}" y2="${y+17}" stroke="#8D6E63" stroke-width="2"/>`;
-        svg += `<line x1="${x+17}" y1="${y}" x2="${x+17}" y2="${y+35}" stroke="#8D6E63" stroke-width="2"/>`;
-        return { svg, x, y, w: 35, h: 35 };
+        var frameC = '#8D6E63';
+        var glassC = col('window_glass');
+        var svg = '';
+        svg += cartoonRect(x, y, 40, 40, glassC, OL);
+        svg += '<line x1="'+x+'" y1="'+(y+20)+'" x2="'+(x+40)+'" y2="'+(y+20)+'" stroke="'+frameC+'" stroke-width="3"/>';
+        svg += '<line x1="'+(x+20)+'" y1="'+y+'" x2="'+(x+20)+'" y2="'+(y+40)+'" stroke="'+frameC+'" stroke-width="3"/>';
+        svg += cartoonPath('M'+x+','+y+' Q'+(x+5)+','+(y+10)+' '+x+','+(y+20), '#FFCDD2', 'stroke="none"');
+        svg += cartoonPath('M'+(x+40)+','+y+' Q'+(x+35)+','+(y+10)+' '+(x+40)+','+(y+20), '#FFCDD2', 'stroke="none"');
+        return { svg: svg, x: x, y: y, w: 40, h: 40, parts: [
+            { id: 'window-glass', fill: glassC }
+        ]};
     }
 
-    function buildClock(x, y) {
-        let svg = '';
-        svg += svgCircle(x, y, 16, '#FFF9C4');
-        svg += svgCircle(x, y, 16, 'none', 'stroke="#333" stroke-width="2"');
-        svg += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y-10}" stroke="#333" stroke-width="2"/>`;
-        svg += `<line x1="${x}" y1="${y}" x2="${x+7}" y2="${y+2}" stroke="#333" stroke-width="1.5"/>`;
-        svg += svgCircle(x, y, 2, '#333');
-        return { svg, x: x-16, y: y-16, w: 32, h: 32 };
+    function buildClock(cx, cy) {
+        var svg = '';
+        svg += cartoonCircle(cx, cy, 18, '#FFF9C4', OL);
+        svg += '<text x="'+cx+'" y="'+(cy-10)+'" font-size="7" fill="#2a1f14" text-anchor="middle" font-family="Arial">12</text>';
+        svg += '<text x="'+(cx+11)+'" y="'+(cy+3)+'" font-size="7" fill="#2a1f14" text-anchor="middle" font-family="Arial">3</text>';
+        svg += '<text x="'+cx+'" y="'+(cy+14)+'" font-size="7" fill="#2a1f14" text-anchor="middle" font-family="Arial">6</text>';
+        svg += '<text x="'+(cx-11)+'" y="'+(cy+3)+'" font-size="7" fill="#2a1f14" text-anchor="middle" font-family="Arial">9</text>';
+        svg += '<line x1="'+cx+'" y1="'+cy+'" x2="'+cx+'" y2="'+(cy-12)+'" stroke="#2a1f14" stroke-width="2.5" stroke-linecap="round"/>';
+        svg += '<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+8)+'" y2="'+(cy+3)+'" stroke="#2a1f14" stroke-width="2" stroke-linecap="round"/>';
+        svg += cartoonCircle(cx, cy, 2.5, '#E53935', 'stroke="none"');
+        return { svg: svg, x: cx-18, y: cy-18, w: 36, h: 36, parts: [
+            { id: 'clock-face', fill: '#FFF9C4' }
+        ]};
     }
 
-    function buildRug(x, y) {
-        const c = col('flower');
-        let svg = '';
-        svg += svgEllipse(x, y, 45, 20, c, 'opacity="0.6"');
-        svg += svgEllipse(x, y, 35, 14, '#fff', 'opacity="0.3"');
-        return { svg, x: x-45, y: y-20, w: 90, h: 40 };
+    function buildRug(cx, cy) {
+        var c = col('flower_petal');
+        var c2 = col('purple');
+        var svg = '';
+        svg += cartoonEllipse(cx, cy, 55, 22, c, OL);
+        svg += cartoonEllipse(cx, cy, 40, 15, c2, OLthin);
+        svg += cartoonEllipse(cx, cy, 22, 8, c, OLthin);
+        return { svg: svg, x: cx-55, y: cy-22, w: 110, h: 44, parts: [
+            { id: 'rug-outer', fill: c },
+            { id: 'rug-inner', fill: c2 }
+        ]};
     }
 
-    function buildToy(x, y) {
-        // teddy bear
-        const c = '#D7CCC8';
-        let svg = '';
-        svg += svgCircle(x, y, 12, c);
-        svg += svgCircle(x - 8, y - 11, 5, c);
-        svg += svgCircle(x + 8, y - 11, 5, c);
-        svg += svgCircle(x - 3, y - 2, 2, '#333');
-        svg += svgCircle(x + 3, y - 2, 2, '#333');
-        svg += svgEllipse(x, y + 4, 4, 3, '#A1887F');
-        return { svg, x: x-14, y: y-16, w: 28, h: 28 };
+    function buildToy(cx, cy) {
+        var bodyC = '#D7CCC8';
+        var innerC = '#BCAAA4';
+        var svg = '';
+        svg += cartoonCircle(cx-12, cy-16, 7, bodyC, OLthin);
+        svg += cartoonCircle(cx-12, cy-16, 4, innerC, 'stroke="none"');
+        svg += cartoonCircle(cx+12, cy-16, 7, bodyC, OLthin);
+        svg += cartoonCircle(cx+12, cy-16, 4, innerC, 'stroke="none"');
+        svg += cartoonCircle(cx, cy-6, 15, bodyC, OL);
+        svg += cartoonEllipse(cx, cy+16, 12, 14, bodyC, OL);
+        svg += cartoonEllipse(cx, cy+16, 7, 9, innerC, 'stroke="none"');
+        svg += '<circle cx="'+(cx-5)+'" cy="'+(cy-9)+'" r="2.5" fill="#2a1f14" stroke="none"/>';
+        svg += '<circle cx="'+(cx+5)+'" cy="'+(cy-9)+'" r="2.5" fill="#2a1f14" stroke="none"/>';
+        svg += cartoonEllipse(cx, cy-3, 3, 2.5, '#5D4037', 'stroke="none"');
+        svg += '<path d="M'+(cx-3)+','+cy+' Q'+cx+','+(cy+4)+' '+(cx+3)+','+cy+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
+        svg += cartoonEllipse(cx-16, cy+12, 6, 8, bodyC, OLthin);
+        svg += cartoonEllipse(cx+16, cy+12, 6, 8, bodyC, OLthin);
+        svg += cartoonEllipse(cx-7, cy+28, 7, 5, bodyC, OLthin);
+        svg += cartoonEllipse(cx+7, cy+28, 7, 5, bodyC, OLthin);
+        return { svg: svg, x: cx-24, y: cy-24, w: 48, h: 56, parts: [
+            { id: 'teddy-body', fill: bodyC }
+        ]};
     }
 
-    function buildFish(x, y) {
-        const c = col('flower');
-        let svg = '';
-        svg += svgEllipse(x, y, 16, 9, c);
-        svg += svgPoly(`${x-14},${y} ${x-26},${y-10} ${x-26},${y+10}`, c);
-        svg += svgCircle(x + 8, y - 2, 2.5, '#333');
-        return { svg, x: x-26, y: y-10, w: 42, h: 20 };
+    function buildFridge(x, groundY) {
+        var fridgeH = 95, fridgeW = 50;
+        var baseY = groundY - fridgeH;
+        var bodyC = '#ECEFF1';
+        var svg = '';
+        svg += cartoonRect(x, baseY, fridgeW, fridgeH, bodyC, OLthick);
+        svg += cartoonRect(x+3, baseY+3, fridgeW-6, fridgeH*0.42, '#CFD8DC', OLthin);
+        svg += cartoonRect(x+3, baseY+fridgeH*0.46, fridgeW-6, fridgeH*0.5, '#CFD8DC', OLthin);
+        svg += cartoonRect(x+fridgeW-10, baseY+18, 4, 14, '#9E9E9E', OLthin);
+        svg += cartoonRect(x+fridgeW-10, baseY+fridgeH*0.55, 4, 14, '#9E9E9E', OLthin);
+        svg += cartoonCircle(x+15, baseY+15, 5, '#FF6B6B', OLthin);
+        return { svg: svg, x: x, y: baseY, w: fridgeW, h: fridgeH, parts: [
+            { id: 'fridge-body', fill: bodyC },
+            { id: 'fridge-magnet', fill: '#FF6B6B' }
+        ]};
     }
 
-    function buildCrab(x, y) {
-        let svg = '';
-        svg += svgEllipse(x, y, 16, 11, '#EF5350');
-        svg += svgCircle(x - 6, y - 4, 3, '#333');
-        svg += svgCircle(x + 6, y - 4, 3, '#333');
-        // claws
-        svg += svgCircle(x - 24, y - 4, 7, '#EF5350');
-        svg += `<line x1="${x-16}" y1="${y}" x2="${x-18}" y2="${y-4}" stroke="#EF5350" stroke-width="3"/>`;
-        svg += svgCircle(x + 24, y - 4, 7, '#EF5350');
-        svg += `<line x1="${x+16}" y1="${y}" x2="${x+18}" y2="${y-4}" stroke="#EF5350" stroke-width="3"/>`;
-        // legs
-        for (let i = -1; i <= 1; i++) {
-            svg += `<line x1="${x-12}" y1="${y+5+i*5}" x2="${x-20}" y2="${y+12+i*5}" stroke="#EF5350" stroke-width="2"/>`;
-            svg += `<line x1="${x+12}" y1="${y+5+i*5}" x2="${x+20}" y2="${y+12+i*5}" stroke="#EF5350" stroke-width="2"/>`;
+    function buildTable(x, groundY) {
+        var c = col('furniture');
+        var tH = 8, tW = 95, legH = 38;
+        var topY = groundY - legH - tH;
+        var svg = '';
+        svg += cartoonRect(x+6, topY+tH, 7, legH, c, OLthin);
+        svg += cartoonRect(x+tW-13, topY+tH, 7, legH, c, OLthin);
+        svg += cartoonRect(x, topY, tW, tH, c, OL);
+        return { svg: svg, x: x, y: topY, w: tW, h: legH+tH, parts: [
+            { id: 'table-body', fill: c }
+        ]};
+    }
+
+    function buildChair(x, groundY) {
+        var c = col('furniture');
+        var seatY = groundY - 28;
+        var svg = '';
+        svg += cartoonRect(x+3, seatY+5, 5, 23, c, OLthin);
+        svg += cartoonRect(x+27, seatY+5, 5, 23, c, OLthin);
+        svg += cartoonRect(x+1, seatY-30, 33, 32, c, OL);
+        svg += cartoonRect(x-1, seatY, 37, 7, c, OL);
+        return { svg: svg, x: x-1, y: seatY-30, w: 38, h: groundY-(seatY-30), parts: [
+            { id: 'chair-body', fill: c }
+        ]};
+    }
+
+    function buildPot(cx, surfaceY) {
+        var c = col('red');
+        var svg = '';
+        svg += cartoonPath('M'+(cx-20)+','+surfaceY+' Q'+(cx-22)+','+(surfaceY-30)+' '+(cx-14)+','+(surfaceY-30)+' L'+(cx+14)+','+(surfaceY-30)+' Q'+(cx+22)+','+(surfaceY-30)+' '+(cx+20)+','+surfaceY+' Z', c, OL);
+        svg += cartoonEllipse(cx, surfaceY-30, 18, 5, c, OL);
+        svg += cartoonCircle(cx, surfaceY-36, 4, c, OLthin);
+        svg += '<path d="M'+(cx-6)+','+(surfaceY-42)+' Q'+(cx-10)+','+(surfaceY-54)+' '+(cx-4)+','+(surfaceY-58)+'" stroke="#BDBDBD" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.6"/>';
+        svg += '<path d="M'+(cx+6)+','+(surfaceY-42)+' Q'+(cx+10)+','+(surfaceY-56)+' '+(cx+4)+','+(surfaceY-62)+'" stroke="#BDBDBD" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.6"/>';
+        return { svg: svg, x: cx-22, y: surfaceY-62, w: 44, h: 62, parts: [
+            { id: 'pot-body', fill: c }
+        ]};
+    }
+
+    function buildApple(cx, cy) {
+        var c = '#F44336';
+        var svg = '';
+        svg += cartoonPath('M'+cx+','+(cy-10)+' C'+(cx-14)+','+(cy-12)+' '+(cx-14)+','+(cy+8)+' '+cx+','+(cy+12)+' C'+(cx+14)+','+(cy+8)+' '+(cx+14)+','+(cy-12)+' '+cx+','+(cy-10)+' Z', c, OLthin);
+        svg += '<path d="M'+cx+','+(cy-10)+' Q'+(cx+2)+','+(cy-18)+' '+(cx+1)+','+(cy-20)+'" stroke="#5D4037" stroke-width="2" fill="none" stroke-linecap="round"/>';
+        svg += cartoonPath('M'+(cx+1)+','+(cy-17)+' Q'+(cx+10)+','+(cy-22)+' '+(cx+8)+','+(cy-15), '#4CAF50', OLthin);
+        svg += '<ellipse cx="'+(cx-4)+'" cy="'+(cy-5)+'" rx="3" ry="4" fill="white" opacity="0.3" stroke="none"/>';
+        return { svg: svg, x: cx-14, y: cy-22, w: 28, h: 34, parts: [
+            { id: 'apple-body', fill: c }
+        ]};
+    }
+
+    function buildUmbrella(cx, groundY) {
+        var c = col('flower_petal');
+        var poleC = '#795548';
+        var svg = '';
+        svg += '<line x1="'+cx+'" y1="'+groundY+'" x2="'+cx+'" y2="'+(groundY-70)+'" stroke="'+poleC+'" stroke-width="3.5" stroke-linecap="round"/>';
+        svg += '<path d="M'+cx+','+groundY+' Q'+(cx+10)+','+(groundY+6)+' '+(cx+8)+','+(groundY-2)+'" stroke="'+poleC+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
+        svg += cartoonPath('M'+(cx-40)+','+(groundY-62)+' Q'+(cx-20)+','+(groundY-96)+' '+cx+','+(groundY-92)+' Q'+(cx+20)+','+(groundY-96)+' '+(cx+40)+','+(groundY-62)+' Z', c, OLthick);
+        svg += '<line x1="'+cx+'" y1="'+(groundY-92)+'" x2="'+cx+'" y2="'+(groundY-62)+'" stroke="#2a1f14" stroke-width="1.5"/>';
+        svg += '<line x1="'+(cx-20)+'" y1="'+(groundY-88)+'" x2="'+(cx-22)+'" y2="'+(groundY-62)+'" stroke="#2a1f14" stroke-width="1.5"/>';
+        svg += '<line x1="'+(cx+20)+'" y1="'+(groundY-88)+'" x2="'+(cx+22)+'" y2="'+(groundY-62)+'" stroke="#2a1f14" stroke-width="1.5"/>';
+        return { svg: svg, x: cx-42, y: groundY-96, w: 84, h: 102, parts: [
+            { id: 'umbrella-canopy', fill: c }
+        ]};
+    }
+
+    function buildSandcastle(x, groundY) {
+        var sandC = '#FFB74D';
+        var svg = '';
+        svg += cartoonPath('M'+x+','+groundY+' L'+(x+60)+','+groundY+' L'+(x+58)+','+(groundY-28)+' L'+(x+2)+','+(groundY-28)+' Z', sandC, OL);
+        svg += cartoonRect(x+4, groundY-50, 18, 24, sandC, OL);
+        svg += cartoonRect(x+38, groundY-50, 18, 24, sandC, OL);
+        for (var i = 0; i < 3; i++) {
+            svg += cartoonRect(x+5+i*7, groundY-56, 5, 8, sandC, OLthin);
+            svg += cartoonRect(x+39+i*7, groundY-56, 5, 8, sandC, OLthin);
         }
-        return { svg, x: x-31, y: y-12, w: 62, h: 30 };
+        svg += cartoonPath('M'+(x+24)+','+(groundY-28)+' Q'+(x+30)+','+(groundY-40)+' '+(x+36)+','+(groundY-28), '#D7A04A', OLthin);
+        svg += '<line x1="'+(x+13)+'" y1="'+(groundY-56)+'" x2="'+(x+13)+'" y2="'+(groundY-72)+'" stroke="#795548" stroke-width="2"/>';
+        svg += cartoonPoly((x+13)+','+(groundY-72)+' '+(x+25)+','+(groundY-67)+' '+(x+13)+','+(groundY-62), '#F44336', OLthin);
+        return { svg: svg, x: x, y: groundY-72, w: 60, h: 72, parts: [
+            { id: 'castle-body', fill: sandC },
+            { id: 'castle-flag', fill: '#F44336' }
+        ]};
     }
 
-    function buildApple(x, y) {
-        let svg = '';
-        svg += svgCircle(x, y, 10, '#F44336');
-        svg += svgRect(x - 1, y - 16, 2, 8, '#795548');
-        svg += svgEllipse(x + 4, y - 13, 5, 3, '#66BB6A', 'transform="rotate(30 ' + (x+4) + ' ' + (y-13) + ')"');
-        return { svg, x: x-10, y: y-16, w: 20, h: 26 };
+    function buildBoat(cx, waterY) {
+        var hullC = col('house_wall');
+        var svg = '';
+        svg += cartoonPath('M'+(cx-35)+','+waterY+' L'+(cx-28)+','+(waterY+18)+' L'+(cx+28)+','+(waterY+18)+' L'+(cx+35)+','+waterY+' Z', hullC, OL);
+        svg += '<line x1="'+cx+'" y1="'+waterY+'" x2="'+cx+'" y2="'+(waterY-45)+'" stroke="#795548" stroke-width="3.5" stroke-linecap="round"/>';
+        svg += cartoonPath('M'+(cx+2)+','+(waterY-42)+' L'+(cx+28)+','+(waterY-15)+' L'+(cx+2)+','+(waterY-5)+' Z', '#FFFFFF', OL);
+        svg += cartoonPoly(cx+','+(waterY-45)+' '+(cx+12)+','+(waterY-40)+' '+cx+','+(waterY-35), '#FF6B6B', OLthin);
+        return { svg: svg, x: cx-37, y: waterY-47, w: 74, h: 67, parts: [
+            { id: 'hull', fill: hullC },
+            { id: 'sail', fill: '#FFFFFF' }
+        ]};
     }
 
-    function buildFence(x, y) {
-        let svg = '';
-        for (let i = 0; i < 5; i++) {
-            svg += svgRect(x + i * 15, y, 5, 35, '#D7CCC8', 1);
-            svg += svgPoly(`${x + i*15},${y} ${x + i*15 + 2.5},${y-6} ${x + i*15 + 5},${y}`, '#D7CCC8');
+    function buildFish(cx, cy) {
+        var c = col('flower_petal');
+        var svg = '';
+        svg += cartoonPath('M'+(cx+18)+','+cy+' C'+(cx+18)+','+(cy-12)+' '+(cx-8)+','+(cy-14)+' '+(cx-14)+','+cy+' C'+(cx-8)+','+(cy+14)+' '+(cx+18)+','+(cy+12)+' '+(cx+18)+','+cy+' Z', c, OLthin);
+        svg += cartoonPath('M'+(cx-12)+','+cy+' L'+(cx-26)+','+(cy-10)+' L'+(cx-26)+','+(cy+10)+' Z', c, OLthin);
+        svg += '<circle cx="'+(cx+8)+'" cy="'+(cy-3)+'" r="3" fill="white" stroke="none"/>';
+        svg += '<circle cx="'+(cx+9)+'" cy="'+(cy-3)+'" r="1.5" fill="#2a1f14" stroke="none"/>';
+        svg += cartoonPath('M'+cx+','+(cy-8)+' Q'+(cx+4)+','+(cy-16)+' '+(cx+10)+','+(cy-8), c, OLthin);
+        return { svg: svg, x: cx-28, y: cy-16, w: 48, h: 32, parts: [
+            { id: 'fish-body', fill: c }
+        ]};
+    }
+
+    function buildCrab(cx, cy) {
+        var c = '#EF5350';
+        var svg = '';
+        svg += cartoonEllipse(cx, cy, 18, 13, c, OL);
+        svg += '<line x1="'+(cx-6)+'" y1="'+(cy-12)+'" x2="'+(cx-8)+'" y2="'+(cy-20)+'" stroke="'+c+'" stroke-width="3"/>';
+        svg += '<line x1="'+(cx+6)+'" y1="'+(cy-12)+'" x2="'+(cx+8)+'" y2="'+(cy-20)+'" stroke="'+c+'" stroke-width="3"/>';
+        svg += cartoonCircle(cx-8, cy-21, 4, '#fff', OLthin);
+        svg += '<circle cx="'+(cx-8)+'" cy="'+(cy-21)+'" r="2" fill="#2a1f14" stroke="none"/>';
+        svg += cartoonCircle(cx+8, cy-21, 4, '#fff', OLthin);
+        svg += '<circle cx="'+(cx+8)+'" cy="'+(cy-21)+'" r="2" fill="#2a1f14" stroke="none"/>';
+        svg += cartoonPath('M'+(cx-18)+','+(cy-2)+' L'+(cx-28)+','+(cy-8)+' L'+(cx-26)+','+(cy-16)+' Q'+(cx-20)+','+(cy-14)+' '+(cx-22)+','+(cy-8), c, OL);
+        svg += cartoonPath('M'+(cx+18)+','+(cy-2)+' L'+(cx+28)+','+(cy-8)+' L'+(cx+26)+','+(cy-16)+' Q'+(cx+20)+','+(cy-14)+' '+(cx+22)+','+(cy-8), c, OL);
+        for (var i = -1; i <= 1; i++) {
+            svg += '<line x1="'+(cx-16)+'" y1="'+(cy+4+i*6)+'" x2="'+(cx-26)+'" y2="'+(cy+10+i*6)+'" stroke="'+c+'" stroke-width="2.5" stroke-linecap="round"/>';
+            svg += '<line x1="'+(cx+16)+'" y1="'+(cy+4+i*6)+'" x2="'+(cx+26)+'" y2="'+(cy+10+i*6)+'" stroke="'+c+'" stroke-width="2.5" stroke-linecap="round"/>';
         }
-        svg += svgRect(x - 2, y + 8, 64, 4, '#D7CCC8', 1);
-        svg += svgRect(x - 2, y + 22, 64, 4, '#D7CCC8', 1);
-        return { svg, x: x-2, y: y-6, w: 66, h: 41 };
+        svg += '<path d="M'+(cx-5)+','+(cy+4)+' Q'+cx+','+(cy+9)+' '+(cx+5)+','+(cy+4)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
+        return { svg: svg, x: cx-30, y: cy-25, w: 60, h: 40, parts: [
+            { id: 'crab-body', fill: c }
+        ]};
     }
 
-    // ====== SCENE COMPOSERS ======
+    function buildDesk(x, groundY) {
+        var c = '#A1887F';
+        var deskH = 7, legH = 34, deskW = 100;
+        var topY = groundY - legH - deskH;
+        var svg = '';
+        svg += cartoonRect(x+6, topY+deskH, 6, legH, c, OLthin);
+        svg += cartoonRect(x+deskW-12, topY+deskH, 6, legH, c, OLthin);
+        svg += cartoonRect(x, topY, deskW, deskH, c, OL);
+        svg += cartoonRect(x+20, topY-9, 28, 9, '#42A5F5', OLthin);
+        svg += cartoonRect(x+58, topY-7, 18, 7, '#66BB6A', OLthin);
+        return { svg: svg, x: x, y: topY-9, w: deskW, h: legH+deskH+9, parts: [
+            { id: 'desk-top', fill: c },
+            { id: 'desk-book', fill: '#42A5F5' }
+        ]};
+    }
 
-    function buildScene(sceneType) {
-        const elements = [];
-        let bgSvg = '';
-        let eid = 0;
+    function buildBlackboard(x, y) {
+        var frameC = '#6D4C41';
+        var boardC = '#2E7D32';
+        var svg = '';
+        svg += cartoonRect(x-4, y-4, 138, 82, frameC, OLthick);
+        svg += cartoonRect(x, y, 130, 74, boardC, OL);
+        svg += '<text x="'+(x+65)+'" y="'+(y+38)+'" font-size="24" fill="#FFEB3B" font-family="Arial, sans-serif" text-anchor="middle" stroke="none">ABC</text>';
+        svg += '<text x="'+(x+65)+'" y="'+(y+58)+'" font-size="16" fill="#fff" font-family="Arial, sans-serif" text-anchor="middle" stroke="none" opacity="0.7">123</text>';
+        svg += cartoonRect(x+10, y+74, 110, 5, '#8D6E63', OLthin);
+        svg += cartoonRect(x+25, y+72, 14, 4, '#fff', 'stroke="none"');
+        svg += cartoonRect(x+45, y+72, 10, 4, '#FFD600', 'stroke="none"');
+        return { svg: svg, x: x-4, y: y-4, w: 138, h: 83, parts: [
+            { id: 'board', fill: boardC },
+            { id: 'board-frame', fill: frameC }
+        ]};
+    }
 
-        function addEl(name, builderResult, canModify = true) {
+    function buildCow(cx, groundY) {
+        var bodyC = '#FFFFFF';
+        var spotC = '#333333';
+        var svg = '';
+        var by = groundY - 32;
+        svg += cartoonEllipse(cx, by, 34, 22, bodyC, OLthick);
+        svg += cartoonEllipse(cx-12, by-6, 9, 7, spotC, 'stroke="none"');
+        svg += cartoonEllipse(cx+14, by+4, 7, 6, spotC, 'stroke="none"');
+        svg += cartoonEllipse(cx+4, by+8, 6, 4, spotC, 'stroke="none"');
+        svg += cartoonCircle(cx+36, by-6, 15, bodyC, OL);
+        svg += cartoonEllipse(cx+28, by-20, 6, 4, '#FFCCBC', OLthin);
+        svg += cartoonEllipse(cx+44, by-20, 6, 4, '#FFCCBC', OLthin);
+        svg += '<circle cx="'+(cx+32)+'" cy="'+(by-10)+'" r="3" fill="white" stroke="none"/>';
+        svg += '<circle cx="'+(cx+33)+'" cy="'+(by-10)+'" r="1.8" fill="#2a1f14" stroke="none"/>';
+        svg += '<circle cx="'+(cx+40)+'" cy="'+(by-10)+'" r="3" fill="white" stroke="none"/>';
+        svg += '<circle cx="'+(cx+41)+'" cy="'+(by-10)+'" r="1.8" fill="#2a1f14" stroke="none"/>';
+        svg += cartoonEllipse(cx+37, by, 8, 5, '#FFCCBC', OLthin);
+        svg += '<circle cx="'+(cx+34)+'" cy="'+by+'" r="1.5" fill="#2a1f14" stroke="none"/>';
+        svg += '<circle cx="'+(cx+40)+'" cy="'+by+'" r="1.5" fill="#2a1f14" stroke="none"/>';
+        svg += cartoonPath('M'+(cx+30)+','+(by-19)+' Q'+(cx+26)+','+(by-32)+' '+(cx+28)+','+(by-34), '#FFB74D', OLthin);
+        svg += cartoonPath('M'+(cx+42)+','+(by-19)+' Q'+(cx+46)+','+(by-32)+' '+(cx+44)+','+(by-34), '#FFB74D', OLthin);
+        svg += cartoonRect(cx-24, groundY-18, 8, 18, bodyC, OLthin);
+        svg += cartoonRect(cx-10, groundY-18, 8, 18, bodyC, OLthin);
+        svg += cartoonRect(cx+10, groundY-18, 8, 18, bodyC, OLthin);
+        svg += cartoonRect(cx+22, groundY-18, 8, 18, bodyC, OLthin);
+        svg += cartoonRect(cx-25, groundY-3, 10, 3, '#333', 'stroke="none"');
+        svg += cartoonRect(cx-11, groundY-3, 10, 3, '#333', 'stroke="none"');
+        svg += cartoonRect(cx+9, groundY-3, 10, 3, '#333', 'stroke="none"');
+        svg += cartoonRect(cx+21, groundY-3, 10, 3, '#333', 'stroke="none"');
+        svg += '<path d="M'+(cx-34)+','+(by-8)+' Q'+(cx-48)+','+(by-16)+' '+(cx-44)+','+(by-4)+'" stroke="#2a1f14" stroke-width="2" fill="none"/>';
+        svg += cartoonCircle(cx-44, by-4, 4, bodyC, OLthin);
+        svg += '<path d="M'+(cx+33)+','+(by+4)+' Q'+(cx+37)+','+(by+8)+' '+(cx+41)+','+(by+4)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
+        return { svg: svg, x: cx-50, y: by-36, w: 102, h: groundY-(by-36), parts: [
+            { id: 'cow-body', fill: bodyC },
+            { id: 'cow-spots', fill: spotC },
+            { id: 'cow-horns', fill: '#FFB74D' }
+        ]};
+    }
+
+    function buildChicken(cx, groundY) {
+        var bodyC = '#FFE082';
+        var combC = '#F44336';
+        var svg = '';
+        var by = groundY - 18;
+        svg += cartoonEllipse(cx, by, 16, 13, bodyC, OL);
+        svg += cartoonCircle(cx+16, by-8, 10, bodyC, OL);
+        svg += cartoonPath('M'+(cx+12)+','+(by-17)+' Q'+(cx+15)+','+(by-26)+' '+(cx+18)+','+(by-18)+' Q'+(cx+20)+','+(by-25)+' '+(cx+22)+','+(by-17), combC, OLthin);
+        svg += '<circle cx="'+(cx+19)+'" cy="'+(by-10)+'" r="2.5" fill="white" stroke="none"/>';
+        svg += '<circle cx="'+(cx+20)+'" cy="'+(by-10)+'" r="1.3" fill="#2a1f14" stroke="none"/>';
+        svg += cartoonPoly((cx+26)+','+(by-7)+' '+(cx+34)+','+(by-5)+' '+(cx+26)+','+(by-3), '#FF8F00', OLthin);
+        svg += cartoonPath('M'+(cx-4)+','+(by-4)+' Q'+(cx-14)+','+(by+2)+' '+(cx-6)+','+(by+8), '#FFD54F', OLthin);
+        svg += cartoonPath('M'+(cx-14)+','+(by-4)+' Q'+(cx-26)+','+(by-16)+' '+(cx-20)+','+(by+2), '#FFD54F', OLthin);
+        svg += cartoonPath('M'+(cx-14)+','+(by-2)+' Q'+(cx-28)+','+(by-10)+' '+(cx-22)+','+(by+4), bodyC, OLthin);
+        svg += '<line x1="'+(cx-4)+'" y1="'+(by+12)+'" x2="'+(cx-6)+'" y2="'+groundY+'" stroke="#FF8F00" stroke-width="2.5" stroke-linecap="round"/>';
+        svg += '<line x1="'+(cx+4)+'" y1="'+(by+12)+'" x2="'+(cx+6)+'" y2="'+groundY+'" stroke="#FF8F00" stroke-width="2.5" stroke-linecap="round"/>';
+        svg += '<path d="M'+(cx-10)+','+groundY+' L'+(cx-6)+','+groundY+' L'+(cx-2)+','+groundY+'" stroke="#FF8F00" stroke-width="2" fill="none" stroke-linecap="round"/>';
+        svg += '<path d="M'+(cx+2)+','+groundY+' L'+(cx+6)+','+groundY+' L'+(cx+10)+','+groundY+'" stroke="#FF8F00" stroke-width="2" fill="none" stroke-linecap="round"/>';
+        return { svg: svg, x: cx-28, y: by-26, w: 64, h: groundY-(by-26), parts: [
+            { id: 'chicken-body', fill: bodyC },
+            { id: 'chicken-comb', fill: combC }
+        ]};
+    }
+
+    function buildBarn(x, groundY) {
+        var wallC = '#C62828';
+        var roofC = '#D32F2F';
+        var bw = 100, bh = 70;
+        var baseY = groundY - bh;
+        var svg = '';
+        svg += cartoonRect(x, baseY, bw, bh, wallC, OLthick);
+        svg += cartoonPath('M'+(x-8)+','+(baseY+2)+' L'+(x+bw/2)+','+(baseY-42)+' L'+(x+bw+8)+','+(baseY+2)+' Z', roofC, OLthick);
+        svg += '<line x1="'+x+'" y1="'+(baseY+bh/2)+'" x2="'+(x+bw)+'" y2="'+(baseY+bh/2)+'" stroke="#B71C1C" stroke-width="2"/>';
+        svg += cartoonPath('M'+(x+32)+','+groundY+' L'+(x+32)+','+(baseY+20)+' Q'+(x+50)+','+(baseY+10)+' '+(x+68)+','+(baseY+20)+' L'+(x+68)+','+groundY+' Z', '#5D4037', OL);
+        svg += '<line x1="'+(x+50)+'" y1="'+(baseY+14)+'" x2="'+(x+50)+'" y2="'+groundY+'" stroke="#2a1f14" stroke-width="1.5"/>';
+        svg += cartoonRect(x+8, baseY+12, 18, 18, '#FFECB3', OL);
+        svg += cartoonRect(x+bw-26, baseY+12, 18, 18, '#FFECB3', OL);
+        svg += cartoonCircle(x+bw/2, baseY-16, 10, '#FFECB3', OL);
+        return { svg: svg, x: x-8, y: baseY-42, w: bw+16, h: groundY-(baseY-42), parts: [
+            { id: 'barn-wall', fill: wallC },
+            { id: 'barn-roof', fill: roofC },
+            { id: 'barn-door', fill: '#5D4037' },
+            { id: 'barn-hayloft', fill: '#FFECB3' }
+        ]};
+    }
+
+    function buildFence(x, groundY) {
+        var c = '#D7CCC8';
+        var svg = '';
+        var fenceH = 40, postCount = 6, spacing = 14;
+        var totalW = (postCount-1)*spacing + 6;
+        for (var i = 0; i < postCount; i++) {
+            svg += cartoonRect(x+i*spacing, groundY-fenceH, 6, fenceH, c, OLthin);
+            svg += cartoonPoly((x+i*spacing)+','+(groundY-fenceH)+' '+(x+i*spacing+3)+','+(groundY-fenceH-8)+' '+(x+i*spacing+6)+','+(groundY-fenceH), c, OLthin);
+        }
+        svg += cartoonRect(x-2, groundY-fenceH+10, totalW+4, 5, c, OLthin);
+        svg += cartoonRect(x-2, groundY-fenceH+26, totalW+4, 5, c, OLthin);
+        return { svg: svg, x: x-2, y: groundY-fenceH-8, w: totalW+4, h: fenceH+8, parts: [
+            { id: 'fence-body', fill: c }
+        ]};
+    }
+
+    function buildRocket(cx, cy) {
+        var noseC = col('planet');
+        var bodyC = '#ECEFF1';
+        var svg = '';
+        svg += cartoonPath('M'+(cx-16)+','+(cy+18)+' L'+(cx-16)+','+(cy-10)+' Q'+cx+','+(cy-48)+' '+(cx+16)+','+(cy-10)+' L'+(cx+16)+','+(cy+18)+' Z', bodyC, OLthick);
+        svg += cartoonPath('M'+(cx-10)+','+(cy-8)+' Q'+cx+','+(cy-45)+' '+(cx+10)+','+(cy-8), noseC, OL);
+        svg += cartoonCircle(cx, cy, 8, '#42A5F5', OL);
+        svg += cartoonCircle(cx, cy, 4, '#B3E5FC', 'stroke="none"');
+        svg += cartoonPath('M'+(cx-16)+','+(cy+10)+' L'+(cx-28)+','+(cy+30)+' L'+(cx-12)+','+(cy+20)+' Z', noseC, OL);
+        svg += cartoonPath('M'+(cx+16)+','+(cy+10)+' L'+(cx+28)+','+(cy+30)+' L'+(cx+12)+','+(cy+20)+' Z', noseC, OL);
+        svg += cartoonPath('M'+(cx-10)+','+(cy+18)+' Q'+cx+','+(cy+40)+' '+(cx+10)+','+(cy+18), '#FF6F00', OLthin);
+        svg += cartoonPath('M'+(cx-5)+','+(cy+18)+' Q'+cx+','+(cy+32)+' '+(cx+5)+','+(cy+18), '#FFD600', 'stroke="none"');
+        return { svg: svg, x: cx-30, y: cy-48, w: 60, h: 88, parts: [
+            { id: 'rocket-body', fill: bodyC },
+            { id: 'rocket-nose', fill: noseC },
+            { id: 'rocket-window', fill: '#42A5F5' }
+        ]};
+    }
+
+    function buildPlanet(cx, cy, size) {
+        var c = col('planet');
+        var s = size || randInt(20, 35);
+        var svg = '';
+        svg += cartoonCircle(cx, cy, s, c, OL);
+        if (rng() > 0.4) {
+            svg += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(s*1.6)+'" ry="'+(s*0.25)+'" fill="none" stroke="'+c+'" stroke-width="3" opacity="0.5"/>';
+        }
+        svg += cartoonCircle(cx-s*0.3, cy-s*0.2, s*0.15, 'rgba(0,0,0,0.1)', 'stroke="none"');
+        svg += cartoonCircle(cx+s*0.2, cy+s*0.3, s*0.12, 'rgba(0,0,0,0.1)', 'stroke="none"');
+        return { svg: svg, x: cx-s*1.7, y: cy-s, w: s*3.4, h: s*2, parts: [
+            { id: 'planet-body', fill: c }
+        ]};
+    }
+
+    function buildStar(cx, cy, size) {
+        var s = size || randInt(5, 10);
+        var c = col('star');
+        var pts = '';
+        for (var i = 0; i < 5; i++) {
+            var a1 = (i * 72 - 90) * Math.PI / 180;
+            var a2 = ((i * 72) + 36 - 90) * Math.PI / 180;
+            pts += (cx + Math.cos(a1)*s)+','+(cy + Math.sin(a1)*s)+' ';
+            pts += (cx + Math.cos(a2)*s*0.4)+','+(cy + Math.sin(a2)*s*0.4)+' ';
+        }
+        var svg = cartoonPoly(pts.trim(), c, OLthin);
+        return { svg: svg, x: cx-s, y: cy-s, w: s*2, h: s*2, parts: [
+            { id: 'star-body', fill: c }
+        ]};
+    }
+
+    function buildAlien(cx, groundY) {
+        var c = '#66BB6A';
+        var svg = '';
+        var by = groundY - 20;
+        svg += cartoonEllipse(cx, by+6, 12, 14, c, OL);
+        svg += cartoonEllipse(cx, by-14, 14, 12, c, OL);
+        svg += cartoonEllipse(cx-6, by-16, 5, 6, '#fff', OLthin);
+        svg += '<circle cx="'+(cx-5)+'" cy="'+(by-16)+'" r="2.5" fill="#2a1f14" stroke="none"/>';
+        svg += cartoonEllipse(cx+6, by-16, 5, 6, '#fff', OLthin);
+        svg += '<circle cx="'+(cx+7)+'" cy="'+(by-16)+'" r="2.5" fill="#2a1f14" stroke="none"/>';
+        svg += '<line x1="'+(cx-6)+'" y1="'+(by-25)+'" x2="'+(cx-10)+'" y2="'+(by-36)+'" stroke="'+c+'" stroke-width="2" stroke-linecap="round"/>';
+        svg += cartoonCircle(cx-10, by-38, 3, '#FFD600', OLthin);
+        svg += '<line x1="'+(cx+6)+'" y1="'+(by-25)+'" x2="'+(cx+10)+'" y2="'+(by-36)+'" stroke="'+c+'" stroke-width="2" stroke-linecap="round"/>';
+        svg += cartoonCircle(cx+10, by-38, 3, '#FFD600', OLthin);
+        svg += '<path d="M'+(cx-4)+','+(by-8)+' Q'+cx+','+(by-4)+' '+(cx+4)+','+(by-8)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
+        svg += '<line x1="'+(cx-12)+'" y1="'+(by+2)+'" x2="'+(cx-22)+'" y2="'+(by-4)+'" stroke="'+c+'" stroke-width="3" stroke-linecap="round"/>';
+        svg += '<line x1="'+(cx+12)+'" y1="'+(by+2)+'" x2="'+(cx+22)+'" y2="'+(by-4)+'" stroke="'+c+'" stroke-width="3" stroke-linecap="round"/>';
+        svg += '<line x1="'+(cx-5)+'" y1="'+(by+18)+'" x2="'+(cx-8)+'" y2="'+groundY+'" stroke="'+c+'" stroke-width="3" stroke-linecap="round"/>';
+        svg += '<line x1="'+(cx+5)+'" y1="'+(by+18)+'" x2="'+(cx+8)+'" y2="'+groundY+'" stroke="'+c+'" stroke-width="3" stroke-linecap="round"/>';
+        return { svg: svg, x: cx-24, y: by-40, w: 48, h: groundY-(by-40), parts: [
+            { id: 'alien-body', fill: c }
+        ]};
+    }
+
+    function buildPlant(x, groundY) {
+        var potC = col('red');
+        var leafC = '#43A047';
+        var svg = '';
+        svg += cartoonPath('M'+x+','+groundY+' L'+(x+4)+','+(groundY-28)+' L'+(x+32)+','+(groundY-28)+' L'+(x+36)+','+groundY+' Z', potC, OL);
+        svg += cartoonRect(x-2, groundY-30, 40, 5, potC, OL);
+        svg += cartoonPath('M'+(x+18)+','+(groundY-30)+' Q'+(x+8)+','+(groundY-50)+' '+(x-2)+','+(groundY-42), leafC, OL);
+        svg += cartoonPath('M'+(x+18)+','+(groundY-30)+' Q'+(x+28)+','+(groundY-50)+' '+(x+38)+','+(groundY-42), leafC, OL);
+        svg += cartoonPath('M'+(x+18)+','+(groundY-30)+' Q'+(x+16)+','+(groundY-56)+' '+(x+18)+','+(groundY-58), leafC, OL);
+        return { svg: svg, x: x-4, y: groundY-60, w: 44, h: 60, parts: [
+            { id: 'plant-pot', fill: potC },
+            { id: 'plant-leaves', fill: leafC }
+        ]};
+    }
+
+    function buildShelf(x, y) {
+        var woodC = '#8D6E63';
+        var svg = '';
+        svg += cartoonRect(x, y, 90, 6, woodC, OL);
+        svg += cartoonPath('M'+(x+5)+','+(y+6)+' L'+(x+5)+','+(y+18)+' L'+(x+15)+','+(y+6), woodC, OLthin);
+        svg += cartoonPath('M'+(x+75)+','+(y+6)+' L'+(x+75)+','+(y+18)+' L'+(x+85)+','+(y+6), woodC, OLthin);
+        svg += cartoonRect(x+10, y-16, 14, 16, '#42A5F5', OLthin);
+        svg += cartoonRect(x+30, y-20, 12, 20, '#66BB6A', OLthin);
+        svg += cartoonRect(x+50, y-14, 16, 14, '#FFA726', OLthin);
+        return { svg: svg, x: x, y: y-20, w: 90, h: 38, parts: [
+            { id: 'shelf-body', fill: woodC }
+        ]};
+    }
+
+    function buildPalmTree(x, groundY) {
+        var trunkC = '#8D6E63';
+        var leafC = '#2E7D32';
+        var svg = '';
+        svg += '<path d="M'+x+','+groundY+' C'+(x-8)+','+(groundY-40)+' '+(x+12)+','+(groundY-70)+' '+(x+4)+','+(groundY-95)+'" stroke="#2a1f14" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.2"/>';
+        svg += '<path d="M'+x+','+groundY+' C'+(x-8)+','+(groundY-40)+' '+(x+12)+','+(groundY-70)+' '+(x+4)+','+(groundY-95)+'" stroke="'+trunkC+'" stroke-width="12" fill="none" stroke-linecap="round"/>';
+        svg += cartoonCircle(x+2, groundY-90, 5, '#795548', OLthin);
+        svg += cartoonCircle(x+10, groundY-88, 5, '#795548', OLthin);
+        svg += cartoonPath('M'+(x+4)+','+(groundY-95)+' Q'+(x-30)+','+(groundY-110)+' '+(x-40)+','+(groundY-85), leafC, OL);
+        svg += cartoonPath('M'+(x+4)+','+(groundY-95)+' Q'+(x+38)+','+(groundY-115)+' '+(x+48)+','+(groundY-85), leafC, OL);
+        svg += cartoonPath('M'+(x+4)+','+(groundY-95)+' Q'+(x-10)+','+(groundY-120)+' '+(x-20)+','+(groundY-95), leafC, OL);
+        svg += cartoonPath('M'+(x+4)+','+(groundY-95)+' Q'+(x+18)+','+(groundY-120)+' '+(x+30)+','+(groundY-95), leafC, OL);
+        svg += cartoonPath('M'+(x+4)+','+(groundY-95)+' Q'+(x+4)+','+(groundY-125)+' '+(x+6)+','+(groundY-100), leafC, OLthin);
+        return { svg: svg, x: x-42, y: groundY-125, w: 92, h: 125, parts: [
+            { id: 'palm-trunk', fill: trunkC },
+            { id: 'palm-fronds', fill: leafC },
+            { id: 'palm-coconuts', fill: '#795548' }
+        ]};
+    }
+
+    function buildSeashell(cx, cy) {
+        var c = '#FFAB91';
+        var svg = '';
+        svg += cartoonPath('M'+(cx-10)+','+(cy+4)+' Q'+(cx-12)+','+(cy-8)+' '+cx+','+(cy-10)+' Q'+(cx+12)+','+(cy-8)+' '+(cx+10)+','+(cy+4)+' Q'+cx+','+(cy+8)+' '+(cx-10)+','+(cy+4)+' Z', c, OLthin);
+        svg += '<path d="M'+(cx-4)+','+(cy+2)+' Q'+(cx-6)+','+(cy-4)+' '+cx+','+(cy-5)+' Q'+(cx+6)+','+(cy-4)+' '+(cx+4)+','+(cy+2)+'" stroke="#E57373" stroke-width="1" fill="none"/>';
+        return { svg: svg, x: cx-12, y: cy-10, w: 24, h: 20, parts: [
+            { id: 'shell-body', fill: c }
+        ]};
+    }
+
+    function buildBucket(x, groundY) {
+        var c = col('blue');
+        var svg = '';
+        svg += cartoonPath('M'+x+','+groundY+' L'+(x+4)+','+(groundY-24)+' L'+(x+28)+','+(groundY-24)+' L'+(x+32)+','+groundY+' Z', c, OL);
+        svg += '<path d="M'+(x+6)+','+(groundY-24)+' Q'+(x+16)+','+(groundY-38)+' '+(x+26)+','+(groundY-24)+'" stroke="#9E9E9E" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+        return { svg: svg, x: x, y: groundY-38, w: 32, h: 38, parts: [
+            { id: 'bucket-body', fill: c }
+        ]};
+    }
+
+    function buildBackpack(x, groundY) {
+        var c = col('red');
+        var svg = '';
+        var bh = 36, bw = 28;
+        var baseY = groundY - bh;
+        svg += cartoonPath('M'+x+','+groundY+' L'+x+','+(baseY+6)+' Q'+(x+bw/2)+','+(baseY-4)+' '+(x+bw)+','+(baseY+6)+' L'+(x+bw)+','+groundY+' Z', c, OL);
+        svg += cartoonRect(x+4, groundY-16, bw-8, 12, c, OLthin);
+        svg += '<line x1="'+(x+bw/2-6)+'" y1="'+(groundY-10)+'" x2="'+(x+bw/2+6)+'" y2="'+(groundY-10)+'" stroke="#FFD600" stroke-width="2"/>';
+        svg += '<path d="M'+(x+4)+','+(baseY+8)+' Q'+(x-4)+','+(baseY+20)+' '+(x+2)+','+(groundY-4)+'" stroke="'+c+'" stroke-width="3" fill="none"/>';
+        svg += '<path d="M'+(x+bw-4)+','+(baseY+8)+' Q'+(x+bw+4)+','+(baseY+20)+' '+(x+bw-2)+','+(groundY-4)+'" stroke="'+c+'" stroke-width="3" fill="none"/>';
+        return { svg: svg, x: x-6, y: baseY-4, w: bw+12, h: groundY-(baseY-4), parts: [
+            { id: 'backpack-body', fill: c }
+        ]};
+    }
+
+    function buildMoon(cx, cy) {
+        var c = '#FFF9C4';
+        var svg = '';
+        svg += cartoonCircle(cx, cy, 25, c, OL);
+        svg += cartoonCircle(cx-8, cy-6, 5, '#F0E68C', 'stroke="none"');
+        svg += cartoonCircle(cx+10, cy+8, 4, '#F0E68C', 'stroke="none"');
+        svg += cartoonCircle(cx+4, cy-10, 3, '#F0E68C', 'stroke="none"');
+        svg += '<circle cx="'+(cx-6)+'" cy="'+(cy-3)+'" r="2" fill="#2a1f14" stroke="none"/>';
+        svg += '<circle cx="'+(cx+6)+'" cy="'+(cy-3)+'" r="2" fill="#2a1f14" stroke="none"/>';
+        svg += '<path d="M'+(cx-4)+','+(cy+6)+' Q'+cx+','+(cy+10)+' '+(cx+4)+','+(cy+6)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
+        return { svg: svg, x: cx-25, y: cy-25, w: 50, h: 50, parts: [
+            { id: 'moon-body', fill: c }
+        ]};
+    }
+
+    function buildSatellite(cx, cy) {
+        var bodyC = '#BDBDBD';
+        var panelC = '#1565C0';
+        var svg = '';
+        svg += cartoonRect(cx-10, cy-8, 20, 16, bodyC, OL);
+        svg += cartoonRect(cx-35, cy-6, 22, 12, panelC, OL);
+        svg += cartoonRect(cx+13, cy-6, 22, 12, panelC, OL);
+        svg += '<line x1="'+(cx-24)+'" y1="'+(cy-6)+'" x2="'+(cx-24)+'" y2="'+(cy+6)+'" stroke="#0D47A1" stroke-width="1"/>';
+        svg += '<line x1="'+(cx+24)+'" y1="'+(cy-6)+'" x2="'+(cx+24)+'" y2="'+(cy+6)+'" stroke="#0D47A1" stroke-width="1"/>';
+        svg += '<line x1="'+cx+'" y1="'+(cy-8)+'" x2="'+cx+'" y2="'+(cy-18)+'" stroke="#9E9E9E" stroke-width="2"/>';
+        svg += cartoonCircle(cx, cy-20, 3, '#FF6B6B', OLthin);
+        svg += '<path d="M'+(cx+8)+','+(cy+8)+' Q'+(cx+16)+','+(cy+16)+' '+(cx+12)+','+(cy+20)+'" stroke="#9E9E9E" stroke-width="2" fill="none"/>';
+        return { svg: svg, x: cx-37, y: cy-22, w: 74, h: 44, parts: [
+            { id: 'satellite-body', fill: bodyC },
+            { id: 'satellite-panels', fill: panelC }
+        ]};
+    }
+
+    function buildPig(cx, groundY) {
+        var c = '#F8BBD0';
+        var svg = '';
+        var by = groundY - 22;
+        svg += cartoonEllipse(cx, by, 22, 16, c, OL);
+        svg += cartoonCircle(cx+22, by-4, 12, c, OL);
+        svg += cartoonEllipse(cx+30, by-2, 7, 5, '#F48FB1', OLthin);
+        svg += '<circle cx="'+(cx+28)+'" cy="'+(by-2)+'" r="1.5" fill="#2a1f14" stroke="none"/>';
+        svg += '<circle cx="'+(cx+32)+'" cy="'+(by-2)+'" r="1.5" fill="#2a1f14" stroke="none"/>';
+        svg += '<circle cx="'+(cx+24)+'" cy="'+(by-8)+'" r="2.5" fill="white" stroke="none"/>';
+        svg += '<circle cx="'+(cx+25)+'" cy="'+(by-8)+'" r="1.3" fill="#2a1f14" stroke="none"/>';
+        svg += cartoonPath('M'+(cx+18)+','+(by-14)+' Q'+(cx+14)+','+(by-24)+' '+(cx+20)+','+(by-20), c, OLthin);
+        svg += cartoonPath('M'+(cx+26)+','+(by-14)+' Q'+(cx+30)+','+(by-24)+' '+(cx+24)+','+(by-20), c, OLthin);
+        svg += cartoonRect(cx-14, groundY-12, 7, 12, c, OLthin);
+        svg += cartoonRect(cx-2, groundY-12, 7, 12, c, OLthin);
+        svg += cartoonRect(cx+8, groundY-12, 7, 12, c, OLthin);
+        svg += cartoonRect(cx-15, groundY-3, 9, 3, '#D48BA6', 'stroke="none"');
+        svg += cartoonRect(cx-3, groundY-3, 9, 3, '#D48BA6', 'stroke="none"');
+        svg += cartoonRect(cx+7, groundY-3, 9, 3, '#D48BA6', 'stroke="none"');
+        svg += '<path d="M'+(cx-22)+','+(by-4)+' Q'+(cx-30)+','+(by-12)+' '+(cx-26)+','+(by-2)+' Q'+(cx-34)+','+(by-8)+' '+(cx-28)+','+(by+2)+'" stroke="'+c+'" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+        return { svg: svg, x: cx-36, y: by-24, w: 74, h: groundY-(by-24), parts: [
+            { id: 'pig-body', fill: c }
+        ]};
+    }
+
+    function buildHayBale(cx, groundY) {
+        var c = '#FFB74D';
+        var svg = '';
+        svg += cartoonEllipse(cx, groundY-14, 22, 14, c, OL);
+        svg += '<line x1="'+(cx-14)+'" y1="'+(groundY-14)+'" x2="'+(cx+14)+'" y2="'+(groundY-14)+'" stroke="#E6A23C" stroke-width="1.5"/>';
+        svg += '<line x1="'+(cx-16)+'" y1="'+(groundY-8)+'" x2="'+(cx+16)+'" y2="'+(groundY-8)+'" stroke="#E6A23C" stroke-width="1.5"/>';
+        svg += '<line x1="'+(cx-14)+'" y1="'+(groundY-20)+'" x2="'+(cx+14)+'" y2="'+(groundY-20)+'" stroke="#E6A23C" stroke-width="1.5"/>';
+        return { svg: svg, x: cx-22, y: groundY-28, w: 44, h: 28, parts: [
+            { id: 'hay-body', fill: c }
+        ]};
+    }
+
+    function buildGlobe(cx, cy) {
+        var c = '#42A5F5';
+        var svg = '';
+        svg += '<line x1="'+cx+'" y1="'+(cy+16)+'" x2="'+cx+'" y2="'+(cy+26)+'" stroke="#9E9E9E" stroke-width="3"/>';
+        svg += cartoonEllipse(cx, cy+27, 10, 4, '#9E9E9E', OLthin);
+        svg += cartoonCircle(cx, cy, 16, c, OL);
+        svg += cartoonPath('M'+(cx-8)+','+(cy-6)+' Q'+(cx-4)+','+(cy-12)+' '+(cx+4)+','+(cy-8)+' Q'+(cx+2)+','+(cy-2)+' '+(cx-6)+','+(cy-2)+' Z', '#66BB6A', 'stroke="none"');
+        svg += cartoonPath('M'+(cx+4)+','+(cy+4)+' Q'+(cx+10)+','+(cy+2)+' '+(cx+10)+','+(cy+8)+' Q'+(cx+6)+','+(cy+10)+' '+(cx+4)+','+(cy+4)+' Z', '#66BB6A', 'stroke="none"');
+        return { svg: svg, x: cx-18, y: cy-18, w: 36, h: 48, parts: [
+            { id: 'globe-body', fill: c }
+        ]};
+    }
+
+    function buildPencilHolder(x, groundY) {
+        var cupC = col('blue');
+        var svg = '';
+        svg += cartoonPath('M'+x+','+groundY+' L'+(x+3)+','+(groundY-28)+' L'+(x+27)+','+(groundY-28)+' L'+(x+30)+','+groundY+' Z', cupC, OL);
+        svg += '<line x1="'+(x+8)+'" y1="'+(groundY-28)+'" x2="'+(x+6)+'" y2="'+(groundY-44)+'" stroke="#FFD600" stroke-width="3" stroke-linecap="round"/>';
+        svg += '<line x1="'+(x+15)+'" y1="'+(groundY-28)+'" x2="'+(x+15)+'" y2="'+(groundY-48)+'" stroke="#F44336" stroke-width="3" stroke-linecap="round"/>';
+        svg += '<line x1="'+(x+22)+'" y1="'+(groundY-28)+'" x2="'+(x+24)+'" y2="'+(groundY-42)+'" stroke="#2196F3" stroke-width="3" stroke-linecap="round"/>';
+        return { svg: svg, x: x, y: groundY-48, w: 30, h: 48, parts: [
+            { id: 'holder-cup', fill: cupC }
+        ]};
+    }
+
+    function buildTowel(x, groundY) {
+        var c = col('flower_petal');
+        var svg = '';
+        svg += cartoonPath('M'+x+','+groundY+' L'+(x+65)+','+groundY+' L'+(x+62)+','+(groundY-6)+' L'+(x+3)+','+(groundY-6)+' Z', c, OL);
+        svg += '<line x1="'+(x+5)+'" y1="'+(groundY-3)+'" x2="'+(x+60)+'" y2="'+(groundY-3)+'" stroke="#fff" stroke-width="2" opacity="0.5"/>';
+        return { svg: svg, x: x, y: groundY-6, w: 65, h: 6, parts: [
+            { id: 'towel-body', fill: c }
+        ]};
+    }
+
+    // ========== SCENE COMPOSERS ==========
+
+    function buildScene(sceneType, difficulty) {
+        var elements = [];
+        var bgSvg = '';
+        var eid = 0;
+        var cfg = DIFFICULTY[difficulty];
+
+        function addEl(name, builderResult, sizeHint) {
+            var sz = sizeHint || sizeCategory(builderResult.w, builderResult.h);
             elements.push({
                 id: eid++,
-                name,
-                ...builderResult,
-                canModify
+                name: name,
+                size: sz,
+                svg: builderResult.svg,
+                x: builderResult.x,
+                y: builderResult.y,
+                w: builderResult.w,
+                h: builderResult.h,
+                parts: builderResult.parts || []
             });
         }
 
         switch(sceneType) {
             case 'parco': {
-                bgSvg += svgRect(0, 0, W, H * 0.6, col('sky'));
-                bgSvg += svgRect(0, H * 0.6, W, H * 0.4, '#81C784');
-                addEl('sole', buildSun(430, 60));
-                addEl('nuvola1', buildCloud(100, 55));
-                addEl('nuvola2', buildCloud(290, 80));
-                addEl('albero1', buildTree(60, H * 0.62, 1.2));
-                addEl('albero2', buildTree(440, H * 0.65, 0.9));
-                addEl('altalena', buildSwing(180, H * 0.6));
-                addEl('scivolo', buildSlide(310, H * 0.6));
-                addEl('fiore1', buildFlower(100, H * 0.85));
-                addEl('fiore2', buildFlower(380, H * 0.9));
-                addEl('fiore3', buildFlower(250, H * 0.88));
-                addEl('uccello1', buildBird(160, 45));
-                addEl('uccello2', buildBird(350, 35));
-                addEl('farfalla', buildButterfly(130, H * 0.55));
-                addEl('panchina', (() => {
-                    let svg = svgRect(380, H*0.7, 60, 5, '#8D6E63', 2);
-                    svg += svgRect(383, H*0.75, 4, 15, '#8D6E63');
-                    svg += svgRect(432, H*0.75, 4, 15, '#8D6E63');
-                    svg += svgRect(378, H*0.65, 4, 12, '#8D6E63');
-                    svg += svgRect(438, H*0.65, 4, 12, '#8D6E63');
-                    svg += svgRect(378, H*0.65, 64, 4, '#8D6E63', 2);
-                    return { svg, x: 378, y: H*0.65, w: 64, h: 30 };
-                })());
+                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.6)+'" fill="'+col('sky')+'" stroke="none"/>';
+                bgSvg += '<rect x="0" y="'+(H*0.6)+'" width="'+W+'" height="'+(H*0.4)+'" fill="#5ED86A" stroke="none"/>';
+                bgSvg += '<path d="M0,'+(H*0.6)+' Q50,'+(H*0.57)+' 120,'+(H*0.6)+' Q200,'+(H*0.63)+' 300,'+(H*0.6)+' Q400,'+(H*0.57)+' '+W+','+(H*0.6)+'" fill="#4ECB5C" stroke="none"/>';
+
+                addEl('sole', buildSun(430, 58), 'large');
+                addEl('nuvola1', buildCloud(110, 52));
+                addEl('nuvola2', buildCloud(300, 78));
+                addEl('albero1', buildTree(55, H*0.62, 1.3), 'large');
+                addEl('albero2', buildTree(445, H*0.64, 1.0));
+                addEl('altalena', buildSwing(185, H*0.62), 'large');
+                addEl('scivolo', buildSlide(310, H*0.62), 'medium');
+                addEl('panchina', buildBench(370, H*0.88), 'medium');
+                addEl('fiore1', buildFlower(120, H*0.86), 'small');
+                addEl('fiore2', buildFlower(250, H*0.9), 'small');
+                addEl('fiore3', buildFlower(390, H*0.92), 'small');
+                addEl('uccello1', buildBird(165, 42), 'small');
+                addEl('uccello2', buildBird(350, 32), 'small');
+                addEl('farfalla', buildButterfly(140, H*0.52), 'small');
+
+                if (cfg.objectCount[1] >= 10) {
+                    addEl('fiore4', buildFlower(60, H*0.94), 'small');
+                    addEl('albero3', buildTree(240, H*0.58, 0.7), 'medium');
+                }
+                if (cfg.objectCount[1] >= 14) {
+                    addEl('fiore5', buildFlower(470, H*0.88), 'small');
+                    addEl('uccello3', buildBird(80, 75), 'small');
+                    addEl('farfalla2', buildButterfly(420, H*0.48), 'small');
+                    addEl('nuvola3', buildCloud(460, 42), 'small');
+                }
                 break;
             }
             case 'camera': {
-                const wallC = col('wall');
-                const floorC = col('floor');
-                bgSvg += svgRect(0, 0, W, H * 0.7, wallC);
-                bgSvg += svgRect(0, H * 0.7, W, H * 0.3, floorC);
-                addEl('finestra', buildWindow(200, 40));
-                addEl('letto', buildBed(30, H * 0.52));
-                addEl('lampada', buildLamp(160, H * 0.35));
-                addEl('libreria', buildBookshelf(350, H * 0.38));
-                addEl('tappeto', buildRug(250, H * 0.85));
-                addEl('orologio', buildClock(300, 50));
-                addEl('orsetto', buildToy(430, H * 0.65));
-                addEl('sedia', buildChair(270, H * 0.58));
-                addEl('quadro', (() => {
-                    const c = col('flower');
-                    let svg = svgRect(60, 30, 50, 40, c, 2);
-                    svg += svgRect(62, 32, 46, 36, '#fff', 1);
-                    svg += svgCircle(85, 48, 8, '#FFD600');
-                    svg += svgPoly('70,66 85,50 100,66', '#4CAF50');
-                    return { svg, x: 60, y: 30, w: 50, h: 40 };
-                })());
-                addEl('stella-adesivo', buildStar(440, 50, 10));
+                var wallC = col('wall');
+                var floorC = col('floor');
+                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.68)+'" fill="'+wallC+'" stroke="none"/>';
+                bgSvg += '<rect x="0" y="'+(H*0.68)+'" width="'+W+'" height="'+(H*0.32)+'" fill="'+floorC+'" stroke="none"/>';
+                bgSvg += '<line x1="0" y1="'+(H*0.68)+'" x2="'+W+'" y2="'+(H*0.68)+'" stroke="#2a1f14" stroke-width="2"/>';
+
+                addEl('finestra', buildWindow(220, 45), 'medium');
+                addEl('letto', buildBed(20, H*0.68), 'large');
+                addEl('lampada', buildLamp(170, H*0.68), 'medium');
+                addEl('libreria', buildBookshelf(360, H*0.68), 'large');
+                addEl('tappeto', buildRug(250, H*0.85), 'medium');
+                addEl('orologio', buildClock(310, 50), 'small');
+                addEl('orsetto', buildToy(440, H*0.6), 'medium');
+
+                if (cfg.objectCount[1] >= 10) {
+                    var qc = col('flower_petal');
+                    var qsvg = cartoonRect(60, 30, 55, 42, qc, OL);
+                    qsvg += '<rect x="63" y="33" width="49" height="36" fill="#fff" stroke="none" rx="2"/>';
+                    qsvg += cartoonCircle(87, 48, 9, '#FFD600', 'stroke="none"');
+                    qsvg += cartoonPath('M70,68 L87,52 L104,68', '#4CAF50', 'stroke="none"');
+                    addEl('quadro', { svg: qsvg, x: 60, y: 30, w: 55, h: 42, parts: [{ id: 'frame', fill: qc }] }, 'small');
+                    addEl('stella', buildStar(450, 48, 12), 'small');
+                    addEl('sedia', buildChair(280, H*0.68), 'medium');
+                }
+                if (cfg.objectCount[1] >= 14) {
+                    addEl('pianta', buildPlant(160, H*0.98), 'small');
+                    addEl('orologio2', buildClock(80, 50), 'small');
+                    addEl('fiore-vaso', buildFlower(440, H*0.95), 'small');
+                    addEl('tappeto2', buildRug(100, H*0.92), 'small');
+                }
                 break;
             }
             case 'cucina': {
-                const wallC = col('wall');
-                bgSvg += svgRect(0, 0, W, H * 0.7, wallC);
-                bgSvg += svgRect(0, H * 0.7, W, H * 0.3, '#BCAAA4');
-                addEl('frigo', buildFridge(20, H * 0.38));
-                addEl('tavolo', buildTable(180, H * 0.6));
-                addEl('sedia1', buildChair(200, H * 0.68));
-                addEl('sedia2', buildChair(240, H * 0.68));
-                addEl('pentola', buildPot(400, H * 0.48));
-                addEl('finestra', buildWindow(250, 30));
-                addEl('orologio', buildClock(150, 40));
-                addEl('mela', buildApple(210, H * 0.53));
-                addEl('mela2', buildApple(240, H * 0.54));
-                addEl('mensola', (() => {
-                    let svg = svgRect(350, 60, 80, 6, '#8D6E63', 2);
-                    svg += svgRect(360, 38, 12, 22, '#42A5F5', 2);
-                    svg += svgRect(380, 42, 10, 18, '#66BB6A', 2);
-                    svg += svgRect(400, 35, 14, 25, '#FFA726', 2);
-                    return { svg, x: 350, y: 35, w: 80, h: 31 };
-                })());
-                addEl('pianta', (() => {
-                    let svg = svgRect(90, H*0.55, 20, 25, '#8D6E63', 3);
-                    svg += svgEllipse(100, H*0.52, 18, 14, '#66BB6A');
-                    svg += svgEllipse(92, H*0.48, 10, 10, '#4CAF50');
-                    svg += svgEllipse(110, H*0.48, 10, 10, '#4CAF50');
-                    return { svg, x: 80, y: H*0.38, w: 40, h: H*0.42 };
-                })());
+                var wallC2 = col('wall');
+                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.68)+'" fill="'+wallC2+'" stroke="none"/>';
+                bgSvg += '<rect x="0" y="'+(H*0.68)+'" width="'+W+'" height="'+(H*0.32)+'" fill="#BCAAA4" stroke="none"/>';
+                bgSvg += '<line x1="0" y1="'+(H*0.68)+'" x2="'+W+'" y2="'+(H*0.68)+'" stroke="#2a1f14" stroke-width="2"/>';
+
+                addEl('frigo', buildFridge(15, H*0.68), 'large');
+                addEl('tavolo', buildTable(175, H*0.98), 'large');
+                addEl('sedia1', buildChair(195, H*0.98), 'medium');
+                addEl('sedia2', buildChair(245, H*0.98), 'medium');
+                addEl('pentola', buildPot(410, H*0.44), 'medium');
+                addEl('finestra', buildWindow(260, 30), 'medium');
+                addEl('orologio', buildClock(155, 40), 'small');
+
+                if (cfg.objectCount[1] >= 10) {
+                    addEl('mela1', buildApple(200, H*0.5), 'small');
+                    addEl('mela2', buildApple(230, H*0.5), 'small');
+                    addEl('mensola', buildShelf(360, 55), 'small');
+                    addEl('pianta', buildPlant(85, H*0.68), 'small');
+                }
+                if (cfg.objectCount[1] >= 14) {
+                    addEl('mela3', buildApple(440, H*0.62), 'small');
+                    addEl('pianta2', buildPlant(460, H*0.68), 'small');
+                    addEl('orologio2', buildClock(110, 80), 'small');
+                    addEl('tazza', buildBucket(340, H*0.44), 'small');
+                }
                 break;
             }
             case 'giardino': {
-                bgSvg += svgRect(0, 0, W, H * 0.55, col('sky'));
-                bgSvg += svgRect(0, H * 0.55, W, H * 0.45, '#81C784');
-                addEl('sole', buildSun(420, 55));
-                addEl('nuvola', buildCloud(130, 50));
-                addEl('casa', buildHouse(190, H * 0.45));
-                addEl('albero1', buildTree(80, H * 0.57, 1.1));
-                addEl('albero2', buildTree(420, H * 0.58, 0.8));
-                addEl('fiore1', buildFlower(140, H * 0.82));
-                addEl('fiore2', buildFlower(300, H * 0.85));
-                addEl('fiore3', buildFlower(350, H * 0.78));
-                addEl('fiore4', buildFlower(60, H * 0.9));
-                addEl('steccato', buildFence(100, H * 0.65));
-                addEl('farfalla', buildButterfly(280, H * 0.5));
-                addEl('uccello', buildBird(320, 40));
-                addEl('cespuglio', (() => {
-                    let svg = '';
-                    svg += svgEllipse(450, H*0.72, 25, 16, '#388E3C');
-                    svg += svgEllipse(435, H*0.74, 18, 12, '#2E7D32');
-                    svg += svgEllipse(465, H*0.74, 18, 12, '#2E7D32');
-                    return { svg, x: 415, y: H*0.58, w: 70, h: H*0.18 };
-                })());
+                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.55)+'" fill="'+col('sky')+'" stroke="none"/>';
+                bgSvg += '<rect x="0" y="'+(H*0.55)+'" width="'+W+'" height="'+(H*0.45)+'" fill="#5ED86A" stroke="none"/>';
+                bgSvg += '<path d="M0,'+(H*0.55)+' Q80,'+(H*0.52)+' 160,'+(H*0.55)+' Q280,'+(H*0.58)+' 400,'+(H*0.55)+' Q460,'+(H*0.53)+' '+W+','+(H*0.55)+'" fill="#4ECB5C" stroke="none"/>';
+
+                addEl('sole', buildSun(425, 55), 'large');
+                addEl('nuvola', buildCloud(140, 48));
+                addEl('casa', buildHouse(185, H*0.57), 'large');
+                addEl('albero1', buildTree(65, H*0.57, 1.2), 'large');
+                addEl('albero2', buildTree(430, H*0.58, 0.9));
+                addEl('steccato', buildFence(95, H*0.68), 'medium');
+                addEl('fiore1', buildFlower(140, H*0.84), 'small');
+                addEl('fiore2', buildFlower(320, H*0.86), 'small');
+
+                if (cfg.objectCount[1] >= 10) {
+                    addEl('fiore3', buildFlower(360, H*0.8), 'small');
+                    addEl('fiore4', buildFlower(55, H*0.92), 'small');
+                    addEl('farfalla', buildButterfly(290, H*0.48), 'small');
+                    addEl('uccello', buildBird(330, 38), 'small');
+                }
+                if (cfg.objectCount[1] >= 14) {
+                    var bushSvg = '';
+                    bushSvg += cartoonEllipse(460, H*0.72, 28, 18, '#388E3C', OL);
+                    bushSvg += cartoonEllipse(442, H*0.74, 20, 14, '#2E7D32', OL);
+                    bushSvg += cartoonEllipse(478, H*0.74, 20, 14, '#2E7D32', OL);
+                    bushSvg += '<ellipse cx="460" cy="'+(H*0.74)+'" rx="22" ry="12" fill="#388E3C" stroke="none"/>';
+                    addEl('cespuglio', { svg: bushSvg, x: 420, y: H*0.56, w: 78, h: H*0.2, parts: [{ id: 'bush', fill: '#388E3C' }] }, 'medium');
+                    addEl('fiore5', buildFlower(460, H*0.92), 'small');
+                    addEl('uccello2', buildBird(200, 35), 'small');
+                    addEl('farfalla2', buildButterfly(80, H*0.5), 'small');
+                    addEl('nuvola2', buildCloud(380, 68), 'small');
+                }
                 break;
             }
             case 'spiaggia': {
-                bgSvg += svgRect(0, 0, W, H * 0.45, '#87CEEB');
-                bgSvg += svgRect(0, H * 0.45, W, H * 0.15, col('water'));
-                bgSvg += svgRect(0, H * 0.6, W, H * 0.4, col('sand'));
-                // waves
-                for (let wx = 0; wx < W; wx += 40) {
-                    bgSvg += `<path d="M${wx},${H*0.48} Q${wx+10},${H*0.45} ${wx+20},${H*0.48} Q${wx+30},${H*0.51} ${wx+40},${H*0.48}" stroke="#fff" stroke-width="2" fill="none" opacity="0.5"/>`;
+                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.42)+'" fill="#5CC8FF" stroke="none"/>';
+                var wc = col('water');
+                bgSvg += '<rect x="0" y="'+(H*0.42)+'" width="'+W+'" height="'+(H*0.16)+'" fill="'+wc+'" stroke="none"/>';
+                bgSvg += '<path d="M0,'+(H*0.42)+' Q60,'+(H*0.40)+' 130,'+(H*0.42)+' Q220,'+(H*0.44)+' 320,'+(H*0.42)+' Q420,'+(H*0.40)+' '+W+','+(H*0.42)+'" fill="'+wc+'" stroke="none"/>';
+                var sc = col('sand');
+                bgSvg += '<rect x="0" y="'+(H*0.58)+'" width="'+W+'" height="'+(H*0.42)+'" fill="'+sc+'" stroke="none"/>';
+                bgSvg += '<path d="M0,'+(H*0.58)+' Q100,'+(H*0.56)+' 250,'+(H*0.58)+' Q400,'+(H*0.60)+' '+W+','+(H*0.58)+'" fill="'+sc+'" stroke="none"/>';
+
+                addEl('sole', buildSun(430, 55), 'large');
+                addEl('nuvola', buildCloud(130, 45));
+                addEl('palma', buildPalmTree(60, H*0.62), 'large');
+                addEl('ombrellone', buildUmbrella(250, H*0.94), 'large');
+                addEl('castello', buildSandcastle(350, H*0.95), 'medium');
+                addEl('barca', buildBoat(200, H*0.46), 'medium');
+                addEl('granchio', buildCrab(150, H*0.82), 'small');
+
+                if (cfg.objectCount[1] >= 10) {
+                    addEl('pesce', buildFish(350, H*0.5), 'small');
+                    addEl('conchiglia1', buildSeashell(100, H*0.92), 'small');
+                    addEl('secchiello', buildBucket(300, H*0.95), 'small');
+                    addEl('telo', buildTowel(400, H*0.94), 'small');
                 }
-                addEl('sole', buildSun(400, 55));
-                addEl('nuvola', buildCloud(140, 45));
-                addEl('ombrellone', buildUmbrella(120, H * 0.72));
-                addEl('castello', buildSandcastle(280, H * 0.78));
-                addEl('barca', buildBoat(340, H * 0.38));
-                addEl('pesce', buildFish(200, H * 0.5));
-                addEl('granchio', buildCrab(400, H * 0.82));
-                addEl('uccello1', buildBird(250, 40));
-                addEl('uccello2', buildBird(80, 60));
-                addEl('conchiglia', (() => {
-                    let svg = '';
-                    svg += svgEllipse(180, H*0.88, 10, 7, '#FFCC80');
-                    svg += `<path d="M${170},${H*0.88} Q${180},${H*0.82} ${190},${H*0.88}" stroke="#FFB74D" stroke-width="1.5" fill="none"/>`;
-                    return { svg, x: 168, y: H*0.8, w: 24, h: H*0.1 };
-                })());
-                addEl('palma', (() => {
-                    let svg = '';
-                    svg += svgRect(55, H*0.35, 8, H*0.32, '#8D6E63', 3);
-                    svg += svgEllipse(59, H*0.35, 30, 8, '#4CAF50', 'transform="rotate(-20 59 ' + H*0.35 + ')"');
-                    svg += svgEllipse(59, H*0.35, 30, 8, '#388E3C', 'transform="rotate(15 59 ' + H*0.35 + ')"');
-                    svg += svgEllipse(59, H*0.35, 28, 7, '#66BB6A', 'transform="rotate(-50 59 ' + H*0.35 + ')"');
-                    return { svg, x: 25, y: H*0.25, w: 70, h: H*0.42 };
-                })());
+                if (cfg.objectCount[1] >= 14) {
+                    addEl('uccello1', buildBird(300, 35), 'small');
+                    addEl('uccello2', buildBird(100, 60), 'small');
+                    addEl('conchiglia2', buildSeashell(440, H*0.88), 'small');
+                    addEl('pesce2', buildFish(100, H*0.48), 'small');
+                    addEl('stella-marina', buildStar(460, H*0.94, 10), 'small');
+                    addEl('nuvola2', buildCloud(320, 65), 'small');
+                }
                 break;
             }
             case 'classe': {
-                const wallC = '#FFF9C4';
-                bgSvg += svgRect(0, 0, W, H * 0.7, wallC);
-                bgSvg += svgRect(0, H * 0.7, W, H * 0.3, '#BCAAA4');
-                addEl('lavagna', buildBlackboard(180, 30));
-                addEl('banco1', buildDesk(40, H * 0.55));
-                addEl('banco2', buildDesk(200, H * 0.55));
-                addEl('banco3', buildDesk(360, H * 0.55));
-                addEl('sedia1', buildChair(70, H * 0.65));
-                addEl('sedia2', buildChair(230, H * 0.65));
-                addEl('sedia3', buildChair(390, H * 0.65));
-                addEl('orologio', buildClock(430, 45));
-                addEl('finestra', buildWindow(30, 30));
-                addEl('mappamondo', (() => {
-                    let svg = '';
-                    svg += svgCircle(440, H*0.42, 18, '#42A5F5');
-                    svg += svgEllipse(440, H*0.42, 8, 18, '#66BB6A', 'opacity="0.6"');
-                    svg += svgRect(438, H*0.42 + 18, 4, 12, '#9E9E9E');
-                    svg += svgRect(430, H*0.42 + 28, 20, 4, '#9E9E9E', 2);
-                    return { svg, x: 420, y: H*0.42 - 18, w: 40, h: 50 };
-                })());
-                addEl('libro', (() => {
-                    let svg = '';
-                    svg += svgRect(130, H*0.48, 28, 8, '#E53935', 2);
-                    return { svg, x: 130, y: H*0.48, w: 28, h: 8 };
-                })());
-                addEl('matita', (() => {
-                    let svg = '';
-                    svg += svgRect(375, H*0.48, 25, 4, '#FFD600', 1);
-                    svg += svgPoly(`${400},${H*0.48} ${406},${H*0.50} ${400},${H*0.52}`, '#FFB74D');
-                    return { svg, x: 375, y: H*0.48, w: 31, h: 4 };
-                })());
+                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.7)+'" fill="#E8F5E9" stroke="none"/>';
+                bgSvg += '<rect x="0" y="'+(H*0.7)+'" width="'+W+'" height="'+(H*0.3)+'" fill="#BCAAA4" stroke="none"/>';
+                bgSvg += '<line x1="0" y1="'+(H*0.7)+'" x2="'+W+'" y2="'+(H*0.7)+'" stroke="#2a1f14" stroke-width="2"/>';
+
+                addEl('lavagna', buildBlackboard(50, 30), 'large');
+                addEl('banco1', buildDesk(40, H*0.96), 'large');
+                addEl('banco2', buildDesk(240, H*0.96), 'large');
+                addEl('sedia1', buildChair(70, H*0.96), 'medium');
+                addEl('sedia2', buildChair(270, H*0.96), 'medium');
+                addEl('orologio', buildClock(420, 40), 'small');
+                addEl('globo', buildGlobe(440, H*0.54), 'small');
+
+                if (cfg.objectCount[1] >= 10) {
+                    addEl('finestra', buildWindow(380, 65), 'small');
+                    addEl('pianta', buildPlant(460, H*0.7), 'small');
+                    addEl('zaino', buildBackpack(160, H*0.96), 'small');
+                    addEl('portapenne', buildPencilHolder(350, H*0.64), 'small');
+                }
+                if (cfg.objectCount[1] >= 14) {
+                    addEl('sedia3', buildChair(130, H*0.7), 'small');
+                    addEl('banco3', buildDesk(360, H*0.7), 'small');
+                    addEl('stella', buildStar(250, 20, 10), 'small');
+                    var fc2 = col('blue');
+                    var qsvg2 = cartoonRect(220, 55, 45, 35, fc2, OL);
+                    qsvg2 += '<rect x="223" y="58" width="39" height="29" fill="#fff" stroke="none" rx="2"/>';
+                    qsvg2 += cartoonCircle(242, 68, 6, '#FFD600', 'stroke="none"');
+                    addEl('quadro', { svg: qsvg2, x: 220, y: 55, w: 45, h: 35, parts: [{ id: 'frame', fill: fc2 }] }, 'small');
+                }
                 break;
             }
             case 'fattoria': {
-                bgSvg += svgRect(0, 0, W, H * 0.5, col('sky'));
-                bgSvg += svgRect(0, H * 0.5, W, H * 0.5, '#A5D6A7');
-                // dirt path
-                bgSvg += svgRect(200, H*0.5, 50, H*0.5, '#D7CCC8');
-                addEl('sole', buildSun(420, 50));
-                addEl('nuvola', buildCloud(150, 55));
-                addEl('fienile', buildBarn(60, H * 0.4));
-                addEl('mucca', buildCow(300, H * 0.65));
-                addEl('gallina1', buildChicken(380, H * 0.78));
-                addEl('gallina2', buildChicken(420, H * 0.82));
-                addEl('albero', buildTree(450, H * 0.52, 1.0));
-                addEl('steccato', buildFence(260, H * 0.55));
-                addEl('fiore1', buildFlower(170, H * 0.85));
-                addEl('fiore2', buildFlower(100, H * 0.9));
-                addEl('uccello', buildBird(240, 40));
-                addEl('mela', buildApple(460, H * 0.42));
+                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.5)+'" fill="'+col('sky')+'" stroke="none"/>';
+                bgSvg += '<rect x="0" y="'+(H*0.5)+'" width="'+W+'" height="'+(H*0.5)+'" fill="#5ED86A" stroke="none"/>';
+                bgSvg += '<path d="M0,'+(H*0.5)+' Q100,'+(H*0.47)+' 200,'+(H*0.5)+' Q350,'+(H*0.53)+' '+W+','+(H*0.5)+'" fill="#4ECB5C" stroke="none"/>';
+
+                addEl('sole', buildSun(430, 55), 'large');
+                addEl('nuvola', buildCloud(130, 50));
+                addEl('fienile', buildBarn(30, H*0.54), 'large');
+                addEl('mucca', buildCow(260, H*0.72), 'large');
+                addEl('gallina', buildChicken(380, H*0.76), 'medium');
+                addEl('steccato', buildFence(170, H*0.62), 'medium');
+                addEl('albero', buildTree(440, H*0.52, 1.1), 'large');
+
+                if (cfg.objectCount[1] >= 10) {
+                    addEl('maiale', buildPig(180, H*0.88), 'medium');
+                    addEl('fieno', buildHayBale(350, H*0.96), 'small');
+                    addEl('fiore1', buildFlower(300, H*0.92), 'small');
+                    addEl('fiore2', buildFlower(420, H*0.94), 'small');
+                }
+                if (cfg.objectCount[1] >= 14) {
+                    addEl('gallina2', buildChicken(120, H*0.88), 'small');
+                    addEl('fieno2', buildHayBale(70, H*0.96), 'small');
+                    addEl('uccello', buildBird(280, 35), 'small');
+                    addEl('farfalla', buildButterfly(340, H*0.48), 'small');
+                    addEl('nuvola2', buildCloud(300, 65), 'small');
+                    addEl('fiore3', buildFlower(460, H*0.9), 'small');
+                }
                 break;
             }
             case 'spazio': {
-                bgSvg += svgRect(0, 0, W, H, '#0D1B2A');
-                // background stars
-                for (let i = 0; i < 40; i++) {
-                    bgSvg += svgCircle(randInt(5, W-5), randInt(5, H-5), randInt(1, 2), '#fff', `opacity="${(rng()*0.5+0.3).toFixed(2)}"`);
+                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#0D1B2A" stroke="none"/>';
+                for (var si = 0; si < 40; si++) {
+                    var sx = randInt(5, W-5), sy = randInt(5, H-5), sr = randFloat(0.8, 2);
+                    bgSvg += '<circle cx="'+sx+'" cy="'+sy+'" r="'+sr+'" fill="#fff" opacity="'+randFloat(0.3,0.8)+'" stroke="none"/>';
                 }
-                addEl('pianeta1', buildPlanet(80, 100, 35));
-                addEl('pianeta2', buildPlanet(380, 280, 25));
-                addEl('pianeta3', buildPlanet(200, 320, 20));
-                addEl('razzo', buildRocket(260, 140));
-                addEl('stella1', buildStar(150, 50, 12));
-                addEl('stella2', buildStar(420, 80, 10));
-                addEl('stella3', buildStar(50, 250, 8));
-                addEl('stella4', buildStar(450, 200, 9));
-                addEl('stella5', buildStar(330, 50, 11));
-                addEl('luna', (() => {
-                    let svg = '';
-                    svg += svgCircle(430, 330, 30, '#FFF9C4');
-                    svg += svgCircle(442, 320, 28, '#0D1B2A');
-                    return { svg, x: 400, y: 300, w: 60, h: 60 };
-                })());
-                addEl('satellite', (() => {
-                    let svg = '';
-                    svg += svgRect(100, 180, 30, 15, '#78909C', 3);
-                    svg += svgRect(80, 183, 20, 8, '#42A5F5', 1);
-                    svg += svgRect(130, 183, 20, 8, '#42A5F5', 1);
-                    svg += svgCircle(115, 188, 4, '#F44336');
-                    return { svg, x: 80, y: 180, w: 70, h: 15 };
-                })());
-                addEl('alieno', (() => {
-                    let svg = '';
-                    svg += svgEllipse(340, 180, 12, 16, '#76FF03');
-                    svg += svgCircle(335, 175, 4, '#333');
-                    svg += svgCircle(345, 175, 4, '#333');
-                    svg += `<path d="M${334},${184} Q${340},${190} ${346},${184}" stroke="#333" stroke-width="1.5" fill="none"/>`;
-                    svg += `<line x1="334" y1="165" x2="330" y2="158" stroke="#76FF03" stroke-width="2"/>`;
-                    svg += `<line x1="346" y1="165" x2="350" y2="158" stroke="#76FF03" stroke-width="2"/>`;
-                    svg += svgCircle(330, 156, 3, '#76FF03');
-                    svg += svgCircle(350, 156, 3, '#76FF03');
-                    return { svg, x: 326, y: 153, w: 28, h: 43 };
-                })());
+
+                addEl('luna', buildMoon(80, 65), 'medium');
+                addEl('razzo', buildRocket(250, 180), 'large');
+                addEl('pianeta1', buildPlanet(420, 100, 35), 'large');
+                addEl('pianeta2', buildPlanet(100, 280, 28), 'medium');
+                addEl('satellite', buildSatellite(380, 280), 'medium');
+                addEl('stella1', buildStar(180, 50, 14), 'small');
+                addEl('stella2', buildStar(340, 340, 12), 'small');
+
+                if (cfg.objectCount[1] >= 10) {
+                    addEl('alieno', buildAlien(60, H*0.88), 'medium');
+                    addEl('stella3', buildStar(460, 220, 10), 'small');
+                    addEl('stella4', buildStar(40, 180, 8), 'small');
+                    addEl('pianeta3', buildPlanet(460, 350, 20), 'small');
+                }
+                if (cfg.objectCount[1] >= 14) {
+                    addEl('stella5', buildStar(300, 50, 10), 'small');
+                    addEl('stella6', buildStar(150, 350, 8), 'small');
+                    addEl('stella7', buildStar(50, 350, 9), 'small');
+                    addEl('stella8', buildStar(480, 60, 7), 'small');
+                    addEl('pianeta4', buildPlanet(200, 340, 18), 'small');
+                }
                 break;
             }
         }
 
-        return { bgSvg, elements };
+        return { elements: elements, bgSvg: bgSvg };
     }
 
-    // ====== DIFFERENCE GENERATION ======
+    // ========== DIFFERENCE GENERATOR ==========
 
-    function applyDifferences(scene, numDiffs) {
-        const modifiable = scene.elements.filter(e => e.canModify);
-        const chosen = shuffle(modifiable).slice(0, numDiffs);
-        const diffs = [];
-        const diffTypes = ['remove', 'color', 'move', 'resize', 'color', 'move'];
+    function getAlternateColor(originalFill) {
+        var allColors = [
+            '#FF4757', '#EF5350', '#FF6B6B',
+            '#2196F3', '#42A5F5', '#1E88E5',
+            '#4CAF50', '#66BB6A', '#43A047',
+            '#AB47BC', '#CE93D8', '#9C27B0',
+            '#FF9800', '#FFA726', '#FB8C00',
+            '#FFEB3B', '#FFC107', '#FFD600',
+            '#FF69B4', '#E91E63', '#FF3B6F',
+            '#00BCD4', '#26C6DA', '#00ACC1',
+            '#795548', '#8D6E63', '#6D4C41',
+            '#FFFFFF', '#ECEFF1', '#CFD8DC'
+        ];
+        var filtered = allColors.filter(function(c) { return c.toLowerCase() !== originalFill.toLowerCase(); });
+        return pick(filtered);
+    }
 
-        chosen.forEach(el => {
-            const diffType = pick(diffTypes);
-            diffs.push({ element: el, type: diffType });
-        });
+    function generateDifferences(elements, difficulty) {
+        var cfg = DIFFICULTY[difficulty];
+        var diffCount = randInt(cfg.diffs[0], cfg.diffs[1]);
+        var eligibleSizes = cfg.sizes;
+
+        var eligible = elements.filter(function(el) { return eligibleSizes.indexOf(el.size) !== -1; });
+
+        if (eligible.length < diffCount) {
+            var allSizes = ['large', 'medium', 'small'];
+            var expandedSizes = eligibleSizes.slice();
+            for (var si = 0; si < allSizes.length; si++) {
+                if (expandedSizes.indexOf(allSizes[si]) === -1) expandedSizes.push(allSizes[si]);
+                var now = elements.filter(function(el) { return expandedSizes.indexOf(el.size) !== -1; });
+                if (now.length >= diffCount) {
+                    eligible = now;
+                    break;
+                }
+            }
+            if (eligible.length < diffCount) eligible = elements.slice();
+        }
+
+        eligible = shuffle(eligible);
+        var chosen = eligible.slice(0, diffCount);
+
+        var diffs = [];
+        for (var i = 0; i < chosen.length; i++) {
+            var el = chosen[i];
+            var type;
+            if (el.size === 'large') {
+                type = rng() < 0.85 ? 'color' : 'missing';
+            } else if (el.size === 'medium') {
+                type = rng() < 0.6 ? 'color' : 'missing';
+            } else {
+                type = rng() < 0.5 ? 'color' : 'missing';
+            }
+
+            if (type === 'color' && el.parts && el.parts.length > 0) {
+                var part = pick(el.parts);
+                var newColor = getAlternateColor(part.fill);
+                diffs.push({ elId: el.id, elName: el.name, type: 'color', partId: part.id, oldColor: part.fill, newColor: newColor });
+            } else {
+                diffs.push({ elId: el.id, elName: el.name, type: 'missing' });
+            }
+        }
 
         return diffs;
     }
 
-    function renderSvg(scene, diffs, isModified) {
-        let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">`;
-        svg += scene.bgSvg;
+    // ========== APPLY DIFFERENCES & RENDER ==========
 
-        const diffMap = {};
-        if (isModified && diffs) {
-            diffs.forEach(d => { diffMap[d.element.id] = d; });
+    function applySvgDiff(svgStr, el, diff) {
+        if (diff.type === 'missing') {
+            return '';
         }
-
-        scene.elements.forEach(el => {
-            const diff = diffMap[el.id];
-            if (!diff) {
-                svg += el.svg;
-                return;
+        if (diff.type === 'color') {
+            var modified = svgStr;
+            var oldC = diff.oldColor;
+            var newC = diff.newColor;
+            modified = modified.split('fill="' + oldC + '"').join('fill="' + newC + '"');
+            if (oldC.toLowerCase() !== oldC) {
+                modified = modified.split('fill="' + oldC.toLowerCase() + '"').join('fill="' + newC + '"');
             }
-
-            switch (diff.type) {
-                case 'remove':
-                    // Don't render = removed
-                    break;
-                case 'color': {
-                    // Shift hue by replacing fill colors
-                    let modified = el.svg;
-                    const colorShifts = [
-                        ['#F44336', '#2196F3'], ['#2196F3', '#FF9800'], ['#FF9800', '#4CAF50'],
-                        ['#4CAF50', '#E91E63'], ['#E91E63', '#00BCD4'], ['#FFD600', '#AB47BC'],
-                        ['#42A5F5', '#FF5722'], ['#EF5350', '#66BB6A'], ['#8D6E63', '#5C6BC0'],
-                        ['#81C784', '#FFB74D'], ['#AB47BC', '#FFEB3B'], ['#795548', '#1E88E5'],
-                        ['#FFA726', '#7E57C2'], ['#66BB6A', '#EF5350'], ['#FFEE58', '#EC407A'],
-                        ['#fff', '#FFEB3B'], ['#FFE082', '#B39DDB'], ['#76FF03', '#FF4081'],
-                        ['#ECEFF1', '#FFD54F'], ['#C62828', '#1565C0'], ['#D32F2F', '#1976D2'],
-                    ];
-                    // Pick a random color from the element and shift it
-                    const fillRegex = /fill="(#[0-9A-Fa-f]{3,8})"/g;
-                    const fills = [];
-                    let m;
-                    while ((m = fillRegex.exec(el.svg)) !== null) {
-                        if (m[1] !== 'none' && m[1] !== '#333' && m[1] !== '#fff') fills.push(m[1]);
-                    }
-                    if (fills.length > 0) {
-                        const targetFill = pick(fills);
-                        let newColor = null;
-                        for (const [from, to] of colorShifts) {
-                            if (from.toLowerCase() === targetFill.toLowerCase()) { newColor = to; break; }
-                        }
-                        if (!newColor) {
-                            // Generate a random different color
-                            const randomColors = ['#F44336','#2196F3','#FF9800','#4CAF50','#E91E63','#9C27B0','#00BCD4','#FFEB3B'];
-                            newColor = pick(randomColors.filter(c => c.toLowerCase() !== targetFill.toLowerCase()));
-                        }
-                        modified = modified.split(targetFill).join(newColor);
-                    }
-                    svg += modified;
-                    break;
-                }
-                case 'move': {
-                    const dx = randInt(-25, 25);
-                    const dy = randInt(-15, 15);
-                    svg += `<g transform="translate(${dx}, ${dy})">${el.svg}</g>`;
-                    break;
-                }
-                case 'resize': {
-                    const s = rng() > 0.5 ? 0.6 : 1.4;
-                    const cx = el.x + el.w / 2;
-                    const cy = el.y + el.h / 2;
-                    svg += `<g transform="translate(${cx * (1 - s)}, ${cy * (1 - s)}) scale(${s})">${el.svg}</g>`;
-                    break;
-                }
-            }
-        });
-
-        svg += '</svg>';
-        return svg;
+            return modified;
+        }
+        return svgStr;
     }
 
-    // ====== MAIN GENERATE ======
+    function renderScene(bgSvg, elements, diffs, isModified) {
+        var inner = bgSvg;
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            var diff = null;
+            if (isModified) {
+                for (var j = 0; j < diffs.length; j++) {
+                    if (diffs[j].elId === el.id) { diff = diffs[j]; break; }
+                }
+            }
+            if (diff) {
+                inner += applySvgDiff(el.svg, el, diff);
+            } else {
+                inner += el.svg;
+            }
+        }
+        return '<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="background:#fff">'+inner+'</svg>';
+    }
 
-    let currentScene = null;
-    let currentDiffs = null;
-    let currentDiffCount = 0;
+    // ========== MAIN GENERATE ==========
 
     function generate() {
-        const sceneType = document.getElementById('scene-select').value;
-        const numDiffs = parseInt(document.getElementById('diff-count').value);
-
-        // Use a random seed
-        const seed = Date.now();
+        var sceneType = document.getElementById('scene-select').value;
+        var difficulty = document.getElementById('difficulty').value;
+        var seed = Date.now();
         rng = mulberry32(seed);
 
-        const scene = buildScene(sceneType);
-        const diffs = applyDifferences(scene, numDiffs);
+        var result = buildScene(sceneType, difficulty);
+        var elements = result.elements;
+        var bgSvg = result.bgSvg;
+        var diffs = generateDifferences(elements, difficulty);
 
-        currentScene = scene;
-        currentDiffs = diffs;
-        currentDiffCount = numDiffs;
+        var originalSvg = renderScene(bgSvg, elements, [], false);
+        var modifiedSvg = renderScene(bgSvg, elements, diffs, true);
 
-        // Re-seed for consistent background stars etc. on both renders
-        rng = mulberry32(seed);
-        const scene1 = buildScene(sceneType);
-        const svg1 = renderSvg(scene1, null, false);
+        var diffCountText = diffs.length;
+        var origLeft = rng() > 0.5;
 
-        rng = mulberry32(seed);
-        const scene2 = buildScene(sceneType);
-        const diffs2 = applyDifferences(scene2, numDiffs);
-        const svg2 = renderSvg(scene2, diffs2, true);
-
-        const output = document.getElementById('output');
-        output.innerHTML = `
-            <div class="scenes-container">
-                <div class="scene-box">
-                    <div class="scene-label">Originale</div>
-                    ${svg1}
-                </div>
-                <div class="scene-box">
-                    <div class="scene-label">Modificata</div>
-                    ${svg2}
-                </div>
-            </div>
-            <div class="challenge-text">Trova ${numDiffs} differenze!</div>
-        `;
+        var output = document.getElementById('output');
+        output.innerHTML =
+            '<div class="scenes-container">' +
+                '<div class="scene-box">' +
+                    (origLeft ? originalSvg : modifiedSvg) +
+                    '<div class="scene-label">' + (origLeft ? 'Originale' : 'Modificata') + '</div>' +
+                '</div>' +
+                '<div class="scene-box">' +
+                    (origLeft ? modifiedSvg : originalSvg) +
+                    '<div class="scene-label">' + (origLeft ? 'Modificata' : 'Originale') + '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="challenge-text">Trova le ' + diffCountText + ' differenze!</div>';
     }
 
-    // ====== PDF EXPORT ======
+    // ========== PDF EXPORT ==========
 
-    async function exportPDF() {
-        const wrapper = document.getElementById('output');
-        if (!wrapper.querySelector('svg')) {
-            alert('Prima genera una scena!');
-            return;
-        }
+    function exportPDF() {
+        var wrapper = document.getElementById('output');
+        var svgs = wrapper.querySelectorAll('svg');
+        if (svgs.length < 2) { alert('Genera prima una scena.'); return; }
 
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+        var jsPDFLib = window.jspdf;
+        var pdf = new jsPDFLib.jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+        var pw = pdf.internal.pageSize.getWidth();
+        var ph = pdf.internal.pageSize.getHeight();
 
-        const svgs = wrapper.querySelectorAll('.scene-box');
-        const pageW = 297, pageH = 210;
-        const margin = 10;
-        const imgW = (pageW - margin * 3) / 2;
-        const imgH = imgW * (H / W);
-        const yPos = (pageH - imgH - 20) / 2;
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(20);
+        pdf.text('Trova le Differenze', pw / 2, 15, { align: 'center' });
 
-        for (let i = 0; i < 2; i++) {
-            const svgEl = svgs[i].querySelector('svg');
-            const label = svgs[i].querySelector('.scene-label').textContent;
-            const svgData = new XMLSerializer().serializeToString(svgEl);
-            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(svgBlob);
+        var margin = 12;
+        var gap = 8;
+        var svgW = (pw - margin * 2 - gap) / 2;
+        var svgH = svgW * (H / W);
+        var topY = 24;
+        var loaded = 0;
 
-            const img = new Image();
-            img.width = W * 2;
-            img.height = H * 2;
+        for (var i = 0; i < 2; i++) {
+            (function(index) {
+                var svgEl = svgs[index];
+                var serializer = new XMLSerializer();
+                var svgStr = serializer.serializeToString(svgEl);
+                var svgBlob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+                var url = URL.createObjectURL(svgBlob);
 
-            await new Promise((resolve) => {
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
+                var img = new Image();
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
                     canvas.width = W * 2;
                     canvas.height = H * 2;
-                    const ctx = canvas.getContext('2d');
-                    ctx.fillStyle = '#ffffff';
+                    var ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#fff';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    ctx.drawImage(img, 0, 0, W * 2, H * 2);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    var dataUrl = canvas.toDataURL('image/png');
 
-                    const dataUrl = canvas.toDataURL('image/png');
-                    const xPos = margin + i * (imgW + margin);
-                    pdf.addImage(dataUrl, 'PNG', xPos, yPos, imgW, imgH);
-                    pdf.setFontSize(11);
-                    pdf.text(label, xPos + imgW / 2, yPos - 3, { align: 'center' });
+                    var xPos = margin + index * (svgW + gap);
+                    pdf.addImage(dataUrl, 'PNG', xPos, topY, svgW, svgH);
+
+                    pdf.setFontSize(10);
+                    pdf.setFont('helvetica', 'normal');
+                    var label = svgEl.parentElement.querySelector('.scene-label');
+                    if (label) {
+                        pdf.text(label.textContent, xPos + svgW / 2, topY + svgH + 6, { align: 'center' });
+                    }
 
                     URL.revokeObjectURL(url);
-                    resolve();
+                    loaded++;
+
+                    if (loaded === 2) {
+                        var challengeEl = wrapper.querySelector('.challenge-text');
+                        if (challengeEl) {
+                            pdf.setFont('helvetica', 'bold');
+                            pdf.setFontSize(16);
+                            pdf.text(challengeEl.textContent, pw / 2, topY + svgH + 16, { align: 'center' });
+                        }
+                        pdf.save('trova-le-differenze.pdf');
+                    }
                 };
                 img.src = url;
-            });
+            })(i);
         }
-
-        // Challenge text
-        const challengeEl = wrapper.querySelector('.challenge-text');
-        if (challengeEl) {
-            pdf.setFontSize(16);
-            pdf.text(challengeEl.textContent, pageW / 2, yPos + imgH + 12, { align: 'center' });
-        }
-
-        pdf.save('trova-le-differenze.pdf');
     }
-
-    // Auto-generate on load
-    window.addEventListener('DOMContentLoaded', () => { generate(); });
     </script>
 </body>
 </html>

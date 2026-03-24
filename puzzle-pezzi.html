@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Puzzle da Ritagliare - Print2Play</title>
+<title>Puzzle Fai-da-Te per Tutta la Famiglia - Print2Play</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -236,16 +236,16 @@ select:focus {
 
 <header>
   <div class="header-left">
-    <h1>Puzzle da Ritagliare</h1>
-    <p>Ritaglia i pezzi e completa l'immagine</p>
+    <h1>Puzzle Fai-da-Te!</h1>
+    <p>Taglia, gioca e divertiti insieme alla tua famiglia!</p>
   </div>
-  <a href="index.html" class="back-link">&larr; Torna alla home</a>
+  <a href="index.html" class="back-link">&larr; Tutti i giochi</a>
 </header>
 
 <div class="app">
   <aside class="sidebar">
     <div class="control-group">
-      <label>Scena</label>
+      <label>Scegli un mondo</label>
       <select id="scene">
         <option value="casa">Casa con giardino</option>
         <option value="mare">Paesaggio marino</option>
@@ -256,7 +256,7 @@ select:focus {
       </select>
     </div>
     <div class="control-group">
-      <label>Pezzi mancanti</label>
+      <label>Quanti pezzi?</label>
       <select id="pieces">
         <option value="3">3 pezzi</option>
         <option value="4" selected>4 pezzi</option>
@@ -265,19 +265,19 @@ select:focus {
       </select>
     </div>
     <div class="control-group">
-      <label>Difficolt&agrave;</label>
+      <label>Che sfida vuoi?</label>
       <select id="difficulty">
-        <option value="facile">Facile (pezzi rettangolari)</option>
-        <option value="difficile">Difficile (forme irregolari)</option>
+        <option value="facile">Tranquillo - pezzi semplici</option>
+        <option value="difficile">Avventuroso - forme pazzerelle!</option>
       </select>
     </div>
-    <button class="btn btn-primary" onclick="generate()">Genera Puzzle</button>
-    <button class="btn btn-secondary" onclick="window.print()">Stampa</button>
-    <button class="btn btn-secondary" onclick="exportPDF()">Esporta PDF</button>
+    <button class="btn btn-primary" onclick="generate()">Crea il tuo Puzzle!</button>
+    <button class="btn btn-secondary" onclick="window.print()">Stampa e Gioca!</button>
+    <button class="btn btn-secondary" onclick="exportPDF()">Salva come PDF</button>
   </aside>
 
   <main class="main-area" id="output">
-    <div class="placeholder-msg">Scegli le opzioni e premi <strong>Genera Puzzle</strong> per creare il tuo puzzle da ritagliare.</div>
+    <div class="placeholder-msg">Pronti per il divertimento? Scegli una scena, decidi quanti pezzi vuoi e premi <strong>Crea il tuo Puzzle!</strong> per iniziare l'avventura!</div>
   </main>
 </div>
 
@@ -929,7 +929,7 @@ function generate() {
     <defs>${piecesDefs}</defs>
     <rect x="0" y="0" width="${w}" height="${h}" fill="#fff" rx="4"/>
     ${scissorsIcon}
-    <text x="${w/2 + 10}" y="30" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="600" fill="#333">Ritaglia i pezzi lungo le linee tratteggiate</text>
+    <text x="${w/2 + 10}" y="30" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="600" fill="#333">Ritaglia lungo le linee e ricomponi il disegno!</text>
     ${piecesContent}
     <rect x="0" y="0" width="${w}" height="${h}" fill="none" stroke="#ccc" stroke-width="2" rx="4"/>
   </svg>`;
@@ -937,11 +937,11 @@ function generate() {
   const output = document.getElementById('output');
   output.innerHTML = `
     <div class="page-container" id="page1">
-      <h2>Completa l'immagine: ${sceneNames[sceneKey]}</h2>
+      <h2>Ecco la tua scena: ${sceneNames[sceneKey]} - Riesci a completarla?</h2>
       ${svgPage1}
     </div>
     <div class="page-container" id="page2">
-      <h2>Pezzi da ritagliare</h2>
+      <h2>Ecco i tuoi pezzi - Forbici alla mano!</h2>
       ${svgPage2}
     </div>
   `;
@@ -951,7 +951,7 @@ async function exportPDF() {
   const page1 = document.getElementById('page1');
   const page2 = document.getElementById('page2');
   if (!page1 || !page2) {
-    alert('Prima genera il puzzle!');
+    alert('Prima crea il tuo puzzle premendo il bottone!');
     return;
   }
 

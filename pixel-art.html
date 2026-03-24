@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pixel Art - Colora con i Numeri</title>
+<title>Pixel Art - Divertiti a Colorare con i Numeri!</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -373,15 +373,15 @@ header p {
 <body>
 
 <header>
-  <a href="index.html" class="back-link">&larr; Torna alla home</a>
-  <h1>Pixel Art - Colora con i Numeri</h1>
-  <p>Scegli un'immagine, genera la griglia e colora seguendo i numeri!</p>
+  <a href="index.html" class="back-link">&larr; Torna ai giochi</a>
+  <h1>Pixel Art - Divertiti a Colorare!</h1>
+  <p>Scegliete insieme un disegno, preparate i colori e via con il divertimento in famiglia!</p>
 </header>
 
 <div class="app">
   <aside class="sidebar">
     <div class="control-group">
-      <label for="imageSelect">Immagine</label>
+      <label for="imageSelect">Cosa vuoi colorare?</label>
       <select id="imageSelect">
         <option value="cuore">Cuore</option>
         <option value="stella">Stella</option>
@@ -397,11 +397,11 @@ header p {
     </div>
 
     <div class="control-group">
-      <label for="sizeSelect">Dimensione griglia</label>
+      <label for="sizeSelect">Quanto grande?</label>
       <select id="sizeSelect">
-        <option value="10">Piccolo (10&times;10)</option>
-        <option value="15" selected>Medio (15&times;15)</option>
-        <option value="20">Grande (20&times;20)</option>
+        <option value="10">Piccolo - veloce e facile!</option>
+        <option value="15" selected>Medio - perfetto per tutti!</option>
+        <option value="20">Grande - per i pi&ugrave; pazienti!</option>
       </select>
     </div>
 
@@ -411,21 +411,21 @@ header p {
           <input type="checkbox" id="previewToggle">
           <span class="toggle-slider"></span>
         </div>
-        <label for="previewToggle">Mostra anteprima</label>
+        <label for="previewToggle">Sbircia i colori!</label>
       </div>
     </div>
 
     <div class="actions">
-      <button class="btn btn-primary" onclick="generate()">Genera</button>
-      <button class="btn btn-secondary" onclick="window.print()">Stampa</button>
-      <button class="btn btn-secondary" onclick="exportPDF()">Esporta PDF</button>
+      <button class="btn btn-primary" onclick="generate()">Crea il disegno!</button>
+      <button class="btn btn-secondary" onclick="window.print()">Stampa e colora!</button>
+      <button class="btn btn-secondary" onclick="exportPDF()">Salva come PDF</button>
     </div>
   </aside>
 
   <main class="main-area" id="mainArea">
     <div class="empty-state" id="emptyState">
-      <h2>Pronto per creare!</h2>
-      <p>Scegli un'immagine e una dimensione, poi premi "Genera".</p>
+      <h2>Pronti a divertirvi?</h2>
+      <p>Scegliete un disegno, decidete la grandezza e premete "Crea il disegno!" per iniziare il divertimento!</p>
     </div>
     <div id="output" style="display:none;">
       <div class="print-title" id="printTitle"></div>
@@ -685,7 +685,7 @@ document.getElementById('previewToggle').addEventListener('change', function() {
 });
 
 function exportPDF() {
-  if (!currentGrid) { alert('Prima genera una griglia!'); return; }
+  if (!currentGrid) { alert('Prima crea un disegno premendo "Crea il disegno!"'); return; }
 
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -764,7 +764,7 @@ function exportPDF() {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(10);
   doc.setTextColor(30, 41, 59);
-  doc.text('Legenda colori:', margin, y);
+  doc.text('Ecco i colori da usare:', margin, y);
   y += 6;
 
   const legendX = margin;
