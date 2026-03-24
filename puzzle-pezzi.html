@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puzzle da Ritagliare - Print2Play</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.10);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-left p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.back-link {
+  font-size: 0.9rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.back-link:hover { color: var(--primary-hover); text-decoration: underline; }
+
+.app {
+  display: flex;
+  flex: 1;
+  gap: 0;
+}
+
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.control-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+select, button {
+  font-family: 'Inter', system-ui, sans-serif;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+select {
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
+}
+
+.btn {
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--primary-hover); }
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+.main-area {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.page-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.page-container h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text);
+  text-align: center;
+}
+
+.page-container svg {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  height: auto;
+}
+
+.placeholder-msg {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 80px 24px;
+  font-size: 1rem;
+}
+
+/* Print styles */
+@media print {
+  header, .sidebar { display: none !important; }
+  body { background: #fff; }
+  .main-area { padding: 0; }
+  .page-container {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 10mm;
+    max-width: 100%;
+    page-break-after: always;
+    break-after: page;
+  }
+  .page-container:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+  .page-container h2 {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 16px;
+    gap: 12px;
+  }
+  .control-group { flex: 1; min-width: 140px; }
+  .main-area { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Puzzle da Ritagliare</h1>
+    <p>Ritaglia i pezzi e completa l'immagine</p>
+  </div>
+  <a href="index.html" class="back-link">&larr; Torna alla home</a>
+</header>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="control-group">
+      <label>Scena</label>
+      <select id="scene">
+        <option value="casa">Casa con giardino</option>
+        <option value="mare">Paesaggio marino</option>
+        <option value="citta">Citt&agrave;</option>
+        <option value="fattoria">Fattoria</option>
+        <option value="foresta">Foresta</option>
+        <option value="spazio">Spazio</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>Pezzi mancanti</label>
+      <select id="pieces">
+        <option value="3">3 pezzi</option>
+        <option value="4" selected>4 pezzi</option>
+        <option value="5">5 pezzi</option>
+        <option value="6">6 pezzi</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>Difficolt&agrave;</label>
+      <select id="difficulty">
+        <option value="facile">Facile (pezzi rettangolari)</option>
+        <option value="difficile">Difficile (forme irregolari)</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="generate()">Genera Puzzle</button>
+    <button class="btn btn-secondary" onclick="window.print()">Stampa</button>
+    <button class="btn btn-secondary" onclick="exportPDF()">Esporta PDF</button>
+  </aside>
+
+  <main class="main-area" id="output">
+    <div class="placeholder-msg">Scegli le opzioni e premi <strong>Genera Puzzle</strong> per creare il tuo puzzle da ritagliare.</div>
+  </main>
+</div>
+
+<script>
+const SCENE_W = 650, SCENE_H = 460;
+
+// Scene drawing functions - each returns SVG elements as a string
+const scenes = {
+  casa(w, h) {
+    return `
+      <!-- cielo -->
+      <rect x="0" y="0" width="${w}" height="${h}" fill="#87CEEB"/>
+      <!-- sole -->
+      <circle cx="${w-60}" cy="60" r="40" fill="#FFD700"/>
+      <line x1="${w-60}" y1="10" x2="${w-60}" y2="0" stroke="#FFD700" stroke-width="3"/>
+      <line x1="${w-100}" y1="30" x2="${w-110}" y2="20" stroke="#FFD700" stroke-width="3"/>
+      <line x1="${w-20}" y1="30" x2="${w-10}" y2="20" stroke="#FFD700" stroke-width="3"/>
+      <!-- nuvole -->
+      <ellipse cx="120" cy="60" rx="50" ry="25" fill="#fff" opacity="0.9"/>
+      <ellipse cx="150" cy="50" rx="40" ry="20" fill="#fff" opacity="0.9"/>
+      <ellipse cx="350" cy="80" rx="45" ry="22" fill="#fff" opacity="0.85"/>
+      <!-- prato -->
+      <rect x="0" y="${h*0.65}" width="${w}" height="${h*0.35}" fill="#4CAF50"/>
+      <rect x="0" y="${h*0.65}" width="${w}" height="15" fill="#66BB6A"/>
+      <!-- sentiero -->
+      <path d="M${w/2-20} ${h} Q${w/2-10} ${h*0.78} ${w/2} ${h*0.72} Q${w/2+10} ${h*0.66} ${w/2+5} ${h*0.65}" fill="#D2B48C" stroke="#C4A882" stroke-width="1"/>
+      <path d="M${w/2+20} ${h} Q${w/2+30} ${h*0.78} ${w/2+40} ${h*0.72} Q${w/2+50} ${h*0.66} ${w/2+45} ${h*0.65}" fill="#D2B48C" stroke="#C4A882" stroke-width="1"/>
+      <!-- casa corpo -->
+      <rect x="${w/2-80}" y="${h*0.38}" width="160" height="125" fill="#E8D5B7" stroke="#8B7355" stroke-width="2"/>
+      <!-- tetto -->
+      <polygon points="${w/2-95},${h*0.38} ${w/2},${h*0.2} ${w/2+95},${h*0.38}" fill="#C0392B" stroke="#922B21" stroke-width="2"/>
+      <!-- porta -->
+      <rect x="${w/2-18}" y="${h*0.52}" width="36" height="55" rx="3" fill="#8B4513" stroke="#6B3410" stroke-width="2"/>
+      <circle cx="${w/2+10}" cy="${h*0.58}" r="3" fill="#FFD700"/>
+      <!-- finestre -->
+      <rect x="${w/2-65}" y="${h*0.44}" width="35" height="30" rx="2" fill="#AED6F1" stroke="#5B7FA5" stroke-width="2"/>
+      <line x1="${w/2-47.5}" y1="${h*0.44}" x2="${w/2-47.5}" y2="${h*0.44+30}" stroke="#5B7FA5" stroke-width="1.5"/>
+      <line x1="${w/2-65}" y1="${h*0.44+15}" x2="${w/2-30}" y2="${h*0.44+15}" stroke="#5B7FA5" stroke-width="1.5"/>
+      <rect x="${w/2+30}" y="${h*0.44}" width="35" height="30" rx="2" fill="#AED6F1" stroke="#5B7FA5" stroke-width="2"/>
+      <line x1="${w/2+47.5}" y1="${h*0.44}" x2="${w/2+47.5}" y2="${h*0.44+30}" stroke="#5B7FA5" stroke-width="1.5"/>
+      <line x1="${w/2+30}" y1="${h*0.44+15}" x2="${w/2+65}" y2="${h*0.44+15}" stroke="#5B7FA5" stroke-width="1.5"/>
+      <!-- camino -->
+      <rect x="${w/2+40}" y="${h*0.22}" width="20" height="40" fill="#8B7355" stroke="#6B5335" stroke-width="1.5"/>
+      <!-- albero sx -->
+      <rect x="60" y="${h*0.48}" width="18" height="80" fill="#8B6914"/>
+      <circle cx="69" cy="${h*0.42}" r="40" fill="#2E7D32"/>
+      <circle cx="50" cy="${h*0.46}" r="30" fill="#388E3C"/>
+      <circle cx="88" cy="${h*0.46}" r="30" fill="#388E3C"/>
+      <!-- albero dx -->
+      <rect x="${w-90}" y="${h*0.50}" width="16" height="70" fill="#8B6914"/>
+      <circle cx="${w-82}" cy="${h*0.44}" r="35" fill="#2E7D32"/>
+      <circle cx="${w-65}" cy="${h*0.48}" r="25" fill="#388E3C"/>
+      <circle cx="${w-100}" cy="${h*0.48}" r="25" fill="#388E3C"/>
+      <!-- fiori -->
+      <circle cx="180" cy="${h*0.75}" r="6" fill="#E91E63"/>
+      <circle cx="190" cy="${h*0.80}" r="5" fill="#FF9800"/>
+      <circle cx="460" cy="${h*0.73}" r="6" fill="#9C27B0"/>
+      <circle cx="480" cy="${h*0.78}" r="5" fill="#FF5722"/>
+      <circle cx="500" cy="${h*0.82}" r="6" fill="#E91E63"/>
+      <!-- staccionata -->
+      <rect x="15" y="${h*0.62}" width="4" height="35" fill="#D2B48C"/>
+      <rect x="45" y="${h*0.62}" width="4" height="35" fill="#D2B48C"/>
+      <rect x="10" y="${h*0.65}" width="44" height="5" fill="#D2B48C"/>
+      <rect x="10" y="${h*0.72}" width="44" height="5" fill="#D2B48C"/>
+    `;
+  },
+
+  mare(w, h) {
+    return `
+      <!-- cielo -->
+      <rect x="0" y="0" width="${w}" height="${h*0.55}" fill="#87CEEB"/>
+      <!-- sole -->
+      <circle cx="100" cy="70" r="45" fill="#FFD700"/>
+      <!-- nuvole -->
+      <ellipse cx="300" cy="55" rx="55" ry="25" fill="#fff" opacity="0.9"/>
+      <ellipse cx="340" cy="45" rx="40" ry="20" fill="#fff" opacity="0.9"/>
+      <ellipse cx="520" cy="70" rx="45" ry="20" fill="#fff" opacity="0.85"/>
+      <!-- mare -->
+      <rect x="0" y="${h*0.55}" width="${w}" height="${h*0.30}" fill="#1E88E5"/>
+      <path d="M0 ${h*0.55} Q${w*0.1} ${h*0.52} ${w*0.2} ${h*0.55} Q${w*0.3} ${h*0.58} ${w*0.4} ${h*0.55} Q${w*0.5} ${h*0.52} ${w*0.6} ${h*0.55} Q${w*0.7} ${h*0.58} ${w*0.8} ${h*0.55} Q${w*0.9} ${h*0.52} ${w} ${h*0.55} V${h*0.60} Q${w*0.9} ${h*0.57} ${w*0.8} ${h*0.60} Q${w*0.7} ${h*0.63} ${w*0.6} ${h*0.60} Q${w*0.5} ${h*0.57} ${w*0.4} ${h*0.60} Q${w*0.3} ${h*0.63} ${w*0.2} ${h*0.60} Q${w*0.1} ${h*0.57} 0 ${h*0.60} Z" fill="#2196F3"/>
+      <!-- spiaggia -->
+      <rect x="0" y="${h*0.85}" width="${w}" height="${h*0.15}" fill="#F4D03F"/>
+      <path d="M0 ${h*0.85} Q${w*0.25} ${h*0.82} ${w*0.5} ${h*0.85} Q${w*0.75} ${h*0.88} ${w} ${h*0.85} V${h*0.88} Q${w*0.75} ${h*0.91} ${w*0.5} ${h*0.88} Q${w*0.25} ${h*0.85} 0 ${h*0.88} Z" fill="#F5D54A"/>
+      <!-- barca -->
+      <path d="M${w*0.55} ${h*0.50} L${w*0.50} ${h*0.57} L${w*0.70} ${h*0.57} Z" fill="#E74C3C"/>
+      <rect x="${w*0.595}" y="${h*0.38}" width="4" height="80" fill="#8B4513"/>
+      <polygon points="${w*0.60},${h*0.38} ${w*0.60},${h*0.50} ${w*0.66},${h*0.44}" fill="#fff" stroke="#ddd" stroke-width="1"/>
+      <!-- pesce -->
+      <ellipse cx="${w*0.30}" cy="${h*0.68}" rx="20" ry="10" fill="#FF9800"/>
+      <polygon points="${w*0.28-20},${h*0.68} ${w*0.28-32},${h*0.68-10} ${w*0.28-32},${h*0.68+10}" fill="#FF9800"/>
+      <circle cx="${w*0.32}" cy="${h*0.67}" r="2.5" fill="#000"/>
+      <!-- stella marina -->
+      <polygon points="${w*0.20},${h*0.90} ${w*0.21},${h*0.87} ${w*0.23},${h*0.89} ${w*0.25},${h*0.87} ${w*0.24},${h*0.90} ${w*0.26},${h*0.92} ${w*0.23},${h*0.91} ${w*0.20},${h*0.93} ${w*0.21},${h*0.90}" fill="#E91E63"/>
+      <!-- conchiglia -->
+      <ellipse cx="${w*0.65}" cy="${h*0.92}" rx="12" ry="8" fill="#FFCCBC"/>
+      <path d="M${w*0.65-12} ${h*0.92} Q${w*0.65} ${h*0.92-14} ${w*0.65+12} ${h*0.92}" fill="none" stroke="#E8A598" stroke-width="1.5"/>
+      <!-- ombrellone -->
+      <rect x="${w*0.78}" y="${h*0.78}" width="4" height="60" fill="#8B4513"/>
+      <path d="M${w*0.78-35} ${h*0.78} Q${w*0.78+2} ${h*0.70} ${w*0.78+39} ${h*0.78} Z" fill="#E74C3C"/>
+      <path d="M${w*0.78-10} ${h*0.78} Q${w*0.78+2} ${h*0.72} ${w*0.78+14} ${h*0.78} Z" fill="#F1C40F"/>
+      <!-- gabbiani -->
+      <path d="M${w*0.40} ${h*0.15} Q${w*0.42} ${h*0.12} ${w*0.44} ${h*0.14}" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+      <path d="M${w*0.44} ${h*0.14} Q${w*0.46} ${h*0.11} ${w*0.48} ${h*0.13}" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+      <path d="M${w*0.60} ${h*0.10} Q${w*0.62} ${h*0.07} ${w*0.64} ${h*0.09}" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+      <path d="M${w*0.64} ${h*0.09} Q${w*0.66} ${h*0.06} ${w*0.68} ${h*0.08}" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+      <!-- palma -->
+      <rect x="530" y="${h*0.60}" width="10" height="100" fill="#8B6914" rx="3"/>
+      <path d="M535 ${h*0.60} Q510 ${h*0.50} 490 ${h*0.55}" fill="none" stroke="#2E7D32" stroke-width="6" stroke-linecap="round"/>
+      <path d="M535 ${h*0.60} Q560 ${h*0.50} 580 ${h*0.55}" fill="none" stroke="#2E7D32" stroke-width="6" stroke-linecap="round"/>
+      <path d="M535 ${h*0.60} Q535 ${h*0.48} 535 ${h*0.52}" fill="none" stroke="#388E3C" stroke-width="5" stroke-linecap="round"/>
+    `;
+  },
+
+  citta(w, h) {
+    return `
+      <!-- cielo -->
+      <rect x="0" y="0" width="${w}" height="${h}" fill="#5C9CE6"/>
+      <!-- nuvole -->
+      <ellipse cx="100" cy="50" rx="50" ry="22" fill="#fff" opacity="0.9"/>
+      <ellipse cx="130" cy="42" rx="35" ry="18" fill="#fff" opacity="0.9"/>
+      <ellipse cx="480" cy="60" rx="45" ry="20" fill="#fff" opacity="0.85"/>
+      <!-- sole -->
+      <circle cx="${w-70}" cy="55" r="35" fill="#FFD700"/>
+      <!-- strada -->
+      <rect x="0" y="${h*0.82}" width="${w}" height="${h*0.18}" fill="#607D8B"/>
+      <rect x="0" y="${h*0.90}" width="${w}" height="4" fill="#fff" stroke-dasharray="20 15"/>
+      <!-- marciapiede -->
+      <rect x="0" y="${h*0.78}" width="${w}" height="${h*0.04}" fill="#B0BEC5"/>
+      <!-- palazzo 1 -->
+      <rect x="30" y="${h*0.30}" width="100" height="${h*0.48}" fill="#E57373" stroke="#C62828" stroke-width="1.5"/>
+      <rect x="45" y="${h*0.35}" width="20" height="25" fill="#BBDEFB" stroke="#64B5F6" stroke-width="1"/>
+      <rect x="95" y="${h*0.35}" width="20" height="25" fill="#BBDEFB" stroke="#64B5F6" stroke-width="1"/>
+      <rect x="45" y="${h*0.50}" width="20" height="25" fill="#BBDEFB" stroke="#64B5F6" stroke-width="1"/>
+      <rect x="95" y="${h*0.50}" width="20" height="25" fill="#BBDEFB" stroke="#64B5F6" stroke-width="1"/>
+      <rect x="65" y="${h*0.65}" width="25" height="40" fill="#8D6E63" stroke="#5D4037" stroke-width="1"/>
+      <!-- palazzo 2 (alto) -->
+      <rect x="150" y="${h*0.15}" width="90" height="${h*0.63}" fill="#64B5F6" stroke="#1976D2" stroke-width="1.5"/>
+      <rect x="160" y="${h*0.20}" width="18" height="20" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1"/>
+      <rect x="212" y="${h*0.20}" width="18" height="20" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1"/>
+      <rect x="160" y="${h*0.33}" width="18" height="20" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1"/>
+      <rect x="212" y="${h*0.33}" width="18" height="20" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1"/>
+      <rect x="160" y="${h*0.46}" width="18" height="20" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1"/>
+      <rect x="212" y="${h*0.46}" width="18" height="20" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1"/>
+      <rect x="183" y="${h*0.63}" width="22" height="35" fill="#8D6E63"/>
+      <!-- palazzo 3 -->
+      <rect x="260" y="${h*0.35}" width="110" height="${h*0.43}" fill="#FFB74D" stroke="#F57C00" stroke-width="1.5"/>
+      <rect x="275" y="${h*0.40}" width="22" height="22" fill="#FFF3E0" stroke="#FFE0B2" stroke-width="1"/>
+      <rect x="335" y="${h*0.40}" width="22" height="22" fill="#FFF3E0" stroke="#FFE0B2" stroke-width="1"/>
+      <rect x="275" y="${h*0.55}" width="22" height="22" fill="#FFF3E0" stroke="#FFE0B2" stroke-width="1"/>
+      <rect x="335" y="${h*0.55}" width="22" height="22" fill="#FFF3E0" stroke="#FFE0B2" stroke-width="1"/>
+      <rect x="300" y="${h*0.66}" width="25" height="35" fill="#8D6E63"/>
+      <!-- torre -->
+      <rect x="400" y="${h*0.08}" width="70" height="${h*0.70}" fill="#CE93D8" stroke="#8E24AA" stroke-width="1.5"/>
+      <rect x="415" y="${h*0.14}" width="15" height="18" fill="#F3E5F5" stroke="#E1BEE7" stroke-width="1"/>
+      <rect x="440" y="${h*0.14}" width="15" height="18" fill="#F3E5F5" stroke="#E1BEE7" stroke-width="1"/>
+      <rect x="415" y="${h*0.28}" width="15" height="18" fill="#F3E5F5" stroke="#E1BEE7" stroke-width="1"/>
+      <rect x="440" y="${h*0.28}" width="15" height="18" fill="#F3E5F5" stroke="#E1BEE7" stroke-width="1"/>
+      <rect x="415" y="${h*0.42}" width="15" height="18" fill="#F3E5F5" stroke="#E1BEE7" stroke-width="1"/>
+      <rect x="440" y="${h*0.42}" width="15" height="18" fill="#F3E5F5" stroke="#E1BEE7" stroke-width="1"/>
+      <rect x="415" y="${h*0.56}" width="15" height="18" fill="#F3E5F5" stroke="#E1BEE7" stroke-width="1"/>
+      <rect x="440" y="${h*0.56}" width="15" height="18" fill="#F3E5F5" stroke="#E1BEE7" stroke-width="1"/>
+      <polygon points="400,${h*0.08} 435,${h*0.01} 470,${h*0.08}" fill="#AB47BC"/>
+      <!-- palazzo 5 -->
+      <rect x="490" y="${h*0.40}" width="100" height="${h*0.38}" fill="#A5D6A7" stroke="#388E3C" stroke-width="1.5"/>
+      <rect x="505" y="${h*0.45}" width="20" height="22" fill="#E8F5E9" stroke="#C8E6C9" stroke-width="1"/>
+      <rect x="555" y="${h*0.45}" width="20" height="22" fill="#E8F5E9" stroke="#C8E6C9" stroke-width="1"/>
+      <rect x="530" y="${h*0.63}" width="22" height="35" fill="#8D6E63"/>
+      <!-- auto -->
+      <rect x="80" y="${h*0.85}" width="60" height="25" rx="5" fill="#F44336"/>
+      <rect x="88" y="${h*0.82}" width="44" height="16" rx="4" fill="#EF5350"/>
+      <circle cx="95" cy="${h*0.91}" r="7" fill="#333"/>
+      <circle cx="125" cy="${h*0.91}" r="7" fill="#333"/>
+      <!-- auto 2 -->
+      <rect x="420" y="${h*0.86}" width="55" height="22" rx="5" fill="#2196F3"/>
+      <rect x="427" y="${h*0.83}" width="40" height="14" rx="4" fill="#42A5F5"/>
+      <circle cx="432" cy="${h*0.92}" r="6" fill="#333"/>
+      <circle cx="462" cy="${h*0.92}" r="6" fill="#333"/>
+      <!-- albero -->
+      <rect x="603" y="${h*0.60}" width="10" height="65" fill="#6D4C41"/>
+      <circle cx="608" cy="${h*0.54}" r="28" fill="#4CAF50"/>
+    `;
+  },
+
+  fattoria(w, h) {
+    return `
+      <!-- cielo -->
+      <rect x="0" y="0" width="${w}" height="${h}" fill="#87CEEB"/>
+      <!-- sole -->
+      <circle cx="${w-70}" cy="65" r="40" fill="#FFD700"/>
+      <!-- nuvole -->
+      <ellipse cx="150" cy="55" rx="50" ry="22" fill="#fff" opacity="0.9"/>
+      <ellipse cx="180" cy="45" rx="40" ry="18" fill="#fff" opacity="0.9"/>
+      <ellipse cx="420" cy="65" rx="45" ry="20" fill="#fff" opacity="0.85"/>
+      <!-- prato -->
+      <rect x="0" y="${h*0.60}" width="${w}" height="${h*0.40}" fill="#66BB6A"/>
+      <rect x="0" y="${h*0.60}" width="${w}" height="12" fill="#81C784"/>
+      <!-- campo grano -->
+      <rect x="0" y="${h*0.60}" width="${w*0.35}" height="${h*0.15}" fill="#F9A825"/>
+      <line x1="10" y1="${h*0.60}" x2="15" y2="${h*0.55}" stroke="#F57F17" stroke-width="2"/>
+      <line x1="30" y1="${h*0.60}" x2="35" y2="${h*0.54}" stroke="#F57F17" stroke-width="2"/>
+      <line x1="50" y1="${h*0.60}" x2="52" y2="${h*0.55}" stroke="#F57F17" stroke-width="2"/>
+      <line x1="70" y1="${h*0.60}" x2="73" y2="${h*0.54}" stroke="#F57F17" stroke-width="2"/>
+      <line x1="90" y1="${h*0.60}" x2="93" y2="${h*0.56}" stroke="#F57F17" stroke-width="2"/>
+      <line x1="110" y1="${h*0.60}" x2="112" y2="${h*0.54}" stroke="#F57F17" stroke-width="2"/>
+      <line x1="140" y1="${h*0.60}" x2="143" y2="${h*0.55}" stroke="#F57F17" stroke-width="2"/>
+      <line x1="170" y1="${h*0.60}" x2="172" y2="${h*0.55}" stroke="#F57F17" stroke-width="2"/>
+      <line x1="200" y1="${h*0.60}" x2="203" y2="${h*0.54}" stroke="#F57F17" stroke-width="2"/>
+      <!-- fienile -->
+      <rect x="${w*0.40}" y="${h*0.32}" width="150" height="130" fill="#C0392B" stroke="#922B21" stroke-width="2"/>
+      <polygon points="${w*0.40-10},${h*0.32} ${w*0.40+75},${h*0.16} ${w*0.40+160},${h*0.32}" fill="#E74C3C" stroke="#C0392B" stroke-width="2"/>
+      <rect x="${w*0.40+55}" y="${h*0.46}" width="40" height="55" fill="#8B4513" stroke="#6B3410" stroke-width="2"/>
+      <line x1="${w*0.40+75}" y1="${h*0.46}" x2="${w*0.40+75}" y2="${h*0.58+20}" stroke="#6B3410" stroke-width="2"/>
+      <!-- silo -->
+      <rect x="${w*0.40+165}" y="${h*0.25}" width="40" height="140" fill="#B0BEC5" stroke="#78909C" stroke-width="1.5"/>
+      <ellipse cx="${w*0.40+185}" cy="${h*0.25}" rx="20" ry="8" fill="#90A4AE" stroke="#78909C" stroke-width="1.5"/>
+      <!-- staccionata -->
+      <line x1="${w*0.65}" y1="${h*0.62}" x2="${w}" y2="${h*0.62}" stroke="#D2B48C" stroke-width="4"/>
+      <line x1="${w*0.65}" y1="${h*0.68}" x2="${w}" y2="${h*0.68}" stroke="#D2B48C" stroke-width="4"/>
+      <line x1="${w*0.67}" y1="${h*0.58}" x2="${w*0.67}" y2="${h*0.72}" stroke="#D2B48C" stroke-width="3"/>
+      <line x1="${w*0.75}" y1="${h*0.58}" x2="${w*0.75}" y2="${h*0.72}" stroke="#D2B48C" stroke-width="3"/>
+      <line x1="${w*0.83}" y1="${h*0.58}" x2="${w*0.83}" y2="${h*0.72}" stroke="#D2B48C" stroke-width="3"/>
+      <line x1="${w*0.91}" y1="${h*0.58}" x2="${w*0.91}" y2="${h*0.72}" stroke="#D2B48C" stroke-width="3"/>
+      <!-- mucca -->
+      <ellipse cx="${w*0.76}" cy="${h*0.78}" rx="30" ry="18" fill="#fff" stroke="#333" stroke-width="1.5"/>
+      <circle cx="${w*0.76-25}" cy="${h*0.76}" r="10" fill="#fff" stroke="#333" stroke-width="1.5"/>
+      <circle cx="${w*0.76-28}" cy="${h*0.75}" r="2" fill="#333"/>
+      <ellipse cx="${w*0.76+10}" cy="${h*0.80}" rx="8" ry="5" fill="#333"/>
+      <line x1="${w*0.76-15}" y1="${h*0.82}" x2="${w*0.76-15}" y2="${h*0.88}" stroke="#333" stroke-width="3"/>
+      <line x1="${w*0.76+15}" y1="${h*0.82}" x2="${w*0.76+15}" y2="${h*0.88}" stroke="#333" stroke-width="3"/>
+      <!-- gallina -->
+      <ellipse cx="180" cy="${h*0.82}" rx="14" ry="10" fill="#F5F5DC"/>
+      <circle cx="170" cy="${h*0.79}" r="7" fill="#F5F5DC"/>
+      <circle cx="168" cy="${h*0.78}" r="1.5" fill="#333"/>
+      <polygon points="164,${h*0.79} 160,${h*0.80} 164,${h*0.81}" fill="#FF5722"/>
+      <polygon points="173,${h*0.76} 175,${h*0.73} 177,${h*0.76}" fill="#F44336"/>
+      <!-- albero -->
+      <rect x="30" y="${h*0.42}" width="14" height="70" fill="#6D4C41"/>
+      <circle cx="37" cy="${h*0.36}" r="32" fill="#2E7D32"/>
+      <circle cx="20" cy="${h*0.40}" r="22" fill="#388E3C"/>
+      <circle cx="54" cy="${h*0.40}" r="22" fill="#388E3C"/>
+      <!-- mulino -->
+      <rect x="${w-100}" y="${h*0.35}" width="50" height="90" fill="#FFF9C4" stroke="#F9A825" stroke-width="1.5"/>
+      <line x1="${w-75}" y1="${h*0.35}" x2="${w-75+30}" y2="${h*0.25}" stroke="#795548" stroke-width="4"/>
+      <line x1="${w-75}" y1="${h*0.35}" x2="${w-75-30}" y2="${h*0.25}" stroke="#795548" stroke-width="4"/>
+      <line x1="${w-75}" y1="${h*0.35}" x2="${w-75}" y2="${h*0.22}" stroke="#795548" stroke-width="4"/>
+      <line x1="${w-75}" y1="${h*0.35}" x2="${w-75+25}" y2="${h*0.42}" stroke="#795548" stroke-width="4"/>
+      <circle cx="${w-75}" cy="${h*0.35}" r="5" fill="#795548"/>
+    `;
+  },
+
+  foresta(w, h) {
+    return `
+      <!-- cielo -->
+      <rect x="0" y="0" width="${w}" height="${h}" fill="#81C784"/>
+      <rect x="0" y="0" width="${w}" height="${h*0.45}" fill="#64B5F6"/>
+      <!-- sole tra gli alberi -->
+      <circle cx="${w*0.80}" cy="60" r="35" fill="#FFD700" opacity="0.9"/>
+      <!-- nuvole -->
+      <ellipse cx="200" cy="40" rx="50" ry="20" fill="#fff" opacity="0.8"/>
+      <ellipse cx="230" cy="32" rx="35" ry="16" fill="#fff" opacity="0.8"/>
+      <!-- montagne lontane -->
+      <polygon points="0,${h*0.45} 100,${h*0.25} 200,${h*0.45}" fill="#4CAF50" opacity="0.5"/>
+      <polygon points="120,${h*0.45} 250,${h*0.20} 380,${h*0.45}" fill="#388E3C" opacity="0.5"/>
+      <polygon points="320,${h*0.45} 450,${h*0.28} 580,${h*0.45}" fill="#4CAF50" opacity="0.5"/>
+      <polygon points="450,${h*0.45} 560,${h*0.25} ${w},${h*0.45}" fill="#388E3C" opacity="0.5"/>
+      <!-- terreno -->
+      <rect x="0" y="${h*0.45}" width="${w}" height="${h*0.55}" fill="#5D4037"/>
+      <rect x="0" y="${h*0.45}" width="${w}" height="20" fill="#6D4C41"/>
+      <!-- sentiero -->
+      <path d="M${w*0.45} ${h} Q${w*0.44} ${h*0.85} ${w*0.48} ${h*0.70} Q${w*0.52} ${h*0.60} ${w*0.50} ${h*0.50}" fill="#8D6E63" stroke="#795548" stroke-width="1"/>
+      <path d="M${w*0.55} ${h} Q${w*0.54} ${h*0.85} ${w*0.56} ${h*0.70} Q${w*0.58} ${h*0.60} ${w*0.56} ${h*0.50}" fill="#8D6E63" stroke="#795548" stroke-width="1"/>
+      <!-- grande albero sx -->
+      <rect x="50" y="${h*0.20}" width="25" height="200" fill="#4E342E"/>
+      <circle cx="62" cy="${h*0.14}" r="55" fill="#1B5E20"/>
+      <circle cx="35" cy="${h*0.22}" r="40" fill="#2E7D32"/>
+      <circle cx="90" cy="${h*0.22}" r="40" fill="#2E7D32"/>
+      <circle cx="62" cy="${h*0.08}" r="35" fill="#388E3C"/>
+      <!-- albero medio -->
+      <rect x="175" y="${h*0.30}" width="18" height="150" fill="#5D4037"/>
+      <circle cx="184" cy="${h*0.24}" r="40" fill="#2E7D32"/>
+      <circle cx="170" cy="${h*0.30}" r="30" fill="#388E3C"/>
+      <circle cx="200" cy="${h*0.30}" r="30" fill="#1B5E20"/>
+      <!-- pino -->
+      <rect x="310" y="${h*0.35}" width="14" height="120" fill="#4E342E"/>
+      <polygon points="290,${h*0.38} 317,${h*0.12} 344,${h*0.38}" fill="#1B5E20"/>
+      <polygon points="295,${h*0.30} 317,${h*0.08} 339,${h*0.30}" fill="#2E7D32"/>
+      <polygon points="300,${h*0.22} 317,${h*0.04} 334,${h*0.22}" fill="#388E3C"/>
+      <!-- albero dx -->
+      <rect x="450" y="${h*0.25}" width="22" height="170" fill="#4E342E"/>
+      <circle cx="461" cy="${h*0.18}" r="48" fill="#1B5E20"/>
+      <circle cx="440" cy="${h*0.25}" r="35" fill="#2E7D32"/>
+      <circle cx="482" cy="${h*0.25}" r="35" fill="#388E3C"/>
+      <!-- piccolo albero -->
+      <rect x="575" y="${h*0.38}" width="12" height="100" fill="#5D4037"/>
+      <circle cx="581" cy="${h*0.32}" r="32" fill="#2E7D32"/>
+      <circle cx="565" cy="${h*0.38}" r="22" fill="#388E3C"/>
+      <circle cx="597" cy="${h*0.38}" r="22" fill="#1B5E20"/>
+      <!-- cespugli -->
+      <ellipse cx="140" cy="${h*0.52}" rx="30" ry="18" fill="#2E7D32"/>
+      <ellipse cx="360" cy="${h*0.50}" rx="25" ry="15" fill="#388E3C"/>
+      <ellipse cx="530" cy="${h*0.53}" rx="28" ry="16" fill="#2E7D32"/>
+      <!-- funghi -->
+      <rect x="240" y="${h*0.54}" width="6" height="14" fill="#F5F5DC"/>
+      <ellipse cx="243" cy="${h*0.54}" rx="10" ry="6" fill="#F44336"/>
+      <circle cx="238" cy="${h*0.53}" r="2" fill="#fff"/>
+      <circle cx="248" cy="${h*0.53}" r="2" fill="#fff"/>
+      <!-- cervo -->
+      <ellipse cx="${w*0.65}" cy="${h*0.72}" rx="25" ry="15" fill="#A1887F"/>
+      <circle cx="${w*0.62}" cy="${h*0.68}" r="8" fill="#A1887F"/>
+      <circle cx="${w*0.61}" cy="${h*0.67}" r="1.5" fill="#333"/>
+      <line x1="${w*0.63}" y1="${h*0.65}" x2="${w*0.64}" y2="${h*0.58}" stroke="#5D4037" stroke-width="2"/>
+      <line x1="${w*0.64}" y1="${h*0.58}" x2="${w*0.66}" y2="${h*0.55}" stroke="#5D4037" stroke-width="2"/>
+      <line x1="${w*0.625}" y1="${h*0.65}" x2="${w*0.62}" y2="${h*0.58}" stroke="#5D4037" stroke-width="2"/>
+      <line x1="${w*0.62}" y1="${h*0.58}" x2="${w*0.60}" y2="${h*0.55}" stroke="#5D4037" stroke-width="2"/>
+      <!-- fiori -->
+      <circle cx="400" cy="${h*0.55}" r="4" fill="#E91E63"/>
+      <circle cx="130" cy="${h*0.58}" r="3" fill="#FF9800"/>
+      <circle cx="500" cy="${h*0.56}" r="4" fill="#9C27B0"/>
+    `;
+  },
+
+  spazio(w, h) {
+    return `
+      <!-- spazio profondo -->
+      <rect x="0" y="0" width="${w}" height="${h}" fill="#0D1B2A"/>
+      <!-- stelle -->
+      <circle cx="50" cy="30" r="1.5" fill="#fff"/><circle cx="120" cy="60" r="1" fill="#fff"/>
+      <circle cx="200" cy="20" r="1.5" fill="#fff"/><circle cx="280" cy="80" r="1" fill="#fff"/>
+      <circle cx="350" cy="30" r="2" fill="#fff"/><circle cx="420" cy="55" r="1" fill="#fff"/>
+      <circle cx="500" cy="25" r="1.5" fill="#fff"/><circle cx="580" cy="70" r="1" fill="#fff"/>
+      <circle cx="80" cy="120" r="1" fill="#fff"/><circle cx="160" cy="150" r="1.5" fill="#fff"/>
+      <circle cx="300" cy="130" r="1" fill="#fff"/><circle cx="450" cy="110" r="2" fill="#fff"/>
+      <circle cx="600" cy="140" r="1" fill="#fff"/><circle cx="40" cy="200" r="1.5" fill="#fff"/>
+      <circle cx="250" cy="190" r="1" fill="#fff"/><circle cx="550" cy="200" r="1.5" fill="#fff"/>
+      <circle cx="100" cy="280" r="1" fill="#fff"/><circle cx="400" cy="250" r="1.5" fill="#fff"/>
+      <circle cx="620" cy="300" r="1" fill="#fff"/><circle cx="30" cy="350" r="1" fill="#fff"/>
+      <circle cx="500" cy="370" r="1.5" fill="#fff"/><circle cx="180" cy="400" r="1" fill="#fff"/>
+      <circle cx="330" cy="350" r="1.5" fill="#fff"/><circle cx="590" cy="420" r="1" fill="#fff"/>
+      <!-- via lattea -->
+      <ellipse cx="${w/2}" cy="${h/2-40}" rx="300" ry="25" fill="#1A237E" opacity="0.3" transform="rotate(-15 ${w/2} ${h/2-40})"/>
+      <!-- sole (grande) -->
+      <circle cx="80" cy="${h*0.75}" r="50" fill="#FF8F00"/>
+      <circle cx="80" cy="${h*0.75}" r="45" fill="#FFB300"/>
+      <circle cx="80" cy="${h*0.75}" r="38" fill="#FFD54F"/>
+      <!-- terra -->
+      <circle cx="${w*0.38}" cy="${h*0.45}" r="55" fill="#1565C0"/>
+      <ellipse cx="${w*0.35}" cy="${h*0.40}" rx="20" ry="25" fill="#2E7D32" transform="rotate(-20 ${w*0.35} ${h*0.40})"/>
+      <ellipse cx="${w*0.42}" cy="${h*0.50}" rx="18" ry="12" fill="#388E3C" transform="rotate(10 ${w*0.42} ${h*0.50})"/>
+      <ellipse cx="${w*0.34}" cy="${h*0.52}" rx="10" ry="8" fill="#2E7D32"/>
+      <!-- luna -->
+      <circle cx="${w*0.58}" cy="${h*0.30}" r="25" fill="#CFD8DC"/>
+      <circle cx="${w*0.57}" cy="${h*0.28}" r="5" fill="#B0BEC5"/>
+      <circle cx="${w*0.60}" cy="${h*0.33}" r="4" fill="#B0BEC5"/>
+      <circle cx="${w*0.56}" cy="${h*0.32}" r="3" fill="#B0BEC5"/>
+      <!-- marte -->
+      <circle cx="${w*0.78}" cy="${h*0.55}" r="30" fill="#E53935"/>
+      <circle cx="${w*0.76}" cy="${h*0.53}" r="5" fill="#C62828" opacity="0.5"/>
+      <circle cx="${w*0.80}" cy="${h*0.57}" r="4" fill="#B71C1C" opacity="0.5"/>
+      <!-- saturno -->
+      <circle cx="${w*0.65}" cy="${h*0.75}" r="22" fill="#FFB74D"/>
+      <ellipse cx="${w*0.65}" cy="${h*0.75}" rx="40" ry="8" fill="none" stroke="#FFE0B2" stroke-width="4" transform="rotate(-20 ${w*0.65} ${h*0.75})"/>
+      <!-- razzo -->
+      <g transform="translate(${w*0.48}, ${h*0.12}) rotate(25)">
+        <rect x="-8" y="0" width="16" height="40" rx="8" fill="#E0E0E0" stroke="#BDBDBD" stroke-width="1"/>
+        <polygon points="-8,40 -14,52 8,40" fill="#F44336"/>
+        <polygon points="8,40 14,52 -8,40" fill="#F44336"/>
+        <circle cx="0" cy="12" r="5" fill="#64B5F6" stroke="#42A5F5" stroke-width="1"/>
+        <polygon points="-4,42 0,55 4,42" fill="#FF9800"/>
+        <polygon points="-2,42 0,50 2,42" fill="#FFEB3B"/>
+      </g>
+      <!-- cometa -->
+      <circle cx="${w*0.15}" cy="${h*0.18}" r="4" fill="#fff"/>
+      <line x1="${w*0.15}" y1="${h*0.18}" x2="${w*0.25}" y2="${h*0.12}" stroke="#fff" stroke-width="2" opacity="0.5"/>
+      <line x1="${w*0.15}" y1="${h*0.18}" x2="${w*0.23}" y2="${h*0.14}" stroke="#fff" stroke-width="1" opacity="0.3"/>
+      <!-- satellite -->
+      <rect x="${w*0.85}" y="${h*0.20}" width="14" height="10" fill="#78909C"/>
+      <rect x="${w*0.85-12}" y="${h*0.22}" width="12" height="6" fill="#42A5F5"/>
+      <rect x="${w*0.85+14}" y="${h*0.22}" width="12" height="6" fill="#42A5F5"/>
+    `;
+  }
+};
+
+// Piece region candidates per scene (x, y, w, h as fractions of scene dimensions)
+const pieceRegions = {
+  casa: [
+    {x:0.02, y:0.02, w:0.22, h:0.28},   // sole/nuvola area
+    {x:0.70, y:0.02, w:0.28, h:0.25},    // sole
+    {x:0.05, y:0.30, w:0.22, h:0.38},    // albero sx
+    {x:0.73, y:0.32, w:0.25, h:0.36},    // albero dx
+    {x:0.35, y:0.15, w:0.30, h:0.30},    // tetto + casa top
+    {x:0.35, y:0.45, w:0.30, h:0.28},    // porta + finestre
+    {x:0.10, y:0.68, w:0.30, h:0.28},    // prato sx fiori
+    {x:0.60, y:0.68, w:0.30, h:0.28},    // prato dx fiori
+  ],
+  mare: [
+    {x:0.02, y:0.02, w:0.25, h:0.25},    // sole
+    {x:0.38, y:0.02, w:0.30, h:0.22},    // nuvole/cielo
+    {x:0.45, y:0.30, w:0.30, h:0.28},    // barca
+    {x:0.15, y:0.55, w:0.25, h:0.25},    // pesce
+    {x:0.65, y:0.65, w:0.30, h:0.30},    // ombrellone
+    {x:0.02, y:0.82, w:0.30, h:0.16},    // spiaggia sx
+    {x:0.72, y:0.45, w:0.26, h:0.30},    // palma
+    {x:0.40, y:0.82, w:0.28, h:0.16},    // spiaggia centro
+  ],
+  citta: [
+    {x:0.02, y:0.02, w:0.25, h:0.30},    // palazzo 1 top
+    {x:0.20, y:0.08, w:0.18, h:0.35},    // palazzo 2
+    {x:0.38, y:0.25, w:0.22, h:0.30},    // palazzo 3
+    {x:0.58, y:0.02, w:0.16, h:0.40},    // torre
+    {x:0.72, y:0.30, w:0.26, h:0.30},    // palazzo 5
+    {x:0.05, y:0.78, w:0.30, h:0.20},    // auto 1
+    {x:0.60, y:0.78, w:0.30, h:0.20},    // auto 2
+    {x:0.82, y:0.02, w:0.16, h:0.25},    // sole
+  ],
+  fattoria: [
+    {x:0.75, y:0.02, w:0.23, h:0.25},    // sole
+    {x:0.02, y:0.02, w:0.28, h:0.22},    // nuvole
+    {x:0.35, y:0.12, w:0.30, h:0.30},    // fienile top
+    {x:0.35, y:0.40, w:0.30, h:0.25},    // fienile bottom
+    {x:0.60, y:0.55, w:0.35, h:0.25},    // mucca + staccionata
+    {x:0.01, y:0.35, w:0.20, h:0.35},    // albero
+    {x:0.80, y:0.30, w:0.18, h:0.30},    // mulino
+    {x:0.15, y:0.72, w:0.25, h:0.26},    // gallina area
+  ],
+  foresta: [
+    {x:0.02, y:0.02, w:0.22, h:0.42},    // grande albero sx
+    {x:0.22, y:0.05, w:0.20, h:0.38},    // albero medio
+    {x:0.42, y:0.02, w:0.18, h:0.40},    // pino
+    {x:0.62, y:0.05, w:0.22, h:0.38},    // albero dx
+    {x:0.82, y:0.20, w:0.16, h:0.35},    // piccolo albero
+    {x:0.55, y:0.60, w:0.28, h:0.25},    // cervo
+    {x:0.30, y:0.48, w:0.20, h:0.18},    // funghi/cespuglio
+    {x:0.65, y:0.02, w:0.30, h:0.22},    // sole
+  ],
+  spazio: [
+    {x:0.02, y:0.60, w:0.22, h:0.35},    // sole
+    {x:0.25, y:0.30, w:0.22, h:0.28},    // terra
+    {x:0.47, y:0.18, w:0.18, h:0.22},    // luna
+    {x:0.65, y:0.40, w:0.22, h:0.25},    // marte
+    {x:0.50, y:0.62, w:0.25, h:0.25},    // saturno
+    {x:0.38, y:0.02, w:0.22, h:0.25},    // razzo
+    {x:0.78, y:0.10, w:0.20, h:0.20},    // satellite
+    {x:0.02, y:0.08, w:0.22, h:0.20},    // cometa/stelle
+  ]
+};
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function getIrregularClipPath(id, x, y, w, h) {
+  // Create a wavy/irregular rectangle path
+  const inset = 4;
+  const amp = Math.min(w, h) * 0.06;
+  const steps = 6;
+  let d = `M${x + inset} ${y + inset}`;
+  // top edge
+  for (let i = 1; i <= steps; i++) {
+    const px = x + inset + (w - 2*inset) * (i / steps);
+    const py = y + inset + (i % 2 === 1 ? -amp : amp);
+    d += ` Q${x + inset + (w - 2*inset) * ((i - 0.5) / steps)} ${py} ${px} ${y + inset}`;
+  }
+  // right edge
+  for (let i = 1; i <= steps; i++) {
+    const px = x + w - inset + (i % 2 === 1 ? amp : -amp);
+    const py = y + inset + (h - 2*inset) * (i / steps);
+    d += ` Q${px} ${y + inset + (h - 2*inset) * ((i - 0.5) / steps)} ${x + w - inset} ${py}`;
+  }
+  // bottom edge (reversed)
+  for (let i = 1; i <= steps; i++) {
+    const px = x + w - inset - (w - 2*inset) * (i / steps);
+    const py = y + h - inset + (i % 2 === 1 ? amp : -amp);
+    d += ` Q${x + w - inset - (w - 2*inset) * ((i - 0.5) / steps)} ${py} ${px} ${y + h - inset}`;
+  }
+  // left edge (reversed)
+  for (let i = 1; i <= steps; i++) {
+    const px = x + inset + (i % 2 === 1 ? -amp : amp);
+    const py = y + h - inset - (h - 2*inset) * (i / steps);
+    d += ` Q${px} ${y + h - inset - (h - 2*inset) * ((i - 0.5) / steps)} ${x + inset} ${py}`;
+  }
+  d += ' Z';
+  return { clipPathDef: `<clipPath id="${id}"><path d="${d}"/></clipPath>`, path: d };
+}
+
+function generate() {
+  const sceneKey = document.getElementById('scene').value;
+  const numPieces = parseInt(document.getElementById('pieces').value);
+  const difficulty = document.getElementById('difficulty').value;
+  const w = SCENE_W, h = SCENE_H;
+
+  const sceneContent = scenes[sceneKey](w, h);
+
+  // Select piece regions
+  const available = pieceRegions[sceneKey];
+  const selected = shuffleArray(available).slice(0, numPieces);
+
+  // Build page 1: scene with holes
+  let defs1 = '';
+  let holes1 = '';
+  let labels1 = '';
+
+  selected.forEach((region, i) => {
+    const px = Math.round(region.x * w);
+    const py = Math.round(region.y * h);
+    const pw = Math.round(region.w * w);
+    const ph = Math.round(region.h * h);
+    const num = i + 1;
+
+    if (difficulty === 'difficile') {
+      const clipId = `hole${i}`;
+      const { clipPathDef, path } = getIrregularClipPath(clipId, px, py, pw, ph);
+      defs1 += clipPathDef;
+      holes1 += `<path d="${path}" fill="#f5f5f5" stroke="#999" stroke-width="2" stroke-dasharray="6 4"/>`;
+      labels1 += `<text x="${px + pw/2}" y="${py + ph/2 + 6}" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="22" font-weight="700" fill="#999">${num}</text>`;
+    } else {
+      holes1 += `<rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="4" fill="#f5f5f5" stroke="#999" stroke-width="2" stroke-dasharray="6 4"/>`;
+      labels1 += `<text x="${px + pw/2}" y="${py + ph/2 + 6}" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="22" font-weight="700" fill="#999">${num}</text>`;
+    }
+  });
+
+  // For page 1, we clip out the pieces using a mask
+  let maskRects = '';
+  selected.forEach((region, i) => {
+    const px = Math.round(region.x * w);
+    const py = Math.round(region.y * h);
+    const pw = Math.round(region.w * w);
+    const ph = Math.round(region.h * h);
+    if (difficulty === 'difficile') {
+      const { path } = getIrregularClipPath(`m${i}`, px, py, pw, ph);
+      maskRects += `<path d="${path}" fill="black"/>`;
+    } else {
+      maskRects += `<rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="4" fill="black"/>`;
+    }
+  });
+
+  const svgPage1 = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+    <defs>
+      ${defs1}
+      <mask id="sceneMask">
+        <rect x="0" y="0" width="${w}" height="${h}" fill="white"/>
+        ${maskRects}
+      </mask>
+    </defs>
+    <rect x="0" y="0" width="${w}" height="${h}" fill="#f0f0f0" rx="4"/>
+    <g mask="url(#sceneMask)">${sceneContent}</g>
+    ${holes1}
+    ${labels1}
+    <rect x="0" y="0" width="${w}" height="${h}" fill="none" stroke="#ccc" stroke-width="2" rx="4"/>
+  </svg>`;
+
+  // Build page 2: cut-out pieces
+  const pieceMargin = 18;
+  const cols = numPieces <= 4 ? 2 : 3;
+  const rows = Math.ceil(numPieces / cols);
+  const maxPieceW = Math.floor((w - pieceMargin * (cols + 1)) / cols);
+  const titleAreaH = 50;
+
+  // Calculate piece sizes
+  const piecesInfo = selected.map((region, i) => {
+    const pw = Math.round(region.w * w);
+    const ph = Math.round(region.h * h);
+    return { pw, ph, region, num: i + 1 };
+  });
+
+  // Scale pieces to fit in grid cells
+  const cellW = maxPieceW;
+  const cellH = Math.floor((h - titleAreaH - pieceMargin * (rows + 1)) / rows);
+
+  let piecesContent = '';
+  let piecesDefs = '';
+
+  piecesInfo.forEach((p, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const cx = pieceMargin + col * (cellW + pieceMargin);
+    const cy = titleAreaH + pieceMargin + row * (cellH + pieceMargin);
+
+    const srcX = Math.round(p.region.x * w);
+    const srcY = Math.round(p.region.y * h);
+    const srcW = Math.round(p.region.w * w);
+    const srcH = Math.round(p.region.h * h);
+
+    // Scale to fit in cell
+    const scale = Math.min(cellW / srcW, cellH / srcH, 1);
+    const drawW = Math.round(srcW * scale);
+    const drawH = Math.round(srcH * scale);
+    const drawX = cx + (cellW - drawW) / 2;
+    const drawY = cy + (cellH - drawH) / 2;
+
+    const clipId = `piece${i}`;
+
+    if (difficulty === 'difficile') {
+      const { clipPathDef, path } = getIrregularClipPath(clipId, 0, 0, srcW, srcH);
+      piecesDefs += clipPathDef;
+      // Dashed border (irregular)
+      const { path: borderPath } = getIrregularClipPath(`border${i}`, drawX, drawY, drawW, drawH);
+      piecesContent += `
+        <g>
+          <path d="${borderPath}" fill="none" stroke="#666" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <g transform="translate(${drawX}, ${drawY}) scale(${scale})">
+            <g clip-path="url(#${clipId})">
+              <g transform="translate(${-srcX}, ${-srcY})">
+                ${sceneContent}
+              </g>
+            </g>
+          </g>
+          <text x="${drawX + drawW/2}" y="${drawY - 5}" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="15" font-weight="700" fill="#4f46e5">${p.num}</text>
+        </g>`;
+    } else {
+      piecesDefs += `<clipPath id="${clipId}"><rect x="0" y="0" width="${srcW}" height="${srcH}" rx="4"/></clipPath>`;
+      piecesContent += `
+        <g>
+          <rect x="${drawX}" y="${drawY}" width="${drawW}" height="${drawH}" rx="4" fill="none" stroke="#666" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <g transform="translate(${drawX}, ${drawY}) scale(${scale})">
+            <g clip-path="url(#${clipId})">
+              <g transform="translate(${-srcX}, ${-srcY})">
+                ${sceneContent}
+              </g>
+            </g>
+          </g>
+          <text x="${drawX + drawW/2}" y="${drawY - 5}" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="15" font-weight="700" fill="#4f46e5">${p.num}</text>
+        </g>`;
+    }
+  });
+
+  // Scissors icon
+  const scissorsIcon = `<g transform="translate(${w/2 - 10}, 14) scale(0.8)">
+    <circle cx="5" cy="18" r="4" fill="none" stroke="#666" stroke-width="1.5"/>
+    <circle cx="19" cy="18" r="4" fill="none" stroke="#666" stroke-width="1.5"/>
+    <line x1="8" y1="15" x2="16" y2="5" stroke="#666" stroke-width="1.8" stroke-linecap="round"/>
+    <line x1="16" y1="15" x2="8" y2="5" stroke="#666" stroke-width="1.8" stroke-linecap="round"/>
+  </g>`;
+
+  const sceneNames = {
+    casa: 'Casa con Giardino',
+    mare: 'Paesaggio Marino',
+    citta: 'Citt\u00e0',
+    fattoria: 'Fattoria',
+    foresta: 'Foresta',
+    spazio: 'Spazio'
+  };
+
+  const svgPage2 = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+    <defs>${piecesDefs}</defs>
+    <rect x="0" y="0" width="${w}" height="${h}" fill="#fff" rx="4"/>
+    ${scissorsIcon}
+    <text x="${w/2 + 10}" y="30" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="600" fill="#333">Ritaglia i pezzi lungo le linee tratteggiate</text>
+    ${piecesContent}
+    <rect x="0" y="0" width="${w}" height="${h}" fill="none" stroke="#ccc" stroke-width="2" rx="4"/>
+  </svg>`;
+
+  const output = document.getElementById('output');
+  output.innerHTML = `
+    <div class="page-container" id="page1">
+      <h2>Completa l'immagine: ${sceneNames[sceneKey]}</h2>
+      ${svgPage1}
+    </div>
+    <div class="page-container" id="page2">
+      <h2>Pezzi da ritagliare</h2>
+      ${svgPage2}
+    </div>
+  `;
+}
+
+async function exportPDF() {
+  const page1 = document.getElementById('page1');
+  const page2 = document.getElementById('page2');
+  if (!page1 || !page2) {
+    alert('Prima genera il puzzle!');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+  const renderSVGToCanvas = (container) => {
+    return new Promise((resolve) => {
+      const svg = container.querySelector('svg');
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width * 2;
+        canvas.height = img.height * 2;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(2, 2);
+        ctx.drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.src = url;
+    });
+  };
+
+  try {
+    const pageW = 297, pageH = 210;
+    const margin = 10;
+    const titleH = 8;
+
+    // Page 1
+    const title1 = page1.querySelector('h2').textContent;
+    const img1 = await renderSVGToCanvas(page1);
+    const imgW = pageW - 2 * margin;
+    const imgH = imgW * (SCENE_H / SCENE_W);
+    const finalH = Math.min(imgH, pageH - 2 * margin - titleH);
+    const finalW = finalH * (SCENE_W / SCENE_H);
+    const offsetX = (pageW - finalW) / 2;
+
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(14);
+    pdf.text(title1, pageW / 2, margin + 5, { align: 'center' });
+    pdf.addImage(img1, 'PNG', offsetX, margin + titleH, finalW, finalH);
+
+    // Page 2
+    pdf.addPage();
+    const title2 = page2.querySelector('h2').textContent;
+    const img2 = await renderSVGToCanvas(page2);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(14);
+    pdf.text(title2, pageW / 2, margin + 5, { align: 'center' });
+    pdf.addImage(img2, 'PNG', offsetX, margin + titleH, finalW, finalH);
+
+    pdf.save('puzzle-da-ritagliare.pdf');
+  } catch (e) {
+    console.error('Errore PDF:', e);
+    alert('Errore nell\'esportazione PDF. Prova a usare la stampa del browser.');
+  }
+}
+
+// Auto-generate on load
+document.addEventListener('DOMContentLoaded', generate);
+</script>
+</body>
+</html>

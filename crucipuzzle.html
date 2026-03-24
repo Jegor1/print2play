@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crucipuzzle - Cerca le Parole</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.10);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header .title-area h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+header .title-area p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+header .back-link {
+  font-size: 0.9rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+header .back-link:hover {
+  color: var(--primary-hover);
+}
+
+.app {
+  display: flex;
+  flex: 1;
+  gap: 0;
+}
+
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.control-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+select, button {
+  font-family: 'Inter', system-ui, sans-serif;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+select {
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
+}
+
+.btn {
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover { background: var(--primary-hover); }
+
+.btn-secondary {
+  background: var(--bg);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+}
+
+.btn-secondary:hover { background: #e8eaed; }
+
+.btn-accent {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+}
+
+.btn-accent:hover { filter: brightness(1.1); }
+
+.main-area {
+  flex: 1;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  text-align: center;
+  gap: 12px;
+}
+
+.placeholder svg {
+  opacity: 0.3;
+}
+
+.placeholder p {
+  font-size: 1rem;
+}
+
+.puzzle-container {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.puzzle-container.visible {
+  display: flex;
+}
+
+.puzzle-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+}
+
+.grid-wrapper {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.grid-table {
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+.grid-table td {
+  width: 34px;
+  height: 34px;
+  text-align: center;
+  vertical-align: middle;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  border: 1px solid var(--border);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.grid-table td.highlighted {
+  background: rgba(79, 70, 229, 0.12);
+  color: var(--primary);
+}
+
+.words-section {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  width: 100%;
+}
+
+.words-section h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.words-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  list-style: none;
+}
+
+.words-list li {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  padding: 4px 12px;
+  background: var(--bg);
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Print styles */
+@media print {
+  body { background: #fff; }
+
+  header, .sidebar {
+    display: none !important;
+  }
+
+  .app {
+    display: block;
+  }
+
+  .main-area {
+    padding: 0;
+  }
+
+  .puzzle-container {
+    gap: 20px;
+    max-width: 100%;
+  }
+
+  .grid-wrapper, .words-section {
+    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .grid-table td {
+    width: 28px;
+    height: 28px;
+    font-size: 0.95rem;
+    border-color: #ccc;
+  }
+
+  .grid-table td.highlighted {
+    background: none;
+    color: var(--text);
+  }
+
+  .words-list li {
+    background: none;
+    padding: 2px 6px;
+  }
+
+  .puzzle-title {
+    -webkit-text-fill-color: var(--text);
+    background: none;
+    color: var(--text);
+  }
+
+  .print-info {
+    display: block !important;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 8px;
+  }
+}
+
+.print-info {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+  }
+  .control-group {
+    flex: 1;
+    min-width: 140px;
+  }
+  .main-area {
+    padding: 16px;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-area">
+    <h1>Crucipuzzle</h1>
+    <p>Genera un crucipuzzle stampabile con parole nascoste</p>
+  </div>
+  <a href="index.html" class="back-link">&larr; Torna alla home</a>
+</header>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="control-group">
+      <label for="theme">Tema</label>
+      <select id="theme">
+        <option value="animali">Animali</option>
+        <option value="colori">Colori</option>
+        <option value="frutta">Frutta</option>
+        <option value="sport">Sport</option>
+        <option value="scuola">Scuola</option>
+        <option value="natura">Natura</option>
+        <option value="mestieri">Mestieri</option>
+        <option value="corpo">Corpo umano</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="gridSize">Dimensione griglia</label>
+      <select id="gridSize">
+        <option value="10">10 &times; 10</option>
+        <option value="12">12 &times; 12</option>
+        <option value="15">15 &times; 15</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="difficulty">Difficolt&agrave;</label>
+      <select id="difficulty">
+        <option value="facile">Facile (orizzontale / verticale)</option>
+        <option value="medio">Medio (+ diagonali)</option>
+        <option value="difficile">Difficile (+ al contrario)</option>
+      </select>
+    </div>
+
+    <button class="btn btn-primary" onclick="generatePuzzle()">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+      Genera crucipuzzle
+    </button>
+
+    <button class="btn btn-secondary" onclick="window.print()">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Stampa
+    </button>
+
+    <button class="btn btn-accent" onclick="exportPDF()">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+      Esporta PDF
+    </button>
+  </aside>
+
+  <main class="main-area">
+    <div class="placeholder" id="placeholder">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <p>Scegli le opzioni e premi <strong>Genera crucipuzzle</strong></p>
+    </div>
+
+    <div class="puzzle-container" id="puzzleContainer">
+      <div class="puzzle-title" id="puzzleTitle"></div>
+      <p class="print-info" id="printInfo"></p>
+      <div class="grid-wrapper">
+        <table class="grid-table" id="gridTable"></table>
+      </div>
+      <div class="words-section">
+        <h3>Parole da trovare</h3>
+        <ul class="words-list" id="wordsList"></ul>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const THEMES = {
+  animali: [
+    'GATTO','CANE','CAVALLO','TIGRE','LEONE','ELEFANTE','GIRAFFA','DELFINO',
+    'AQUILA','PAPPAGALLO','CONIGLIO','SERPENTE','LUPO','ORSO','VOLPE','PINGUINO',
+    'BALENA','TARTARUGA','FARFALLA','RANA','TOPO','CERVO','PECORA','MUCCA'
+  ],
+  colori: [
+    'ROSSO','BLU','VERDE','GIALLO','ARANCIONE','VIOLA','ROSA','BIANCO',
+    'NERO','GRIGIO','MARRONE','AZZURRO','CELESTE','INDACO','CREMISI','PORPORA',
+    'TURCHESE','BEIGE','LILLA','MAGENTA','CORALLO','OCRA','AMBRA','RAME'
+  ],
+  frutta: [
+    'MELA','PERA','BANANA','ARANCIA','FRAGOLA','CILIEGIA','UVA','LIMONE',
+    'PESCA','ALBICOCCA','ANANAS','MANGO','KIWI','FICO','MELONE','ANGURIA',
+    'LAMPONE','MIRTILLO','MANDARINO','POMPELMO','COCCO','PRUGNA','PAPAYA','DATTERO'
+  ],
+  sport: [
+    'CALCIO','TENNIS','NUOTO','PALLAVOLO','BASKET','RUGBY','CICLISMO','SCHERMA',
+    'ATLETICA','BOXE','JUDO','KARATE','GOLF','VELA','CANOA','SURF',
+    'HOCKEY','POLO','TIRO','LOTTA','CORSA','SALTO','LANCIO','GINNASTICA'
+  ],
+  scuola: [
+    'LIBRO','PENNA','MATITA','GOMMA','ZAINO','BANCO','LAVAGNA','QUADERNO',
+    'MAESTRO','ALUNNO','CLASSE','COMPITO','ESAME','VOTO','LEZIONE','AULA',
+    'STUDIO','REGISTRO','GESSO','CARTA','FORBICI','COLLA','RIGA','DIARIO'
+  ],
+  natura: [
+    'ALBERO','FIORE','FIUME','MARE','MONTAGNA','LAGO','BOSCO','PRATO',
+    'SOLE','LUNA','STELLA','NUVOLA','PIOGGIA','NEVE','VENTO','FOGLIA',
+    'ROCCIA','SABBIA','TERRA','CIELO','AURORA','ARCOBALENO','CASCATA','COLLINA'
+  ],
+  mestieri: [
+    'MEDICO','MAESTRO','CUOCO','POMPIERE','PILOTA','AVVOCATO','PITTORE','ATTORE',
+    'INFERMIERE','FARMACISTA','OPERAIO','MURATORE','SARTO','PARRUCCHIERE','GIARDINIERE',
+    'VETERINARIO','DENTISTA','SCRITTORE','CANTANTE','MUSICISTA','AUTISTA','POSTINO','BAGNINO','SOLDATO'
+  ],
+  corpo: [
+    'TESTA','OCCHIO','NASO','BOCCA','ORECCHIO','BRACCIO','MANO','DITO',
+    'GAMBA','PIEDE','GINOCCHIO','SPALLA','PETTO','SCHIENA','COLLO','GOMITO',
+    'CAVIGLIA','POLSO','FRONTE','MENTO','GUANCIA','LABBRO','LINGUA','DENTE'
+  ]
+};
+
+const THEME_LABELS = {
+  animali: 'Animali',
+  colori: 'Colori',
+  frutta: 'Frutta',
+  sport: 'Sport',
+  scuola: 'Scuola',
+  natura: 'Natura',
+  mestieri: 'Mestieri',
+  corpo: 'Corpo umano'
+};
+
+const DIFFICULTY_LABELS = {
+  facile: 'Facile',
+  medio: 'Medio',
+  difficile: 'Difficile'
+};
+
+let currentGrid = null;
+let currentWords = null;
+let currentPlacedWords = null;
+
+function getDirections(difficulty) {
+  // Base: horizontal and vertical
+  const dirs = [
+    [0, 1],   // right
+    [1, 0],   // down
+  ];
+  if (difficulty === 'medio' || difficulty === 'difficile') {
+    dirs.push([1, 1]);   // diagonal down-right
+    dirs.push([1, -1]);  // diagonal down-left
+  }
+  if (difficulty === 'difficile') {
+    dirs.push([0, -1]);  // left (reversed horizontal)
+    dirs.push([-1, 0]);  // up (reversed vertical)
+    dirs.push([-1, -1]); // diagonal up-left
+    dirs.push([-1, 1]);  // diagonal up-right
+  }
+  return dirs;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function canPlace(grid, word, row, col, dr, dc, size) {
+  for (let i = 0; i < word.length; i++) {
+    const r = row + dr * i;
+    const c = col + dc * i;
+    if (r < 0 || r >= size || c < 0 || c >= size) return false;
+    if (grid[r][c] !== null && grid[r][c] !== word[i]) return false;
+  }
+  return true;
+}
+
+function placeWord(grid, word, row, col, dr, dc) {
+  const cells = [];
+  for (let i = 0; i < word.length; i++) {
+    const r = row + dr * i;
+    const c = col + dc * i;
+    grid[r][c] = word[i];
+    cells.push([r, c]);
+  }
+  return cells;
+}
+
+function generatePuzzle() {
+  const theme = document.getElementById('theme').value;
+  const size = parseInt(document.getElementById('gridSize').value);
+  const difficulty = document.getElementById('difficulty').value;
+  const directions = getDirections(difficulty);
+
+  // Create empty grid
+  const grid = Array.from({ length: size }, () => Array(size).fill(null));
+
+  // Pick words that fit in grid
+  let candidates = shuffle(THEMES[theme]).filter(w => w.length <= size);
+
+  const placedWords = [];
+  const placedCells = new Set();
+
+  for (const word of candidates) {
+    const shuffledDirs = shuffle(directions);
+    let placed = false;
+
+    // Try random positions
+    const positions = [];
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        positions.push([r, c]);
+      }
+    }
+    const shuffledPos = shuffle(positions);
+
+    for (const dir of shuffledDirs) {
+      for (const [r, c] of shuffledPos) {
+        if (canPlace(grid, word, r, c, dir[0], dir[1], size)) {
+          const cells = placeWord(grid, word, r, c, dir[0], dir[1]);
+          placedWords.push(word);
+          cells.forEach(([cr, cc]) => placedCells.add(`${cr},${cc}`));
+          placed = true;
+          break;
+        }
+      }
+      if (placed) break;
+    }
+
+    if (placedWords.length >= 12 && size <= 12) break;
+    if (placedWords.length >= 15) break;
+  }
+
+  // Fill empty cells with random letters
+  const letters = 'ABCDEFGHILMNOPQRSTUVZ'; // Italian alphabet
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (grid[r][c] === null) {
+        grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+      }
+    }
+  }
+
+  currentGrid = grid;
+  currentWords = placedWords.sort();
+  currentPlacedWords = placedCells;
+
+  renderPuzzle(grid, placedWords, theme, size, difficulty);
+}
+
+function renderPuzzle(grid, words, theme, size, difficulty) {
+  document.getElementById('placeholder').style.display = 'none';
+  const container = document.getElementById('puzzleContainer');
+  container.classList.add('visible');
+
+  document.getElementById('puzzleTitle').textContent =
+    `Crucipuzzle: ${THEME_LABELS[theme]}`;
+  document.getElementById('printInfo').textContent =
+    `${size}x${size} - ${DIFFICULTY_LABELS[difficulty]} - ${words.length} parole`;
+
+  // Render grid
+  const table = document.getElementById('gridTable');
+  table.innerHTML = '';
+  for (let r = 0; r < grid.length; r++) {
+    const tr = document.createElement('tr');
+    for (let c = 0; c < grid[r].length; c++) {
+      const td = document.createElement('td');
+      td.textContent = grid[r][c];
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+
+  // Render word list
+  const list = document.getElementById('wordsList');
+  list.innerHTML = '';
+  const sorted = [...words].sort();
+  for (const w of sorted) {
+    const li = document.createElement('li');
+    li.textContent = w;
+    list.appendChild(li);
+  }
+}
+
+function exportPDF() {
+  if (!currentGrid) {
+    alert('Genera prima un crucipuzzle!');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const theme = document.getElementById('theme').value;
+  const size = parseInt(document.getElementById('gridSize').value);
+  const difficulty = document.getElementById('difficulty').value;
+
+  const pageW = 210;
+  const margin = 20;
+  const usableW = pageW - 2 * margin;
+
+  // Title
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.text(`Crucipuzzle: ${THEME_LABELS[theme]}`, pageW / 2, 25, { align: 'center' });
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text(`${size}x${size} - ${DIFFICULTY_LABELS[difficulty]} - ${currentWords.length} parole`, pageW / 2, 33, { align: 'center' });
+
+  // Grid
+  const cellSize = Math.min(usableW / size, 8);
+  const gridW = cellSize * size;
+  const gridX = (pageW - gridW) / 2;
+  let y = 42;
+
+  doc.setFont('courier', 'bold');
+  doc.setFontSize(cellSize * 2.2);
+
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      const x = gridX + c * cellSize;
+      const cy = y + r * cellSize;
+      doc.setDrawColor(200);
+      doc.rect(x, cy, cellSize, cellSize);
+      doc.text(currentGrid[r][c], x + cellSize / 2, cy + cellSize * 0.72, { align: 'center' });
+    }
+  }
+
+  // Word list
+  const wordsY = y + size * cellSize + 12;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.text('Parole da trovare:', margin, wordsY);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+
+  const cols = 3;
+  const colW = usableW / cols;
+  const sorted = [...currentWords].sort();
+
+  for (let i = 0; i < sorted.length; i++) {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const wx = margin + col * colW;
+    const wy = wordsY + 8 + row * 6;
+    doc.text(sorted[i], wx, wy);
+  }
+
+  doc.save(`crucipuzzle_${theme}.pdf`);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unisci i Puntini - Generatore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.10);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+header p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.back-link {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.back-link:hover {
+  color: var(--primary-hover);
+}
+
+.app {
+  display: flex;
+  flex: 1;
+  gap: 0;
+}
+
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.control-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+select, button, input[type="range"] {
+  font-family: 'Inter', system-ui, sans-serif;
+  width: 100%;
+  font-size: 0.9rem;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(79,70,229,0.3);
+}
+
+.range-value {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--primary);
+  margin-top: 4px;
+}
+
+.btn {
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover { background: var(--primary-hover); }
+
+.btn-secondary {
+  background: var(--bg);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+}
+
+.btn-secondary:hover { background: #e8eaed; }
+
+.btn-accent {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+}
+
+.btn-accent:hover { filter: brightness(1.1); }
+
+.shape-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.shape-btn {
+  padding: 10px 6px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.shape-btn:hover {
+  border-color: var(--primary);
+  background: #f5f3ff;
+}
+
+.shape-btn.active {
+  border-color: var(--primary);
+  background: #ede9fe;
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
+}
+
+.shape-btn .shape-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.shape-btn .shape-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.main-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg);
+}
+
+.canvas-wrapper {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 20px;
+  position: relative;
+}
+
+.canvas-wrapper svg {
+  display: block;
+}
+
+.dot-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  fill: var(--primary);
+  pointer-events: none;
+  user-select: none;
+}
+
+.dot-circle {
+  fill: var(--text);
+}
+
+.hint-line {
+  stroke: #e2e8f0;
+  stroke-width: 0.8;
+  stroke-dasharray: 4,4;
+}
+
+.title-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  fill: var(--text);
+  text-anchor: middle;
+}
+
+@media print {
+  body { background: #fff !important; }
+  header, .sidebar { display: none !important; }
+  .app { display: block !important; }
+  .main-area {
+    padding: 0 !important;
+    background: #fff !important;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .canvas-wrapper {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  .canvas-wrapper svg {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 40vh;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Unisci i Puntini</h1>
+    <p>Genera disegni da completare collegando i numeri</p>
+  </div>
+  <a href="index.html" class="back-link">&larr; Torna alla home</a>
+</header>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="control-group">
+      <label>Forma</label>
+      <div class="shape-grid" id="shapeGrid">
+        <button class="shape-btn active" data-shape="star"><span class="shape-icon">&#11088;</span><span class="shape-name">Stella</span></button>
+        <button class="shape-btn" data-shape="house"><span class="shape-icon">&#127968;</span><span class="shape-name">Casa</span></button>
+        <button class="shape-btn" data-shape="cat"><span class="shape-icon">&#128049;</span><span class="shape-name">Gatto</span></button>
+        <button class="shape-btn" data-shape="fish"><span class="shape-icon">&#128031;</span><span class="shape-name">Pesce</span></button>
+        <button class="shape-btn" data-shape="heart"><span class="shape-icon">&#10084;&#65039;</span><span class="shape-name">Cuore</span></button>
+        <button class="shape-btn" data-shape="tree"><span class="shape-icon">&#127794;</span><span class="shape-name">Albero</span></button>
+        <button class="shape-btn" data-shape="rocket"><span class="shape-icon">&#128640;</span><span class="shape-name">Razzo</span></button>
+        <button class="shape-btn" data-shape="butterfly"><span class="shape-icon">&#129419;</span><span class="shape-name">Farfalla</span></button>
+        <button class="shape-btn" data-shape="dinosaur"><span class="shape-icon">&#129430;</span><span class="shape-name">Dinosauro</span></button>
+        <button class="shape-btn" data-shape="car"><span class="shape-icon">&#128663;</span><span class="shape-name">Auto</span></button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Numero di puntini: <span id="dotCountValue">40</span></label>
+      <input type="range" id="dotCount" min="20" max="80" value="40" step="1">
+    </div>
+
+    <button class="btn btn-primary" id="generateBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+      Genera
+    </button>
+
+    <hr style="border: none; border-top: 1px solid var(--border);">
+
+    <button class="btn btn-secondary" id="printBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Stampa
+    </button>
+
+    <button class="btn btn-accent" id="pdfBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Esporta PDF
+    </button>
+  </div>
+
+  <div class="main-area">
+    <div class="canvas-wrapper" id="canvasWrapper">
+      <svg id="dotSvg" width="600" height="700" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
+      </svg>
+    </div>
+  </div>
+</div>
+
+<script>
+const shapes = {
+  star: {
+    name: 'Stella',
+    // 5-pointed star
+    getPath() {
+      const cx = 300, cy = 310, outerR = 220, innerR = 90;
+      const pts = [];
+      for (let i = 0; i < 5; i++) {
+        const aOuter = (Math.PI / 2 * -1) + (i * 2 * Math.PI / 5);
+        pts.push([cx + outerR * Math.cos(aOuter), cy + outerR * Math.sin(aOuter)]);
+        const aInner = aOuter + Math.PI / 5;
+        pts.push([cx + innerR * Math.cos(aInner), cy + innerR * Math.sin(aInner)]);
+      }
+      return pts;
+    }
+  },
+  house: {
+    name: 'Casa',
+    getPath() {
+      return [
+        [150, 350], [150, 580], [450, 580], [450, 350], // walls
+        [300, 130], // roof peak
+        [150, 350], // back to wall top-left
+        // door
+        [240, 580], [240, 460], [360, 460], [360, 580],
+        // window left
+        [180, 390], [180, 440], [230, 440], [230, 390], [180, 390],
+        // chimney
+        [380, 260], [380, 170], [420, 170], [420, 310]
+      ];
+    }
+  },
+  cat: {
+    name: 'Gatto',
+    getPath() {
+      const pts = [];
+      // body outline - sitting cat facing right
+      // left ear
+      pts.push([220, 180], [200, 90], [250, 140]);
+      // head top
+      pts.push([280, 110], [330, 100], [360, 120]);
+      // right ear
+      pts.push([380, 80], [400, 160]);
+      // right cheek
+      pts.push([410, 200], [400, 250]);
+      // body right
+      pts.push([420, 320], [430, 400], [420, 480]);
+      // tail
+      pts.push([440, 520], [480, 500], [500, 450], [490, 400]);
+      // bottom
+      pts.push([420, 560], [350, 580], [250, 580], [180, 560]);
+      // body left
+      pts.push([170, 480], [165, 400], [170, 320]);
+      // left cheek
+      pts.push([190, 250], [200, 200]);
+      return pts;
+    }
+  },
+  fish: {
+    name: 'Pesce',
+    getPath() {
+      const pts = [];
+      const cx = 280, cy = 340;
+      // fish body (elliptical) + tail
+      // top of body
+      for (let i = 0; i <= 8; i++) {
+        const t = i / 8;
+        const x = 120 + t * 320;
+        const y = cy - 140 * Math.sin(t * Math.PI) * (1 - t * 0.3);
+        pts.push([x, y]);
+      }
+      // tail top
+      pts.push([480, 250], [520, 200]);
+      // tail tip
+      pts.push([530, 340]);
+      // tail bottom
+      pts.push([520, 480], [480, 430]);
+      // bottom of body (reverse)
+      for (let i = 8; i >= 0; i--) {
+        const t = i / 8;
+        const x = 120 + t * 320;
+        const y = cy + 140 * Math.sin(t * Math.PI) * (1 - t * 0.3);
+        pts.push([x, y]);
+      }
+      return pts;
+    }
+  },
+  heart: {
+    name: 'Cuore',
+    getPath() {
+      const pts = [];
+      const steps = 30;
+      for (let i = 0; i <= steps; i++) {
+        const t = (i / steps) * 2 * Math.PI;
+        // heart parametric equations
+        let x = 16 * Math.pow(Math.sin(t), 3);
+        let y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+        // scale and center
+        x = 300 + x * 14;
+        y = 320 + y * 14;
+        pts.push([x, y]);
+      }
+      return pts;
+    }
+  },
+  tree: {
+    name: 'Albero',
+    getPath() {
+      return [
+        // trunk base
+        [270, 580], [270, 460],
+        // lower branches
+        [140, 460], [300, 320],
+        // middle branches
+        [170, 320], [300, 200],
+        // upper branches
+        [200, 200], [300, 100],
+        // top to right side
+        [400, 200], [330, 200],
+        // right middle
+        [430, 320], [330, 320],
+        // right lower
+        [460, 460], [330, 460],
+        // trunk right
+        [330, 580]
+      ];
+    }
+  },
+  rocket: {
+    name: 'Razzo',
+    getPath() {
+      const pts = [];
+      // nose cone
+      pts.push([300, 60]);
+      // right side of body
+      pts.push([340, 140], [355, 240], [360, 360]);
+      // right fin
+      pts.push([420, 480], [440, 560], [370, 500]);
+      // bottom
+      pts.push([360, 540], [330, 580], [300, 600], [270, 580], [240, 540]);
+      // left fin
+      pts.push([230, 500], [160, 560], [180, 480]);
+      // left side of body
+      pts.push([240, 360], [245, 240], [260, 140]);
+      return pts;
+    }
+  },
+  butterfly: {
+    name: 'Farfalla',
+    getPath() {
+      const pts = [];
+      const cx = 300, cy = 340;
+      // body top
+      pts.push([cx, 130]);
+      // right upper wing
+      pts.push([340, 150], [430, 130], [490, 180], [500, 260], [460, 310], [380, 320]);
+      // body middle
+      pts.push([cx, 340]);
+      // right lower wing
+      pts.push([370, 360], [450, 400], [470, 480], [430, 540], [360, 550], [320, 500]);
+      // body bottom
+      pts.push([cx, 570]);
+      // left lower wing
+      pts.push([280, 500], [240, 550], [170, 540], [130, 480], [150, 400], [230, 360]);
+      // body middle again
+      pts.push([cx, 340]);
+      // left upper wing
+      pts.push([220, 320], [140, 310], [100, 260], [110, 180], [170, 130], [260, 150]);
+      return pts;
+    }
+  },
+  dinosaur: {
+    name: 'Dinosauro',
+    getPath() {
+      // brontosaurus / long-neck side view
+      return [
+        // tail
+        [80, 360], [100, 320], [130, 340],
+        // back
+        [170, 300], [220, 280], [280, 270], [340, 280],
+        // neck going up
+        [370, 250], [380, 200], [390, 150], [400, 110],
+        // head
+        [420, 95], [450, 90], [470, 100], [475, 120], [460, 140], [430, 145],
+        // neck going down
+        [410, 170], [400, 220], [390, 280],
+        // belly
+        [400, 340], [410, 400],
+        // back right leg
+        [420, 470], [430, 560], [450, 570], [440, 560], [420, 480],
+        // belly continued
+        [380, 430], [320, 440], [260, 440],
+        // front left leg
+        [220, 470], [210, 560], [190, 570], [200, 560], [220, 480],
+        // belly to tail
+        [180, 430], [140, 400], [100, 390]
+      ];
+    }
+  },
+  car: {
+    name: 'Auto',
+    getPath() {
+      return [
+        // bottom left (before front wheel)
+        [90, 420],
+        // front
+        [90, 360], [100, 340], [130, 320],
+        // hood
+        [180, 310], [220, 300],
+        // windshield
+        [240, 240], [280, 200],
+        // roof
+        [330, 190], [400, 190],
+        // rear window
+        [440, 220], [470, 280],
+        // trunk
+        [490, 310], [510, 340], [520, 360],
+        // bottom right
+        [520, 420],
+        // rear wheel area
+        [490, 420], [470, 450], [440, 460], [410, 450], [390, 420],
+        // undercarriage
+        [280, 420],
+        // front wheel area
+        [250, 420], [230, 450], [200, 460], [170, 450], [150, 420],
+        // connect back
+        [110, 420]
+      ];
+    }
+  }
+};
+
+let currentShape = 'star';
+let dotCount = 40;
+
+// DOM elements
+const svgEl = document.getElementById('dotSvg');
+const dotCountSlider = document.getElementById('dotCount');
+const dotCountValue = document.getElementById('dotCountValue');
+const generateBtn = document.getElementById('generateBtn');
+const printBtn = document.getElementById('printBtn');
+const pdfBtn = document.getElementById('pdfBtn');
+const shapeGrid = document.getElementById('shapeGrid');
+
+// Shape selection
+shapeGrid.addEventListener('click', (e) => {
+  const btn = e.target.closest('.shape-btn');
+  if (!btn) return;
+  shapeGrid.querySelectorAll('.shape-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentShape = btn.dataset.shape;
+});
+
+// Dot count slider
+dotCountSlider.addEventListener('input', () => {
+  dotCount = parseInt(dotCountSlider.value);
+  dotCountValue.textContent = dotCount;
+});
+
+// Generate
+generateBtn.addEventListener('click', generate);
+
+// Print
+printBtn.addEventListener('click', () => window.print());
+
+// PDF export
+pdfBtn.addEventListener('click', exportPDF);
+
+function resamplePath(origPoints, targetCount) {
+  // Calculate total path length
+  let totalLen = 0;
+  const segments = [];
+  for (let i = 0; i < origPoints.length - 1; i++) {
+    const dx = origPoints[i+1][0] - origPoints[i][0];
+    const dy = origPoints[i+1][1] - origPoints[i][1];
+    const len = Math.sqrt(dx*dx + dy*dy);
+    segments.push(len);
+    totalLen += len;
+  }
+
+  // Place points evenly along path
+  const spacing = totalLen / (targetCount - 1);
+  const result = [[...origPoints[0]]];
+
+  let segIdx = 0;
+  let segUsed = 0;
+  let remaining = spacing;
+
+  while (result.length < targetCount - 1 && segIdx < segments.length) {
+    const segLeft = segments[segIdx] - segUsed;
+    if (segLeft <= remaining) {
+      remaining -= segLeft;
+      segUsed = 0;
+      segIdx++;
+      if (remaining < 0.5 && result.length < targetCount - 1) {
+        if (segIdx < origPoints.length) {
+          result.push([...origPoints[segIdx]]);
+          remaining = spacing;
+        }
+      }
+    } else {
+      segUsed += remaining;
+      const t = segUsed / segments[segIdx];
+      const x = origPoints[segIdx][0] + t * (origPoints[segIdx+1][0] - origPoints[segIdx][0]);
+      const y = origPoints[segIdx][1] + t * (origPoints[segIdx+1][1] - origPoints[segIdx][1]);
+      result.push([x, y]);
+      remaining = spacing;
+    }
+  }
+
+  // Ensure we have the last point
+  if (result.length < targetCount) {
+    result.push([...origPoints[origPoints.length - 1]]);
+  }
+
+  // Trim or pad to exact count
+  while (result.length > targetCount) result.pop();
+  while (result.length < targetCount) {
+    result.push([...origPoints[origPoints.length - 1]]);
+  }
+
+  return result;
+}
+
+function generate() {
+  const shape = shapes[currentShape];
+  const origPoints = shape.getPath();
+  const points = resamplePath(origPoints, dotCount);
+
+  // Clear SVG
+  svgEl.innerHTML = '';
+
+  const svgW = 600, svgH = 700;
+  const margin = 50;
+
+  // Scale points to fit within margins
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const [x, y] of points) {
+    minX = Math.min(minX, x);
+    minY = Math.min(minY, y);
+    maxX = Math.max(maxX, x);
+    maxY = Math.max(maxY, y);
+  }
+
+  const rangeX = maxX - minX || 1;
+  const rangeY = maxY - minY || 1;
+  const drawW = svgW - margin * 2;
+  const drawH = svgH - margin * 2 - 40; // extra space for title
+  const scale = Math.min(drawW / rangeX, drawH / rangeY);
+  const offsetX = margin + (drawW - rangeX * scale) / 2;
+  const offsetY = margin + 40 + (drawH - rangeY * scale) / 2;
+
+  const scaled = points.map(([x, y]) => [
+    offsetX + (x - minX) * scale,
+    offsetY + (y - minY) * scale
+  ]);
+
+  // Title
+  const title = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  title.setAttribute('x', svgW / 2);
+  title.setAttribute('y', 35);
+  title.setAttribute('class', 'title-text');
+  title.setAttribute('font-size', '22');
+  title.textContent = `Unisci i Puntini: ${shape.name}`;
+  svgEl.appendChild(title);
+
+  // Subtitle
+  const sub = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  sub.setAttribute('x', svgW / 2);
+  sub.setAttribute('y', 58);
+  sub.setAttribute('text-anchor', 'middle');
+  sub.setAttribute('font-family', 'Inter, sans-serif');
+  sub.setAttribute('font-size', '13');
+  sub.setAttribute('fill', '#64748b');
+  sub.textContent = `Collega i numeri da 1 a ${dotCount} per scoprire il disegno!`;
+  svgEl.appendChild(sub);
+
+  // Hint lines (very faint dashed)
+  for (let i = 0; i < scaled.length - 1; i++) {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', scaled[i][0]);
+    line.setAttribute('y1', scaled[i][1]);
+    line.setAttribute('x2', scaled[i+1][0]);
+    line.setAttribute('y2', scaled[i+1][1]);
+    line.setAttribute('class', 'hint-line');
+    line.setAttribute('opacity', '0');
+    svgEl.appendChild(line);
+  }
+
+  // Determine good font size based on dot count
+  const baseFontSize = dotCount <= 30 ? 14 : dotCount <= 50 ? 12 : 10;
+  const dotRadius = dotCount <= 30 ? 4.5 : dotCount <= 50 ? 3.5 : 3;
+
+  // Draw dots and numbers
+  for (let i = 0; i < scaled.length; i++) {
+    const [x, y] = scaled[i];
+    const num = i + 1;
+
+    // Dot
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', x);
+    circle.setAttribute('cy', y);
+    circle.setAttribute('r', dotRadius);
+    circle.setAttribute('class', 'dot-circle');
+    svgEl.appendChild(circle);
+
+    // Number label - position it to avoid overlap with the line
+    const labelOffset = dotRadius + baseFontSize * 0.6;
+
+    // Determine best label position (avoid overlapping with adjacent lines)
+    let angle = 0;
+    const prevPt = i > 0 ? scaled[i-1] : null;
+    const nextPt = i < scaled.length - 1 ? scaled[i+1] : null;
+
+    if (prevPt && nextPt) {
+      // Average direction of incoming and outgoing segments
+      const ax = (prevPt[0] + nextPt[0]) / 2 - x;
+      const ay = (prevPt[1] + nextPt[1]) / 2 - y;
+      angle = Math.atan2(ay, ax) + Math.PI; // opposite direction
+    } else if (prevPt) {
+      angle = Math.atan2(prevPt[1] - y, prevPt[0] - x) + Math.PI / 2;
+    } else if (nextPt) {
+      angle = Math.atan2(nextPt[1] - y, nextPt[0] - x) - Math.PI / 2;
+    }
+
+    const lx = x + labelOffset * Math.cos(angle);
+    const ly = y + labelOffset * Math.sin(angle);
+
+    // Clamp to SVG bounds
+    const clampedX = Math.max(15, Math.min(svgW - 15, lx));
+    const clampedY = Math.max(20, Math.min(svgH - 5, ly));
+
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', clampedX);
+    text.setAttribute('y', clampedY);
+    text.setAttribute('class', 'dot-number');
+    text.setAttribute('font-size', baseFontSize);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'central');
+    text.textContent = num;
+    svgEl.appendChild(text);
+  }
+
+  // Start/finish indicators
+  if (scaled.length > 0) {
+    // Start marker
+    const startCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    startCircle.setAttribute('cx', scaled[0][0]);
+    startCircle.setAttribute('cy', scaled[0][1]);
+    startCircle.setAttribute('r', dotRadius + 4);
+    startCircle.setAttribute('fill', 'none');
+    startCircle.setAttribute('stroke', '#059669');
+    startCircle.setAttribute('stroke-width', '2');
+    svgEl.appendChild(startCircle);
+  }
+}
+
+function exportPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const svgData = new XMLSerializer().serializeToString(svgEl);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = 1200;
+  canvas.height = 1400;
+
+  const img = new Image();
+  const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(svgBlob);
+
+  img.onload = function() {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(url);
+
+    const imgData = canvas.toDataURL('image/png');
+    const pageW = 210;
+    const pageH = 297;
+    const imgAspect = canvas.width / canvas.height;
+    const margin = 10;
+    const availW = pageW - margin * 2;
+    const availH = pageH - margin * 2;
+
+    let w, h;
+    if (availW / availH > imgAspect) {
+      h = availH;
+      w = h * imgAspect;
+    } else {
+      w = availW;
+      h = w / imgAspect;
+    }
+
+    const x = (pageW - w) / 2;
+    const y = (pageH - h) / 2;
+
+    doc.addImage(imgData, 'PNG', x, y, w, h);
+    doc.save(`unisci-puntini-${currentShape}.pdf`);
+  };
+
+  img.src = url;
+}
+
+// Generate on load
+generate();
+</script>
+</body>
+</html>

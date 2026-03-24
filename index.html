@@ -1,1628 +1,259 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generatore di Labirinti</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print2Play - Giochi stampabili per bambini</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-:root {
-  --bg: #f0f2f5;
-  --surface: #ffffff;
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --text: #1e293b;
-  --text-muted: #64748b;
-  --border: #e2e8f0;
-  --radius: 12px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
-  --shadow-lg: 0 4px 24px rgba(0,0,0,0.10);
-}
+        :root {
+            --bg: #f0f2f5;
+            --surface: #ffffff;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+        }
 
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 16px 24px;
-  box-shadow: var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
 
-header h1 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+        header {
+            text-align: center;
+            padding: 56px 24px 40px;
+        }
 
-header p {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
+        header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
 
-.app {
-  display: flex;
-  flex: 1;
-  gap: 0;
-}
+        header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 480px;
+            margin: 0 auto;
+        }
 
-.sidebar {
-  width: 280px;
-  min-width: 280px;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  overflow-y: auto;
-}
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            padding-bottom: 64px;
+        }
 
-.control-group label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
+        .card {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: var(--shadow);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
 
-select, button {
-  font-family: 'Inter', system-ui, sans-serif;
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  transition: all 0.15s ease;
-  cursor: pointer;
-}
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.08);
+            border-color: var(--primary);
+        }
 
-select {
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 32px;
-}
+        .card-icon {
+            font-size: 2rem;
+            line-height: 1;
+            flex-shrink: 0;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            border-radius: 10px;
+        }
 
-select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
-}
+        .card-body {
+            min-width: 0;
+        }
 
-.btn {
-  border: none;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
+        .card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
 
-.btn-primary {
-  background: var(--primary);
-  color: #fff;
-}
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
 
-.btn-primary:hover { background: var(--primary-hover); }
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
 
-.btn-secondary {
-  background: var(--bg);
-  color: var(--text);
-  border: 1.5px solid var(--border);
-}
+        @media (min-width: 560px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
-.btn-secondary:hover { background: #e8eaed; }
+        @media (min-width: 840px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
 
-.btn-accent {
-  background: linear-gradient(135deg, #059669, #10b981);
-  color: #fff;
-}
+            .card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 32px 24px;
+            }
 
-.btn-accent:hover { filter: brightness(1.1); }
+            .card-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2.2rem;
+                margin-bottom: 4px;
+            }
+        }
 
-.toggle-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 0;
-}
+        @media (min-width: 560px) and (max-width: 839px) {
+            header h1 {
+                font-size: 2.2rem;
+            }
+        }
 
-.toggle-row span {
-  font-size: 0.9rem;
-  font-weight: 500;
-}
+        @media (max-width: 559px) {
+            header {
+                padding: 40px 16px 32px;
+            }
 
-.toggle {
-  position: relative;
-  width: 44px;
-  height: 24px;
-  cursor: pointer;
-}
+            header h1 {
+                font-size: 1.8rem;
+            }
 
-.toggle input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+            header p {
+                font-size: 1rem;
+            }
 
-.toggle-track {
-  position: absolute;
-  inset: 0;
-  background: #cbd5e1;
-  border-radius: 12px;
-  transition: background 0.2s;
-}
-
-.toggle input:checked + .toggle-track {
-  background: var(--primary);
-}
-
-.toggle-track::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 20px;
-  height: 20px;
-  background: #fff;
-  border-radius: 50%;
-  transition: transform 0.2s;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-.toggle input:checked + .toggle-track::after {
-  transform: translateX(20px);
-}
-
-.main {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  min-width: 0;
-}
-
-.canvas-wrapper {
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-canvas {
-  display: block;
-  border-radius: 4px;
-}
-
-.info-bar {
-  margin-top: auto;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-
-@media (max-width: 768px) {
-  .app {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    min-width: 0;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    padding: 16px;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .control-group { flex: 1; min-width: 140px; }
-
-  .btn-row {
-    display: flex;
-    gap: 8px;
-    width: 100%;
-  }
-
-  .btn-row .btn { flex: 1; }
-
-  .toggle-wrapper { width: 100%; }
-
-  .info-bar { display: none; }
-
-  .main { padding: 16px; }
-
-  .canvas-wrapper {
-    padding: 12px;
-  }
-}
-</style>
+            .container {
+                padding: 0 16px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<header>
-  <h1>Generatore di Labirinti</h1>
-  <p>Crea, esplora e scarica labirinti unici</p>
-</header>
-
-<div class="app">
-  <aside class="sidebar">
-    <div class="control-group">
-      <label>Difficolt&agrave;</label>
-      <select id="difficulty">
-        <option value="facile">Facile</option>
-        <option value="medio" selected>Medio</option>
-        <option value="difficile">Difficile</option>
-        <option value="estremo">Estremo</option>
-      </select>
-    </div>
-
-    <div class="control-group">
-      <label>Stile Muri</label>
-      <select id="wallStyle">
-        <option value="straight" selected>Dritto</option>
-        <option value="organic">Organico</option>
-      </select>
-    </div>
-
-    <div class="control-group">
-      <label>Forma</label>
-      <select id="shape">
-        <option value="none" selected>Nessuna</option>
-        <option value="heart">Cuore</option>
-        <option value="star">Stella</option>
-        <option value="cat">Gatto</option>
-        <option value="fish">Pesce</option>
-        <option value="tree">Albero</option>
-        <option value="mountain">Montagna</option>
-        <option value="city">Citt&agrave;</option>
-        <option value="dinosauro">Dinosauro</option>
-        <option value="razzo">Razzo</option>
-        <option value="farfalla">Farfalla</option>
-        <option value="casa">Casa</option>
-        <option value="nave">Nave</option>
-        <option value="corona">Corona</option>
-        <option value="fantasma">Fantasma</option>
-        <option value="robot">Robot</option>
-      </select>
-    </div>
-
-    <div class="control-group">
-      <label>Tema</label>
-      <select id="theme">
-        <option value="classic">Classico</option>
-        <option value="forest">Foresta</option>
-        <option value="underwater">Sottomarino</option>
-      </select>
-    </div>
-
-    <div class="control-group toggle-wrapper">
-      <div class="toggle-row">
-        <span>Mostra soluzione</span>
-        <label class="toggle">
-          <input type="checkbox" id="showSolution">
-          <span class="toggle-track"></span>
-        </label>
-      </div>
-    </div>
-
-    <div class="control-group btn-row">
-      <button class="btn btn-primary" id="btnGenerate">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.65 2.35a1.2 1.2 0 00-1.7 0L3.35 10.95a1.2 1.2 0 000 1.7 1.2 1.2 0 001.7 0l8.6-8.6a1.2 1.2 0 000-1.7z" fill="currentColor" opacity=".3"/><path d="M2 14l1.5-4.5L12 1l3 3-8.5 8.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-        Genera Nuovo
-      </button>
-    </div>
-
-    <div class="control-group btn-row">
-      <button class="btn btn-accent" id="btnPDF">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4.5 7.5L8 11l3.5-3.5M3 13h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Scarica PDF
-      </button>
-    </div>
-
-    <div class="info-bar">
-      Algoritmo: Recursive Backtracker<br>
-      Soluzione: BFS (percorso pi&ugrave; breve)<br>
-      Ogni labirinto &egrave; unico.
-    </div>
-  </aside>
-
-  <main class="main">
-    <div class="canvas-wrapper">
-      <canvas id="mazeCanvas"></canvas>
-    </div>
-  </main>
-</div>
-
-<script>
-(() => {
-  'use strict';
-
-  // ============================================================
-  // CONFIG
-  // ============================================================
-  const DIFFICULTY = {
-    facile:    { cols: 10, rows: 8 },
-    medio:     { cols: 20, rows: 15 },
-    difficile: { cols: 30, rows: 25 },
-    estremo:   { cols: 50, rows: 40 },
-  };
-
-  const DIFFICULTY_LABELS = {
-    facile: 'Facile', medio: 'Medio', difficile: 'Difficile', estremo: 'Estremo',
-  };
-
-  const SHAPE_LABELS = {
-    none: 'Nessuna', heart: 'Cuore', star: 'Stella', cat: 'Gatto',
-    fish: 'Pesce', tree: 'Albero', mountain: 'Montagna', city: 'Citt\u00e0',
-    dinosauro: 'Dinosauro', razzo: 'Razzo', farfalla: 'Farfalla', casa: 'Casa',
-    nave: 'Nave', corona: 'Corona', fantasma: 'Fantasma', robot: 'Robot',
-  };
-
-  const THEMES = {
-    classic: {
-      bg: '#ffffff', wall: '#1e293b', path: '#ffffff',
-      solution: 'rgba(239, 68, 68, 0.45)', entry: '#22c55e', exit: '#ef4444', wallWidth: 2,
-    },
-    forest: {
-      bg: '#f0fdf4', wall: '#166534', path: '#ecfccb',
-      solution: 'rgba(234, 179, 8, 0.5)', entry: '#15803d', exit: '#dc2626', wallWidth: 2.5,
-    },
-    underwater: {
-      bg: '#ecfeff', wall: '#0e7490', path: '#cffafe',
-      solution: 'rgba(251, 146, 60, 0.5)', entry: '#0284c7', exit: '#e11d48', wallWidth: 2.5,
-    },
-  };
-
-  // ============================================================
-  // DOM
-  // ============================================================
-  const canvas = document.getElementById('mazeCanvas');
-  const ctx = canvas.getContext('2d');
-  const diffSelect = document.getElementById('difficulty');
-  const wallStyleSelect = document.getElementById('wallStyle');
-  const shapeSelect = document.getElementById('shape');
-  const themeSelect = document.getElementById('theme');
-  const showSolCheck = document.getElementById('showSolution');
-  const btnGenerate = document.getElementById('btnGenerate');
-  const btnPDF = document.getElementById('btnPDF');
-
-  let currentMaze = null;
-  let currentSolution = null;
-  let organicSeed = 1;
-
-  // ============================================================
-  // SEEDED PRNG (xoshiro128**)
-  // ============================================================
-  function makeRng(seed) {
-    let s = [seed | 0, (seed * 2654435761) | 0, (seed * 2246822519) | 0, (seed * 3266489917) | 0];
-    if (s[0] === 0 && s[1] === 0 && s[2] === 0 && s[3] === 0) s[0] = 1;
-    for (let i = 0; i < 20; i++) next();
-    function rotl(x, k) { return ((x << k) | (x >>> (32 - k))) | 0; }
-    function next() {
-      const result = (Math.imul(rotl(Math.imul(s[1], 5), 7), 9)) | 0;
-      const t = (s[1] << 9) | 0;
-      s[2] ^= s[0]; s[3] ^= s[1]; s[1] ^= s[2]; s[0] ^= s[3];
-      s[2] ^= t; s[3] = rotl(s[3], 11);
-      return (result >>> 0) / 4294967296;
-    }
-    return next;
-  }
-
-  // ============================================================
-  // SILHOUETTE SHAPES
-  // Normalized coords: x,y in [0,1]. Return true if inside.
-  // ============================================================
-  const SHAPES = {
-    none: () => true,
-    heart: (x, y) => {
-      const px = (x - 0.5) * 2.2;
-      const py = (0.4 - y) * 2.2 + 0.2;
-      const v = px * px + py * py - 1;
-      return (v * v * v - px * px * py * py * py) <= 0;
-    },
-    star: (x, y) => {
-      const cx = 0.5, cy = 0.48;
-      const dx = x - cx, dy = y - cy;
-      const r = Math.sqrt(dx * dx + dy * dy);
-      let a = Math.atan2(dy, dx);
-      if (a < 0) a += Math.PI * 2;
-      const n = 5;
-      const slice = Math.PI / n;
-      const sector = a % (2 * slice);
-      const outerR = 0.46;
-      const innerR = 0.19;
-      let edgeR;
-      if (sector < slice) {
-        edgeR = innerR + (outerR - innerR) * (1 - sector / slice);
-      } else {
-        edgeR = innerR + (outerR - innerR) * ((sector - slice) / slice);
-      }
-      return r <= edgeR;
-    },
-    cat: (x, y) => {
-      // Head: circle
-      const headCx = 0.5, headCy = 0.28, headR = 0.2;
-      const hx = x - headCx, hy = y - headCy;
-      if (hx * hx + hy * hy <= headR * headR) return true;
-      // Left ear
-      if (x >= 0.28 && x <= 0.42 && y >= 0.05 && y <= 0.2) {
-        const ex = (x - 0.28) / 0.14, ey = (y - 0.05) / 0.15;
-        if (ex + ey >= 0.5) return true;
-      }
-      // Right ear
-      if (x >= 0.58 && x <= 0.72 && y >= 0.05 && y <= 0.2) {
-        const ex = (x - 0.58) / 0.14, ey = (y - 0.05) / 0.15;
-        if ((1 - ex) + ey >= 0.5) return true;
-      }
-      // Body: ellipse
-      const bx = (x - 0.5) / 0.26, by = (y - 0.6) / 0.32;
-      if (bx * bx + by * by <= 1) return true;
-      // Tail: curve approximation
-      if (y >= 0.7 && y <= 0.88) {
-        const ty = (y - 0.7) / 0.18;
-        const tx = 0.76 + 0.12 * Math.sin(ty * Math.PI);
-        if (Math.abs(x - tx) < 0.04) return true;
-      }
-      return false;
-    },
-    fish: (x, y) => {
-      // Body: ellipse
-      const bx = (x - 0.42) / 0.34, by = (y - 0.5) / 0.22;
-      if (bx * bx + by * by <= 1) return true;
-      // Tail: triangle
-      if (x >= 0.72 && x <= 0.95) {
-        const tx = (x - 0.72) / 0.23;
-        const halfH = 0.18 * tx;
-        if (Math.abs(y - 0.5) <= halfH) return true;
-      }
-      return false;
-    },
-    tree: (x, y) => {
-      // Trunk
-      if (x >= 0.43 && x <= 0.57 && y >= 0.78 && y <= 0.95) return true;
-      // 3 layers of triangle foliage
-      for (let i = 0; i < 3; i++) {
-        const top = 0.05 + i * 0.2;
-        const bot = 0.35 + i * 0.22;
-        if (y >= top && y <= bot) {
-          const frac = (y - top) / (bot - top);
-          const halfW = 0.08 + frac * (0.25 + i * 0.06);
-          if (Math.abs(x - 0.5) <= halfW) return true;
-        }
-      }
-      return false;
-    },
-    mountain: (x, y) => {
-      // 3 overlapping triangular mountains
-      const peaks = [
-        { cx: 0.25, top: 0.15, base: 0.92, halfW: 0.3 },
-        { cx: 0.55, top: 0.08, base: 0.92, halfW: 0.35 },
-        { cx: 0.8,  top: 0.22, base: 0.92, halfW: 0.28 },
-      ];
-      for (const p of peaks) {
-        if (y >= p.top && y <= p.base) {
-          const frac = (y - p.top) / (p.base - p.top);
-          const halfW = frac * p.halfW;
-          if (Math.abs(x - p.cx) <= halfW) return true;
-        }
-      }
-      return false;
-    },
-    city: (x, y) => {
-      // Buildings: series of rectangles of varying heights along the bottom
-      const buildings = [
-        { left: 0.02, right: 0.12, top: 0.35 },
-        { left: 0.12, right: 0.22, top: 0.2 },
-        { left: 0.22, right: 0.28, top: 0.45 },
-        { left: 0.28, right: 0.40, top: 0.15 },
-        { left: 0.40, right: 0.48, top: 0.32 },
-        { left: 0.48, right: 0.58, top: 0.1 },
-        { left: 0.58, right: 0.65, top: 0.38 },
-        { left: 0.65, right: 0.78, top: 0.22 },
-        { left: 0.78, right: 0.86, top: 0.42 },
-        { left: 0.86, right: 0.98, top: 0.28 },
-      ];
-      for (const b of buildings) {
-        if (x >= b.left && x <= b.right && y >= b.top && y <= 0.98) return true;
-      }
-      return false;
-    },
-    dinosauro: (x, y) => {
-      // T-Rex: body, head, tail, legs, small arms
-      // Body: large ellipse center-right
-      const bx = (x - 0.45) / 0.22, by = (y - 0.5) / 0.2;
-      if (bx * bx + by * by <= 1) return true;
-      // Head: circle upper-right
-      const hx = x - 0.7, hy = y - 0.28;
-      if (hx * hx + hy * hy <= 0.08 * 0.08 + 0.1 * 0.1) return true;
-      // Jaw
-      if (x >= 0.68 && x <= 0.88 && y >= 0.28 && y <= 0.38) return true;
-      // Neck connecting head to body
-      if (x >= 0.58 && x <= 0.72 && y >= 0.3 && y <= 0.45) return true;
-      // Tail: tapers left from body
-      if (y >= 0.38 && y <= 0.55) {
-        const ty = (y - 0.38) / 0.17;
-        const tailX = 0.23 - 0.18 * (1 - ty);
-        const halfW = 0.06 * (1 - (0.23 - x) / 0.25);
-        if (x >= 0.05 && x <= 0.28 && Math.abs(y - 0.46) <= halfW + 0.04) return true;
-      }
-      // Left leg
-      if (x >= 0.35 && x <= 0.43 && y >= 0.65 && y <= 0.92) return true;
-      // Right leg
-      if (x >= 0.50 && x <= 0.58 && y >= 0.65 && y <= 0.92) return true;
-      // Left foot
-      if (x >= 0.32 && x <= 0.45 && y >= 0.88 && y <= 0.95) return true;
-      // Right foot
-      if (x >= 0.48 && x <= 0.60 && y >= 0.88 && y <= 0.95) return true;
-      // Small arm
-      if (x >= 0.60 && x <= 0.66 && y >= 0.45 && y <= 0.55) return true;
-      return false;
-    },
-    razzo: (x, y) => {
-      // Rocket: tall narrow body with nose cone and fins
-      // Nose cone (triangle)
-      if (y >= 0.05 && y <= 0.22) {
-        const frac = (y - 0.05) / 0.17;
-        const halfW = frac * 0.1;
-        if (Math.abs(x - 0.5) <= halfW) return true;
-      }
-      // Body (rectangle with slight taper)
-      if (y >= 0.22 && y <= 0.75) {
-        const halfW = 0.1 + 0.02 * Math.sin((y - 0.22) / 0.53 * Math.PI);
-        if (Math.abs(x - 0.5) <= halfW) return true;
-      }
-      // Engine base (wider)
-      if (y >= 0.75 && y <= 0.82 && Math.abs(x - 0.5) <= 0.13) return true;
-      // Left fin
-      if (y >= 0.65 && y <= 0.85) {
-        const frac = (y - 0.65) / 0.2;
-        const finLeft = 0.5 - 0.12 - frac * 0.14;
-        if (x >= finLeft && x <= 0.5 - 0.08) return true;
-      }
-      // Right fin
-      if (y >= 0.65 && y <= 0.85) {
-        const frac = (y - 0.65) / 0.2;
-        const finRight = 0.5 + 0.12 + frac * 0.14;
-        if (x <= finRight && x >= 0.5 + 0.08) return true;
-      }
-      // Flame area
-      if (y >= 0.82 && y <= 0.95 && Math.abs(x - 0.5) <= 0.08) return true;
-      return false;
-    },
-    farfalla: (x, y) => {
-      // Butterfly: two upper wings, two lower wings, narrow body
-      // Body (thin vertical ellipse)
-      if (Math.abs(x - 0.5) <= 0.03 && y >= 0.2 && y <= 0.82) return true;
-      // Upper left wing
-      const ulx = (x - 0.28) / 0.2, uly = (y - 0.28) / 0.22;
-      if (ulx * ulx + uly * uly <= 1 && x <= 0.5) return true;
-      // Upper right wing
-      const urx = (x - 0.72) / 0.2, ury = (y - 0.28) / 0.22;
-      if (urx * urx + ury * ury <= 1 && x >= 0.5) return true;
-      // Lower left wing
-      const llx = (x - 0.3) / 0.16, lly = (y - 0.62) / 0.16;
-      if (llx * llx + lly * lly <= 1 && x <= 0.5) return true;
-      // Lower right wing
-      const lrx = (x - 0.7) / 0.16, lry = (y - 0.62) / 0.16;
-      if (lrx * lrx + lry * lry <= 1 && x >= 0.5) return true;
-      return false;
-    },
-    casa: (x, y) => {
-      // House: square body with triangular roof and chimney
-      // Roof (triangle)
-      if (y >= 0.15 && y <= 0.45) {
-        const frac = (y - 0.15) / 0.3;
-        const halfW = frac * 0.42;
-        if (Math.abs(x - 0.5) <= halfW) return true;
-      }
-      // Body (rectangle)
-      if (x >= 0.12 && x <= 0.88 && y >= 0.45 && y <= 0.92) return true;
-      // Chimney
-      if (x >= 0.68 && x <= 0.76 && y >= 0.1 && y <= 0.35) return true;
-      return false;
-    },
-    nave: (x, y) => {
-      // Ship: hull and cabin/superstructure
-      // Hull (curved bottom)
-      if (y >= 0.55 && y <= 0.85) {
-        const frac = (y - 0.55) / 0.3;
-        const halfW = 0.45 * (1 - frac * 0.6);
-        if (Math.abs(x - 0.5) <= halfW) return true;
-      }
-      // Deck area
-      if (y >= 0.48 && y <= 0.58 && x >= 0.08 && x <= 0.92) return true;
-      // Cabin
-      if (x >= 0.3 && x <= 0.65 && y >= 0.28 && y <= 0.48) return true;
-      // Bridge/upper cabin
-      if (x >= 0.38 && x <= 0.55 && y >= 0.18 && y <= 0.28) return true;
-      // Funnel/smokestack
-      if (x >= 0.55 && x <= 0.62 && y >= 0.15 && y <= 0.28) return true;
-      return false;
-    },
-    corona: (x, y) => {
-      // Crown: band at bottom with pointed peaks
-      // Band
-      if (y >= 0.6 && y <= 0.88 && x >= 0.1 && x <= 0.9) return true;
-      // Peaks (5 triangular points)
-      const peaks = [0.18, 0.34, 0.5, 0.66, 0.82];
-      for (const px of peaks) {
-        if (y >= 0.2 && y <= 0.65) {
-          const frac = (0.65 - y) / 0.45;
-          const halfW = 0.07 * (1 - frac);
-          if (Math.abs(x - px) <= halfW) return true;
-        }
-      }
-      return false;
-    },
-    fantasma: (x, y) => {
-      // Ghost: rounded top, wavy bottom
-      // Rounded top (semicircle)
-      const hx = (x - 0.5) / 0.3, hy = (y - 0.35) / 0.3;
-      if (hx * hx + hy * hy <= 1 && y <= 0.35) return true;
-      // Body (rectangle)
-      if (Math.abs(x - 0.5) <= 0.3 && y >= 0.35 && y <= 0.82) return true;
-      // Wavy bottom edge
-      if (y >= 0.82 && y <= 0.92 && Math.abs(x - 0.5) <= 0.3) {
-        const wave = Math.sin((x - 0.2) * Math.PI * 5) * 0.04;
-        if (y <= 0.87 + wave) return true;
-      }
-      return false;
-    },
-    robot: (x, y) => {
-      // Robot: chunky rounded shape, no thin parts
-      // Head (wide, rounded top via ellipse)
-      const hx = (x - 0.5) / 0.28, hy = (y - 0.22) / 0.18;
-      if (hx * hx + hy * hy <= 1) return true;
-      // Body (large rounded rectangle)
-      if (x >= 0.2 && x <= 0.8 && y >= 0.32 && y <= 0.72) return true;
-      // Body rounded top corners (connect to head smoothly)
-      if (x >= 0.22 && x <= 0.78 && y >= 0.28 && y <= 0.36) return true;
-      // Left leg (thick)
-      if (x >= 0.22 && x <= 0.42 && y >= 0.72 && y <= 0.95) return true;
-      // Right leg (thick)
-      if (x >= 0.58 && x <= 0.78 && y >= 0.72 && y <= 0.95) return true;
-      return false;
-    },
-  };
-
-  // ============================================================
-  // SHAPE HOLES — internal empty zones the maze wraps around
-  // Each hole: { type: 'circle', cx, cy, r } or { type: 'rect', x, y, w, h }
-  // Coordinates are normalized 0-1 (same as shapes)
-  // ============================================================
-  const SHAPE_HOLES = {
-    none: [],
-    heart: [],
-    star: [],
-    cat: [
-      // Eyes
-      { type: 'circle', cx: 0.42, cy: 0.24, r: 0.055 },
-      { type: 'circle', cx: 0.58, cy: 0.24, r: 0.055 },
-      // Nose
-      { type: 'circle', cx: 0.5, cy: 0.33, r: 0.035 },
-    ],
-    fish: [
-      // Eye
-      { type: 'circle', cx: 0.28, cy: 0.45, r: 0.065 },
-    ],
-    tree: [
-      // Ornaments
-      { type: 'circle', cx: 0.44, cy: 0.32, r: 0.04 },
-      { type: 'circle', cx: 0.56, cy: 0.48, r: 0.04 },
-      { type: 'circle', cx: 0.42, cy: 0.60, r: 0.04 },
-      { type: 'circle', cx: 0.55, cy: 0.70, r: 0.04 },
-    ],
-    mountain: [
-      // Snow caps at peaks
-      { type: 'circle', cx: 0.25, cy: 0.22, r: 0.06 },
-      { type: 'circle', cx: 0.55, cy: 0.15, r: 0.07 },
-      { type: 'circle', cx: 0.8, cy: 0.28, r: 0.05 },
-    ],
-    city: [
-      // Windows on buildings
-      { type: 'rect', x: 0.50, y: 0.16, w: 0.06, h: 0.06 },
-      { type: 'rect', x: 0.50, y: 0.26, w: 0.06, h: 0.06 },
-      { type: 'rect', x: 0.30, y: 0.24, w: 0.06, h: 0.06 },
-      { type: 'rect', x: 0.30, y: 0.34, w: 0.06, h: 0.06 },
-      { type: 'rect', x: 0.67, y: 0.28, w: 0.06, h: 0.06 },
-      { type: 'rect', x: 0.88, y: 0.34, w: 0.06, h: 0.06 },
-    ],
-    dinosauro: [
-      // Eye
-      { type: 'circle', cx: 0.72, cy: 0.25, r: 0.045 },
-    ],
-    razzo: [
-      // Windows
-      { type: 'circle', cx: 0.5, cy: 0.32, r: 0.055 },
-      { type: 'circle', cx: 0.5, cy: 0.48, r: 0.055 },
-      { type: 'circle', cx: 0.5, cy: 0.64, r: 0.055 },
-    ],
-    farfalla: [
-      // Wing spots
-      { type: 'circle', cx: 0.28, cy: 0.28, r: 0.06 },
-      { type: 'circle', cx: 0.72, cy: 0.28, r: 0.06 },
-      { type: 'circle', cx: 0.30, cy: 0.62, r: 0.05 },
-      { type: 'circle', cx: 0.70, cy: 0.62, r: 0.05 },
-    ],
-    casa: [
-      // Door
-      { type: 'rect', x: 0.42, y: 0.62, w: 0.16, h: 0.28 },
-      // Windows
-      { type: 'rect', x: 0.16, y: 0.50, w: 0.12, h: 0.12 },
-      { type: 'rect', x: 0.72, y: 0.50, w: 0.12, h: 0.12 },
-    ],
-    nave: [
-      // Portholes on cabin
-      { type: 'circle', cx: 0.36, cy: 0.38, r: 0.045 },
-      { type: 'circle', cx: 0.48, cy: 0.38, r: 0.045 },
-      { type: 'circle', cx: 0.60, cy: 0.38, r: 0.045 },
-    ],
-    corona: [
-      // Gems on the band
-      { type: 'circle', cx: 0.26, cy: 0.72, r: 0.055 },
-      { type: 'circle', cx: 0.5, cy: 0.72, r: 0.06 },
-      { type: 'circle', cx: 0.74, cy: 0.72, r: 0.055 },
-    ],
-    fantasma: [
-      // Eyes
-      { type: 'circle', cx: 0.38, cy: 0.30, r: 0.08 },
-      { type: 'circle', cx: 0.62, cy: 0.30, r: 0.08 },
-      // Mouth
-      { type: 'circle', cx: 0.5, cy: 0.55, r: 0.09 },
-    ],
-    robot: [
-      // Eyes
-      { type: 'circle', cx: 0.39, cy: 0.20, r: 0.055 },
-      { type: 'circle', cx: 0.61, cy: 0.20, r: 0.055 },
-      // Chest panel
-      { type: 'rect', x: 0.35, y: 0.45, w: 0.30, h: 0.15 },
-    ],
-  };
-
-  function isInHole(x, y, holes) {
-    for (const h of holes) {
-      if (h.type === 'circle') {
-        const dx = x - h.cx, dy = y - h.cy;
-        if (dx * dx + dy * dy <= h.r * h.r) return true;
-      } else if (h.type === 'rect') {
-        if (x >= h.x && x <= h.x + h.w && y >= h.y && y <= h.y + h.h) return true;
-      }
-    }
-    return false;
-  }
-
-  // ============================================================
-  // RECTANGULAR MAZE
-  // ============================================================
-  function generateRectMaze(cols, rows, shapeName) {
-    const rng = makeRng(Date.now() ^ (Math.random() * 0xffffffff));
-    organicSeed = (Date.now() ^ (Math.random() * 0xffffffff)) | 0;
-    const TOP = 0, RIGHT = 1, BOTTOM = 2, LEFT = 3;
-    const total = cols * rows;
-    const cells = new Array(total);
-    const active = new Uint8Array(total);
-    const shapeFn = SHAPES[shapeName] || SHAPES.none;
-    const holes = SHAPE_HOLES[shapeName] || [];
-    const idx = (c, r) => r * cols + c;
-
-    // Determine active cells (inside shape AND not inside any hole)
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const cx = (c + 0.5) / cols;
-        const cy = (r + 0.5) / rows;
-        active[idx(c, r)] = (shapeFn(cx, cy) && !isInHole(cx, cy, holes)) ? 1 : 0;
-      }
-    }
-
-    for (let i = 0; i < total; i++) {
-      cells[i] = [true, true, true, true];
-    }
-
-    const visited = new Uint8Array(total);
-    const dirs = [
-      [0, -1, TOP, BOTTOM],
-      [1, 0, RIGHT, LEFT],
-      [0, 1, BOTTOM, TOP],
-      [-1, 0, LEFT, RIGHT],
-    ];
-
-    // Find a starting active cell
-    let startCell = -1;
-    for (let i = 0; i < total; i++) {
-      if (active[i]) { startCell = i; break; }
-    }
-    if (startCell === -1) {
-      // No active cells, fallback
-      for (let i = 0; i < total; i++) active[i] = 1;
-      startCell = 0;
-    }
-
-    visited[startCell] = 1;
-    const stack = [startCell];
-
-    while (stack.length > 0) {
-      const cur = stack[stack.length - 1];
-      const cx = cur % cols;
-      const cy = (cur - cx) / cols;
-      const neighbors = [];
-      for (const [dx, dy, wallA, wallB] of dirs) {
-        const nx = cx + dx, ny = cy + dy;
-        if (nx >= 0 && nx < cols && ny >= 0 && ny < rows) {
-          const ni = idx(nx, ny);
-          if (active[ni] && !visited[ni]) {
-            neighbors.push([nx, ny, wallA, wallB, ni]);
-          }
-        }
-      }
-      if (neighbors.length === 0) { stack.pop(); continue; }
-      const [nx, ny, wallA, wallB, ni] = neighbors[(rng() * neighbors.length) | 0];
-      cells[cur][wallA] = false;
-      cells[ni][wallB] = false;
-      visited[ni] = 1;
-      stack.push(ni);
-    }
-
-    // Find entry and exit on the shape boundary
-    let entry = -1, exit = -1;
-    if (shapeName === 'none') {
-      entry = idx(0, 0);
-      exit = idx(cols - 1, rows - 1);
-      cells[entry][TOP] = false;
-      cells[exit][BOTTOM] = false;
-    } else {
-      // Entry: topmost active cell in leftmost column possible
-      outer1: for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          if (active[idx(c, r)]) { entry = idx(c, r); break outer1; }
-        }
-      }
-      // Exit: bottommost active cell in rightmost column possible
-      outer2: for (let r = rows - 1; r >= 0; r--) {
-        for (let c = cols - 1; c >= 0; c--) {
-          if (active[idx(c, r)]) { exit = idx(c, r); break outer2; }
-        }
-      }
-      if (entry === exit) {
-        // Try harder to find distinct entry/exit
-        for (let i = total - 1; i >= 0; i--) {
-          if (active[i] && i !== entry) { exit = i; break; }
-        }
-      }
-      // Open entry wall (top) and exit wall (bottom)
-      const er = Math.floor(entry / cols), ec = entry % cols;
-      const xr = Math.floor(exit / cols), xc = exit % cols;
-      // Find a wall that faces outward or towards inactive cell for entry
-      if (er === 0 || !active[idx(ec, er - 1)]) cells[entry][TOP] = false;
-      else if (ec === 0 || !active[idx(ec - 1, er)]) cells[entry][LEFT] = false;
-      else cells[entry][TOP] = false;
-      // Exit
-      if (xr === rows - 1 || !active[idx(xc, xr + 1)]) cells[exit][BOTTOM] = false;
-      else if (xc === cols - 1 || !active[idx(xc + 1, xr)]) cells[exit][RIGHT] = false;
-      else cells[exit][BOTTOM] = false;
-    }
-
-    return { type: 'rect', cols, rows, cells, active, holes, idx, entry, exit, shapeName };
-  }
-
-  function solveRectMaze(maze) {
-    const { cols, rows, cells, active, idx, entry, exit } = maze;
-    const TOP = 0, RIGHT = 1, BOTTOM = 2, LEFT = 3;
-    const total = cols * rows;
-    const prev = new Int32Array(total).fill(-1);
-    const visited = new Uint8Array(total);
-    const dirs = [[0, -1, TOP], [1, 0, RIGHT], [0, 1, BOTTOM], [-1, 0, LEFT]];
-    const queue = [entry];
-    visited[entry] = 1;
-    let head = 0;
-    while (head < queue.length) {
-      const cur = queue[head++];
-      if (cur === exit) break;
-      const cx = cur % cols, cy = (cur - cx) / cols;
-      for (const [dx, dy, wall] of dirs) {
-        if (cells[cur][wall]) continue;
-        const nx = cx + dx, ny = cy + dy;
-        if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) continue;
-        const ni = idx(nx, ny);
-        if (!active[ni] || visited[ni]) continue;
-        visited[ni] = 1;
-        prev[ni] = cur;
-        queue.push(ni);
-      }
-    }
-    const path = [];
-    let c = exit;
-    while (c !== -1) { path.push(c); c = prev[c]; }
-    path.reverse();
-    return path;
-  }
-
-  // ============================================================
-  // ORGANIC WALL DRAWING HELPERS
-  // ============================================================
-  function organicRng(x1, y1, x2, y2) {
-    // Deterministic based on coordinates and seed
-    let h = organicSeed;
-    h = Math.imul(h ^ (Math.round(x1 * 100)), 2654435761);
-    h = Math.imul(h ^ (Math.round(y1 * 100)), 2246822519);
-    h = Math.imul(h ^ (Math.round(x2 * 100)), 3266489917);
-    h = Math.imul(h ^ (Math.round(y2 * 100)), 668265263);
-    h = ((h >>> 0) / 4294967296);
-    return (h - 0.5) * 2; // -1 to 1
-  }
-
-  function drawWallLine(c, x1, y1, x2, y2, isOrganic, cellSize) {
-    if (!isOrganic) {
-      c.beginPath();
-      c.moveTo(x1, y1);
-      c.lineTo(x2, y2);
-      c.stroke();
-    } else {
-      const dx = x2 - x1, dy = y2 - y1;
-      const len = Math.sqrt(dx * dx + dy * dy);
-      const wobble = Math.min(cellSize * 0.15, len * 0.2);
-      // Perpendicular direction
-      const nx = -dy / len, ny = dx / len;
-      const offset = organicRng(x1, y1, x2, y2) * wobble;
-      const cpx = (x1 + x2) / 2 + nx * offset;
-      const cpy = (y1 + y2) / 2 + ny * offset;
-      c.beginPath();
-      c.moveTo(x1, y1);
-      c.quadraticCurveTo(cpx, cpy, x2, y2);
-      c.stroke();
-    }
-  }
-
-  // ============================================================
-  // SHAPE DECORATION (drawn behind maze)
-  // ============================================================
-  function drawShapeDecoration(c, ox, oy, mazeW, mazeH, shapeName, theme) {
-    if (shapeName === 'none') return;
-    c.save();
-    // Parse wall color and use at 15% opacity
-    const wallColor = theme.wall;
-    c.globalAlpha = 0.15;
-    c.strokeStyle = wallColor;
-    c.fillStyle = wallColor;
-    c.lineWidth = 1.5;
-    c.lineCap = 'round';
-    c.lineJoin = 'round';
-
-    // Helper to convert normalized coords to canvas coords
-    const px = (nx) => ox + nx * mazeW;
-    const py = (ny) => oy + ny * mazeH;
-
-    switch (shapeName) {
-      case 'heart': {
-        // Heart outline with subtle gradient effect
-        c.beginPath();
-        const steps = 100;
-        for (let i = 0; i <= steps; i++) {
-          const t = (i / steps) * Math.PI * 2;
-          const hx = 16 * Math.pow(Math.sin(t), 3);
-          const hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-          const nx = 0.5 + hx / 36;
-          const ny = 0.48 + hy / 40;
-          if (i === 0) c.moveTo(px(nx), py(ny)); else c.lineTo(px(nx), py(ny));
-        }
-        c.closePath();
-        c.stroke();
-        break;
-      }
-      case 'star': {
-        // Star outline with small radiating lines
-        c.beginPath();
-        const cx = 0.5, cy = 0.48, outerR = 0.46, innerR = 0.19;
-        for (let i = 0; i < 10; i++) {
-          const a = -Math.PI / 2 + i * Math.PI / 5;
-          const r = i % 2 === 0 ? outerR : innerR;
-          const sx = cx + r * Math.cos(a), sy = cy + r * Math.sin(a);
-          if (i === 0) c.moveTo(px(sx), py(sy)); else c.lineTo(px(sx), py(sy));
-        }
-        c.closePath();
-        c.stroke();
-        // Radiating lines from tips
-        for (let i = 0; i < 5; i++) {
-          const a = -Math.PI / 2 + i * 2 * Math.PI / 5;
-          const sx = cx + outerR * Math.cos(a), sy = cy + outerR * Math.sin(a);
-          const ex = cx + (outerR + 0.04) * Math.cos(a), ey = cy + (outerR + 0.04) * Math.sin(a);
-          c.beginPath(); c.moveTo(px(sx), py(sy)); c.lineTo(px(ex), py(ey)); c.stroke();
-        }
-        break;
-      }
-      case 'cat': {
-        // Whiskers, eyes, nose
-        // Eyes
-        c.beginPath(); c.arc(px(0.44), py(0.26), mazeW * 0.015, 0, Math.PI * 2); c.fill();
-        c.beginPath(); c.arc(px(0.56), py(0.26), mazeW * 0.015, 0, Math.PI * 2); c.fill();
-        // Nose
-        c.beginPath(); c.moveTo(px(0.5), py(0.3)); c.lineTo(px(0.485), py(0.32)); c.lineTo(px(0.515), py(0.32)); c.closePath(); c.fill();
-        // Whiskers left
-        c.beginPath(); c.moveTo(px(0.38), py(0.28)); c.lineTo(px(0.2), py(0.25)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.38), py(0.31)); c.lineTo(px(0.2), py(0.32)); c.stroke();
-        // Whiskers right
-        c.beginPath(); c.moveTo(px(0.62), py(0.28)); c.lineTo(px(0.8), py(0.25)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.62), py(0.31)); c.lineTo(px(0.8), py(0.32)); c.stroke();
-        // Ear tips
-        c.beginPath(); c.moveTo(px(0.32), py(0.08)); c.lineTo(px(0.38), py(0.15)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.68), py(0.08)); c.lineTo(px(0.62), py(0.15)); c.stroke();
-        break;
-      }
-      case 'fish': {
-        // Eye
-        c.beginPath(); c.arc(px(0.3), py(0.46), mazeW * 0.02, 0, Math.PI * 2); c.fill();
-        // Gill line
-        c.beginPath(); c.arc(px(0.4), py(0.5), mazeW * 0.06, -0.5, 0.5); c.stroke();
-        // Scale hints
-        for (let row = 0; row < 3; row++) {
-          for (let col = 0; col < 4; col++) {
-            const sx = 0.35 + col * 0.08, sy = 0.42 + row * 0.06;
-            c.beginPath(); c.arc(px(sx), py(sy), mazeW * 0.015, 0, Math.PI); c.stroke();
-          }
-        }
-        break;
-      }
-      case 'tree': {
-        // Small ornament circles
-        const ornaments = [[0.45, 0.35], [0.55, 0.45], [0.42, 0.55], [0.58, 0.3], [0.5, 0.6]];
-        for (const [ox2, oy2] of ornaments) {
-          c.beginPath(); c.arc(px(ox2), py(oy2), mazeW * 0.012, 0, Math.PI * 2); c.fill();
-        }
-        // Star on top
-        c.beginPath();
-        c.moveTo(px(0.5), py(0.04));
-        c.lineTo(px(0.48), py(0.08));
-        c.lineTo(px(0.44), py(0.08));
-        c.lineTo(px(0.47), py(0.1));
-        c.lineTo(px(0.46), py(0.14));
-        c.lineTo(px(0.5), py(0.11));
-        c.lineTo(px(0.54), py(0.14));
-        c.lineTo(px(0.53), py(0.1));
-        c.lineTo(px(0.56), py(0.08));
-        c.lineTo(px(0.52), py(0.08));
-        c.closePath();
-        c.fill();
-        break;
-      }
-      case 'mountain': {
-        // Snow caps
-        c.globalAlpha = 0.2;
-        c.fillStyle = '#ffffff';
-        const peaks = [
-          { cx: 0.25, top: 0.15, halfW: 0.08 },
-          { cx: 0.55, top: 0.08, halfW: 0.1 },
-          { cx: 0.8,  top: 0.22, halfW: 0.07 },
-        ];
-        for (const p of peaks) {
-          c.beginPath();
-          c.moveTo(px(p.cx), py(p.top));
-          c.lineTo(px(p.cx - p.halfW), py(p.top + 0.1));
-          c.lineTo(px(p.cx + p.halfW), py(p.top + 0.1));
-          c.closePath();
-          c.fill();
-        }
-        // Sun circle
-        c.fillStyle = wallColor;
-        c.globalAlpha = 0.12;
-        c.beginPath(); c.arc(px(0.88), py(0.1), mazeW * 0.03, 0, Math.PI * 2); c.fill();
-        break;
-      }
-      case 'city': {
-        // Window rectangles
-        const buildings = [
-          { left: 0.02, right: 0.12, top: 0.35 },
-          { left: 0.12, right: 0.22, top: 0.2 },
-          { left: 0.22, right: 0.28, top: 0.45 },
-          { left: 0.28, right: 0.40, top: 0.15 },
-          { left: 0.40, right: 0.48, top: 0.32 },
-          { left: 0.48, right: 0.58, top: 0.1 },
-          { left: 0.58, right: 0.65, top: 0.38 },
-          { left: 0.65, right: 0.78, top: 0.22 },
-          { left: 0.78, right: 0.86, top: 0.42 },
-          { left: 0.86, right: 0.98, top: 0.28 },
-        ];
-        const winSize = 0.018;
-        for (const b of buildings) {
-          const bw = b.right - b.left;
-          const bh = 0.98 - b.top;
-          const winCols = Math.floor(bw / (winSize * 3));
-          const winRows = Math.floor(bh / (winSize * 3.5));
-          for (let wr = 0; wr < winRows; wr++) {
-            for (let wc = 0; wc < winCols; wc++) {
-              const wx = b.left + (bw - winCols * winSize * 2.5) / 2 + wc * winSize * 2.5;
-              const wy = b.top + 0.04 + wr * winSize * 3;
-              c.fillRect(px(wx), py(wy), mazeW * winSize, mazeH * winSize * 1.3);
-            }
-          }
-        }
-        break;
-      }
-      case 'dinosauro': {
-        // Eye
-        c.beginPath(); c.arc(px(0.74), py(0.26), mazeW * 0.015, 0, Math.PI * 2); c.fill();
-        // Teeth marks along jaw
-        for (let i = 0; i < 4; i++) {
-          const tx = 0.72 + i * 0.04;
-          c.beginPath(); c.moveTo(px(tx), py(0.35)); c.lineTo(px(tx + 0.01), py(0.38)); c.stroke();
-        }
-        // Texture lines on body
-        for (let i = 0; i < 5; i++) {
-          const lx = 0.32 + i * 0.05;
-          c.beginPath(); c.moveTo(px(lx), py(0.42)); c.lineTo(px(lx + 0.02), py(0.55)); c.stroke();
-        }
-        break;
-      }
-      case 'razzo': {
-        // Flames at bottom
-        c.globalAlpha = 0.18;
-        c.fillStyle = '#ef4444';
-        c.beginPath();
-        c.moveTo(px(0.42), py(0.82));
-        c.quadraticCurveTo(px(0.46), py(0.92), px(0.5), py(0.97));
-        c.quadraticCurveTo(px(0.54), py(0.92), px(0.58), py(0.82));
-        c.closePath();
-        c.fill();
-        c.fillStyle = '#f97316';
-        c.beginPath();
-        c.moveTo(px(0.44), py(0.82));
-        c.quadraticCurveTo(px(0.47), py(0.88), px(0.5), py(0.93));
-        c.quadraticCurveTo(px(0.53), py(0.88), px(0.56), py(0.82));
-        c.closePath();
-        c.fill();
-        // Window circles on body
-        c.fillStyle = wallColor;
-        c.globalAlpha = 0.15;
-        c.beginPath(); c.arc(px(0.5), py(0.35), mazeW * 0.025, 0, Math.PI * 2); c.stroke();
-        c.beginPath(); c.arc(px(0.5), py(0.50), mazeW * 0.025, 0, Math.PI * 2); c.stroke();
-        // Panel lines
-        c.beginPath(); c.moveTo(px(0.4), py(0.22)); c.lineTo(px(0.6), py(0.22)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.38), py(0.75)); c.lineTo(px(0.62), py(0.75)); c.stroke();
-        break;
-      }
-      case 'farfalla': {
-        // Antenna lines
-        c.beginPath(); c.moveTo(px(0.5), py(0.22)); c.quadraticCurveTo(px(0.35), py(0.1), px(0.25), py(0.06)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.5), py(0.22)); c.quadraticCurveTo(px(0.65), py(0.1), px(0.75), py(0.06)); c.stroke();
-        // Antenna tips
-        c.beginPath(); c.arc(px(0.25), py(0.06), mazeW * 0.01, 0, Math.PI * 2); c.fill();
-        c.beginPath(); c.arc(px(0.75), py(0.06), mazeW * 0.01, 0, Math.PI * 2); c.fill();
-        // Wing vein patterns (curved lines) - left upper
-        c.beginPath(); c.moveTo(px(0.47), py(0.3)); c.quadraticCurveTo(px(0.35), py(0.22), px(0.2), py(0.25)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.47), py(0.35)); c.quadraticCurveTo(px(0.35), py(0.32), px(0.15), py(0.35)); c.stroke();
-        // Wing veins - right upper
-        c.beginPath(); c.moveTo(px(0.53), py(0.3)); c.quadraticCurveTo(px(0.65), py(0.22), px(0.8), py(0.25)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.53), py(0.35)); c.quadraticCurveTo(px(0.65), py(0.32), px(0.85), py(0.35)); c.stroke();
-        // Wing veins - lower wings
-        c.beginPath(); c.moveTo(px(0.47), py(0.6)); c.quadraticCurveTo(px(0.35), py(0.58), px(0.2), py(0.62)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.53), py(0.6)); c.quadraticCurveTo(px(0.65), py(0.58), px(0.8), py(0.62)); c.stroke();
-        break;
-      }
-      case 'casa': {
-        // Door
-        c.strokeRect(px(0.43), py(0.65), mazeW * 0.14, mazeH * 0.27);
-        // Door heart
-        c.beginPath(); c.arc(px(0.5), py(0.73), mazeW * 0.015, 0, Math.PI * 2); c.fill();
-        // Windows
-        c.strokeRect(px(0.18), py(0.52), mazeW * 0.12, mazeH * 0.1);
-        c.strokeRect(px(0.7), py(0.52), mazeW * 0.12, mazeH * 0.1);
-        // Window cross lines
-        c.beginPath(); c.moveTo(px(0.24), py(0.52)); c.lineTo(px(0.24), py(0.62)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.18), py(0.57)); c.lineTo(px(0.3), py(0.57)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.76), py(0.52)); c.lineTo(px(0.76), py(0.62)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.7), py(0.57)); c.lineTo(px(0.82), py(0.57)); c.stroke();
-        // Doorknob
-        c.beginPath(); c.arc(px(0.54), py(0.8), mazeW * 0.008, 0, Math.PI * 2); c.fill();
-        break;
-      }
-      case 'nave': {
-        // Waves below hull
-        c.globalAlpha = 0.12;
-        for (let w = 0; w < 3; w++) {
-          c.beginPath();
-          const wy = 0.88 + w * 0.04;
-          for (let i = 0; i <= 20; i++) {
-            const wx2 = i / 20;
-            const wvy = wy + Math.sin(wx2 * Math.PI * 4 + w) * 0.015;
-            if (i === 0) c.moveTo(px(wx2), py(wvy)); else c.lineTo(px(wx2), py(wvy));
-          }
-          c.stroke();
-        }
-        c.globalAlpha = 0.15;
-        // Portholes
-        const portholes = [0.35, 0.45, 0.55];
-        for (const phx of portholes) {
-          c.beginPath(); c.arc(px(phx), py(0.4), mazeW * 0.015, 0, Math.PI * 2); c.stroke();
-        }
-        // Flag on top
-        c.beginPath(); c.moveTo(px(0.46), py(0.18)); c.lineTo(px(0.46), py(0.08)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.46), py(0.08)); c.lineTo(px(0.54), py(0.11)); c.lineTo(px(0.46), py(0.14)); c.closePath(); c.fill();
-        break;
-      }
-      case 'corona': {
-        // Gem shapes on the band
-        const gemPositions = [0.25, 0.4, 0.5, 0.6, 0.75];
-        for (const gx of gemPositions) {
-          // Diamond shape
-          c.beginPath();
-          c.moveTo(px(gx), py(0.63));
-          c.lineTo(px(gx - 0.025), py(0.7));
-          c.lineTo(px(gx), py(0.77));
-          c.lineTo(px(gx + 0.025), py(0.7));
-          c.closePath();
-          c.stroke();
-          // Small circle
-          c.beginPath(); c.arc(px(gx), py(0.7), mazeW * 0.008, 0, Math.PI * 2); c.fill();
-        }
-        break;
-      }
-      case 'fantasma': {
-        // Two oval eyes
-        c.beginPath();
-        c.ellipse(px(0.4), py(0.3), mazeW * 0.035, mazeH * 0.04, 0, 0, Math.PI * 2);
-        c.fill();
-        c.beginPath();
-        c.ellipse(px(0.6), py(0.3), mazeW * 0.035, mazeH * 0.04, 0, 0, Math.PI * 2);
-        c.fill();
-        // Pupils (clear centers)
-        c.globalAlpha = 0.3;
-        c.fillStyle = theme.bg;
-        c.beginPath(); c.arc(px(0.4), py(0.3), mazeW * 0.015, 0, Math.PI * 2); c.fill();
-        c.beginPath(); c.arc(px(0.6), py(0.3), mazeW * 0.015, 0, Math.PI * 2); c.fill();
-        // Mouth (open oval)
-        c.fillStyle = wallColor;
-        c.globalAlpha = 0.15;
-        c.beginPath();
-        c.ellipse(px(0.5), py(0.48), mazeW * 0.04, mazeH * 0.035, 0, 0, Math.PI * 2);
-        c.fill();
-        break;
-      }
-      case 'robot': {
-        // Antenna nub on top of head
-        c.beginPath(); c.arc(px(0.5), py(0.06), mazeW * 0.02, 0, Math.PI * 2); c.fill();
-        c.beginPath(); c.moveTo(px(0.5), py(0.08)); c.lineTo(px(0.5), py(0.12)); c.stroke();
-        // Smile line
-        c.beginPath();
-        c.arc(px(0.5), py(0.26), mazeW * 0.08, 0.1 * Math.PI, 0.9 * Math.PI);
-        c.stroke();
-        // Body panel lines
-        c.beginPath(); c.moveTo(px(0.25), py(0.55)); c.lineTo(px(0.75), py(0.55)); c.stroke();
-        c.beginPath(); c.moveTo(px(0.25), py(0.65)); c.lineTo(px(0.75), py(0.65)); c.stroke();
-        break;
-      }
-    }
-    c.restore();
-  }
-
-  // ============================================================
-  // RENDER RECTANGULAR MAZE
-  // ============================================================
-  function renderRect(c, mazeCanvas, cellSize, showSolution, themeKey) {
-    const maze = currentMaze;
-    const { cols, rows, cells, active, holes, idx, entry, exit, shapeName } = maze;
-    const theme = THEMES[themeKey] || THEMES.classic;
-    const isOrganic = wallStyleSelect.value === 'organic';
-    const TOP = 0, RIGHT = 1, BOTTOM = 2, LEFT = 3;
-
-    const padTop = cellSize;
-    const padBottom = cellSize;
-    const padX = cellSize * 0.5;
-    const w = cols * cellSize + padX * 2;
-    const h = rows * cellSize + padTop + padBottom;
-    mazeCanvas.width = w;
-    mazeCanvas.height = h;
-
-    c.fillStyle = theme.bg;
-    c.fillRect(0, 0, w, h);
-
-    const ox = padX, oy = padTop;
-
-    // Fill active cells
-    c.fillStyle = theme.path;
-    for (let r = 0; r < rows; r++) {
-      for (let col = 0; col < cols; col++) {
-        if (active[idx(col, r)]) {
-          c.fillRect(ox + col * cellSize, oy + r * cellSize, cellSize, cellSize);
-        }
-      }
-    }
-
-    // Draw holes as decorative filled shapes
-    if (holes && holes.length > 0 && shapeName !== 'none') {
-      c.save();
-      const mazeW = cols * cellSize, mazeH = rows * cellSize;
-
-      for (const hole of holes) {
-        const hcx = ox + hole.cx * mazeW;
-        const hcy = oy + hole.cy * mazeH;
-
-        if (hole.type === 'circle') {
-          const rx = hole.r * mazeW;
-          const ry = hole.r * mazeH;
-          // Fill
-          c.fillStyle = theme.wall;
-          c.globalAlpha = 0.08;
-          c.beginPath();
-          c.ellipse(hcx, hcy, rx, ry, 0, 0, Math.PI * 2);
-          c.fill();
-          // Outline
-          c.strokeStyle = theme.wall;
-          c.globalAlpha = 0.3;
-          c.lineWidth = Math.max(1.5, cellSize * 0.12);
-          c.beginPath();
-          c.ellipse(hcx, hcy, rx, ry, 0, 0, Math.PI * 2);
-          c.stroke();
-        } else if (hole.type === 'rect') {
-          const hx = ox + hole.x * mazeW;
-          const hy = oy + hole.y * mazeH;
-          const hw = hole.w * mazeW;
-          const hh = hole.h * mazeH;
-          // Fill
-          c.fillStyle = theme.wall;
-          c.globalAlpha = 0.08;
-          c.fillRect(hx, hy, hw, hh);
-          // Outline
-          c.strokeStyle = theme.wall;
-          c.globalAlpha = 0.3;
-          c.lineWidth = Math.max(1.5, cellSize * 0.12);
-          c.strokeRect(hx, hy, hw, hh);
-        }
-      }
-      c.restore();
-    }
-
-    // Shape decoration (behind maze walls)
-    drawShapeDecoration(c, ox, oy, cols * cellSize, rows * cellSize, shapeName, theme);
-
-    // Solution
-    if (showSolution && currentSolution && currentSolution.length > 1) {
-      c.strokeStyle = theme.solution;
-      c.lineWidth = cellSize * 0.35;
-      c.lineCap = 'round';
-      c.lineJoin = 'round';
-      c.beginPath();
-      for (let i = 0; i < currentSolution.length; i++) {
-        const si = currentSolution[i];
-        const sx = si % cols, sy = (si - sx) / cols;
-        const px = ox + sx * cellSize + cellSize / 2;
-        const py = oy + sy * cellSize + cellSize / 2;
-        if (i === 0) c.moveTo(px, py); else c.lineTo(px, py);
-      }
-      c.stroke();
-    }
-
-    // Walls
-    c.strokeStyle = theme.wall;
-    c.lineWidth = theme.wallWidth * (cellSize / 20);
-    c.lineCap = 'round';
-
-    for (let r = 0; r < rows; r++) {
-      for (let col = 0; col < cols; col++) {
-        const ci = idx(col, r);
-        if (!active[ci]) continue;
-        const x = ox + col * cellSize;
-        const y = oy + r * cellSize;
-        const cell = cells[ci];
-
-        if (cell[TOP]) drawWallLine(c, x, y, x + cellSize, y, isOrganic, cellSize);
-        if (cell[RIGHT]) drawWallLine(c, x + cellSize, y, x + cellSize, y + cellSize, isOrganic, cellSize);
-        if (cell[BOTTOM]) drawWallLine(c, x, y + cellSize, x + cellSize, y + cellSize, isOrganic, cellSize);
-        if (cell[LEFT]) drawWallLine(c, x, y, x, y + cellSize, isOrganic, cellSize);
-      }
-    }
-
-    // Entry/exit arrows
-    const arrowSize = cellSize * 0.4;
-    const ec = entry % cols, er = Math.floor(entry / cols);
-    const xc = exit % cols, xr = Math.floor(exit / cols);
-
-    // Determine entry arrow direction
-    let entryArrowDir = 'top';
-    if (!cells[entry][TOP] && (er === 0 || !active[idx(ec, er - 1)])) entryArrowDir = 'top';
-    else if (!cells[entry][LEFT] && (ec === 0 || !active[idx(ec - 1, er)])) entryArrowDir = 'left';
-
-    if (entryArrowDir === 'top') {
-      const ax = ox + ec * cellSize + cellSize / 2;
-      const ay = oy + er * cellSize - arrowSize * 0.3;
-      c.fillStyle = theme.entry;
-      c.beginPath();
-      c.moveTo(ax, ay);
-      c.lineTo(ax - arrowSize * 0.5, ay - arrowSize);
-      c.lineTo(ax + arrowSize * 0.5, ay - arrowSize);
-      c.closePath();
-      c.fill();
-    } else {
-      const ax = ox + ec * cellSize - arrowSize * 0.3;
-      const ay = oy + er * cellSize + cellSize / 2;
-      c.fillStyle = theme.entry;
-      c.beginPath();
-      c.moveTo(ax, ay);
-      c.lineTo(ax - arrowSize, ay - arrowSize * 0.5);
-      c.lineTo(ax - arrowSize, ay + arrowSize * 0.5);
-      c.closePath();
-      c.fill();
-    }
-
-    let exitArrowDir = 'bottom';
-    if (!cells[exit][BOTTOM] && (xr === rows - 1 || !active[idx(xc, xr + 1)])) exitArrowDir = 'bottom';
-    else if (!cells[exit][RIGHT] && (xc === cols - 1 || !active[idx(xc + 1, xr)])) exitArrowDir = 'right';
-
-    if (exitArrowDir === 'bottom') {
-      const ax = ox + xc * cellSize + cellSize / 2;
-      const ay = oy + (xr + 1) * cellSize + arrowSize * 0.3;
-      c.fillStyle = theme.exit;
-      c.beginPath();
-      c.moveTo(ax, ay);
-      c.lineTo(ax - arrowSize * 0.5, ay + arrowSize);
-      c.lineTo(ax + arrowSize * 0.5, ay + arrowSize);
-      c.closePath();
-      c.fill();
-    } else {
-      const ax = ox + (xc + 1) * cellSize + arrowSize * 0.3;
-      const ay = oy + xr * cellSize + cellSize / 2;
-      c.fillStyle = theme.exit;
-      c.beginPath();
-      c.moveTo(ax, ay);
-      c.lineTo(ax + arrowSize, ay - arrowSize * 0.5);
-      c.lineTo(ax + arrowSize, ay + arrowSize * 0.5);
-      c.closePath();
-      c.fill();
-    }
-  }
-
-  // ============================================================
-  // MAIN LOGIC
-  // ============================================================
-  function getCellSize() {
-    const diff = DIFFICULTY[diffSelect.value] || DIFFICULTY.medio;
-    const mainEl = document.querySelector('.main');
-    const maxW = mainEl.clientWidth - 80;
-    const maxH = mainEl.clientHeight - 80;
-    const padCols = diff.cols + 1;
-    const padRows = diff.rows + 2;
-    return Math.max(4, Math.min(Math.floor(maxW / padCols), Math.floor(maxH / padRows)));
-  }
-
-  function generate() {
-    const diff = DIFFICULTY[diffSelect.value] || DIFFICULTY.medio;
-    const shapeName = shapeSelect.value;
-    currentMaze = generateRectMaze(diff.cols, diff.rows, shapeName);
-    currentSolution = solveRectMaze(currentMaze);
-    drawMaze();
-  }
-
-  function drawMaze() {
-    if (!currentMaze) return;
-    const cellSize = getCellSize();
-    renderRect(ctx, canvas, cellSize, showSolCheck.checked, themeSelect.value);
-  }
-
-  // ============================================================
-  // PDF EXPORT
-  // ============================================================
-  function downloadPDF() {
-    if (!currentMaze) return;
-    if (!window.jspdf) {
-      alert('jsPDF non caricato. Controlla la connessione internet e ricarica la pagina.');
-      return;
-    }
-    try {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-
-      const pageW = 210, pageH = 297;
-      const margin = 15;
-      const titleH = 20;
-
-      const diffLabel = DIFFICULTY_LABELS[diffSelect.value] || diffSelect.value;
-      const shapeName = currentMaze.shapeName || 'none';
-      const shapeLabel = (shapeName !== 'none') ? SHAPE_LABELS[shapeName] || shapeName : '';
-      const titleText = shapeLabel
-        ? `Labirinto - ${diffLabel} (${shapeLabel})`
-        : `Labirinto - ${diffLabel}`;
-
-      pdf.setFont('helvetica', 'bold');
-      pdf.setFontSize(18);
-      pdf.text(titleText, pageW / 2, margin + 8, { align: 'center' });
-
-      const offCanvas = document.createElement('canvas');
-      const offCtx = offCanvas.getContext('2d');
-
-      // Calculate cell size for PDF (pxPerMm=3 for reliability on all browsers)
-      const diff = DIFFICULTY[diffSelect.value] || DIFFICULTY.medio;
-      const availW = pageW - margin * 2;
-      const availH = pageH - margin * 2 - titleH - 10;
-      const pxPerMm = 3;
-
-      const padCols = currentMaze.cols + 1;
-      const padRows = currentMaze.rows + 2;
-      const cellSizePx = Math.min(availW / padCols, availH / padRows) * pxPerMm;
-
-      const themeKey = themeSelect.value;
-      const showSol = showSolCheck.checked;
-
-      // Set canvas dimensions before rendering
-      offCanvas.width = Math.ceil((currentMaze.cols * cellSizePx) + cellSizePx * 2);
-      offCanvas.height = Math.ceil((currentMaze.rows * cellSizePx) + cellSizePx * 2);
-
-      renderRect(offCtx, offCanvas, cellSizePx, showSol, themeKey);
-
-      const imgData = offCanvas.toDataURL('image/png');
-      const imgWmm = offCanvas.width / pxPerMm;
-      const imgHmm = offCanvas.height / pxPerMm;
-      const imgX = (pageW - imgWmm) / 2;
-      const imgY = margin + titleH;
-
-      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWmm, imgHmm);
-
-      pdf.setFontSize(8);
-      pdf.setFont('helvetica', 'normal');
-      pdf.setTextColor(150);
-      const footerText = shapeLabel ? `${diffLabel} - ${shapeLabel}` : diffLabel;
-      pdf.text(footerText, pageW / 2, pageH - 8, { align: 'center' });
-
-      const filenameParts = ['labirinto', diffSelect.value];
-      if (shapeLabel) filenameParts.push(shapeName);
-      pdf.save(filenameParts.join('-') + '.pdf');
-    } catch (err) {
-      console.error('PDF generation failed:', err);
-      alert('Errore PDF: ' + err.message);
-    }
-  }
-
-  // ============================================================
-  // EVENTS
-  // ============================================================
-  btnGenerate.addEventListener('click', generate);
-  btnPDF.addEventListener('click', downloadPDF);
-  diffSelect.addEventListener('change', generate);
-  wallStyleSelect.addEventListener('change', drawMaze);
-  shapeSelect.addEventListener('change', generate);
-  themeSelect.addEventListener('change', drawMaze);
-  showSolCheck.addEventListener('change', drawMaze);
-
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(drawMaze, 100);
-  });
-
-  // Init
-  generate();
-})();
-</script>
+    <header>
+        <h1>Print2Play</h1>
+        <p>Giochi e attivit&agrave; stampabili per bambini &mdash; scegli, stampa e gioca!</p>
+    </header>
+
+    <main class="container">
+        <div class="grid">
+            <a href="labirinto.html" class="card">
+                <div class="card-icon">&#x1F3F0;</div>
+                <div class="card-body">
+                    <div class="card-title">Labirinti</div>
+                    <div class="card-desc">Genera labirinti di diverse dimensioni</div>
+                </div>
+            </a>
+
+            <a href="unisci-puntini.html" class="card">
+                <div class="card-icon">&#x270F;&#xFE0F;</div>
+                <div class="card-body">
+                    <div class="card-title">Unisci i Puntini</div>
+                    <div class="card-desc">Collega i numeri e scopri il disegno</div>
+                </div>
+            </a>
+
+            <a href="crucipuzzle.html" class="card">
+                <div class="card-icon">&#x1F50D;</div>
+                <div class="card-body">
+                    <div class="card-title">Crucipuzzle</div>
+                    <div class="card-desc">Trova le parole nascoste nella griglia</div>
+                </div>
+            </a>
+
+            <a href="differenze.html" class="card">
+                <div class="card-icon">&#x1F440;</div>
+                <div class="card-body">
+                    <div class="card-title">Trova le Differenze</div>
+                    <div class="card-desc">Scopri le differenze tra due immagini</div>
+                </div>
+            </a>
+
+            <a href="cruciverba.html" class="card">
+                <div class="card-icon">&#x1F4DD;</div>
+                <div class="card-body">
+                    <div class="card-title">Cruciverba</div>
+                    <div class="card-desc">Risolvi il cruciverba con definizioni semplici</div>
+                </div>
+            </a>
+
+            <a href="matematica.html" class="card">
+                <div class="card-icon">&#x1F522;</div>
+                <div class="card-body">
+                    <div class="card-title">Schede di Matematica</div>
+                    <div class="card-desc">Esercizi di matematica da stampare</div>
+                </div>
+            </a>
+
+            <a href="puzzle-pezzi.html" class="card">
+                <div class="card-icon">&#x2702;&#xFE0F;</div>
+                <div class="card-body">
+                    <div class="card-title">Puzzle da Ritagliare</div>
+                    <div class="card-desc">Ritaglia i pezzi e completa l&#39;immagine</div>
+                </div>
+            </a>
+
+            <a href="pixel-art.html" class="card">
+                <div class="card-icon">&#x1F3A8;</div>
+                <div class="card-body">
+                    <div class="card-title">Pixel Art</div>
+                    <div class="card-desc">Colora seguendo i numeri</div>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>Print2Play &mdash; Stampa, gioca, impara.</p>
+    </footer>
 </body>
 </html>

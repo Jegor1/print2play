@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cruciverba - Print2Play</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #f0f2f5;
+            --surface: #ffffff;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 24px 32px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 16px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+
+        .back-link:hover {
+            color: var(--primary-hover);
+        }
+
+        header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .controls {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        select {
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--text);
+            background: var(--surface);
+            cursor: pointer;
+            min-width: 160px;
+        }
+
+        select:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 1px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-solution {
+            background: #f59e0b;
+            color: #fff;
+        }
+
+        .btn-solution:hover {
+            background: #d97706;
+        }
+
+        .btn-solution.active {
+            background: #16a34a;
+        }
+
+        .crossword-area {
+            display: none;
+        }
+
+        .crossword-area.visible {
+            display: block;
+        }
+
+        .grid-wrapper {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+
+        .grid-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .crossword-grid {
+            border-collapse: collapse;
+            border: 2px solid var(--text);
+        }
+
+        .crossword-grid td {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            text-align: center;
+            vertical-align: middle;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            position: relative;
+            background: var(--surface);
+        }
+
+        .crossword-grid td.black {
+            background: var(--text);
+            border-color: var(--text);
+        }
+
+        .crossword-grid td .cell-number {
+            position: absolute;
+            top: 1px;
+            left: 2px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            line-height: 1;
+        }
+
+        .crossword-grid td .cell-letter {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .definitions-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .definitions-col {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .definitions-col h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .definitions-col ol {
+            list-style: none;
+            padding: 0;
+        }
+
+        .definitions-col li {
+            padding: 6px 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-bottom: 1px solid var(--bg);
+        }
+
+        .definitions-col li:last-child {
+            border-bottom: none;
+        }
+
+        .def-number {
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 4px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .def-hint {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-left: 4px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 640px) {
+            .definitions-area {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .control-group {
+                width: 100%;
+            }
+
+            select, .btn {
+                width: 100%;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: #fff;
+                font-size: 11pt;
+            }
+
+            .controls, .back-link, footer, .btn-solution, .btn-print {
+                display: none !important;
+            }
+
+            .crossword-area {
+                display: block !important;
+            }
+
+            .grid-wrapper, .definitions-col {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                break-inside: avoid;
+            }
+
+            .crossword-grid td {
+                width: 28px;
+                height: 28px;
+            }
+
+            .crossword-grid td .cell-number {
+                font-size: 6pt;
+            }
+
+            .crossword-grid td .cell-letter {
+                font-size: 9pt;
+            }
+
+            header {
+                padding: 16px 0;
+            }
+
+            header h1 {
+                font-size: 1.6rem;
+            }
+
+            header p {
+                display: none;
+            }
+
+            .definitions-area {
+                gap: 12px;
+            }
+
+            .definitions-col {
+                padding: 12px;
+            }
+
+            .definitions-col li {
+                padding: 3px 0;
+                font-size: 9pt;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-link">&larr; Torna alla home</a>
+        <h1>Cruciverba</h1>
+        <p>Genera un cruciverba con definizioni semplici, stampalo e divertiti a risolverlo!</p>
+    </header>
+
+    <main class="container">
+        <div class="controls">
+            <div class="control-group">
+                <label for="difficulty">Difficolt&agrave;</label>
+                <select id="difficulty">
+                    <option value="facile">Facile (6-8 parole)</option>
+                    <option value="medio" selected>Medio (8-12 parole)</option>
+                    <option value="difficile">Difficile (12-16 parole)</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="generateCrossword()">Genera cruciverba</button>
+            <button class="btn btn-solution" id="solutionBtn" onclick="toggleSolution()">Mostra soluzione</button>
+            <button class="btn btn-secondary btn-print" onclick="window.print()">Stampa</button>
+        </div>
+
+        <div class="crossword-area" id="crosswordArea">
+            <div class="grid-wrapper">
+                <div class="grid-container">
+                    <table class="crossword-grid" id="crosswordGrid"></table>
+                </div>
+            </div>
+            <div class="definitions-area" id="definitionsArea"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Print2Play &mdash; Stampa, gioca, impara.</p>
+    </footer>
+
+    <script>
+    const WORDS = [
+        { word: "GATTO", def: "Animale domestico che fa miao" },
+        { word: "CANE", def: "Il migliore amico dell'uomo" },
+        { word: "SOLE", def: "Stella che illumina il giorno" },
+        { word: "LUNA", def: "Si vede nel cielo di notte" },
+        { word: "MARE", def: "Grande distesa di acqua salata" },
+        { word: "CASA", def: "Dove si vive con la famiglia" },
+        { word: "ALBERO", def: "Pianta grande con tronco e rami" },
+        { word: "FIORE", def: "Sboccia in primavera ed \u00e8 colorato" },
+        { word: "PANE", def: "Alimento fatto con farina e acqua" },
+        { word: "LATTE", def: "Bevanda bianca che viene dalla mucca" },
+        { word: "ACQUA", def: "Si beve quando si ha sete" },
+        { word: "FUOCO", def: "Brucia e fa caldo" },
+        { word: "TERRA", def: "Il pianeta dove viviamo" },
+        { word: "CIELO", def: "Si vede guardando in alto" },
+        { word: "NUVOLA", def: "Bianca e soffice nel cielo" },
+        { word: "PIOGGIA", def: "Acqua che cade dal cielo" },
+        { word: "NEVE", def: "Bianca e fredda, cade in inverno" },
+        { word: "VENTO", def: "Muove le foglie degli alberi" },
+        { word: "STELLA", def: "Brilla nel cielo di notte" },
+        { word: "CUORE", def: "Organo che batte nel petto" },
+        { word: "MANO", def: "Ha cinque dita" },
+        { word: "OCCHIO", def: "Serve per vedere" },
+        { word: "BOCCA", def: "Serve per mangiare e parlare" },
+        { word: "NASO", def: "Serve per sentire gli odori" },
+        { word: "ORECCHIO", def: "Serve per sentire i suoni" },
+        { word: "PIEDE", def: "Si trova alla fine della gamba" },
+        { word: "TESTA", def: "La parte pi\u00f9 alta del corpo" },
+        { word: "DENTE", def: "Serve per masticare il cibo" },
+        { word: "CAPELLI", def: "Crescono sulla testa" },
+        { word: "BRACCIO", def: "Collega la spalla alla mano" },
+        { word: "MELA", def: "Frutto rosso o verde, molto comune" },
+        { word: "PERA", def: "Frutto dalla forma allungata" },
+        { word: "BANANA", def: "Frutto giallo e lungo" },
+        { word: "ARANCIA", def: "Frutto arancione pieno di vitamina C" },
+        { word: "FRAGOLA", def: "Frutto rosso piccolo e dolce" },
+        { word: "UVA", def: "Frutto a grappolo usato per il vino" },
+        { word: "CILIEGIA", def: "Piccolo frutto rosso con il nocciolo" },
+        { word: "LIMONE", def: "Frutto giallo e molto acido" },
+        { word: "ANGURIA", def: "Frutto enorme, verde fuori e rosso dentro" },
+        { word: "PESCA", def: "Frutto estivo con la buccia vellutata" },
+        { word: "ROSSO", def: "Il colore del pomodoro" },
+        { word: "BLU", def: "Il colore del cielo sereno" },
+        { word: "VERDE", def: "Il colore dell'erba" },
+        { word: "GIALLO", def: "Il colore del sole" },
+        { word: "BIANCO", def: "Il colore della neve" },
+        { word: "NERO", def: "Il colore della notte" },
+        { word: "ROSA", def: "Il colore dei fenicotteri" },
+        { word: "VIOLA", def: "Il colore delle melanzane" },
+        { word: "GRIGIO", def: "Il colore delle nuvole di pioggia" },
+        { word: "MARRONE", def: "Il colore del cioccolato" },
+        { word: "LEONE", def: "Il re della savana" },
+        { word: "ELEFANTE", def: "Il pi\u00f9 grande animale terrestre" },
+        { word: "GIRAFFA", def: "Animale con il collo lunghissimo" },
+        { word: "SCIMMIA", def: "Animale che ama arrampicarsi" },
+        { word: "DELFINO", def: "Mammifero marino molto intelligente" },
+        { word: "FARFALLA", def: "Insetto con ali colorate" },
+        { word: "RANA", def: "Animale verde che salta e gracida" },
+        { word: "PESCE", def: "Animale che vive nell'acqua" },
+        { word: "UCCELLO", def: "Animale con le ali che vola" },
+        { word: "CAVALLO", def: "Animale su cui si pu\u00f2 cavalcare" },
+        { word: "MUCCA", def: "Animale che produce il latte" },
+        { word: "PECORA", def: "Animale con la lana bianca" },
+        { word: "GALLINA", def: "Animale che fa le uova" },
+        { word: "MAIALE", def: "Animale rosa della fattoria" },
+        { word: "CONIGLIO", def: "Animale con le orecchie lunghe" },
+        { word: "TARTARUGA", def: "Animale lento con il guscio" },
+        { word: "SERPENTE", def: "Animale lungo senza zampe" },
+        { word: "RAGNO", def: "Animale con otto zampe che tesse la tela" },
+        { word: "APE", def: "Insetto che produce il miele" },
+        { word: "COCCINELLA", def: "Insetto rosso con i puntini neri" },
+        { word: "SCUOLA", def: "Dove si va per imparare" },
+        { word: "LIBRO", def: "Si legge per imparare o divertirsi" },
+        { word: "MATITA", def: "Serve per scrivere e disegnare" },
+        { word: "GOMMA", def: "Serve per cancellare" },
+        { word: "QUADERNO", def: "Ha tante pagine per scrivere" },
+        { word: "ZAINO", def: "Si porta sulle spalle per la scuola" },
+        { word: "MAESTRO", def: "Insegna ai bambini a scuola" },
+        { word: "LAVAGNA", def: "Il maestro ci scrive sopra" },
+        { word: "BANCO", def: "Dove si siede a scuola" },
+        { word: "PENNA", def: "Scrive con l'inchiostro" },
+        { word: "FORBICI", def: "Servono per tagliare la carta" },
+        { word: "COLLA", def: "Serve per attaccare le cose" },
+        { word: "RIGHELLO", def: "Serve per tracciare linee dritte" },
+        { word: "COLORI", def: "Servono per dipingere e colorare" },
+        { word: "MAPPAMONDO", def: "Mostra tutti i continenti della Terra" },
+        { word: "CALCIO", def: "Sport con il pallone rotondo" },
+        { word: "BASKET", def: "Sport dove si lancia la palla nel canestro" },
+        { word: "NUOTO", def: "Sport che si pratica in piscina" },
+        { word: "BICICLETTA", def: "Ha due ruote e i pedali" },
+        { word: "PALLONE", def: "Si calcia nel gioco del calcio" },
+        { word: "PORTA", def: "Si apre per entrare in una stanza" },
+        { word: "FINESTRA", def: "Si apre per far entrare l'aria" },
+        { word: "TAVOLO", def: "Mobile su cui si mangia" },
+        { word: "SEDIA", def: "Mobile su cui ci si siede" },
+        { word: "LETTO", def: "Mobile su cui si dorme" },
+        { word: "ARMADIO", def: "Mobile dove si mettono i vestiti" },
+        { word: "SPECCHIO", def: "Riflette la nostra immagine" },
+        { word: "LAMPADA", def: "Fa luce nella stanza" },
+        { word: "OROLOGIO", def: "Indica le ore e i minuti" },
+        { word: "CHIAVE", def: "Serve per aprire la serratura" },
+        { word: "TRENO", def: "Viaggia sui binari" },
+        { word: "AEREO", def: "Vola nel cielo e porta lontano" },
+        { word: "NAVE", def: "Grande mezzo che viaggia sul mare" },
+        { word: "MACCHINA", def: "Mezzo di trasporto con quattro ruote" },
+        { word: "AUTOBUS", def: "Mezzo pubblico che trasporta tante persone" },
+        { word: "ELICOTTERO", def: "Vola con le eliche sopra" },
+        { word: "SEMAFORO", def: "Ha tre luci: rosso, giallo e verde" },
+        { word: "PONTE", def: "Permette di attraversare un fiume" },
+        { word: "STRADA", def: "Dove camminano le persone e passano le auto" },
+        { word: "RUOTA", def: "È rotonda e fa muovere i veicoli" },
+        { word: "PIZZA", def: "Piatto italiano rotondo con pomodoro e mozzarella" },
+        { word: "PASTA", def: "Piatto tipico italiano, come gli spaghetti" },
+        { word: "GELATO", def: "Dolce freddo che si mangia d'estate" },
+        { word: "TORTA", def: "Dolce che si prepara per le feste" },
+        { word: "BISCOTTO", def: "Piccolo dolce croccante" },
+        { word: "FORMAGGIO", def: "Alimento fatto con il latte" },
+        { word: "UOVO", def: "Lo fa la gallina" },
+        { word: "CAROTA", def: "Ortaggio arancione lungo" },
+        { word: "POMODORO", def: "Ortaggio rosso usato nel sugo" },
+        { word: "PATATA", def: "Ortaggio che cresce sotto terra" },
+        { word: "PIANOFORTE", def: "Strumento musicale con i tasti bianchi e neri" },
+        { word: "CHITARRA", def: "Strumento musicale con le corde" },
+        { word: "TAMBURO", def: "Strumento musicale che si colpisce" },
+        { word: "TROMBA", def: "Strumento musicale a fiato di metallo" },
+        { word: "FLAUTO", def: "Strumento musicale a fiato di legno" },
+        { word: "MUSICA", def: "Arte dei suoni, si ascolta e si suona" },
+        { word: "CANZONE", def: "Musica con le parole" },
+        { word: "TEATRO", def: "Dove si guardano gli spettacoli dal vivo" },
+        { word: "CINEMA", def: "Dove si guardano i film" },
+        { word: "PITTORE", def: "Artista che dipinge quadri" },
+        { word: "DOTTORE", def: "Cura le persone malate" },
+        { word: "POMPIERE", def: "Spegne gli incendi" },
+        { word: "POLIZIOTTO", def: "Protegge le persone e fa rispettare la legge" },
+        { word: "ASTRONAUTA", def: "Viaggia nello spazio" },
+        { word: "CUOCO", def: "Prepara da mangiare" },
+        { word: "CONTADINO", def: "Lavora nei campi e coltiva" },
+        { word: "MARINAIO", def: "Lavora sulle navi" },
+        { word: "PILOTA", def: "Guida gli aerei" },
+        { word: "POSTINO", def: "Consegna le lettere" },
+        { word: "VETERINARIO", def: "Il dottore degli animali" },
+        { word: "INVERNO", def: "La stagione pi\u00f9 fredda" },
+        { word: "PRIMAVERA", def: "La stagione in cui sbocciano i fiori" },
+        { word: "ESTATE", def: "La stagione pi\u00f9 calda" },
+        { word: "AUTUNNO", def: "La stagione in cui cadono le foglie" },
+        { word: "NATALE", def: "Festa del 25 dicembre" },
+        { word: "COMPLEANNO", def: "Il giorno in cui si festeggiano gli anni" },
+        { word: "REGALO", def: "Si riceve alle feste, impacchettato" },
+        { word: "AMICO", def: "Persona a cui si vuole bene" },
+        { word: "FAMIGLIA", def: "Le persone pi\u00f9 care: mamma, pap\u00e0, fratelli" },
+        { word: "GIOCO", def: "Attivit\u00e0 divertente per bambini" }
+    ];
+
+    let showingSolution = false;
+    let currentPuzzle = null;
+
+    function shuffle(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    function getWordCount() {
+        const diff = document.getElementById('difficulty').value;
+        if (diff === 'facile') return 6 + Math.floor(Math.random() * 3);
+        if (diff === 'medio') return 8 + Math.floor(Math.random() * 5);
+        return 12 + Math.floor(Math.random() * 5);
+    }
+
+    // Crossword generation algorithm
+    function generateGrid(wordList) {
+        const gridSize = 30;
+        const grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(null));
+        const placed = [];
+
+        // Sort words by length descending for better placement
+        const sorted = wordList.slice().sort((a, b) => b.word.length - a.word.length);
+
+        // Place first word horizontally in the center
+        const first = sorted[0];
+        const startRow = Math.floor(gridSize / 2);
+        const startCol = Math.floor((gridSize - first.word.length) / 2);
+        for (let i = 0; i < first.word.length; i++) {
+            grid[startRow][startCol + i] = first.word[i];
+        }
+        placed.push({
+            ...first,
+            row: startRow,
+            col: startCol,
+            direction: 'across',
+            length: first.word.length
+        });
+
+        // Try to place remaining words
+        for (let wi = 1; wi < sorted.length; wi++) {
+            const entry = sorted[wi];
+            const word = entry.word;
+            let bestPlacement = null;
+            let bestScore = -1;
+
+            // Try to intersect with already placed words
+            for (const p of placed) {
+                for (let pi = 0; pi < p.word.length; pi++) {
+                    for (let wi2 = 0; wi2 < word.length; wi2++) {
+                        if (p.word[pi] !== word[wi2]) continue;
+
+                        let row, col, dir;
+                        if (p.direction === 'across') {
+                            dir = 'down';
+                            row = p.row - wi2;
+                            col = p.col + pi;
+                        } else {
+                            dir = 'across';
+                            row = p.row + pi;
+                            col = p.col - wi2;
+                        }
+
+                        if (canPlace(grid, word, row, col, dir, gridSize)) {
+                            // Score: prefer more intersections
+                            let score = countIntersections(grid, word, row, col, dir);
+                            if (score > bestScore) {
+                                bestScore = score;
+                                bestPlacement = { row, col, dir };
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (bestPlacement) {
+                const { row, col, dir } = bestPlacement;
+                for (let i = 0; i < word.length; i++) {
+                    if (dir === 'across') {
+                        grid[row][col + i] = word[i];
+                    } else {
+                        grid[row + i][col] = word[i];
+                    }
+                }
+                placed.push({
+                    ...entry,
+                    row: row,
+                    col: col,
+                    direction: dir === 'across' ? 'across' : 'down',
+                    length: word.length
+                });
+            }
+        }
+
+        return { grid, placed, gridSize };
+    }
+
+    function canPlace(grid, word, row, col, dir, gridSize) {
+        const len = word.length;
+
+        for (let i = 0; i < len; i++) {
+            const r = dir === 'across' ? row : row + i;
+            const c = dir === 'across' ? col + i : col;
+
+            if (r < 0 || r >= gridSize || c < 0 || c >= gridSize) return false;
+
+            const existing = grid[r][c];
+            if (existing !== null && existing !== word[i]) return false;
+
+            // Check adjacency - no parallel words touching
+            if (existing === null) {
+                if (dir === 'across') {
+                    // Check cells above and below
+                    if (r > 0 && grid[r - 1][c] !== null) return false;
+                    if (r < gridSize - 1 && grid[r + 1][c] !== null) return false;
+                } else {
+                    // Check cells left and right
+                    if (c > 0 && grid[r][c - 1] !== null) return false;
+                    if (c < gridSize - 1 && grid[r][c + 1] !== null) return false;
+                }
+            }
+        }
+
+        // Check cell before start
+        if (dir === 'across') {
+            if (col > 0 && grid[row][col - 1] !== null) return false;
+            if (col + len < gridSize && grid[row][col + len] !== null) return false;
+        } else {
+            if (row > 0 && grid[row - 1][col] !== null) return false;
+            if (row + len < gridSize && grid[row + len][col] !== null) return false;
+        }
+
+        return true;
+    }
+
+    function countIntersections(grid, word, row, col, dir) {
+        let count = 0;
+        for (let i = 0; i < word.length; i++) {
+            const r = dir === 'across' ? row : row + i;
+            const c = dir === 'across' ? col + i : col;
+            if (grid[r][c] === word[i]) count++;
+        }
+        return count;
+    }
+
+    function buildPuzzle(gridData) {
+        const { grid, placed, gridSize } = gridData;
+
+        // Find bounding box
+        let minR = gridSize, maxR = 0, minC = gridSize, maxC = 0;
+        for (let r = 0; r < gridSize; r++) {
+            for (let c = 0; c < gridSize; c++) {
+                if (grid[r][c] !== null) {
+                    minR = Math.min(minR, r);
+                    maxR = Math.max(maxR, r);
+                    minC = Math.min(minC, c);
+                    maxC = Math.max(maxC, c);
+                }
+            }
+        }
+
+        // Add 1 cell padding
+        minR = Math.max(0, minR - 1);
+        minC = Math.max(0, minC - 1);
+        maxR = Math.min(gridSize - 1, maxR + 1);
+        maxC = Math.min(gridSize - 1, maxC + 1);
+
+        const rows = maxR - minR + 1;
+        const cols = maxC - minC + 1;
+
+        // Build compact grid
+        const compact = [];
+        for (let r = 0; r < rows; r++) {
+            compact[r] = [];
+            for (let c = 0; c < cols; c++) {
+                compact[r][c] = grid[minR + r][minC + c];
+            }
+        }
+
+        // Adjust placed word positions
+        const adjustedPlaced = placed.map(p => ({
+            ...p,
+            row: p.row - minR,
+            col: p.col - minC
+        }));
+
+        // Assign numbers
+        let num = 1;
+        const numbers = {};
+        // Collect all start positions and sort by row then col
+        const starts = [];
+        for (const p of adjustedPlaced) {
+            const key = `${p.row},${p.col}`;
+            starts.push({ key, row: p.row, col: p.col, entry: p });
+        }
+        starts.sort((a, b) => a.row !== b.row ? a.row - b.row : a.col - b.col);
+
+        for (const s of starts) {
+            if (!numbers[s.key]) {
+                numbers[s.key] = num++;
+            }
+            s.entry.number = numbers[s.key];
+        }
+
+        return { grid: compact, placed: adjustedPlaced, rows, cols, numbers };
+    }
+
+    function generateCrossword() {
+        const targetCount = getWordCount();
+        const shuffled = shuffle(WORDS);
+        const candidates = shuffled.slice(0, Math.min(targetCount * 3, WORDS.length));
+
+        let bestResult = null;
+        let bestPlacedCount = 0;
+
+        // Try multiple times for best result
+        for (let attempt = 0; attempt < 15; attempt++) {
+            const subset = shuffle(candidates).slice(0, targetCount + 4);
+            const result = generateGrid(subset);
+            if (result.placed.length > bestPlacedCount) {
+                bestPlacedCount = result.placed.length;
+                bestResult = result;
+            }
+            if (bestPlacedCount >= targetCount) break;
+        }
+
+        if (!bestResult || bestResult.placed.length < 3) {
+            // Fallback: try again with different words
+            generateCrossword();
+            return;
+        }
+
+        currentPuzzle = buildPuzzle(bestResult);
+        showingSolution = false;
+        document.getElementById('solutionBtn').textContent = 'Mostra soluzione';
+        document.getElementById('solutionBtn').classList.remove('active');
+        renderCrossword();
+        document.getElementById('crosswordArea').classList.add('visible');
+    }
+
+    function renderCrossword() {
+        if (!currentPuzzle) return;
+        const { grid, placed, rows, cols, numbers } = currentPuzzle;
+
+        // Build grid HTML
+        let html = '';
+        for (let r = 0; r < rows; r++) {
+            html += '<tr>';
+            for (let c = 0; c < cols; c++) {
+                const letter = grid[r][c];
+                const key = `${r},${c}`;
+                const num = numbers[key];
+                if (letter === null) {
+                    html += '<td class="black"></td>';
+                } else {
+                    html += '<td>';
+                    if (num) html += `<span class="cell-number">${num}</span>`;
+                    if (showingSolution) {
+                        html += `<span class="cell-letter">${letter}</span>`;
+                    }
+                    html += '</td>';
+                }
+            }
+            html += '</tr>';
+        }
+        document.getElementById('crosswordGrid').innerHTML = html;
+
+        // Build definitions
+        const across = placed.filter(p => p.direction === 'across').sort((a, b) => a.number - b.number);
+        const down = placed.filter(p => p.direction === 'down').sort((a, b) => a.number - b.number);
+
+        let defHtml = '';
+
+        defHtml += '<div class="definitions-col"><h3>Orizzontali</h3><ol>';
+        for (const entry of across) {
+            defHtml += `<li><span class="def-number">${entry.number}.</span> ${entry.def} <span class="def-hint">(${entry.word.length} lettere)</span></li>`;
+        }
+        defHtml += '</ol></div>';
+
+        defHtml += '<div class="definitions-col"><h3>Verticali</h3><ol>';
+        for (const entry of down) {
+            defHtml += `<li><span class="def-number">${entry.number}.</span> ${entry.def} <span class="def-hint">(${entry.word.length} lettere)</span></li>`;
+        }
+        defHtml += '</ol></div>';
+
+        document.getElementById('definitionsArea').innerHTML = defHtml;
+    }
+
+    function toggleSolution() {
+        showingSolution = !showingSolution;
+        const btn = document.getElementById('solutionBtn');
+        btn.textContent = showingSolution ? 'Nascondi soluzione' : 'Mostra soluzione';
+        btn.classList.toggle('active', showingSolution);
+        renderCrossword();
+    }
+
+    // Generate on load
+    generateCrossword();
+    </script>
+</body>
+</html>

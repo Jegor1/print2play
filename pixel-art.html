@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixel Art - Colora con i Numeri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.10);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+header p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--primary);
+  text-decoration: none;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.back-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.app {
+  display: flex;
+  flex: 1;
+  gap: 0;
+}
+
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.control-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.control-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.control-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+}
+
+.toggle-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle-group label {
+  margin-bottom: 0;
+  text-transform: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--primary);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  width: 100%;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-secondary {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--border);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px;
+  overflow: auto;
+}
+
+.grid-wrapper {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  display: inline-block;
+}
+
+.pixel-grid {
+  display: grid;
+  border: 2px solid var(--text);
+  width: fit-content;
+}
+
+.pixel-grid .cell {
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--text);
+  background: white;
+  user-select: none;
+  line-height: 1;
+}
+
+.pixel-grid .cell.preview {
+  color: transparent;
+}
+
+.pixel-grid .cell.bg-cell {
+  color: #bbb;
+}
+
+.pixel-grid .cell.bg-cell.preview {
+  color: transparent;
+}
+
+.legend {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.legend-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+}
+
+.legend-number {
+  font-weight: 700;
+  min-width: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 80px 24px;
+}
+
+.empty-state h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+@media print {
+  header, .sidebar { display: none !important; }
+  body { background: white; }
+  .app { display: block; }
+  .main-area { padding: 0; }
+  .grid-wrapper {
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0 auto;
+  }
+  .pixel-grid .cell {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-title {
+    display: block !important;
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+}
+
+.print-title {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+  }
+  .control-group {
+    flex: 1;
+    min-width: 140px;
+  }
+  .actions {
+    flex-direction: row;
+    margin-top: 0;
+    width: 100%;
+  }
+  .main-area {
+    padding: 16px;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">&larr; Torna alla home</a>
+  <h1>Pixel Art - Colora con i Numeri</h1>
+  <p>Scegli un'immagine, genera la griglia e colora seguendo i numeri!</p>
+</header>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="control-group">
+      <label for="imageSelect">Immagine</label>
+      <select id="imageSelect">
+        <option value="cuore">Cuore</option>
+        <option value="stella">Stella</option>
+        <option value="razzo">Razzo</option>
+        <option value="casa">Casa</option>
+        <option value="albero">Albero</option>
+        <option value="pesce">Pesce</option>
+        <option value="fiore">Fiore</option>
+        <option value="farfalla">Farfalla</option>
+        <option value="macchina">Macchina</option>
+        <option value="robot">Robot</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="sizeSelect">Dimensione griglia</label>
+      <select id="sizeSelect">
+        <option value="10">Piccolo (10&times;10)</option>
+        <option value="15" selected>Medio (15&times;15)</option>
+        <option value="20">Grande (20&times;20)</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <div class="toggle-group">
+        <div class="toggle-switch">
+          <input type="checkbox" id="previewToggle">
+          <span class="toggle-slider"></span>
+        </div>
+        <label for="previewToggle">Mostra anteprima</label>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="generate()">Genera</button>
+      <button class="btn btn-secondary" onclick="window.print()">Stampa</button>
+      <button class="btn btn-secondary" onclick="exportPDF()">Esporta PDF</button>
+    </div>
+  </aside>
+
+  <main class="main-area" id="mainArea">
+    <div class="empty-state" id="emptyState">
+      <h2>Pronto per creare!</h2>
+      <p>Scegli un'immagine e una dimensione, poi premi "Genera".</p>
+    </div>
+    <div id="output" style="display:none;">
+      <div class="print-title" id="printTitle"></div>
+      <div class="grid-wrapper">
+        <div class="pixel-grid" id="pixelGrid"></div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+const COLORS = {
+  1: { name: 'Rosso',     hex: '#e53e3e' },
+  2: { name: 'Blu',       hex: '#3182ce' },
+  3: { name: 'Verde',     hex: '#38a169' },
+  4: { name: 'Giallo',    hex: '#ecc94b' },
+  5: { name: 'Arancione', hex: '#ed8936' },
+  6: { name: 'Rosa',      hex: '#ed64a6' },
+  7: { name: 'Marrone',   hex: '#8B4513' },
+  8: { name: 'Viola',     hex: '#805ad5' },
+};
+
+// 10x10 patterns (0 = background/white)
+const PATTERNS_10 = {
+  cuore: [
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,1,1,0,0,1,1,0,0],
+    [0,1,1,1,1,1,1,1,1,0],
+    [0,1,1,1,1,1,1,1,1,0],
+    [0,1,1,1,1,1,1,1,1,0],
+    [0,0,1,1,1,1,1,1,0,0],
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,0,0,1,1,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  stella: [
+    [0,0,0,0,4,4,0,0,0,0],
+    [0,0,0,4,4,4,4,0,0,0],
+    [0,4,4,4,4,4,4,4,4,0],
+    [0,0,4,4,4,4,4,4,0,0],
+    [0,0,0,4,4,4,4,0,0,0],
+    [0,0,4,4,0,0,4,4,0,0],
+    [0,4,4,0,0,0,0,4,4,0],
+    [0,4,0,0,0,0,0,0,4,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  razzo: [
+    [0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,1,2,1,0,0,0,0],
+    [0,0,0,1,2,1,0,0,0,0],
+    [0,0,1,2,2,2,1,0,0,0],
+    [0,0,1,2,3,2,1,0,0,0],
+    [0,0,1,2,2,2,1,0,0,0],
+    [0,1,1,2,2,2,1,1,0,0],
+    [0,0,0,5,0,5,0,0,0,0],
+    [0,0,0,4,0,4,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  casa: [
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,1,1,0,0,0,0],
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,1,1,0],
+    [0,0,5,5,5,5,5,5,0,0],
+    [0,0,5,2,5,5,5,5,0,0],
+    [0,0,5,2,5,7,7,5,0,0],
+    [0,0,5,2,5,7,7,5,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  albero: [
+    [0,0,0,0,3,0,0,0,0,0],
+    [0,0,0,3,3,3,0,0,0,0],
+    [0,0,3,3,3,3,3,0,0,0],
+    [0,0,0,3,3,3,0,0,0,0],
+    [0,0,3,3,3,3,3,0,0,0],
+    [0,3,3,3,3,3,3,3,0,0],
+    [0,0,0,0,7,0,0,0,0,0],
+    [0,0,0,0,7,0,0,0,0,0],
+    [0,0,0,7,7,7,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  pesce: [
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,2,2,2,0,0,0,0],
+    [0,0,2,2,2,2,2,0,0,0],
+    [0,2,2,0,2,2,2,2,5,0],
+    [0,2,2,2,2,2,2,2,5,0],
+    [0,0,2,2,2,2,2,0,0,0],
+    [0,0,0,2,2,2,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  fiore: [
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,6,6,6,0,0,0,0],
+    [0,0,6,6,4,6,6,0,0,0],
+    [0,0,6,4,4,4,6,0,0,0],
+    [0,0,6,6,4,6,6,0,0,0],
+    [0,0,0,6,6,6,0,0,0,0],
+    [0,0,0,0,3,0,0,0,0,0],
+    [0,0,0,3,3,3,0,0,0,0],
+    [0,0,0,0,3,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  farfalla: [
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,6,6,0,0,0,6,6,0,0],
+    [6,8,6,6,0,6,6,8,6,0],
+    [6,8,8,6,0,6,8,8,6,0],
+    [0,6,6,6,7,6,6,6,0,0],
+    [0,0,6,6,7,6,6,0,0,0],
+    [0,0,0,0,7,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  macchina: [
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,1,1,1,1,0,0,0],
+    [0,0,1,1,2,2,1,1,0,0],
+    [0,1,1,1,1,1,1,1,1,0],
+    [0,1,1,1,1,1,1,1,1,0],
+    [0,0,0,7,0,0,7,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+  robot: [
+    [0,0,0,0,4,0,0,0,0,0],
+    [0,0,2,2,2,2,2,0,0,0],
+    [0,0,2,3,2,3,2,0,0,0],
+    [0,0,2,2,1,2,2,0,0,0],
+    [0,0,0,2,2,2,0,0,0,0],
+    [0,0,2,2,2,2,2,0,0,0],
+    [0,2,2,2,2,2,2,2,0,0],
+    [0,0,0,2,0,2,0,0,0,0],
+    [0,0,0,2,0,2,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+  ],
+};
+
+// Scale a 10x10 pattern to target size
+function scalePattern(pattern, targetSize) {
+  const srcSize = pattern.length;
+  if (targetSize === srcSize) return pattern.map(r => [...r]);
+  const scale = targetSize / srcSize;
+  const result = [];
+  for (let y = 0; y < targetSize; y++) {
+    const row = [];
+    for (let x = 0; x < targetSize; x++) {
+      const sy = Math.min(Math.floor(y / scale), srcSize - 1);
+      const sx = Math.min(Math.floor(x / scale), srcSize - 1);
+      row.push(pattern[sy][sx]);
+    }
+    result.push(row);
+  }
+  return result;
+}
+
+let currentGrid = null;
+let currentUsedColors = [];
+
+function generate() {
+  const image = document.getElementById('imageSelect').value;
+  const size = parseInt(document.getElementById('sizeSelect').value);
+  const preview = document.getElementById('previewToggle').checked;
+
+  const basePattern = PATTERNS_10[image];
+  const grid = scalePattern(basePattern, size);
+  currentGrid = grid;
+
+  // Find which colors are used
+  const usedSet = new Set();
+  for (const row of grid) for (const c of row) { if (c > 0) usedSet.add(c); }
+  currentUsedColors = [...usedSet].sort((a, b) => a - b);
+
+  renderGrid(grid, size, preview);
+  renderLegend();
+
+  const names = {
+    cuore: 'Cuore', stella: 'Stella', razzo: 'Razzo', casa: 'Casa',
+    albero: 'Albero', pesce: 'Pesce', fiore: 'Fiore', farfalla: 'Farfalla',
+    macchina: 'Macchina', robot: 'Robot'
+  };
+  document.getElementById('printTitle').textContent = 'Pixel Art: ' + names[image];
+
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('output').style.display = '';
+}
+
+function renderGrid(grid, size, preview) {
+  const container = document.getElementById('pixelGrid');
+  container.innerHTML = '';
+
+  // Calculate cell size: aim for grid to be ~500px on medium, scale for others
+  const maxGridPx = Math.min(560, window.innerWidth - 120);
+  const cellSize = Math.max(16, Math.floor(maxGridPx / size));
+
+  container.style.gridTemplateColumns = `repeat(${size}, ${cellSize}px)`;
+  container.style.gridTemplateRows = `repeat(${size}, ${cellSize}px)`;
+
+  const fontSize = size <= 10 ? '0.85rem' : size <= 15 ? '0.65rem' : '0.5rem';
+
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const val = grid[y][x];
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.style.width = cellSize + 'px';
+      cell.style.height = cellSize + 'px';
+      cell.style.fontSize = fontSize;
+
+      if (val === 0) {
+        cell.classList.add('bg-cell');
+        if (preview) {
+          cell.style.background = '#f8f8f8';
+          cell.classList.add('preview');
+        }
+      } else {
+        cell.textContent = val;
+        if (preview) {
+          cell.style.background = COLORS[val].hex;
+          cell.classList.add('preview');
+        }
+      }
+      container.appendChild(cell);
+    }
+  }
+}
+
+function renderLegend() {
+  const legend = document.getElementById('legend');
+  legend.innerHTML = '';
+  for (const num of currentUsedColors) {
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = `
+      <span class="legend-number">${num}</span>
+      <span class="legend-swatch" style="background:${COLORS[num].hex}"></span>
+      <span>${COLORS[num].name}</span>
+    `;
+    legend.appendChild(item);
+  }
+}
+
+// Toggle preview
+document.getElementById('previewToggle').addEventListener('change', function() {
+  if (!currentGrid) return;
+  const size = parseInt(document.getElementById('sizeSelect').value);
+  renderGrid(currentGrid, size, this.checked);
+});
+
+function exportPDF() {
+  if (!currentGrid) { alert('Prima genera una griglia!'); return; }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const grid = currentGrid;
+  const size = grid.length;
+  const preview = document.getElementById('previewToggle').checked;
+
+  const pageW = 210;
+  const margin = 15;
+  const availW = pageW - margin * 2;
+  const cellMM = Math.min(availW / size, 8);
+  const gridW = cellMM * size;
+  const startX = (pageW - gridW) / 2;
+  let y = margin;
+
+  // Title
+  const image = document.getElementById('imageSelect').value;
+  const names = {
+    cuore: 'Cuore', stella: 'Stella', razzo: 'Razzo', casa: 'Casa',
+    albero: 'Albero', pesce: 'Pesce', fiore: 'Fiore', farfalla: 'Farfalla',
+    macchina: 'Macchina', robot: 'Robot'
+  };
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.text('Pixel Art: ' + names[image], pageW / 2, y, { align: 'center' });
+  y += 10;
+
+  // Grid
+  const numFontSize = size <= 10 ? 7 : size <= 15 ? 5 : 3.5;
+
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      const val = grid[r][c];
+      const cx = startX + c * cellMM;
+      const cy = y + r * cellMM;
+
+      if (preview && val > 0) {
+        const hex = COLORS[val].hex;
+        const rgb = hexToRgb(hex);
+        doc.setFillColor(rgb.r, rgb.g, rgb.b);
+        doc.rect(cx, cy, cellMM, cellMM, 'FD');
+      } else if (preview && val === 0) {
+        doc.setFillColor(248, 248, 248);
+        doc.rect(cx, cy, cellMM, cellMM, 'FD');
+      } else {
+        doc.setDrawColor(200);
+        doc.rect(cx, cy, cellMM, cellMM);
+      }
+
+      if (val > 0 && !preview) {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(numFontSize);
+        doc.setTextColor(30, 41, 59);
+        doc.text(String(val), cx + cellMM / 2, cy + cellMM / 2 + numFontSize * 0.12, { align: 'center' });
+      }
+    }
+  }
+
+  // Outer border
+  doc.setDrawColor(30, 41, 59);
+  doc.setLineWidth(0.5);
+  doc.rect(startX, y, gridW, size * cellMM);
+
+  // Inner grid lines
+  doc.setDrawColor(200);
+  doc.setLineWidth(0.1);
+  for (let i = 1; i < size; i++) {
+    doc.line(startX + i * cellMM, y, startX + i * cellMM, y + size * cellMM);
+    doc.line(startX, y + i * cellMM, startX + gridW, y + i * cellMM);
+  }
+
+  y += size * cellMM + 8;
+
+  // Legend
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(30, 41, 59);
+  doc.text('Legenda colori:', margin, y);
+  y += 6;
+
+  const legendX = margin;
+  let lx = legendX;
+  for (const num of currentUsedColors) {
+    const rgb = hexToRgb(COLORS[num].hex);
+    doc.setFillColor(rgb.r, rgb.g, rgb.b);
+    doc.rect(lx, y - 3.5, 5, 5, 'F');
+    doc.setDrawColor(180);
+    doc.rect(lx, y - 3.5, 5, 5);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(30, 41, 59);
+    doc.text(num + ' = ' + COLORS[num].name, lx + 7, y + 0.5);
+    lx += 35;
+    if (lx > pageW - margin - 30) {
+      lx = legendX;
+      y += 8;
+    }
+  }
+
+  doc.save('pixel-art.pdf');
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return { r, g, b };
+}
+
+// Generate on load
+generate();
+</script>
+</body>
+</html>

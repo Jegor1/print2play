@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schede di Matematica - Print2Play</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.10);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-left p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.back-link {
+  font-size: 0.9rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.back-link:hover {
+  color: var(--primary-hover);
+}
+
+.app {
+  display: flex;
+  flex: 1;
+  gap: 0;
+}
+
+.sidebar {
+  width: 300px;
+  min-width: 300px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.control-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.control-group select,
+.control-group input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--bg);
+  transition: border-color 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.control-group select {
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+.control-group select:focus,
+.control-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+}
+
+.toggle-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.toggle-group span {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--border);
+  border-radius: 24px;
+  transition: 0.2s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.toggle input:checked + .toggle-slider {
+  background: var(--primary);
+}
+
+.toggle input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--border);
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.main-area {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px;
+  overflow-y: auto;
+}
+
+.worksheet {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 720px;
+  padding: 40px;
+}
+
+.worksheet-header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--border);
+}
+
+.worksheet-header h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.worksheet-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.worksheet-meta span {
+  font-weight: 500;
+}
+
+.meta-line {
+  display: inline-block;
+  border-bottom: 1.5px solid var(--text-muted);
+  min-width: 120px;
+  margin-left: 4px;
+}
+
+.score-line {
+  min-width: 40px;
+}
+
+.problems-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.problem {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 1.15rem;
+  gap: 8px;
+}
+
+.problem:nth-child(odd) {
+  border-right: 1px solid var(--border);
+}
+
+.problem-num {
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 32px;
+  font-size: 0.9rem;
+}
+
+.problem-expr {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.problem-answer {
+  display: inline-block;
+  border-bottom: 2px solid var(--text-muted);
+  min-width: 60px;
+  text-align: center;
+  margin-left: 4px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text-muted);
+}
+
+.empty-state .icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+  }
+
+  header, .sidebar {
+    display: none !important;
+  }
+
+  .app {
+    display: block;
+  }
+
+  .main-area {
+    padding: 0;
+    display: block;
+  }
+
+  .worksheet {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .worksheet-header {
+    border-bottom: 2px solid #333;
+  }
+
+  .worksheet-header h2 {
+    color: #000;
+    -webkit-text-fill-color: #000;
+  }
+
+  .problem {
+    border-bottom: 1px solid #ccc;
+  }
+
+  .problem:nth-child(odd) {
+    border-right: 1px solid #ccc;
+  }
+
+  .problem-num {
+    color: #333;
+  }
+
+  .problem-answer {
+    color: #333;
+    border-bottom-color: #666;
+  }
+
+  .meta-line {
+    border-bottom-color: #333;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .btn-group {
+    margin-top: 0;
+    flex-direction: row;
+  }
+
+  .main-area {
+    padding: 16px;
+  }
+
+  .worksheet {
+    padding: 24px;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Schede di Matematica</h1>
+    <p>Genera esercizi di matematica stampabili</p>
+  </div>
+  <a href="index.html" class="back-link">&larr; Torna alla home</a>
+</header>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="control-group">
+      <label>Operazione</label>
+      <select id="operation">
+        <option value="add">Addizioni</option>
+        <option value="sub">Sottrazioni</option>
+        <option value="mul">Moltiplicazioni</option>
+        <option value="div">Divisioni</option>
+        <option value="mix">Mix</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label>Difficolt&agrave;</label>
+      <select id="difficulty">
+        <option value="easy">Facile (1 &ndash; 10)</option>
+        <option value="medium">Medio (1 &ndash; 50)</option>
+        <option value="hard">Difficile (1 &ndash; 100)</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label>Numero di esercizi</label>
+      <select id="count">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20" selected>20</option>
+        <option value="30">30</option>
+      </select>
+    </div>
+
+    <div class="toggle-group">
+      <span>Mostra risposte</span>
+      <label class="toggle">
+        <input type="checkbox" id="showAnswers">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="generate()">Genera esercizi</button>
+      <button class="btn btn-secondary" onclick="window.print()">Stampa</button>
+      <button class="btn btn-secondary" onclick="exportPDF()">Esporta PDF</button>
+    </div>
+  </aside>
+
+  <main class="main-area">
+    <div class="worksheet" id="worksheet">
+      <div class="empty-state" id="emptyState">
+        <div class="icon">&#x1F522;</div>
+        <p>Scegli le opzioni e clicca <strong>Genera esercizi</strong></p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const opNames = {
+  add: 'Addizioni',
+  sub: 'Sottrazioni',
+  mul: 'Moltiplicazioni',
+  div: 'Divisioni',
+  mix: 'Operazioni Miste'
+};
+
+const diffNames = {
+  easy: 'Facile',
+  medium: 'Medio',
+  hard: 'Difficile'
+};
+
+const maxByDiff = { easy: 10, medium: 50, hard: 100 };
+
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function generateProblem(op, max) {
+  let a, b, result, symbol;
+
+  switch (op) {
+    case 'add':
+      a = randInt(1, max);
+      b = randInt(1, max);
+      result = a + b;
+      symbol = '+';
+      break;
+    case 'sub':
+      a = randInt(1, max);
+      b = randInt(1, a); // b <= a so result >= 0
+      result = a - b;
+      symbol = '\u2212';
+      break;
+    case 'mul':
+      if (max <= 10) {
+        a = randInt(1, max);
+        b = randInt(1, max);
+      } else if (max <= 50) {
+        a = randInt(1, 20);
+        b = randInt(1, 10);
+      } else {
+        a = randInt(1, 30);
+        b = randInt(1, 12);
+      }
+      result = a * b;
+      symbol = '\u00D7';
+      break;
+    case 'div':
+      if (max <= 10) {
+        b = randInt(1, max);
+        result = randInt(1, max);
+      } else if (max <= 50) {
+        b = randInt(1, 12);
+        result = randInt(1, 20);
+      } else {
+        b = randInt(2, 12);
+        result = randInt(1, 30);
+      }
+      a = b * result; // ensures whole number division
+      symbol = '\u00F7';
+      break;
+  }
+
+  return { a, b, result, symbol };
+}
+
+function generate() {
+  const op = document.getElementById('operation').value;
+  const diff = document.getElementById('difficulty').value;
+  const count = parseInt(document.getElementById('count').value);
+  const showAnswers = document.getElementById('showAnswers').checked;
+  const max = maxByDiff[diff];
+
+  const ops = op === 'mix' ? ['add', 'sub', 'mul', 'div'] : [op];
+  const problems = [];
+
+  for (let i = 0; i < count; i++) {
+    const chosenOp = ops[Math.floor(Math.random() * ops.length)];
+    problems.push(generateProblem(chosenOp, max));
+  }
+
+  const opLabel = opNames[op];
+  const diffLabel = diffNames[diff];
+
+  let html = `
+    <div class="worksheet-header">
+      <h2>Scheda di Matematica &mdash; ${opLabel}</h2>
+      <div class="worksheet-meta">
+        <div>
+          <span>Nome:</span> <span class="meta-line">&nbsp;</span>
+        </div>
+        <div>
+          <span>Data:</span> <span class="meta-line">&nbsp;</span>
+        </div>
+        <div>
+          <span>Punteggio:</span>
+          <span class="meta-line score-line">&nbsp;</span> / ${count}
+        </div>
+      </div>
+    </div>
+    <div class="problems-grid">
+  `;
+
+  problems.forEach((p, i) => {
+    const num = String(i + 1).padStart(2, '0');
+    const answerText = showAnswers ? p.result : '&nbsp;';
+    html += `
+      <div class="problem">
+        <span class="problem-num">${num}.</span>
+        <span class="problem-expr">${p.a} ${p.symbol} ${p.b} =</span>
+        <span class="problem-answer">${answerText}</span>
+      </div>
+    `;
+  });
+
+  html += '</div>';
+
+  document.getElementById('worksheet').innerHTML = html;
+}
+
+function exportPDF() {
+  const worksheet = document.getElementById('worksheet');
+  if (worksheet.querySelector('.empty-state')) {
+    alert('Prima genera gli esercizi!');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF('p', 'mm', 'a4');
+  const pageW = 210;
+  const margin = 15;
+  const contentW = pageW - margin * 2;
+
+  // Get data from DOM
+  const title = worksheet.querySelector('.worksheet-header h2').textContent;
+  const problems = worksheet.querySelectorAll('.problem');
+  const count = problems.length;
+
+  // Title
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.text(title, pageW / 2, 20, { align: 'center' });
+
+  // Meta line
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  const metaY = 30;
+  doc.text('Nome: ___________________', margin, metaY);
+  doc.text('Data: ____________', pageW / 2, metaY);
+  doc.text('Punteggio: ___ / ' + count, pageW - margin - 35, metaY);
+
+  // Divider
+  doc.setLineWidth(0.5);
+  doc.line(margin, metaY + 4, pageW - margin, metaY + 4);
+
+  // Problems in 2 columns
+  const colW = contentW / 2;
+  const startY = metaY + 14;
+  const rowH = 10;
+  let y = startY;
+
+  doc.setFontSize(12);
+
+  for (let i = 0; i < problems.length; i += 2) {
+    if (y > 275) {
+      doc.addPage();
+      y = 20;
+    }
+
+    // Left column
+    const p1 = problems[i];
+    const num1 = p1.querySelector('.problem-num').textContent;
+    const expr1 = p1.querySelector('.problem-expr').textContent;
+    const ans1 = p1.querySelector('.problem-answer').textContent.trim();
+    const line1 = num1 + ' ' + expr1 + ' ' + (ans1 && ans1 !== '\u00a0' ? ans1 : '______');
+
+    doc.setFont('helvetica', 'bold');
+    doc.text(num1, margin, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text(expr1 + ' ' + (ans1 && ans1 !== '\u00a0' ? ans1 : '______'), margin + 10, y);
+
+    // Right column
+    if (i + 1 < problems.length) {
+      const p2 = problems[i + 1];
+      const num2 = p2.querySelector('.problem-num').textContent;
+      const expr2 = p2.querySelector('.problem-expr').textContent;
+      const ans2 = p2.querySelector('.problem-answer').textContent.trim();
+
+      doc.setFont('helvetica', 'bold');
+      doc.text(num2, margin + colW, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(expr2 + ' ' + (ans2 && ans2 !== '\u00a0' ? ans2 : '______'), margin + colW + 10, y);
+    }
+
+    // Row separator
+    doc.setDrawColor(200);
+    doc.setLineWidth(0.2);
+    doc.line(margin, y + 3, pageW - margin, y + 3);
+
+    y += rowH;
+  }
+
+  doc.save('scheda-matematica.pdf');
+}
+
+// Toggle answers reactivity
+document.getElementById('showAnswers').addEventListener('change', function() {
+  const answers = document.querySelectorAll('.problem-answer');
+  if (answers.length === 0) return;
+  // Re-generate to apply
+  generate();
+});
+
+// Auto-generate on load
+generate();
+</script>
+
+</body>
+</html>
