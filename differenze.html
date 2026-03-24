@@ -259,13 +259,13 @@
             <div class="control-group">
                 <label for="scene-select">Scena</label>
                 <select id="scene-select">
+                    <option value="fattoria">Fattoria</option>
                     <option value="parco">Parco giochi</option>
                     <option value="camera">Camera da letto</option>
                     <option value="cucina">Cucina</option>
                     <option value="giardino">Giardino</option>
                     <option value="spiaggia">Spiaggia</option>
                     <option value="classe">Classe scolastica</option>
-                    <option value="fattoria">Fattoria</option>
                     <option value="spazio">Spazio</option>
                 </select>
             </div>
@@ -292,6 +292,820 @@
         <p>Print2Play &mdash; Stampa, gioca, impara.</p>
     </footer>
 
+    <!-- ==================== SVG SCENE TEMPLATES ==================== -->
+    <!-- Each template is a hidden SVG that JS will clone and modify -->
+
+    <template id="tpl-fattoria">
+        <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Sky gradient -->
+                <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#4DA6E8"/>
+                    <stop offset="60%" stop-color="#87CEEB"/>
+                    <stop offset="100%" stop-color="#C9E8F7"/>
+                </linearGradient>
+                <!-- Sun radial -->
+                <radialGradient id="sunGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FFF7A0"/>
+                    <stop offset="50%" stop-color="#FFE44D"/>
+                    <stop offset="100%" stop-color="#FFA726"/>
+                </radialGradient>
+                <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FFE44D" stop-opacity="0.4"/>
+                    <stop offset="100%" stop-color="#FFE44D" stop-opacity="0"/>
+                </radialGradient>
+                <!-- Hill gradients -->
+                <linearGradient id="hillFarGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#6DBF5B"/>
+                    <stop offset="100%" stop-color="#4A8F3C"/>
+                </linearGradient>
+                <linearGradient id="hillMidGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#5BB84A"/>
+                    <stop offset="100%" stop-color="#3D7A30"/>
+                </linearGradient>
+                <linearGradient id="hillNearGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#4CAF50"/>
+                    <stop offset="100%" stop-color="#2E7D32"/>
+                </linearGradient>
+                <!-- Barn wall -->
+                <linearGradient id="barnWallGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#D32F2F"/>
+                    <stop offset="100%" stop-color="#B71C1C"/>
+                </linearGradient>
+                <!-- Barn roof -->
+                <linearGradient id="barnRoofGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#8D6E63"/>
+                    <stop offset="100%" stop-color="#5D4037"/>
+                </linearGradient>
+                <!-- Tree canopy -->
+                <radialGradient id="treeCanopyGrad" cx="45%" cy="40%" r="55%">
+                    <stop offset="0%" stop-color="#43A047"/>
+                    <stop offset="100%" stop-color="#1B5E20"/>
+                </radialGradient>
+                <!-- Tree trunk -->
+                <linearGradient id="treeTrunkGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#5D4037"/>
+                    <stop offset="50%" stop-color="#8D6E63"/>
+                    <stop offset="100%" stop-color="#4E342E"/>
+                </linearGradient>
+                <!-- Cow body -->
+                <radialGradient id="cowBodyGrad" cx="50%" cy="40%" r="55%">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="100%" stop-color="#E0E0E0"/>
+                </radialGradient>
+                <!-- Pig body -->
+                <radialGradient id="pigBodyGrad" cx="45%" cy="40%" r="55%">
+                    <stop offset="0%" stop-color="#FFABCF"/>
+                    <stop offset="100%" stop-color="#E8769E"/>
+                </radialGradient>
+                <!-- Tractor body -->
+                <linearGradient id="tractorBodyGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#F44336"/>
+                    <stop offset="40%" stop-color="#E53935"/>
+                    <stop offset="100%" stop-color="#C62828"/>
+                </linearGradient>
+                <!-- Tractor wheel -->
+                <radialGradient id="wheelGrad" cx="45%" cy="40%" r="50%">
+                    <stop offset="0%" stop-color="#555"/>
+                    <stop offset="100%" stop-color="#222"/>
+                </radialGradient>
+                <!-- Pond -->
+                <radialGradient id="pondGrad" cx="50%" cy="45%" r="55%">
+                    <stop offset="0%" stop-color="#4FC3F7"/>
+                    <stop offset="100%" stop-color="#0277BD"/>
+                </radialGradient>
+                <!-- Mud puddle -->
+                <radialGradient id="mudGrad" cx="50%" cy="50%" r="55%">
+                    <stop offset="0%" stop-color="#A1887F"/>
+                    <stop offset="100%" stop-color="#6D4C41"/>
+                </radialGradient>
+                <!-- Hay bale -->
+                <linearGradient id="hayGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#FFD54F"/>
+                    <stop offset="100%" stop-color="#F9A825"/>
+                </linearGradient>
+                <!-- Fence -->
+                <linearGradient id="fenceGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#FAFAFA"/>
+                    <stop offset="100%" stop-color="#E0E0E0"/>
+                </linearGradient>
+                <!-- Apple -->
+                <radialGradient id="appleGrad" cx="40%" cy="35%" r="55%">
+                    <stop offset="0%" stop-color="#FF5252"/>
+                    <stop offset="100%" stop-color="#C62828"/>
+                </radialGradient>
+                <!-- Chicken body -->
+                <radialGradient id="chickenGrad" cx="45%" cy="40%" r="55%">
+                    <stop offset="0%" stop-color="#FFF8E1"/>
+                    <stop offset="100%" stop-color="#FFD54F"/>
+                </radialGradient>
+                <!-- Dirt path -->
+                <linearGradient id="dirtGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#D7CCC8"/>
+                    <stop offset="100%" stop-color="#A1887F"/>
+                </linearGradient>
+                <!-- Cloud gradient -->
+                <radialGradient id="cloudGrad" cx="50%" cy="40%" r="55%">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="100%" stop-color="#E8EAF0"/>
+                </radialGradient>
+                <!-- Barn door wood -->
+                <linearGradient id="barnDoorGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#5D4037"/>
+                    <stop offset="50%" stop-color="#795548"/>
+                    <stop offset="100%" stop-color="#4E342E"/>
+                </linearGradient>
+                <!-- Barn hayloft glow -->
+                <radialGradient id="hayloftGlowGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FFE082"/>
+                    <stop offset="100%" stop-color="#FFB300"/>
+                </radialGradient>
+                <!-- Bucket -->
+                <linearGradient id="bucketGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#90CAF9"/>
+                    <stop offset="100%" stop-color="#1565C0"/>
+                </linearGradient>
+                <!-- Flower petal gradients -->
+                <radialGradient id="flowerRedGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FF7043"/>
+                    <stop offset="100%" stop-color="#D32F2F"/>
+                </radialGradient>
+                <radialGradient id="flowerYellowGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FFF176"/>
+                    <stop offset="100%" stop-color="#FBC02D"/>
+                </radialGradient>
+                <radialGradient id="flowerPurpleGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#CE93D8"/>
+                    <stop offset="100%" stop-color="#7B1FA2"/>
+                </radialGradient>
+                <!-- Drop shadows -->
+                <filter id="shadow" x="-10%" y="-10%" width="130%" height="140%">
+                    <feDropShadow dx="2" dy="3" stdDeviation="2.5" flood-color="#000" flood-opacity="0.18"/>
+                </filter>
+                <filter id="shadowSm" x="-10%" y="-10%" width="130%" height="140%">
+                    <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#000" flood-opacity="0.15"/>
+                </filter>
+                <filter id="shadowLg" x="-10%" y="-10%" width="130%" height="140%">
+                    <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000" flood-opacity="0.2"/>
+                </filter>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+                    <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- ===== BACKGROUND LAYER ===== -->
+
+            <!-- Sky -->
+            <rect x="0" y="0" width="800" height="500" fill="url(#skyGrad)"/>
+
+            <!-- Sun with glow -->
+            <g id="el-sole" data-size="large" data-name="sole">
+                <circle cx="680" cy="75" r="60" fill="url(#sunGlow)"/>
+                <circle cx="680" cy="75" r="38" fill="url(#sunGrad)" stroke="#E8A000" stroke-width="1.5"/>
+                <!-- Sun rays -->
+                <g opacity="0.6" stroke="#FFD54F" stroke-width="3" stroke-linecap="round">
+                    <line x1="680" y1="25" x2="680" y2="12"/>
+                    <line x1="680" y1="125" x2="680" y2="138"/>
+                    <line x1="630" y1="75" x2="617" y2="75"/>
+                    <line x1="730" y1="75" x2="743" y2="75"/>
+                    <line x1="644" y1="39" x2="635" y2="30"/>
+                    <line x1="716" y1="39" x2="725" y2="30"/>
+                    <line x1="644" y1="111" x2="635" y2="120"/>
+                    <line x1="716" y1="111" x2="725" y2="120"/>
+                </g>
+                <!-- Highlight -->
+                <ellipse cx="670" cy="65" rx="12" ry="10" fill="#FFF9C4" opacity="0.5"/>
+            </g>
+
+            <!-- Clouds -->
+            <g id="el-nuvola1" data-size="medium" data-name="nuvola1">
+                <ellipse cx="150" cy="65" rx="55" ry="22" fill="url(#cloudGrad)" stroke="#D6DBE4" stroke-width="1" opacity="0.9"/>
+                <ellipse cx="120" cy="70" rx="35" ry="18" fill="#FFFFFF" stroke="none" opacity="0.95"/>
+                <ellipse cx="175" cy="68" rx="40" ry="16" fill="#FFFFFF" stroke="none" opacity="0.9"/>
+                <ellipse cx="150" cy="72" rx="42" ry="14" fill="#FFFFFF" stroke="none"/>
+            </g>
+            <g id="el-nuvola2" data-size="small" data-name="nuvola2">
+                <ellipse cx="420" cy="48" rx="40" ry="16" fill="url(#cloudGrad)" stroke="#D6DBE4" stroke-width="0.8" opacity="0.85"/>
+                <ellipse cx="400" cy="52" rx="28" ry="12" fill="#FFFFFF" stroke="none" opacity="0.9"/>
+                <ellipse cx="440" cy="50" rx="30" ry="11" fill="#FFFFFF" stroke="none" opacity="0.9"/>
+                <ellipse cx="420" cy="53" rx="32" ry="10" fill="#FFFFFF" stroke="none"/>
+            </g>
+            <g id="el-nuvola3" data-size="small" data-name="nuvola3">
+                <ellipse cx="560" cy="38" rx="32" ry="13" fill="url(#cloudGrad)" stroke="#D6DBE4" stroke-width="0.7" opacity="0.8"/>
+                <ellipse cx="545" cy="41" rx="22" ry="10" fill="#FFFFFF" stroke="none" opacity="0.9"/>
+                <ellipse cx="575" cy="40" rx="24" ry="9" fill="#FFFFFF" stroke="none" opacity="0.9"/>
+            </g>
+
+            <!-- Rolling hills (far to near) -->
+            <!-- Far hill -->
+            <path d="M-20,300 C100,240 200,255 350,250 C500,245 600,270 820,260 L820,500 L-20,500 Z" fill="url(#hillFarGrad)" opacity="0.7"/>
+            <!-- Mid hill -->
+            <path d="M-20,320 C80,280 180,295 300,290 C420,285 550,310 700,295 C760,290 800,300 820,305 L820,500 L-20,500 Z" fill="url(#hillMidGrad)" opacity="0.85"/>
+            <!-- Near hill (main ground) -->
+            <path d="M-20,350 C60,335 150,345 280,340 C400,335 500,355 650,345 C720,340 780,348 820,350 L820,500 L-20,500 Z" fill="url(#hillNearGrad)"/>
+
+            <!-- Dirt path winding through scene -->
+            <path d="M350,500 C340,470 360,440 345,410 C330,380 355,365 365,350" fill="none" stroke="url(#dirtGrad)" stroke-width="40" stroke-linecap="round" opacity="0.7"/>
+            <path d="M350,500 C340,470 360,440 345,410 C330,380 355,365 365,350" fill="none" stroke="#C8B9A8" stroke-width="36" stroke-linecap="round" opacity="0.3"/>
+            <!-- Path texture dots -->
+            <g opacity="0.15" fill="#8D6E63">
+                <circle cx="348" cy="480" r="2"/><circle cx="355" cy="465" r="1.5"/>
+                <circle cx="342" cy="450" r="2"/><circle cx="358" cy="435" r="1.8"/>
+                <circle cx="345" cy="420" r="1.5"/><circle cx="350" cy="400" r="2"/>
+                <circle cx="340" cy="390" r="1.3"/><circle cx="355" cy="375" r="1.8"/>
+                <circle cx="360" cy="360" r="1.5"/>
+            </g>
+
+            <!-- ===== MID-GROUND LAYER ===== -->
+
+            <!-- ===== BARN ===== -->
+            <g id="el-fienile" data-size="large" data-name="fienile" filter="url(#shadowLg)">
+                <!-- Barn shadow on ground -->
+                <ellipse cx="170" cy="365" rx="85" ry="12" fill="#1B5E20" opacity="0.2"/>
+                <!-- Barn wall -->
+                <path d="M95,250 L95,365 L245,365 L245,250 Z" fill="url(#barnWallGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
+                <!-- Plank texture lines -->
+                <g stroke="#B71C1C" stroke-width="0.8" opacity="0.3">
+                    <line x1="115" y1="250" x2="115" y2="365"/>
+                    <line x1="135" y1="250" x2="135" y2="365"/>
+                    <line x1="155" y1="250" x2="155" y2="365"/>
+                    <line x1="175" y1="250" x2="175" y2="365"/>
+                    <line x1="195" y1="250" x2="195" y2="365"/>
+                    <line x1="215" y1="250" x2="215" y2="365"/>
+                    <line x1="235" y1="250" x2="235" y2="365"/>
+                </g>
+                <!-- Horizontal plank line -->
+                <line x1="95" y1="308" x2="245" y2="308" stroke="#8B1A1A" stroke-width="1.5" opacity="0.4"/>
+                <!-- Gambrel roof -->
+                <path d="M85,252 L120,218 L170,195 L220,218 L255,252 Z" fill="url(#barnRoofGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
+                <!-- Roof shingle hints -->
+                <g stroke="#4E342E" stroke-width="0.6" opacity="0.3">
+                    <path d="M100,245 Q130,232 170,222 Q210,232 240,245" fill="none"/>
+                    <path d="M93,250 Q135,238 170,228 Q205,238 247,250" fill="none"/>
+                </g>
+                <!-- Barn doors (arched top) -->
+                <path d="M140,365 L140,290 Q170,275 200,290 L200,365 Z" fill="url(#barnDoorGrad)" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
+                <!-- Door center line -->
+                <line x1="170" y1="280" x2="170" y2="365" stroke="#2D1B0E" stroke-width="1.5"/>
+                <!-- White X pattern on left door -->
+                <line x1="143" y1="295" x2="167" y2="360" stroke="#E8E0D4" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                <line x1="167" y1="295" x2="143" y2="360" stroke="#E8E0D4" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                <!-- White X pattern on right door -->
+                <line x1="173" y1="295" x2="197" y2="360" stroke="#E8E0D4" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                <line x1="197" y1="295" x2="173" y2="360" stroke="#E8E0D4" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                <!-- Hayloft window -->
+                <circle cx="170" cy="235" r="14" fill="url(#hayloftGlowGrad)" stroke="#2D1B0E" stroke-width="2"/>
+                <line x1="170" y1="221" x2="170" y2="249" stroke="#2D1B0E" stroke-width="1.2"/>
+                <line x1="156" y1="235" x2="184" y2="235" stroke="#2D1B0E" stroke-width="1.2"/>
+                <!-- Side windows -->
+                <rect x="102" y="265" width="22" height="20" rx="2" fill="#FFECB3" stroke="#2D1B0E" stroke-width="1.5"/>
+                <rect x="216" y="265" width="22" height="20" rx="2" fill="#FFECB3" stroke="#2D1B0E" stroke-width="1.5"/>
+                <!-- Window cross -->
+                <line x1="113" y1="265" x2="113" y2="285" stroke="#2D1B0E" stroke-width="1"/>
+                <line x1="102" y1="275" x2="124" y2="275" stroke="#2D1B0E" stroke-width="1"/>
+                <line x1="227" y1="265" x2="227" y2="285" stroke="#2D1B0E" stroke-width="1"/>
+                <line x1="216" y1="275" x2="238" y2="275" stroke="#2D1B0E" stroke-width="1"/>
+            </g>
+
+            <!-- ===== WINDVANE on barn ===== -->
+            <g id="el-banderuola" data-size="small" data-name="banderuola">
+                <line x1="170" y1="195" x2="170" y2="172" stroke="#555" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Arrow -->
+                <polygon points="155,178 185,175 170,172" fill="#FFD600" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
+                <!-- N/S/E/W letters -->
+                <text x="170" y="170" font-size="7" fill="#555" text-anchor="middle" font-family="Arial" font-weight="bold">N</text>
+            </g>
+
+            <!-- ===== BIRD ON BARN ROOF ===== -->
+            <g id="el-uccello-tetto" data-size="small" data-name="uccello-tetto">
+                <ellipse cx="215" cy="218" rx="8" ry="5.5" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <!-- Wing -->
+                <path d="M210,216 Q205,210 212,214" fill="#E65100" stroke="#2D1B0E" stroke-width="1" stroke-linecap="round"/>
+                <!-- Tail -->
+                <path d="M207,218 L200,214 L202,220" fill="#E65100" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
+                <!-- Eye -->
+                <circle cx="220" cy="215.5" r="1.8" fill="#fff"/>
+                <circle cx="220.5" cy="215.5" r="1" fill="#2D1B0E"/>
+                <!-- Beak -->
+                <polygon points="223,217 228,218 223,219" fill="#FDD835" stroke="#2D1B0E" stroke-width="0.8"/>
+                <!-- Legs -->
+                <line x1="213" y1="223" x2="212" y2="226" stroke="#E65100" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="217" y1="223" x2="218" y2="226" stroke="#E65100" stroke-width="1.5" stroke-linecap="round"/>
+            </g>
+
+            <!-- ===== MOUSE HOLE IN BARN ===== -->
+            <g id="el-tana-topo" data-size="small" data-name="tana-topo">
+                <path d="M100,365 Q100,352 108,350 Q116,352 116,365 Z" fill="#3E2723"/>
+                <ellipse cx="108" cy="365" rx="8" ry="2" fill="#2D1B0E" opacity="0.3"/>
+                <!-- Tiny mouse eyes peeking -->
+                <circle cx="106" cy="358" r="1.2" fill="#FFD600"/>
+                <circle cx="110" cy="358" r="1.2" fill="#FFD600"/>
+            </g>
+
+            <!-- ===== FENCE ===== -->
+            <g id="el-steccato" data-size="medium" data-name="steccato" filter="url(#shadowSm)">
+                <!-- Posts -->
+                <rect x="268" y="310" width="8" height="48" rx="1.5" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M268,310 L272,303 L276,310" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
+                <rect x="298" y="310" width="8" height="48" rx="1.5" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M298,310 L302,303 L306,310" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
+                <rect x="328" y="310" width="8" height="48" rx="1.5" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M328,310 L332,303 L336,310" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
+                <rect x="358" y="310" width="8" height="48" rx="1.5" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M358,310 L362,303 L366,310" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
+                <rect x="388" y="310" width="8" height="48" rx="1.5" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M388,310 L392,303 L396,310" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
+                <!-- Rails -->
+                <rect x="265" y="322" width="138" height="6" rx="2" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
+                <rect x="265" y="340" width="138" height="6" rx="2" fill="url(#fenceGrad)" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
+                <!-- Rail highlight -->
+                <rect x="267" y="323" width="134" height="2" rx="1" fill="#fff" opacity="0.3"/>
+                <rect x="267" y="341" width="134" height="2" rx="1" fill="#fff" opacity="0.3"/>
+            </g>
+
+            <!-- ===== LADYBUG ON FENCE ===== -->
+            <g id="el-coccinella" data-size="small" data-name="coccinella">
+                <ellipse cx="340" cy="320" rx="5" ry="4" fill="#E53935" stroke="#2D1B0E" stroke-width="1.2"/>
+                <circle cx="340" cy="316.5" r="2.5" fill="#2D1B0E"/>
+                <!-- Wing line -->
+                <line x1="340" y1="316" x2="340" y2="324" stroke="#2D1B0E" stroke-width="0.8"/>
+                <!-- Spots -->
+                <circle cx="337.5" cy="319" r="1" fill="#2D1B0E"/>
+                <circle cx="342.5" cy="319" r="1" fill="#2D1B0E"/>
+                <circle cx="338" cy="322" r="0.8" fill="#2D1B0E"/>
+                <circle cx="342" cy="322" r="0.8" fill="#2D1B0E"/>
+                <!-- Antennae -->
+                <path d="M339,316 Q337,313 336,312" stroke="#2D1B0E" stroke-width="0.7" fill="none"/>
+                <path d="M341,316 Q343,313 344,312" stroke="#2D1B0E" stroke-width="0.7" fill="none"/>
+            </g>
+
+            <!-- ===== APPLE TREE ===== -->
+            <g id="el-melo" data-size="large" data-name="melo" filter="url(#shadow)">
+                <!-- Shadow on ground -->
+                <ellipse cx="620" cy="360" rx="55" ry="10" fill="#1B5E20" opacity="0.2"/>
+                <!-- Trunk - gnarled organic shape -->
+                <path d="M608,360 C605,340 600,320 602,300 C603,290 607,282 612,278 L616,278 C620,282 624,290 625,300 C627,320 622,340 618,360 Z" fill="url(#treeTrunkGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
+                <!-- Branch nub left -->
+                <path d="M604,310 C598,305 594,300 596,296 C599,294 604,298 608,305" fill="url(#treeTrunkGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <!-- Branch nub right -->
+                <path d="M622,300 C628,294 632,290 636,292 C638,296 633,300 626,304" fill="url(#treeTrunkGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <!-- Bark texture -->
+                <g stroke="#3E2723" stroke-width="0.6" opacity="0.3">
+                    <path d="M610,350 C612,340 609,330 611,320" fill="none"/>
+                    <path d="M617,345 C615,335 618,325 616,315" fill="none"/>
+                </g>
+                <!-- Canopy - cloud-like wavy blob -->
+                <path d="M570,280 C555,265 560,240 575,230 C580,215 600,205 615,210 C625,198 645,198 655,210 C670,205 690,215 692,230 C705,240 710,265 695,280 C700,295 690,305 675,305 C665,312 645,315 630,312 C615,315 595,312 585,305 C570,305 562,295 570,280 Z" fill="url(#treeCanopyGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
+                <!-- Canopy highlight -->
+                <path d="M585,255 C590,240 610,228 625,230 C635,225 648,228 652,240" fill="#4CAF50" opacity="0.3" stroke="none"/>
+                <!-- Leaf clusters as small bumps -->
+                <circle cx="580" cy="270" r="12" fill="#388E3C" opacity="0.3"/>
+                <circle cx="660" cy="260" r="14" fill="#388E3C" opacity="0.3"/>
+                <circle cx="620" cy="245" r="15" fill="#2E7D32" opacity="0.2"/>
+            </g>
+
+            <!-- Apples on tree -->
+            <g id="el-mela1" data-size="small" data-name="mela1">
+                <circle cx="595" cy="270" r="7" fill="url(#appleGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
+                <ellipse cx="593" cy="267" rx="2.5" ry="2" fill="#FF8A80" opacity="0.5"/>
+                <path d="M595,263 Q596,258 597,256" stroke="#5D4037" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M597,258 Q601,255 603,256" stroke="#4CAF50" stroke-width="1" fill="none" stroke-linecap="round"/>
+            </g>
+            <g id="el-mela2" data-size="small" data-name="mela2">
+                <circle cx="645" cy="260" r="6.5" fill="url(#appleGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
+                <ellipse cx="643" cy="257" rx="2" ry="1.8" fill="#FF8A80" opacity="0.5"/>
+                <path d="M645,253 Q646,249 647,247" stroke="#5D4037" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            </g>
+            <g id="el-mela3" data-size="small" data-name="mela3">
+                <circle cx="625" cy="290" r="6" fill="url(#appleGrad)" stroke="#2D1B0E" stroke-width="1.5"/>
+                <ellipse cx="623" cy="287" rx="2" ry="1.5" fill="#FF8A80" opacity="0.5"/>
+                <path d="M625,284 Q626,280 626,278" stroke="#5D4037" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            </g>
+
+            <!-- ===== HAY BALES ===== -->
+            <g id="el-fieno1" data-size="medium" data-name="fieno1" filter="url(#shadowSm)">
+                <!-- Cylindrical bale 1 -->
+                <ellipse cx="480" cy="365" rx="30" ry="18" fill="url(#hayGrad)" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
+                <!-- Straw texture -->
+                <g stroke="#E6A23C" stroke-width="0.8" opacity="0.5">
+                    <line x1="460" y1="360" x2="500" y2="360"/>
+                    <line x1="455" y1="367" x2="505" y2="367"/>
+                    <line x1="458" y1="374" x2="502" y2="374"/>
+                    <line x1="465" y1="354" x2="495" y2="354"/>
+                </g>
+                <!-- Highlight -->
+                <ellipse cx="475" cy="358" rx="14" ry="5" fill="#FFE082" opacity="0.3"/>
+            </g>
+            <g id="el-fieno2" data-size="small" data-name="fieno2" filter="url(#shadowSm)">
+                <!-- Smaller bale stacked -->
+                <ellipse cx="495" cy="348" rx="22" ry="14" fill="url(#hayGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <g stroke="#E6A23C" stroke-width="0.7" opacity="0.4">
+                    <line x1="478" y1="344" x2="512" y2="344"/>
+                    <line x1="476" y1="350" x2="514" y2="350"/>
+                    <line x1="480" y1="356" x2="510" y2="356"/>
+                </g>
+                <ellipse cx="490" cy="342" rx="10" ry="4" fill="#FFE082" opacity="0.3"/>
+            </g>
+
+            <!-- ===== CAT near hay ===== -->
+            <g id="el-gatto" data-size="small" data-name="gatto">
+                <!-- Cat sitting -->
+                <ellipse cx="520" cy="358" rx="10" ry="12" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <!-- Head -->
+                <circle cx="520" cy="342" r="8" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1.8"/>
+                <!-- Ears -->
+                <polygon points="514,336 511,326 518,333" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1.2"/>
+                <polygon points="526,336 529,326 522,333" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1.2"/>
+                <polygon points="515,335 513,329 517,333" fill="#FFAB40" stroke="none"/>
+                <polygon points="525,335 527,329 523,333" fill="#FFAB40" stroke="none"/>
+                <!-- Eyes -->
+                <ellipse cx="516" cy="341" rx="2.5" ry="3" fill="#C8E6C9"/>
+                <ellipse cx="516.5" cy="341" rx="1" ry="2.5" fill="#2D1B0E"/>
+                <ellipse cx="524" cy="341" rx="2.5" ry="3" fill="#C8E6C9"/>
+                <ellipse cx="524.5" cy="341" rx="1" ry="2.5" fill="#2D1B0E"/>
+                <!-- Nose -->
+                <polygon points="520,344 518.5,346 521.5,346" fill="#F48FB1"/>
+                <!-- Whiskers -->
+                <line x1="512" y1="345" x2="504" y2="343" stroke="#2D1B0E" stroke-width="0.6"/>
+                <line x1="512" y1="347" x2="504" y2="348" stroke="#2D1B0E" stroke-width="0.6"/>
+                <line x1="528" y1="345" x2="536" y2="343" stroke="#2D1B0E" stroke-width="0.6"/>
+                <line x1="528" y1="347" x2="536" y2="348" stroke="#2D1B0E" stroke-width="0.6"/>
+                <!-- Tail curving up -->
+                <path d="M530,360 C538,355 542,345 536,338" stroke="#FF8F00" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                <path d="M530,360 C538,355 542,345 536,338" stroke="#2D1B0E" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.2"/>
+                <!-- Front paws -->
+                <ellipse cx="515" cy="369" rx="3.5" ry="2" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1"/>
+                <ellipse cx="525" cy="369" rx="3.5" ry="2" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1"/>
+            </g>
+
+            <!-- ===== BUCKET near barn ===== -->
+            <g id="el-secchio" data-size="small" data-name="secchio" filter="url(#shadowSm)">
+                <path d="M250,365 L254,338 L280,338 L284,365 Z" fill="url(#bucketGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <!-- Rim -->
+                <rect x="252" y="336" width="30" height="4" rx="1.5" fill="#B0BEC5" stroke="#2D1B0E" stroke-width="1"/>
+                <!-- Handle -->
+                <path d="M256,338 Q267,322 278,338" fill="none" stroke="#78909C" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Metallic highlight -->
+                <path d="M258,342 L258,360" stroke="#64B5F6" stroke-width="2" opacity="0.3" stroke-linecap="round"/>
+            </g>
+
+            <!-- ===== POND ===== -->
+            <g id="el-stagno" data-size="medium" data-name="stagno">
+                <ellipse cx="140" cy="430" rx="55" ry="25" fill="url(#pondGrad)" stroke="#01579B" stroke-width="1.5" opacity="0.8"/>
+                <!-- Water reflection -->
+                <ellipse cx="130" cy="425" rx="20" ry="6" fill="#81D4FA" opacity="0.4"/>
+                <ellipse cx="155" cy="435" rx="12" ry="4" fill="#81D4FA" opacity="0.3"/>
+                <!-- Cattails at edge -->
+                <line x1="100" y1="430" x2="98" y2="402" stroke="#5D4037" stroke-width="2" stroke-linecap="round"/>
+                <ellipse cx="98" cy="402" rx="3" ry="7" fill="#795548" stroke="#4E342E" stroke-width="0.8"/>
+                <line x1="108" y1="428" x2="106" y2="406" stroke="#5D4037" stroke-width="1.8" stroke-linecap="round"/>
+                <ellipse cx="106" cy="406" rx="2.5" ry="6" fill="#795548" stroke="#4E342E" stroke-width="0.8"/>
+                <!-- Grass tufts near pond -->
+                <path d="M85,430 Q83,418 80,412" stroke="#2E7D32" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M88,428 Q90,416 92,410" stroke="#388E3C" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <path d="M185,425 Q188,414 192,408" stroke="#2E7D32" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <path d="M180,427 Q177,416 175,410" stroke="#388E3C" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </g>
+
+            <!-- ===== COW ===== -->
+            <g id="el-mucca" data-size="large" data-name="mucca" filter="url(#shadow)">
+                <!-- Shadow on ground -->
+                <ellipse cx="450" cy="440" rx="48" ry="8" fill="#1B5E20" opacity="0.2"/>
+                <!-- Body - organic blob -->
+                <path d="M415,405 C400,400 390,410 392,420 C390,430 400,438 415,440 C425,442 465,442 480,440 C495,438 505,430 503,420 C505,410 495,400 480,405 C465,400 430,400 415,405 Z" fill="url(#cowBodyGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
+                <!-- Spots -->
+                <g class="cow-spots">
+                    <path d="M420,410 C416,408 412,412 414,418 C416,422 424,424 426,418 C428,412 424,408 420,410 Z" fill="#333"/>
+                    <path d="M460,415 C456,412 450,416 452,422 C454,426 462,426 464,420 C466,414 462,412 460,415 Z" fill="#333"/>
+                    <ellipse cx="440" cy="432" rx="8" ry="5" fill="#333"/>
+                    <path d="M480,412 C477,410 474,414 476,418 C478,420 482,420 484,416 C485,412 482,410 480,412 Z" fill="#333"/>
+                </g>
+                <!-- Legs -->
+                <rect x="406" y="436" width="10" height="28" rx="3" fill="#F5F5F5" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
+                <rect x="422" y="436" width="10" height="28" rx="3" fill="#F5F5F5" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
+                <rect x="460" y="436" width="10" height="28" rx="3" fill="#F5F5F5" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
+                <rect x="476" y="436" width="10" height="28" rx="3" fill="#F5F5F5" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
+                <!-- Hooves -->
+                <rect x="405" y="460" width="12" height="5" rx="2" fill="#333" stroke="#2D1B0E" stroke-width="1"/>
+                <rect x="421" y="460" width="12" height="5" rx="2" fill="#333" stroke="#2D1B0E" stroke-width="1"/>
+                <rect x="459" y="460" width="12" height="5" rx="2" fill="#333" stroke="#2D1B0E" stroke-width="1"/>
+                <rect x="475" y="460" width="12" height="5" rx="2" fill="#333" stroke="#2D1B0E" stroke-width="1"/>
+                <!-- Udder -->
+                <ellipse cx="445" cy="440" rx="10" ry="6" fill="#FFCDD2" stroke="#2D1B0E" stroke-width="1.2"/>
+                <!-- Head -->
+                <circle cx="500" cy="400" r="20" fill="url(#cowBodyGrad)" stroke="#2D1B0E" stroke-width="2.5"/>
+                <!-- Head highlight -->
+                <ellipse cx="495" cy="393" rx="8" ry="6" fill="#fff" opacity="0.15"/>
+                <!-- Ears -->
+                <path d="M486,385 C480,378 476,382 478,388 C480,392 484,390 486,385 Z" fill="#FFCCBC" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M514,385 C520,378 524,382 522,388 C520,392 516,390 514,385 Z" fill="#FFCCBC" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
+                <!-- Horns -->
+                <path d="M490,383 Q486,370 488,366" stroke="#FFB74D" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M510,383 Q514,370 512,366" stroke="#FFB74D" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <!-- Eyes -->
+                <ellipse cx="493" cy="396" rx="5" ry="5.5" fill="#fff" stroke="#2D1B0E" stroke-width="1.2"/>
+                <circle cx="494" cy="397" r="2.8" fill="#4E342E"/>
+                <circle cx="495" cy="395.5" r="1.2" fill="#fff"/>
+                <ellipse cx="507" cy="396" rx="5" ry="5.5" fill="#fff" stroke="#2D1B0E" stroke-width="1.2"/>
+                <circle cx="508" cy="397" r="2.8" fill="#4E342E"/>
+                <circle cx="509" cy="395.5" r="1.2" fill="#fff"/>
+                <!-- Muzzle / snout -->
+                <ellipse cx="500" cy="408" rx="11" ry="7" fill="#FFCCBC" stroke="#2D1B0E" stroke-width="1.5"/>
+                <!-- Nostrils -->
+                <ellipse cx="496" cy="408" rx="2" ry="1.5" fill="#5D4037"/>
+                <ellipse cx="504" cy="408" rx="2" ry="1.5" fill="#5D4037"/>
+                <!-- Smile -->
+                <path d="M494,412 Q500,416 506,412" fill="none" stroke="#2D1B0E" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Tail -->
+                <path d="M392,415 C380,410 375,400 372,408 C370,412 374,416 378,414" stroke="#E0E0E0" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M392,415 C380,410 375,400 372,408 C370,412 374,416 378,414" stroke="#2D1B0E" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.3"/>
+                <!-- Tail tuft -->
+                <circle cx="377" cy="413" r="5" fill="#E0E0E0" stroke="#2D1B0E" stroke-width="1.2"/>
+            </g>
+
+            <!-- ===== TRACTOR ===== -->
+            <g id="el-trattore" data-size="large" data-name="trattore" filter="url(#shadow)">
+                <!-- Shadow on ground -->
+                <ellipse cx="720" cy="450" rx="50" ry="8" fill="#1B5E20" opacity="0.2"/>
+                <!-- Body -->
+                <path d="M685,390 L685,420 L760,420 L760,395 L740,385 L710,385 L705,390 Z" fill="url(#tractorBodyGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
+                <!-- Metallic highlight on body -->
+                <path d="M688,392 L688,408 L720,408 L720,392 Z" fill="#EF5350" opacity="0.4"/>
+                <!-- Cabin/windshield -->
+                <path d="M710,385 L710,360 L742,360 L745,385 Z" fill="#B3E5FC" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round" opacity="0.85"/>
+                <!-- Windshield reflection -->
+                <path d="M714,365 L714,380 L724,380 L724,365 Z" fill="#E1F5FE" opacity="0.4"/>
+                <!-- Roof -->
+                <rect x="706" y="355" width="40" height="5" rx="2" fill="#C62828" stroke="#2D1B0E" stroke-width="1.5"/>
+                <!-- Exhaust pipe -->
+                <rect x="690" y="365" width="5" height="25" rx="2" fill="#616161" stroke="#2D1B0E" stroke-width="1.5"/>
+                <ellipse cx="692.5" cy="364" rx="4" ry="2" fill="#757575" stroke="#2D1B0E" stroke-width="1"/>
+                <!-- Smoke puff -->
+                <circle cx="690" cy="356" r="4" fill="#BDBDBD" opacity="0.5"/>
+                <circle cx="686" cy="349" r="3" fill="#E0E0E0" opacity="0.35"/>
+                <circle cx="688" cy="343" r="2.5" fill="#EEEEEE" opacity="0.2"/>
+                <!-- Seat -->
+                <path d="M726,370 C724,365 722,362 726,360 L734,360 C738,362 736,365 734,370 Z" fill="#5D4037" stroke="#2D1B0E" stroke-width="1.2"/>
+                <!-- Steering wheel hint -->
+                <circle cx="717" cy="378" r="5" fill="none" stroke="#333" stroke-width="2"/>
+                <line x1="717" y1="373" x2="717" y2="383" stroke="#333" stroke-width="1.5"/>
+                <!-- Big back wheel -->
+                <circle cx="700" cy="440" r="28" fill="url(#wheelGrad)" stroke="#2D1B0E" stroke-width="2.5"/>
+                <circle cx="700" cy="440" r="18" fill="none" stroke="#444" stroke-width="1.5"/>
+                <circle cx="700" cy="440" r="8" fill="#9E9E9E" stroke="#2D1B0E" stroke-width="1.5"/>
+                <circle cx="700" cy="440" r="3" fill="#616161"/>
+                <!-- Wheel spokes -->
+                <g stroke="#666" stroke-width="1.5" opacity="0.4">
+                    <line x1="700" y1="422" x2="700" y2="412"/>
+                    <line x1="700" y1="458" x2="700" y2="468"/>
+                    <line x1="682" y1="440" x2="672" y2="440"/>
+                    <line x1="718" y1="440" x2="728" y2="440"/>
+                </g>
+                <!-- Tire tread hints -->
+                <g stroke="#111" stroke-width="2" opacity="0.15" stroke-linecap="round">
+                    <path d="M678,425 L674,422" /><path d="M676,445 L672,448" />
+                    <path d="M722,425 L726,422" /><path d="M724,445 L728,448" />
+                    <path d="M688,418 L686,414" /><path d="M712,418 L714,414" />
+                    <path d="M688,462 L686,466" /><path d="M712,462 L714,466" />
+                </g>
+                <!-- Small front wheel -->
+                <circle cx="756" cy="445" r="16" fill="url(#wheelGrad)" stroke="#2D1B0E" stroke-width="2"/>
+                <circle cx="756" cy="445" r="10" fill="none" stroke="#444" stroke-width="1"/>
+                <circle cx="756" cy="445" r="5" fill="#9E9E9E" stroke="#2D1B0E" stroke-width="1.2"/>
+                <!-- Axle connection -->
+                <rect x="748" y="418" width="6" height="28" rx="2" fill="#616161" stroke="#2D1B0E" stroke-width="1.2"/>
+                <!-- Fender over back wheel -->
+                <path d="M672,420 Q672,410 700,408 Q728,410 728,420" fill="#C62828" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
+            </g>
+
+            <!-- ===== CHICKENS ===== -->
+            <g id="el-gallina1" data-size="medium" data-name="gallina1" filter="url(#shadowSm)">
+                <!-- Body blob -->
+                <path d="M290,430 C278,425 270,430 272,440 C274,450 285,455 295,452 C305,449 310,440 308,432 C306,426 298,425 290,430 Z" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="2" stroke-linejoin="round"/>
+                <!-- Wing -->
+                <path d="M285,435 C280,432 276,436 278,440 C280,444 288,446 290,442 C292,438 288,434 285,435 Z" fill="#FFD54F" stroke="#2D1B0E" stroke-width="1.2"/>
+                <!-- Tail feathers -->
+                <path d="M272,435 C265,428 260,430 262,436 C264,440 270,442 272,438" fill="#FFB300" stroke="#2D1B0E" stroke-width="1.2" stroke-linejoin="round"/>
+                <path d="M270,438 C264,434 258,438 262,442 C264,444 268,444 270,440" fill="#FFA000" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
+                <!-- Head -->
+                <circle cx="305" cy="426" r="9" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="2"/>
+                <!-- Comb -->
+                <path d="M300,418 Q302,410 305,412 Q306,408 309,412 Q312,410 310,418" fill="#F44336" stroke="#2D1B0E" stroke-width="1.2" stroke-linejoin="round"/>
+                <!-- Wattle -->
+                <path d="M307,432 Q310,438 308,440 Q305,438 307,432" fill="#F44336" stroke="#2D1B0E" stroke-width="0.8"/>
+                <!-- Eye -->
+                <circle cx="307" cy="424" r="2.5" fill="#fff"/>
+                <circle cx="307.5" cy="424" r="1.3" fill="#2D1B0E"/>
+                <!-- Beak -->
+                <polygon points="313,426 320,428 313,430" fill="#FF8F00" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
+                <!-- Legs -->
+                <line x1="288" y1="452" x2="286" y2="468" stroke="#FF8F00" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="296" y1="452" x2="298" y2="468" stroke="#FF8F00" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Feet -->
+                <path d="M282,468 L286,468 L290,468" stroke="#FF8F00" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M294,468 L298,468 L302,468" stroke="#FF8F00" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <!-- Toes -->
+                <path d="M286,468 L284,470" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M286,468 L288,470" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M298,468 L296,470" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M298,468 L300,470" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </g>
+
+            <g id="el-gallina2" data-size="small" data-name="gallina2" filter="url(#shadowSm)">
+                <!-- Smaller chicken pecking -->
+                <path d="M220,450 C212,447 207,450 208,456 C210,462 218,465 224,462 C230,460 232,454 230,449 C228,446 224,446 220,450 Z" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <!-- Wing -->
+                <path d="M218,453 C215,451 213,453 214,456 C216,458 220,458 221,456 Z" fill="#FFD54F" stroke="#2D1B0E" stroke-width="1"/>
+                <!-- Head (pecking down) -->
+                <circle cx="230" cy="448" r="7" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="1.8"/>
+                <!-- Comb -->
+                <path d="M226,442 Q228,436 230,438 Q232,435 233,440" fill="#F44336" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
+                <!-- Eye -->
+                <circle cx="232" cy="446" r="2" fill="#fff"/>
+                <circle cx="232.5" cy="446" r="1" fill="#2D1B0E"/>
+                <!-- Beak pointing down -->
+                <polygon points="236,450 240,454 236,453" fill="#FF8F00" stroke="#2D1B0E" stroke-width="0.8"/>
+                <!-- Legs -->
+                <line x1="218" y1="462" x2="216" y2="474" stroke="#FF8F00" stroke-width="2" stroke-linecap="round"/>
+                <line x1="224" y1="462" x2="226" y2="474" stroke="#FF8F00" stroke-width="2" stroke-linecap="round"/>
+                <path d="M213,474 L216,474 L219,474" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M223,474 L226,474 L229,474" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </g>
+
+            <g id="el-gallina3" data-size="small" data-name="gallina3" filter="url(#shadowSm)">
+                <!-- Third chicken, walking -->
+                <path d="M330,445 C322,442 316,445 318,452 C320,458 328,460 334,458 C340,456 342,450 340,444 C338,441 334,440 330,445 Z" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="1.8" stroke-linejoin="round"/>
+                <circle cx="340" cy="438" r="7.5" fill="url(#chickenGrad)" stroke="#2D1B0E" stroke-width="1.8"/>
+                <path d="M336,432 Q338,426 340,428 Q342,425 343,430" fill="#F44336" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round"/>
+                <circle cx="342" cy="436" r="2" fill="#fff"/>
+                <circle cx="342.5" cy="436" r="1" fill="#2D1B0E"/>
+                <polygon points="347,438 353,440 347,441" fill="#FF8F00" stroke="#2D1B0E" stroke-width="0.8"/>
+                <line x1="328" y1="458" x2="326" y2="472" stroke="#FF8F00" stroke-width="2" stroke-linecap="round"/>
+                <line x1="334" y1="458" x2="336" y2="472" stroke="#FF8F00" stroke-width="2" stroke-linecap="round"/>
+                <path d="M323,472 L326,472 L329,472" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M333,472 L336,472 L339,472" stroke="#FF8F00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </g>
+
+            <!-- ===== EGGS near chickens ===== -->
+            <g id="el-uova" data-size="small" data-name="uova">
+                <ellipse cx="310" cy="470" rx="5" ry="6" fill="#FFF8E1" stroke="#2D1B0E" stroke-width="1.2" transform="rotate(-10,310,470)"/>
+                <ellipse cx="308" cy="467" rx="2" ry="1.5" fill="#fff" opacity="0.4"/>
+                <ellipse cx="320" cy="472" rx="4.5" ry="5.5" fill="#FFF8E1" stroke="#2D1B0E" stroke-width="1.2" transform="rotate(8,320,472)"/>
+                <ellipse cx="318" cy="469" rx="1.8" ry="1.3" fill="#fff" opacity="0.4"/>
+            </g>
+
+            <!-- ===== PIG ===== -->
+            <g id="el-maiale" data-size="medium" data-name="maiale" filter="url(#shadow)">
+                <!-- Mud puddle -->
+                <ellipse cx="80" cy="465" rx="40" ry="14" fill="url(#mudGrad)" opacity="0.7" stroke="#5D4037" stroke-width="1"/>
+                <!-- Mud splatter -->
+                <circle cx="60" cy="460" r="3" fill="#8D6E63" opacity="0.4"/>
+                <circle cx="105" cy="462" r="2" fill="#8D6E63" opacity="0.3"/>
+                <!-- Pig body - round pink blob -->
+                <path d="M60,440 C48,435 40,442 42,452 C40,460 50,468 65,468 C80,470 100,470 110,468 C120,465 125,455 122,448 C125,440 118,435 108,438 C95,434 72,434 60,440 Z" fill="url(#pigBodyGrad)" stroke="#2D1B0E" stroke-width="2.5" stroke-linejoin="round"/>
+                <!-- Belly highlight -->
+                <ellipse cx="82" cy="458" rx="22" ry="8" fill="#FFD1E8" opacity="0.4"/>
+                <!-- Legs -->
+                <rect x="58" y="465" width="8" height="16" rx="3" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5"/>
+                <rect x="72" y="465" width="8" height="16" rx="3" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5"/>
+                <rect x="94" y="465" width="8" height="16" rx="3" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5"/>
+                <rect x="108" y="465" width="8" height="16" rx="3" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5"/>
+                <!-- Hooves -->
+                <rect x="57" y="478" width="10" height="4" rx="2" fill="#D48BA6" stroke="#2D1B0E" stroke-width="0.8"/>
+                <rect x="71" y="478" width="10" height="4" rx="2" fill="#D48BA6" stroke="#2D1B0E" stroke-width="0.8"/>
+                <rect x="93" y="478" width="10" height="4" rx="2" fill="#D48BA6" stroke="#2D1B0E" stroke-width="0.8"/>
+                <rect x="107" y="478" width="10" height="4" rx="2" fill="#D48BA6" stroke="#2D1B0E" stroke-width="0.8"/>
+                <!-- Head -->
+                <circle cx="120" cy="440" r="16" fill="url(#pigBodyGrad)" stroke="#2D1B0E" stroke-width="2.5"/>
+                <!-- Ears -->
+                <path d="M110,428 C106,420 102,424 105,430" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M130,428 C134,420 138,424 135,430" fill="#FFABCF" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
+                <!-- Inner ear -->
+                <path d="M109,427 C107,423 105,425 107,429" fill="#E8769E" stroke="none"/>
+                <path d="M131,427 C133,423 135,425 133,429" fill="#E8769E" stroke="none"/>
+                <!-- Snout -->
+                <ellipse cx="130" cy="442" rx="9" ry="6.5" fill="#F48FB1" stroke="#2D1B0E" stroke-width="1.8"/>
+                <!-- Nostrils -->
+                <ellipse cx="127" cy="442" rx="2" ry="1.5" fill="#C2185B"/>
+                <ellipse cx="133" cy="442" rx="2" ry="1.5" fill="#C2185B"/>
+                <!-- Eyes -->
+                <circle cx="116" cy="436" r="3.5" fill="#fff" stroke="#2D1B0E" stroke-width="1"/>
+                <circle cx="116.5" cy="436.5" r="1.8" fill="#2D1B0E"/>
+                <circle cx="117" cy="435.5" r="0.8" fill="#fff"/>
+                <circle cx="125" cy="436" r="3.5" fill="#fff" stroke="#2D1B0E" stroke-width="1"/>
+                <circle cx="125.5" cy="436.5" r="1.8" fill="#2D1B0E"/>
+                <circle cx="126" cy="435.5" r="0.8" fill="#fff"/>
+                <!-- Smile -->
+                <path d="M118,448 Q122,452 126,448" fill="none" stroke="#2D1B0E" stroke-width="1.2" stroke-linecap="round"/>
+                <!-- Curly tail -->
+                <path d="M42,445 C35,440 32,445 35,450 C38,455 32,458 30,452" stroke="#FFABCF" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M42,445 C35,440 32,445 35,450 C38,455 32,458 30,452" stroke="#2D1B0E" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.3"/>
+            </g>
+
+            <!-- ===== FOREGROUND ELEMENTS ===== -->
+
+            <!-- Flowers scattered -->
+            <g id="el-fiore1" data-size="small" data-name="fiore1">
+                <!-- Stem -->
+                <path d="M560,480 C558,470 562,460 560,452" stroke="#2E7D32" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <!-- Leaf -->
+                <path d="M560,468 Q568,462 572,466 Q566,472 560,468" fill="#43A047" stroke="#2D1B0E" stroke-width="0.8"/>
+                <!-- Petals -->
+                <ellipse cx="554" cy="448" rx="5" ry="8" fill="url(#flowerRedGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-30,554,448)"/>
+                <ellipse cx="566" cy="448" rx="5" ry="8" fill="url(#flowerRedGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(30,566,448)"/>
+                <ellipse cx="555" cy="455" rx="5" ry="8" fill="url(#flowerRedGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-60,555,455)"/>
+                <ellipse cx="565" cy="455" rx="5" ry="8" fill="url(#flowerRedGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(60,565,455)"/>
+                <ellipse cx="560" cy="444" rx="5" ry="8" fill="url(#flowerRedGrad)" stroke="#2D1B0E" stroke-width="1"/>
+                <!-- Center -->
+                <circle cx="560" cy="452" r="5" fill="#FFD600" stroke="#2D1B0E" stroke-width="1"/>
+                <circle cx="559" cy="450" r="1.5" fill="#FFE082" opacity="0.6"/>
+            </g>
+
+            <g id="el-fiore2" data-size="small" data-name="fiore2">
+                <path d="M400,485 C398,475 402,465 400,458" stroke="#2E7D32" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M400,472 Q392,467 390,472 Q396,476 400,472" fill="#43A047" stroke="#2D1B0E" stroke-width="0.8"/>
+                <ellipse cx="395" cy="454" rx="4" ry="7" fill="url(#flowerYellowGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-25,395,454)"/>
+                <ellipse cx="405" cy="454" rx="4" ry="7" fill="url(#flowerYellowGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(25,405,454)"/>
+                <ellipse cx="396" cy="460" rx="4" ry="7" fill="url(#flowerYellowGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-55,396,460)"/>
+                <ellipse cx="404" cy="460" rx="4" ry="7" fill="url(#flowerYellowGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(55,404,460)"/>
+                <ellipse cx="400" cy="450" rx="4" ry="7" fill="url(#flowerYellowGrad)" stroke="#2D1B0E" stroke-width="1"/>
+                <circle cx="400" cy="457" r="4" fill="#FF7043" stroke="#2D1B0E" stroke-width="1"/>
+            </g>
+
+            <g id="el-fiore3" data-size="small" data-name="fiore3">
+                <path d="M660,490 C658,480 662,472 660,465" stroke="#2E7D32" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M660,478 Q668,474 670,478 Q664,482 660,478" fill="#43A047" stroke="#2D1B0E" stroke-width="0.8"/>
+                <ellipse cx="655" cy="461" rx="4.5" ry="7" fill="url(#flowerPurpleGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-30,655,461)"/>
+                <ellipse cx="665" cy="461" rx="4.5" ry="7" fill="url(#flowerPurpleGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(30,665,461)"/>
+                <ellipse cx="656" cy="467" rx="4.5" ry="7" fill="url(#flowerPurpleGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(-60,656,467)"/>
+                <ellipse cx="664" cy="467" rx="4.5" ry="7" fill="url(#flowerPurpleGrad)" stroke="#2D1B0E" stroke-width="1" transform="rotate(60,664,467)"/>
+                <ellipse cx="660" cy="457" rx="4.5" ry="7" fill="url(#flowerPurpleGrad)" stroke="#2D1B0E" stroke-width="1"/>
+                <circle cx="660" cy="464" r="4" fill="#FFEB3B" stroke="#2D1B0E" stroke-width="1"/>
+            </g>
+
+            <!-- ===== BUTTERFLY ===== -->
+            <g id="el-farfalla" data-size="small" data-name="farfalla">
+                <!-- Upper wings -->
+                <path d="M575,400 C560,382 548,388 555,400 C548,395 552,408 565,405 Z" fill="#CE93D8" stroke="#2D1B0E" stroke-width="1.2" stroke-linejoin="round" opacity="0.9"/>
+                <path d="M575,400 C590,382 602,388 595,400 C602,395 598,408 585,405 Z" fill="#CE93D8" stroke="#2D1B0E" stroke-width="1.2" stroke-linejoin="round" opacity="0.9"/>
+                <!-- Lower wings -->
+                <path d="M575,400 C560,410 555,420 565,418 C558,415 568,408 575,405 Z" fill="#AB47BC" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round" opacity="0.85"/>
+                <path d="M575,400 C590,410 595,420 585,418 C592,415 582,408 575,405 Z" fill="#AB47BC" stroke="#2D1B0E" stroke-width="1" stroke-linejoin="round" opacity="0.85"/>
+                <!-- Wing spots -->
+                <circle cx="562" cy="394" r="3" fill="#E1BEE7" opacity="0.6"/>
+                <circle cx="588" cy="394" r="3" fill="#E1BEE7" opacity="0.6"/>
+                <!-- Body -->
+                <ellipse cx="575" cy="402" rx="2.5" ry="8" fill="#2D1B0E"/>
+                <!-- Antennae -->
+                <path d="M574,395 Q568,384 564,381" stroke="#2D1B0E" stroke-width="1" fill="none" stroke-linecap="round"/>
+                <circle cx="564" cy="381" r="1.5" fill="#2D1B0E"/>
+                <path d="M576,395 Q582,384 586,381" stroke="#2D1B0E" stroke-width="1" fill="none" stroke-linecap="round"/>
+                <circle cx="586" cy="381" r="1.5" fill="#2D1B0E"/>
+            </g>
+
+            <!-- ===== MUSHROOM near tree ===== -->
+            <g id="el-fungo" data-size="small" data-name="fungo">
+                <!-- Stem -->
+                <path d="M645,475 C643,468 644,460 646,458 L650,458 C652,460 653,468 651,475 Z" fill="#FFF8E1" stroke="#2D1B0E" stroke-width="1.2" stroke-linejoin="round"/>
+                <!-- Cap -->
+                <path d="M636,460 Q638,448 648,445 Q658,448 660,460 Z" fill="#E53935" stroke="#2D1B0E" stroke-width="1.5" stroke-linejoin="round"/>
+                <!-- White spots -->
+                <circle cx="644" cy="452" r="2" fill="#FFF" opacity="0.8"/>
+                <circle cx="652" cy="454" r="1.5" fill="#FFF" opacity="0.8"/>
+                <circle cx="648" cy="448" r="1.8" fill="#FFF" opacity="0.7"/>
+            </g>
+
+            <!-- ===== GRASS TUFTS scattered ===== -->
+            <g opacity="0.8">
+                <!-- Near barn -->
+                <path d="M255,370 Q253,358 250,352" stroke="#2E7D32" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M258,368 Q260,356 264,350" stroke="#388E3C" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M261,370 Q259,360 256,355" stroke="#43A047" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <!-- Near fence -->
+                <path d="M410,368 Q408,358 405,354" stroke="#2E7D32" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <path d="M414,370 Q416,360 418,354" stroke="#388E3C" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <!-- Near tractor -->
+                <path d="M770,465 Q768,458 765,453" stroke="#2E7D32" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <path d="M774,467 Q776,460 778,454" stroke="#388E3C" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <!-- Near path -->
+                <path d="M370,400 Q368,392 366,388" stroke="#2E7D32" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M374,402 Q376,394 378,390" stroke="#388E3C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                <!-- Near pond -->
+                <path d="M195,440 Q193,432 190,428" stroke="#2E7D32" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M200,442 Q202,434 205,430" stroke="#388E3C" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+                <!-- Random foreground -->
+                <path d="M500,478 Q498,470 496,465" stroke="#2E7D32" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M504,480 Q506,472 508,466" stroke="#388E3C" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+                <path d="M160,488 Q158,480 155,476" stroke="#2E7D32" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <path d="M165,490 Q167,482 170,478" stroke="#388E3C" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+            </g>
+        </svg>
+    </template>
+
     <script>
     // ========== UTILITIES ==========
     function mulberry32(a) {
@@ -305,7 +1119,6 @@
 
     let rng = Math.random;
     function randInt(min, max) { return Math.floor(rng() * (max - min + 1)) + min; }
-    function randFloat(min, max) { return rng() * (max - min) + min; }
     function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
     function shuffle(arr) {
         const a = [...arr];
@@ -316,1241 +1129,242 @@
         return a;
     }
 
-    const W = 500, H = 400;
-    const AREA = W * H;
+    const W = 800, H = 500;
 
-    // Stroke style for cartoon outlines
-    const OL = 'stroke="#2a1f14" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"';
-    const OLthin = 'stroke="#2a1f14" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"';
-    const OLthick = 'stroke="#2a1f14" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
-
-    // Color palettes - bold & saturated cartoon colors
-    const COLORS = {
-        sky: ['#5CC8FF', '#74D4FF', '#8AE0FF', '#64CDFF'],
-        grass: ['#3CB44B', '#4ECB5C', '#5ED86A', '#32A83E'],
-        tree_leaf: ['#28A745', '#34C759', '#20913A', '#3DDC63'],
-        trunk: ['#8B5E3C', '#A0714E', '#7A4F30', '#6B4226'],
-        flower_petal: ['#FF3B6F', '#FF6B35', '#FFB800', '#C850FF', '#FF4757', '#FF69B4'],
-        flower_center: ['#FFD600', '#FFC107', '#FFAB00'],
-        house_wall: ['#FF6B6B', '#FFA94D', '#C678FF', '#51A0FF', '#FFE066'],
-        roof: ['#D32F2F', '#E65100', '#7B1FA2', '#1565C0', '#F57F17'],
-        door: ['#6D4C41', '#5D4037', '#4E342E'],
-        window_glass: ['#B3E5FC', '#81D4FA', '#E1F5FE'],
-        sun: ['#FFD600', '#FFAB00', '#FF9100'],
-        cloud: ['#FFFFFF', '#F5F5F5'],
-        water: ['#1E88E5', '#2979FF', '#448AFF'],
-        sand: ['#FFD180', '#FFCC80', '#FFB74D'],
-        skin: ['#FFCCBC', '#FFE0CC', '#FFDAB9'],
-        furniture: ['#8D6E63', '#A1887F', '#795548', '#6D4C41'],
-        wall: ['#FFF9C4', '#FFECB3', '#E1F5FE', '#F3E5F5', '#E8F5E9'],
-        floor: ['#BCAAA4', '#D7CCC8', '#A1887F'],
-        star: ['#FFD600', '#FFF176', '#FFEE58'],
-        planet: ['#EF5350', '#AB47BC', '#26A69A', '#FF7043', '#5C6BC0'],
-        red: ['#FF4757', '#EF5350', '#F44336'],
-        blue: ['#2196F3', '#42A5F5', '#1E88E5'],
-        green: ['#4CAF50', '#66BB6A', '#43A047'],
-        purple: ['#AB47BC', '#CE93D8', '#9C27B0'],
-        orange: ['#FF9800', '#FFA726', '#FB8C00'],
-        yellow: ['#FFEB3B', '#FFC107', '#FFD600'],
-        pink: ['#FF69B4', '#FF3B6F', '#E91E63'],
-        brown: ['#8D6E63', '#795548', '#6D4C41'],
-    };
-    function col(cat) { return pick(COLORS[cat]); }
-
-    // Compute element size category based on bounding box vs image area
-    function sizeCategory(w, h) {
-        const pct = (w * h) / AREA;
-        if (pct > 0.15) return 'large';
-        if (pct > 0.05) return 'medium';
-        return 'small';
-    }
-
-    // Difficulty config
+    // Difficulty config: only color changes and element removal
     const DIFFICULTY = {
-        facile:    { diffs: [3,4], sizes: ['large'], objectCount: [5,7] },
-        medio:     { diffs: [4,5], sizes: ['large','medium'], objectCount: [7,10] },
-        difficile: { diffs: [5,7], sizes: ['medium','small'], objectCount: [10,14] },
-        estremo:   { diffs: [7,9], sizes: ['small'], objectCount: [14,18] },
+        facile:    { diffs: [3,4], sizes: ['large'] },
+        medio:     { diffs: [4,5], sizes: ['large','medium'] },
+        difficile: { diffs: [5,7], sizes: ['medium','small'] },
+        estremo:   { diffs: [7,9], sizes: ['small'] },
     };
 
-    // ========== SVG SHAPE HELPERS (cartoon paths, no bare rects) ==========
-
-    function cartoonRect(x, y, w, h, fill, ol) {
-        ol = ol || OL;
-        const r = Math.min(4, w*0.08, h*0.08);
-        return '<path d="M'+(x+r)+','+y+' L'+(x+w-r)+','+y+' Q'+(x+w)+','+y+' '+(x+w)+','+(y+r)+' L'+(x+w)+','+(y+h-r)+' Q'+(x+w)+','+(y+h)+' '+(x+w-r)+','+(y+h)+' L'+(x+r)+','+(y+h)+' Q'+x+','+(y+h)+' '+x+','+(y+h-r)+' L'+x+','+(y+r)+' Q'+x+','+y+' '+(x+r)+','+y+' Z" fill="'+fill+'" '+ol+'/>';
-    }
-
-    function cartoonCircle(cx, cy, r, fill, ol) {
-        ol = ol || OL;
-        return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+fill+'" '+ol+'/>';
-    }
-
-    function cartoonEllipse(cx, cy, rx, ry, fill, ol) {
-        ol = ol || OL;
-        return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+fill+'" '+ol+'/>';
-    }
-
-    function cartoonPath(d, fill, ol) {
-        ol = ol || OL;
-        return '<path d="'+d+'" fill="'+fill+'" '+ol+'/>';
-    }
-
-    function cartoonPoly(points, fill, ol) {
-        ol = ol || OL;
-        return '<polygon points="'+points+'" fill="'+fill+'" '+ol+'/>';
-    }
-
-    // ========== OBJECT BUILDERS ==========
-
-    function buildSun(cx, cy) {
-        var c = col('sun');
-        var svg = '';
-        for (var a = 0; a < 360; a += 30) {
-            var rad = a * Math.PI / 180;
-            var x1 = cx + Math.cos(rad) * 38;
-            var y1 = cy + Math.sin(rad) * 38;
-            var x2 = cx + Math.cos(rad) * 52;
-            var y2 = cy + Math.sin(rad) * 52;
-            svg += '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+c+'" stroke-width="4" stroke-linecap="round"/>';
-        }
-        svg += cartoonCircle(cx, cy, 32, c, OLthick);
-        svg += '<circle cx="'+(cx-10)+'" cy="'+(cy-6)+'" r="3.5" fill="#2a1f14" stroke="none"/>';
-        svg += '<circle cx="'+(cx+10)+'" cy="'+(cy-6)+'" r="3.5" fill="#2a1f14" stroke="none"/>';
-        svg += '<path d="M'+(cx-10)+','+(cy+8)+' Q'+cx+','+(cy+18)+' '+(cx+10)+','+(cy+8)+'" stroke="#2a1f14" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
-        return { svg: svg, x: cx-54, y: cy-54, w: 108, h: 108, parts: [
-            { id: 'sun-body', fill: c }
-        ]};
-    }
-
-    function buildCloud(cx, cy) {
-        var svg = '';
-        svg += cartoonEllipse(cx, cy, 40, 22, '#fff', OL);
-        svg += cartoonEllipse(cx-24, cy+4, 26, 16, '#fff', OL);
-        svg += cartoonEllipse(cx+26, cy+4, 28, 16, '#fff', OL);
-        svg += '<ellipse cx="'+cx+'" cy="'+(cy+4)+'" rx="30" ry="16" fill="#fff" stroke="none"/>';
-        return { svg: svg, x: cx-60, y: cy-22, w: 120, h: 44, parts: [
-            { id: 'cloud-body', fill: '#fff' }
-        ]};
-    }
-
-    function buildTree(x, groundY, scale) {
-        scale = scale || 1;
-        var s = scale;
-        var trunkC = col('trunk');
-        var leafC = col('tree_leaf');
-        var svg = '';
-        var tx = x, bw = 14*s;
-        svg += cartoonPath('M'+(tx-bw/2)+','+groundY+' C'+(tx-bw/2-3*s)+','+(groundY-30*s)+' '+(tx-bw*0.3)+','+(groundY-55*s)+' '+(tx-2*s)+','+(groundY-60*s)+' L'+(tx+2*s)+','+(groundY-60*s)+' C'+(tx+bw*0.3)+','+(groundY-55*s)+' '+(tx+bw/2+3*s)+','+(groundY-30*s)+' '+(tx+bw/2)+','+groundY+' Z', trunkC, OL);
-        svg += cartoonPath('M'+(tx-35*s)+','+(groundY-55*s)+' C'+(tx-42*s)+','+(groundY-75*s)+' '+(tx-25*s)+','+(groundY-100*s)+' '+tx+','+(groundY-95*s)+' C'+(tx+25*s)+','+(groundY-100*s)+' '+(tx+42*s)+','+(groundY-75*s)+' '+(tx+35*s)+','+(groundY-55*s)+' C'+(tx+20*s)+','+(groundY-50*s)+' '+(tx-20*s)+','+(groundY-50*s)+' '+(tx-35*s)+','+(groundY-55*s)+' Z', leafC, OLthick);
-        svg += cartoonCircle(tx-20*s, groundY-78*s, 18*s, leafC, OL);
-        svg += cartoonCircle(tx+20*s, groundY-78*s, 18*s, leafC, OL);
-        svg += cartoonCircle(tx, groundY-88*s, 20*s, leafC, OL);
-        svg += '<circle cx="'+tx+'" cy="'+(groundY-78*s)+'" r="'+(22*s)+'" fill="'+leafC+'" stroke="none"/>';
-        return { svg: svg, x: tx-44*s, y: groundY-108*s, w: 88*s, h: 108*s, parts: [
-            { id: 'trunk', fill: trunkC },
-            { id: 'canopy', fill: leafC }
-        ]};
-    }
-
-    function buildFlower(x, groundY, petalC) {
-        petalC = petalC || col('flower_petal');
-        var centerC = col('flower_center');
-        var stemC = '#2E7D32';
-        var svg = '';
-        svg += '<path d="M'+x+','+groundY+' C'+(x-3)+','+(groundY-12)+' '+(x+3)+','+(groundY-22)+' '+x+','+(groundY-28)+'" stroke="'+stemC+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
-        svg += cartoonPath('M'+x+','+(groundY-14)+' Q'+(x+12)+','+(groundY-20)+' '+(x+6)+','+(groundY-10), '#43A047', OLthin);
-        for (var a = 0; a < 360; a += 60) {
-            var rad = a * Math.PI / 180;
-            var px = x + Math.cos(rad)*10;
-            var py = (groundY-32) + Math.sin(rad)*10;
-            svg += cartoonEllipse(px, py, 7, 5, petalC, OLthin+' transform="rotate('+a+' '+px+' '+py+')"');
-        }
-        svg += cartoonCircle(x, groundY-32, 6, centerC, OLthin);
-        return { svg: svg, x: x-18, y: groundY-44, w: 36, h: 44, parts: [
-            { id: 'petals', fill: petalC },
-            { id: 'center', fill: centerC }
-        ]};
-    }
-
-    function buildHouse(x, groundY) {
-        var wallC = col('house_wall');
-        var roofC = col('roof');
-        var doorC = col('door');
-        var winC = col('window_glass');
-        var hw = 100, hh = 75;
-        var roofH = 50;
-        var baseY = groundY - hh;
-        var svg = '';
-        svg += cartoonPath('M'+x+','+baseY+' L'+(x+hw)+','+baseY+' L'+(x+hw)+','+groundY+' L'+x+','+groundY+' Z', wallC, OLthick);
-        svg += cartoonPath('M'+(x-8)+','+(baseY+2)+' L'+(x+hw/2)+','+(baseY-roofH)+' L'+(x+hw+8)+','+(baseY+2)+' Z', roofC, OLthick);
-        svg += cartoonRect(x+hw-25, baseY-roofH+10, 16, 28, roofC, OL);
-        svg += cartoonPath('M'+(x+38)+','+groundY+' L'+(x+38)+','+(groundY-35)+' Q'+(x+50)+','+(groundY-42)+' '+(x+62)+','+(groundY-35)+' L'+(x+62)+','+groundY+' Z', doorC, OL);
-        svg += cartoonCircle(x+57, groundY-16, 3, '#FFD600', OLthin);
-        svg += cartoonRect(x+10, baseY+14, 22, 22, winC, OL);
-        svg += '<line x1="'+(x+10)+'" y1="'+(baseY+25)+'" x2="'+(x+32)+'" y2="'+(baseY+25)+'" stroke="#2a1f14" stroke-width="1.5"/>';
-        svg += '<line x1="'+(x+21)+'" y1="'+(baseY+14)+'" x2="'+(x+21)+'" y2="'+(baseY+36)+'" stroke="#2a1f14" stroke-width="1.5"/>';
-        svg += cartoonRect(x+70, baseY+14, 22, 22, winC, OL);
-        svg += '<line x1="'+(x+70)+'" y1="'+(baseY+25)+'" x2="'+(x+92)+'" y2="'+(baseY+25)+'" stroke="#2a1f14" stroke-width="1.5"/>';
-        svg += '<line x1="'+(x+81)+'" y1="'+(baseY+14)+'" x2="'+(x+81)+'" y2="'+(baseY+36)+'" stroke="#2a1f14" stroke-width="1.5"/>';
-        return { svg: svg, x: x-8, y: baseY-roofH, w: hw+16, h: groundY-(baseY-roofH), parts: [
-            { id: 'wall', fill: wallC },
-            { id: 'roof', fill: roofC },
-            { id: 'door', fill: doorC },
-            { id: 'window-left', fill: winC },
-            { id: 'window-right', fill: winC },
-            { id: 'chimney', fill: roofC }
-        ]};
-    }
-
-    function buildSwing(cx, groundY) {
-        var svg = '';
-        var topY = groundY - 95;
-        var frameC = '#78909C';
-        var seatC = '#F44336';
-        svg += cartoonPath('M'+(cx-35)+','+groundY+' L'+(cx-25)+','+topY+' L'+(cx+25)+','+topY+' L'+(cx+35)+','+groundY, frameC, OLthick);
-        svg += cartoonRect(cx-28, topY, 56, 6, frameC, OL);
-        svg += '<line x1="'+(cx-10)+'" y1="'+(topY+6)+'" x2="'+(cx-12)+'" y2="'+(groundY-25)+'" stroke="#8D6E63" stroke-width="3" stroke-linecap="round"/>';
-        svg += '<line x1="'+(cx+10)+'" y1="'+(topY+6)+'" x2="'+(cx+12)+'" y2="'+(groundY-25)+'" stroke="#8D6E63" stroke-width="3" stroke-linecap="round"/>';
-        svg += cartoonRect(cx-16, groundY-27, 32, 7, seatC, OL);
-        return { svg: svg, x: cx-37, y: topY, w: 74, h: groundY-topY, parts: [
-            { id: 'frame', fill: frameC },
-            { id: 'seat', fill: seatC }
-        ]};
-    }
-
-    function buildSlide(x, groundY) {
-        var svg = '';
-        var slideC = '#2196F3';
-        var ladderC = '#78909C';
-        var topY = groundY - 80;
-        svg += cartoonPath('M'+x+','+groundY+' L'+x+','+topY+' L'+(x+12)+','+topY+' L'+(x+12)+','+groundY+' Z', ladderC, OL);
-        for (var i = 1; i <= 5; i++) {
-            var ry = topY + i * 13;
-            svg += '<line x1="'+x+'" y1="'+ry+'" x2="'+(x+12)+'" y2="'+ry+'" stroke="#2a1f14" stroke-width="2"/>';
-        }
-        svg += cartoonPath('M'+(x+12)+','+(topY+2)+' C'+(x+35)+','+(topY+5)+' '+(x+55)+','+(groundY-30)+' '+(x+65)+','+groundY+' L'+(x+58)+','+groundY+' C'+(x+50)+','+(groundY-25)+' '+(x+32)+','+(topY+12)+' '+(x+12)+','+(topY+9)+' Z', slideC, OL);
-        return { svg: svg, x: x-2, y: topY, w: 69, h: groundY-topY, parts: [
-            { id: 'slide-surface', fill: slideC },
-            { id: 'ladder', fill: ladderC }
-        ]};
-    }
-
-    function buildBird(cx, cy) {
-        var bodyC = col('orange');
-        var svg = '';
-        svg += cartoonEllipse(cx, cy, 10, 7, bodyC, OLthin);
-        svg += cartoonPath('M'+(cx-3)+','+(cy-2)+' Q'+(cx-14)+','+(cy-12)+' '+(cx-6)+','+(cy+2), col('yellow'), OLthin);
-        svg += cartoonPoly((cx+10)+','+( cy-1)+' '+(cx+17)+','+(cy+1)+' '+(cx+10)+','+(cy+3), '#FF8F00', OLthin);
-        svg += '<circle cx="'+(cx+6)+'" cy="'+(cy-2)+'" r="2" fill="#2a1f14" stroke="none"/>';
-        svg += cartoonPath('M'+(cx-10)+','+cy+' Q'+(cx-18)+','+(cy-6)+' '+(cx-16)+','+(cy+4), bodyC, OLthin);
-        return { svg: svg, x: cx-18, y: cy-14, w: 36, h: 22, parts: [
-            { id: 'bird-body', fill: bodyC }
-        ]};
-    }
-
-    function buildButterfly(cx, cy) {
-        var c1 = col('flower_petal');
-        var c2 = col('purple');
-        var svg = '';
-        svg += cartoonPath('M'+cx+','+cy+' C'+(cx-20)+','+(cy-22)+' '+(cx-28)+','+(cy-8)+' '+(cx-16)+','+(cy+4)+' Q'+(cx-8)+','+(cy+10)+' '+cx+','+cy, c1, OLthin);
-        svg += cartoonPath('M'+cx+','+cy+' C'+(cx+20)+','+(cy-22)+' '+(cx+28)+','+(cy-8)+' '+(cx+16)+','+(cy+4)+' Q'+(cx+8)+','+(cy+10)+' '+cx+','+cy, c1, OLthin);
-        svg += cartoonPath('M'+cx+','+cy+' C'+(cx-16)+','+(cy+4)+' '+(cx-22)+','+(cy+16)+' '+(cx-8)+','+(cy+14)+' Q'+(cx-2)+','+(cy+10)+' '+cx+','+cy, c2, OLthin);
-        svg += cartoonPath('M'+cx+','+cy+' C'+(cx+16)+','+(cy+4)+' '+(cx+22)+','+(cy+16)+' '+(cx+8)+','+(cy+14)+' Q'+(cx+2)+','+(cy+10)+' '+cx+','+cy, c2, OLthin);
-        svg += cartoonEllipse(cx, cy+2, 3, 10, '#2a1f14', 'stroke="none"');
-        svg += '<path d="M'+(cx-1)+','+(cy-7)+' Q'+(cx-8)+','+(cy-18)+' '+(cx-12)+','+(cy-16)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
-        svg += '<path d="M'+(cx+1)+','+(cy-7)+' Q'+(cx+8)+','+(cy-18)+' '+(cx+12)+','+(cy-16)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
-        return { svg: svg, x: cx-30, y: cy-20, w: 60, h: 38, parts: [
-            { id: 'wing-upper', fill: c1 },
-            { id: 'wing-lower', fill: c2 }
-        ]};
-    }
-
-    function buildBench(x, groundY) {
-        var c = '#8D6E63';
-        var seatY = groundY - 22;
-        var svg = '';
-        svg += cartoonRect(x+4, seatY+4, 6, 18, c, OLthin);
-        svg += cartoonRect(x+55, seatY+4, 6, 18, c, OLthin);
-        svg += cartoonRect(x, seatY-22, 65, 5, c, OL);
-        svg += cartoonRect(x, seatY-14, 65, 5, c, OL);
-        svg += cartoonRect(x-2, seatY, 69, 6, c, OL);
-        svg += cartoonRect(x+2, seatY-24, 5, 26, c, OLthin);
-        svg += cartoonRect(x+58, seatY-24, 5, 26, c, OLthin);
-        return { svg: svg, x: x-2, y: seatY-24, w: 71, h: groundY-(seatY-24), parts: [
-            { id: 'bench-body', fill: c }
-        ]};
-    }
-
-    function buildBed(x, groundY) {
-        var frameC = col('furniture');
-        var blanketC = col('blue');
-        var pillowC = '#FFFFFF';
-        var bh = 55, bw = 110;
-        var baseY = groundY - bh;
-        var svg = '';
-        svg += cartoonRect(x, baseY+10, bw, bh-10, frameC, OL);
-        svg += cartoonPath('M'+(x-4)+','+(baseY+10)+' L'+(x-4)+','+(baseY-8)+' Q'+(x+bw/2)+','+(baseY-20)+' '+(x+bw+4)+','+(baseY-8)+' L'+(x+bw+4)+','+(baseY+10)+' Z', frameC, OLthick);
-        svg += cartoonRect(x+4, baseY+14, bw-8, bh-22, '#F5F5F5', OLthin);
-        svg += cartoonPath('M'+(x+30)+','+(baseY+14)+' L'+(x+bw-4)+','+(baseY+14)+' L'+(x+bw-4)+','+(groundY-8)+' L'+(x+28)+','+(groundY-8)+' Q'+(x+25)+','+(baseY+30)+' '+(x+30)+','+(baseY+14), blanketC, OL);
-        svg += cartoonEllipse(x+20, baseY+24, 16, 10, pillowC, OL);
-        svg += cartoonRect(x+bw-2, groundY-16, 8, 16, frameC, OLthin);
-        return { svg: svg, x: x-4, y: baseY-20, w: bw+12, h: groundY-(baseY-20), parts: [
-            { id: 'frame', fill: frameC },
-            { id: 'blanket', fill: blanketC },
-            { id: 'pillow', fill: pillowC }
-        ]};
-    }
-
-    function buildLamp(x, groundY) {
-        var shadeC = col('flower_petal');
-        var svg = '';
-        var baseY2 = groundY;
-        svg += cartoonEllipse(x, baseY2-2, 14, 5, '#9E9E9E', OLthin);
-        svg += cartoonRect(x-3, baseY2-48, 6, 46, '#BDBDBD', OLthin);
-        svg += cartoonPath('M'+(x-22)+','+(baseY2-48)+' Q'+x+','+(baseY2-72)+' '+(x+22)+','+(baseY2-48)+' Z', shadeC, OL);
-        svg += '<ellipse cx="'+x+'" cy="'+(baseY2-46)+'" rx="8" ry="4" fill="#FFF9C4" stroke="none" opacity="0.6"/>';
-        return { svg: svg, x: x-22, y: baseY2-72, w: 44, h: 72, parts: [
-            { id: 'shade', fill: shadeC }
-        ]};
-    }
-
-    function buildBookshelf(x, groundY) {
-        var woodC = '#8D6E63';
-        var shelfH = 80, shelfW = 70;
-        var baseY = groundY - shelfH;
-        var svg = '';
-        svg += cartoonRect(x, baseY, shelfW, shelfH, woodC, OL);
-        svg += cartoonRect(x+3, baseY+3, shelfW-6, shelfH/3-4, '#D7CCC8', 'stroke="none"');
-        svg += cartoonRect(x+3, baseY+shelfH/3+1, shelfW-6, shelfH/3-4, '#D7CCC8', 'stroke="none"');
-        svg += cartoonRect(x+3, baseY+2*shelfH/3+1, shelfW-6, shelfH/3-4, '#D7CCC8', 'stroke="none"');
-        var bookColors = ['#E53935','#1E88E5','#43A047','#FB8C00','#8E24AA','#00ACC1','#FF6F00','#7B1FA2'];
-        for (var row = 0; row < 3; row++) {
-            var bx = x + 6;
-            var rowY = baseY + 5 + row * (shelfH/3);
-            for (var b = 0; b < 5; b++) {
-                var bww = randInt(7, 11);
-                var bhh = randInt(16, 22);
-                svg += cartoonRect(bx, rowY + (24-bhh), bww, bhh, pick(bookColors), OLthin);
-                bx += bww + 2;
-                if (bx > x + shelfW - 10) break;
-            }
-        }
-        return { svg: svg, x: x, y: baseY, w: shelfW, h: shelfH, parts: [
-            { id: 'shelf-frame', fill: woodC }
-        ]};
-    }
-
-    function buildWindow(x, y) {
-        var frameC = '#8D6E63';
-        var glassC = col('window_glass');
-        var svg = '';
-        svg += cartoonRect(x, y, 40, 40, glassC, OL);
-        svg += '<line x1="'+x+'" y1="'+(y+20)+'" x2="'+(x+40)+'" y2="'+(y+20)+'" stroke="'+frameC+'" stroke-width="3"/>';
-        svg += '<line x1="'+(x+20)+'" y1="'+y+'" x2="'+(x+20)+'" y2="'+(y+40)+'" stroke="'+frameC+'" stroke-width="3"/>';
-        svg += cartoonPath('M'+x+','+y+' Q'+(x+5)+','+(y+10)+' '+x+','+(y+20), '#FFCDD2', 'stroke="none"');
-        svg += cartoonPath('M'+(x+40)+','+y+' Q'+(x+35)+','+(y+10)+' '+(x+40)+','+(y+20), '#FFCDD2', 'stroke="none"');
-        return { svg: svg, x: x, y: y, w: 40, h: 40, parts: [
-            { id: 'window-glass', fill: glassC }
-        ]};
-    }
-
-    function buildClock(cx, cy) {
-        var svg = '';
-        svg += cartoonCircle(cx, cy, 18, '#FFF9C4', OL);
-        svg += '<text x="'+cx+'" y="'+(cy-10)+'" font-size="7" fill="#2a1f14" text-anchor="middle" font-family="Arial">12</text>';
-        svg += '<text x="'+(cx+11)+'" y="'+(cy+3)+'" font-size="7" fill="#2a1f14" text-anchor="middle" font-family="Arial">3</text>';
-        svg += '<text x="'+cx+'" y="'+(cy+14)+'" font-size="7" fill="#2a1f14" text-anchor="middle" font-family="Arial">6</text>';
-        svg += '<text x="'+(cx-11)+'" y="'+(cy+3)+'" font-size="7" fill="#2a1f14" text-anchor="middle" font-family="Arial">9</text>';
-        svg += '<line x1="'+cx+'" y1="'+cy+'" x2="'+cx+'" y2="'+(cy-12)+'" stroke="#2a1f14" stroke-width="2.5" stroke-linecap="round"/>';
-        svg += '<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+8)+'" y2="'+(cy+3)+'" stroke="#2a1f14" stroke-width="2" stroke-linecap="round"/>';
-        svg += cartoonCircle(cx, cy, 2.5, '#E53935', 'stroke="none"');
-        return { svg: svg, x: cx-18, y: cy-18, w: 36, h: 36, parts: [
-            { id: 'clock-face', fill: '#FFF9C4' }
-        ]};
-    }
-
-    function buildRug(cx, cy) {
-        var c = col('flower_petal');
-        var c2 = col('purple');
-        var svg = '';
-        svg += cartoonEllipse(cx, cy, 55, 22, c, OL);
-        svg += cartoonEllipse(cx, cy, 40, 15, c2, OLthin);
-        svg += cartoonEllipse(cx, cy, 22, 8, c, OLthin);
-        return { svg: svg, x: cx-55, y: cy-22, w: 110, h: 44, parts: [
-            { id: 'rug-outer', fill: c },
-            { id: 'rug-inner', fill: c2 }
-        ]};
-    }
-
-    function buildToy(cx, cy) {
-        var bodyC = '#D7CCC8';
-        var innerC = '#BCAAA4';
-        var svg = '';
-        svg += cartoonCircle(cx-12, cy-16, 7, bodyC, OLthin);
-        svg += cartoonCircle(cx-12, cy-16, 4, innerC, 'stroke="none"');
-        svg += cartoonCircle(cx+12, cy-16, 7, bodyC, OLthin);
-        svg += cartoonCircle(cx+12, cy-16, 4, innerC, 'stroke="none"');
-        svg += cartoonCircle(cx, cy-6, 15, bodyC, OL);
-        svg += cartoonEllipse(cx, cy+16, 12, 14, bodyC, OL);
-        svg += cartoonEllipse(cx, cy+16, 7, 9, innerC, 'stroke="none"');
-        svg += '<circle cx="'+(cx-5)+'" cy="'+(cy-9)+'" r="2.5" fill="#2a1f14" stroke="none"/>';
-        svg += '<circle cx="'+(cx+5)+'" cy="'+(cy-9)+'" r="2.5" fill="#2a1f14" stroke="none"/>';
-        svg += cartoonEllipse(cx, cy-3, 3, 2.5, '#5D4037', 'stroke="none"');
-        svg += '<path d="M'+(cx-3)+','+cy+' Q'+cx+','+(cy+4)+' '+(cx+3)+','+cy+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
-        svg += cartoonEllipse(cx-16, cy+12, 6, 8, bodyC, OLthin);
-        svg += cartoonEllipse(cx+16, cy+12, 6, 8, bodyC, OLthin);
-        svg += cartoonEllipse(cx-7, cy+28, 7, 5, bodyC, OLthin);
-        svg += cartoonEllipse(cx+7, cy+28, 7, 5, bodyC, OLthin);
-        return { svg: svg, x: cx-24, y: cy-24, w: 48, h: 56, parts: [
-            { id: 'teddy-body', fill: bodyC }
-        ]};
-    }
-
-    function buildFridge(x, groundY) {
-        var fridgeH = 95, fridgeW = 50;
-        var baseY = groundY - fridgeH;
-        var bodyC = '#ECEFF1';
-        var svg = '';
-        svg += cartoonRect(x, baseY, fridgeW, fridgeH, bodyC, OLthick);
-        svg += cartoonRect(x+3, baseY+3, fridgeW-6, fridgeH*0.42, '#CFD8DC', OLthin);
-        svg += cartoonRect(x+3, baseY+fridgeH*0.46, fridgeW-6, fridgeH*0.5, '#CFD8DC', OLthin);
-        svg += cartoonRect(x+fridgeW-10, baseY+18, 4, 14, '#9E9E9E', OLthin);
-        svg += cartoonRect(x+fridgeW-10, baseY+fridgeH*0.55, 4, 14, '#9E9E9E', OLthin);
-        svg += cartoonCircle(x+15, baseY+15, 5, '#FF6B6B', OLthin);
-        return { svg: svg, x: x, y: baseY, w: fridgeW, h: fridgeH, parts: [
-            { id: 'fridge-body', fill: bodyC },
-            { id: 'fridge-magnet', fill: '#FF6B6B' }
-        ]};
-    }
-
-    function buildTable(x, groundY) {
-        var c = col('furniture');
-        var tH = 8, tW = 95, legH = 38;
-        var topY = groundY - legH - tH;
-        var svg = '';
-        svg += cartoonRect(x+6, topY+tH, 7, legH, c, OLthin);
-        svg += cartoonRect(x+tW-13, topY+tH, 7, legH, c, OLthin);
-        svg += cartoonRect(x, topY, tW, tH, c, OL);
-        return { svg: svg, x: x, y: topY, w: tW, h: legH+tH, parts: [
-            { id: 'table-body', fill: c }
-        ]};
-    }
-
-    function buildChair(x, groundY) {
-        var c = col('furniture');
-        var seatY = groundY - 28;
-        var svg = '';
-        svg += cartoonRect(x+3, seatY+5, 5, 23, c, OLthin);
-        svg += cartoonRect(x+27, seatY+5, 5, 23, c, OLthin);
-        svg += cartoonRect(x+1, seatY-30, 33, 32, c, OL);
-        svg += cartoonRect(x-1, seatY, 37, 7, c, OL);
-        return { svg: svg, x: x-1, y: seatY-30, w: 38, h: groundY-(seatY-30), parts: [
-            { id: 'chair-body', fill: c }
-        ]};
-    }
-
-    function buildPot(cx, surfaceY) {
-        var c = col('red');
-        var svg = '';
-        svg += cartoonPath('M'+(cx-20)+','+surfaceY+' Q'+(cx-22)+','+(surfaceY-30)+' '+(cx-14)+','+(surfaceY-30)+' L'+(cx+14)+','+(surfaceY-30)+' Q'+(cx+22)+','+(surfaceY-30)+' '+(cx+20)+','+surfaceY+' Z', c, OL);
-        svg += cartoonEllipse(cx, surfaceY-30, 18, 5, c, OL);
-        svg += cartoonCircle(cx, surfaceY-36, 4, c, OLthin);
-        svg += '<path d="M'+(cx-6)+','+(surfaceY-42)+' Q'+(cx-10)+','+(surfaceY-54)+' '+(cx-4)+','+(surfaceY-58)+'" stroke="#BDBDBD" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.6"/>';
-        svg += '<path d="M'+(cx+6)+','+(surfaceY-42)+' Q'+(cx+10)+','+(surfaceY-56)+' '+(cx+4)+','+(surfaceY-62)+'" stroke="#BDBDBD" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.6"/>';
-        return { svg: svg, x: cx-22, y: surfaceY-62, w: 44, h: 62, parts: [
-            { id: 'pot-body', fill: c }
-        ]};
-    }
-
-    function buildApple(cx, cy) {
-        var c = '#F44336';
-        var svg = '';
-        svg += cartoonPath('M'+cx+','+(cy-10)+' C'+(cx-14)+','+(cy-12)+' '+(cx-14)+','+(cy+8)+' '+cx+','+(cy+12)+' C'+(cx+14)+','+(cy+8)+' '+(cx+14)+','+(cy-12)+' '+cx+','+(cy-10)+' Z', c, OLthin);
-        svg += '<path d="M'+cx+','+(cy-10)+' Q'+(cx+2)+','+(cy-18)+' '+(cx+1)+','+(cy-20)+'" stroke="#5D4037" stroke-width="2" fill="none" stroke-linecap="round"/>';
-        svg += cartoonPath('M'+(cx+1)+','+(cy-17)+' Q'+(cx+10)+','+(cy-22)+' '+(cx+8)+','+(cy-15), '#4CAF50', OLthin);
-        svg += '<ellipse cx="'+(cx-4)+'" cy="'+(cy-5)+'" rx="3" ry="4" fill="white" opacity="0.3" stroke="none"/>';
-        return { svg: svg, x: cx-14, y: cy-22, w: 28, h: 34, parts: [
-            { id: 'apple-body', fill: c }
-        ]};
-    }
-
-    function buildUmbrella(cx, groundY) {
-        var c = col('flower_petal');
-        var poleC = '#795548';
-        var svg = '';
-        svg += '<line x1="'+cx+'" y1="'+groundY+'" x2="'+cx+'" y2="'+(groundY-70)+'" stroke="'+poleC+'" stroke-width="3.5" stroke-linecap="round"/>';
-        svg += '<path d="M'+cx+','+groundY+' Q'+(cx+10)+','+(groundY+6)+' '+(cx+8)+','+(groundY-2)+'" stroke="'+poleC+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
-        svg += cartoonPath('M'+(cx-40)+','+(groundY-62)+' Q'+(cx-20)+','+(groundY-96)+' '+cx+','+(groundY-92)+' Q'+(cx+20)+','+(groundY-96)+' '+(cx+40)+','+(groundY-62)+' Z', c, OLthick);
-        svg += '<line x1="'+cx+'" y1="'+(groundY-92)+'" x2="'+cx+'" y2="'+(groundY-62)+'" stroke="#2a1f14" stroke-width="1.5"/>';
-        svg += '<line x1="'+(cx-20)+'" y1="'+(groundY-88)+'" x2="'+(cx-22)+'" y2="'+(groundY-62)+'" stroke="#2a1f14" stroke-width="1.5"/>';
-        svg += '<line x1="'+(cx+20)+'" y1="'+(groundY-88)+'" x2="'+(cx+22)+'" y2="'+(groundY-62)+'" stroke="#2a1f14" stroke-width="1.5"/>';
-        return { svg: svg, x: cx-42, y: groundY-96, w: 84, h: 102, parts: [
-            { id: 'umbrella-canopy', fill: c }
-        ]};
-    }
-
-    function buildSandcastle(x, groundY) {
-        var sandC = '#FFB74D';
-        var svg = '';
-        svg += cartoonPath('M'+x+','+groundY+' L'+(x+60)+','+groundY+' L'+(x+58)+','+(groundY-28)+' L'+(x+2)+','+(groundY-28)+' Z', sandC, OL);
-        svg += cartoonRect(x+4, groundY-50, 18, 24, sandC, OL);
-        svg += cartoonRect(x+38, groundY-50, 18, 24, sandC, OL);
-        for (var i = 0; i < 3; i++) {
-            svg += cartoonRect(x+5+i*7, groundY-56, 5, 8, sandC, OLthin);
-            svg += cartoonRect(x+39+i*7, groundY-56, 5, 8, sandC, OLthin);
-        }
-        svg += cartoonPath('M'+(x+24)+','+(groundY-28)+' Q'+(x+30)+','+(groundY-40)+' '+(x+36)+','+(groundY-28), '#D7A04A', OLthin);
-        svg += '<line x1="'+(x+13)+'" y1="'+(groundY-56)+'" x2="'+(x+13)+'" y2="'+(groundY-72)+'" stroke="#795548" stroke-width="2"/>';
-        svg += cartoonPoly((x+13)+','+(groundY-72)+' '+(x+25)+','+(groundY-67)+' '+(x+13)+','+(groundY-62), '#F44336', OLthin);
-        return { svg: svg, x: x, y: groundY-72, w: 60, h: 72, parts: [
-            { id: 'castle-body', fill: sandC },
-            { id: 'castle-flag', fill: '#F44336' }
-        ]};
-    }
-
-    function buildBoat(cx, waterY) {
-        var hullC = col('house_wall');
-        var svg = '';
-        svg += cartoonPath('M'+(cx-35)+','+waterY+' L'+(cx-28)+','+(waterY+18)+' L'+(cx+28)+','+(waterY+18)+' L'+(cx+35)+','+waterY+' Z', hullC, OL);
-        svg += '<line x1="'+cx+'" y1="'+waterY+'" x2="'+cx+'" y2="'+(waterY-45)+'" stroke="#795548" stroke-width="3.5" stroke-linecap="round"/>';
-        svg += cartoonPath('M'+(cx+2)+','+(waterY-42)+' L'+(cx+28)+','+(waterY-15)+' L'+(cx+2)+','+(waterY-5)+' Z', '#FFFFFF', OL);
-        svg += cartoonPoly(cx+','+(waterY-45)+' '+(cx+12)+','+(waterY-40)+' '+cx+','+(waterY-35), '#FF6B6B', OLthin);
-        return { svg: svg, x: cx-37, y: waterY-47, w: 74, h: 67, parts: [
-            { id: 'hull', fill: hullC },
-            { id: 'sail', fill: '#FFFFFF' }
-        ]};
-    }
-
-    function buildFish(cx, cy) {
-        var c = col('flower_petal');
-        var svg = '';
-        svg += cartoonPath('M'+(cx+18)+','+cy+' C'+(cx+18)+','+(cy-12)+' '+(cx-8)+','+(cy-14)+' '+(cx-14)+','+cy+' C'+(cx-8)+','+(cy+14)+' '+(cx+18)+','+(cy+12)+' '+(cx+18)+','+cy+' Z', c, OLthin);
-        svg += cartoonPath('M'+(cx-12)+','+cy+' L'+(cx-26)+','+(cy-10)+' L'+(cx-26)+','+(cy+10)+' Z', c, OLthin);
-        svg += '<circle cx="'+(cx+8)+'" cy="'+(cy-3)+'" r="3" fill="white" stroke="none"/>';
-        svg += '<circle cx="'+(cx+9)+'" cy="'+(cy-3)+'" r="1.5" fill="#2a1f14" stroke="none"/>';
-        svg += cartoonPath('M'+cx+','+(cy-8)+' Q'+(cx+4)+','+(cy-16)+' '+(cx+10)+','+(cy-8), c, OLthin);
-        return { svg: svg, x: cx-28, y: cy-16, w: 48, h: 32, parts: [
-            { id: 'fish-body', fill: c }
-        ]};
-    }
-
-    function buildCrab(cx, cy) {
-        var c = '#EF5350';
-        var svg = '';
-        svg += cartoonEllipse(cx, cy, 18, 13, c, OL);
-        svg += '<line x1="'+(cx-6)+'" y1="'+(cy-12)+'" x2="'+(cx-8)+'" y2="'+(cy-20)+'" stroke="'+c+'" stroke-width="3"/>';
-        svg += '<line x1="'+(cx+6)+'" y1="'+(cy-12)+'" x2="'+(cx+8)+'" y2="'+(cy-20)+'" stroke="'+c+'" stroke-width="3"/>';
-        svg += cartoonCircle(cx-8, cy-21, 4, '#fff', OLthin);
-        svg += '<circle cx="'+(cx-8)+'" cy="'+(cy-21)+'" r="2" fill="#2a1f14" stroke="none"/>';
-        svg += cartoonCircle(cx+8, cy-21, 4, '#fff', OLthin);
-        svg += '<circle cx="'+(cx+8)+'" cy="'+(cy-21)+'" r="2" fill="#2a1f14" stroke="none"/>';
-        svg += cartoonPath('M'+(cx-18)+','+(cy-2)+' L'+(cx-28)+','+(cy-8)+' L'+(cx-26)+','+(cy-16)+' Q'+(cx-20)+','+(cy-14)+' '+(cx-22)+','+(cy-8), c, OL);
-        svg += cartoonPath('M'+(cx+18)+','+(cy-2)+' L'+(cx+28)+','+(cy-8)+' L'+(cx+26)+','+(cy-16)+' Q'+(cx+20)+','+(cy-14)+' '+(cx+22)+','+(cy-8), c, OL);
-        for (var i = -1; i <= 1; i++) {
-            svg += '<line x1="'+(cx-16)+'" y1="'+(cy+4+i*6)+'" x2="'+(cx-26)+'" y2="'+(cy+10+i*6)+'" stroke="'+c+'" stroke-width="2.5" stroke-linecap="round"/>';
-            svg += '<line x1="'+(cx+16)+'" y1="'+(cy+4+i*6)+'" x2="'+(cx+26)+'" y2="'+(cy+10+i*6)+'" stroke="'+c+'" stroke-width="2.5" stroke-linecap="round"/>';
-        }
-        svg += '<path d="M'+(cx-5)+','+(cy+4)+' Q'+cx+','+(cy+9)+' '+(cx+5)+','+(cy+4)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
-        return { svg: svg, x: cx-30, y: cy-25, w: 60, h: 40, parts: [
-            { id: 'crab-body', fill: c }
-        ]};
-    }
-
-    function buildDesk(x, groundY) {
-        var c = '#A1887F';
-        var deskH = 7, legH = 34, deskW = 100;
-        var topY = groundY - legH - deskH;
-        var svg = '';
-        svg += cartoonRect(x+6, topY+deskH, 6, legH, c, OLthin);
-        svg += cartoonRect(x+deskW-12, topY+deskH, 6, legH, c, OLthin);
-        svg += cartoonRect(x, topY, deskW, deskH, c, OL);
-        svg += cartoonRect(x+20, topY-9, 28, 9, '#42A5F5', OLthin);
-        svg += cartoonRect(x+58, topY-7, 18, 7, '#66BB6A', OLthin);
-        return { svg: svg, x: x, y: topY-9, w: deskW, h: legH+deskH+9, parts: [
-            { id: 'desk-top', fill: c },
-            { id: 'desk-book', fill: '#42A5F5' }
-        ]};
-    }
-
-    function buildBlackboard(x, y) {
-        var frameC = '#6D4C41';
-        var boardC = '#2E7D32';
-        var svg = '';
-        svg += cartoonRect(x-4, y-4, 138, 82, frameC, OLthick);
-        svg += cartoonRect(x, y, 130, 74, boardC, OL);
-        svg += '<text x="'+(x+65)+'" y="'+(y+38)+'" font-size="24" fill="#FFEB3B" font-family="Arial, sans-serif" text-anchor="middle" stroke="none">ABC</text>';
-        svg += '<text x="'+(x+65)+'" y="'+(y+58)+'" font-size="16" fill="#fff" font-family="Arial, sans-serif" text-anchor="middle" stroke="none" opacity="0.7">123</text>';
-        svg += cartoonRect(x+10, y+74, 110, 5, '#8D6E63', OLthin);
-        svg += cartoonRect(x+25, y+72, 14, 4, '#fff', 'stroke="none"');
-        svg += cartoonRect(x+45, y+72, 10, 4, '#FFD600', 'stroke="none"');
-        return { svg: svg, x: x-4, y: y-4, w: 138, h: 83, parts: [
-            { id: 'board', fill: boardC },
-            { id: 'board-frame', fill: frameC }
-        ]};
-    }
-
-    function buildCow(cx, groundY) {
-        var bodyC = '#FFFFFF';
-        var spotC = '#333333';
-        var svg = '';
-        var by = groundY - 32;
-        svg += cartoonEllipse(cx, by, 34, 22, bodyC, OLthick);
-        svg += cartoonEllipse(cx-12, by-6, 9, 7, spotC, 'stroke="none"');
-        svg += cartoonEllipse(cx+14, by+4, 7, 6, spotC, 'stroke="none"');
-        svg += cartoonEllipse(cx+4, by+8, 6, 4, spotC, 'stroke="none"');
-        svg += cartoonCircle(cx+36, by-6, 15, bodyC, OL);
-        svg += cartoonEllipse(cx+28, by-20, 6, 4, '#FFCCBC', OLthin);
-        svg += cartoonEllipse(cx+44, by-20, 6, 4, '#FFCCBC', OLthin);
-        svg += '<circle cx="'+(cx+32)+'" cy="'+(by-10)+'" r="3" fill="white" stroke="none"/>';
-        svg += '<circle cx="'+(cx+33)+'" cy="'+(by-10)+'" r="1.8" fill="#2a1f14" stroke="none"/>';
-        svg += '<circle cx="'+(cx+40)+'" cy="'+(by-10)+'" r="3" fill="white" stroke="none"/>';
-        svg += '<circle cx="'+(cx+41)+'" cy="'+(by-10)+'" r="1.8" fill="#2a1f14" stroke="none"/>';
-        svg += cartoonEllipse(cx+37, by, 8, 5, '#FFCCBC', OLthin);
-        svg += '<circle cx="'+(cx+34)+'" cy="'+by+'" r="1.5" fill="#2a1f14" stroke="none"/>';
-        svg += '<circle cx="'+(cx+40)+'" cy="'+by+'" r="1.5" fill="#2a1f14" stroke="none"/>';
-        svg += cartoonPath('M'+(cx+30)+','+(by-19)+' Q'+(cx+26)+','+(by-32)+' '+(cx+28)+','+(by-34), '#FFB74D', OLthin);
-        svg += cartoonPath('M'+(cx+42)+','+(by-19)+' Q'+(cx+46)+','+(by-32)+' '+(cx+44)+','+(by-34), '#FFB74D', OLthin);
-        svg += cartoonRect(cx-24, groundY-18, 8, 18, bodyC, OLthin);
-        svg += cartoonRect(cx-10, groundY-18, 8, 18, bodyC, OLthin);
-        svg += cartoonRect(cx+10, groundY-18, 8, 18, bodyC, OLthin);
-        svg += cartoonRect(cx+22, groundY-18, 8, 18, bodyC, OLthin);
-        svg += cartoonRect(cx-25, groundY-3, 10, 3, '#333', 'stroke="none"');
-        svg += cartoonRect(cx-11, groundY-3, 10, 3, '#333', 'stroke="none"');
-        svg += cartoonRect(cx+9, groundY-3, 10, 3, '#333', 'stroke="none"');
-        svg += cartoonRect(cx+21, groundY-3, 10, 3, '#333', 'stroke="none"');
-        svg += '<path d="M'+(cx-34)+','+(by-8)+' Q'+(cx-48)+','+(by-16)+' '+(cx-44)+','+(by-4)+'" stroke="#2a1f14" stroke-width="2" fill="none"/>';
-        svg += cartoonCircle(cx-44, by-4, 4, bodyC, OLthin);
-        svg += '<path d="M'+(cx+33)+','+(by+4)+' Q'+(cx+37)+','+(by+8)+' '+(cx+41)+','+(by+4)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
-        return { svg: svg, x: cx-50, y: by-36, w: 102, h: groundY-(by-36), parts: [
-            { id: 'cow-body', fill: bodyC },
-            { id: 'cow-spots', fill: spotC },
-            { id: 'cow-horns', fill: '#FFB74D' }
-        ]};
-    }
-
-    function buildChicken(cx, groundY) {
-        var bodyC = '#FFE082';
-        var combC = '#F44336';
-        var svg = '';
-        var by = groundY - 18;
-        svg += cartoonEllipse(cx, by, 16, 13, bodyC, OL);
-        svg += cartoonCircle(cx+16, by-8, 10, bodyC, OL);
-        svg += cartoonPath('M'+(cx+12)+','+(by-17)+' Q'+(cx+15)+','+(by-26)+' '+(cx+18)+','+(by-18)+' Q'+(cx+20)+','+(by-25)+' '+(cx+22)+','+(by-17), combC, OLthin);
-        svg += '<circle cx="'+(cx+19)+'" cy="'+(by-10)+'" r="2.5" fill="white" stroke="none"/>';
-        svg += '<circle cx="'+(cx+20)+'" cy="'+(by-10)+'" r="1.3" fill="#2a1f14" stroke="none"/>';
-        svg += cartoonPoly((cx+26)+','+(by-7)+' '+(cx+34)+','+(by-5)+' '+(cx+26)+','+(by-3), '#FF8F00', OLthin);
-        svg += cartoonPath('M'+(cx-4)+','+(by-4)+' Q'+(cx-14)+','+(by+2)+' '+(cx-6)+','+(by+8), '#FFD54F', OLthin);
-        svg += cartoonPath('M'+(cx-14)+','+(by-4)+' Q'+(cx-26)+','+(by-16)+' '+(cx-20)+','+(by+2), '#FFD54F', OLthin);
-        svg += cartoonPath('M'+(cx-14)+','+(by-2)+' Q'+(cx-28)+','+(by-10)+' '+(cx-22)+','+(by+4), bodyC, OLthin);
-        svg += '<line x1="'+(cx-4)+'" y1="'+(by+12)+'" x2="'+(cx-6)+'" y2="'+groundY+'" stroke="#FF8F00" stroke-width="2.5" stroke-linecap="round"/>';
-        svg += '<line x1="'+(cx+4)+'" y1="'+(by+12)+'" x2="'+(cx+6)+'" y2="'+groundY+'" stroke="#FF8F00" stroke-width="2.5" stroke-linecap="round"/>';
-        svg += '<path d="M'+(cx-10)+','+groundY+' L'+(cx-6)+','+groundY+' L'+(cx-2)+','+groundY+'" stroke="#FF8F00" stroke-width="2" fill="none" stroke-linecap="round"/>';
-        svg += '<path d="M'+(cx+2)+','+groundY+' L'+(cx+6)+','+groundY+' L'+(cx+10)+','+groundY+'" stroke="#FF8F00" stroke-width="2" fill="none" stroke-linecap="round"/>';
-        return { svg: svg, x: cx-28, y: by-26, w: 64, h: groundY-(by-26), parts: [
-            { id: 'chicken-body', fill: bodyC },
-            { id: 'chicken-comb', fill: combC }
-        ]};
-    }
-
-    function buildBarn(x, groundY) {
-        var wallC = '#C62828';
-        var roofC = '#D32F2F';
-        var bw = 100, bh = 70;
-        var baseY = groundY - bh;
-        var svg = '';
-        svg += cartoonRect(x, baseY, bw, bh, wallC, OLthick);
-        svg += cartoonPath('M'+(x-8)+','+(baseY+2)+' L'+(x+bw/2)+','+(baseY-42)+' L'+(x+bw+8)+','+(baseY+2)+' Z', roofC, OLthick);
-        svg += '<line x1="'+x+'" y1="'+(baseY+bh/2)+'" x2="'+(x+bw)+'" y2="'+(baseY+bh/2)+'" stroke="#B71C1C" stroke-width="2"/>';
-        svg += cartoonPath('M'+(x+32)+','+groundY+' L'+(x+32)+','+(baseY+20)+' Q'+(x+50)+','+(baseY+10)+' '+(x+68)+','+(baseY+20)+' L'+(x+68)+','+groundY+' Z', '#5D4037', OL);
-        svg += '<line x1="'+(x+50)+'" y1="'+(baseY+14)+'" x2="'+(x+50)+'" y2="'+groundY+'" stroke="#2a1f14" stroke-width="1.5"/>';
-        svg += cartoonRect(x+8, baseY+12, 18, 18, '#FFECB3', OL);
-        svg += cartoonRect(x+bw-26, baseY+12, 18, 18, '#FFECB3', OL);
-        svg += cartoonCircle(x+bw/2, baseY-16, 10, '#FFECB3', OL);
-        return { svg: svg, x: x-8, y: baseY-42, w: bw+16, h: groundY-(baseY-42), parts: [
-            { id: 'barn-wall', fill: wallC },
-            { id: 'barn-roof', fill: roofC },
-            { id: 'barn-door', fill: '#5D4037' },
-            { id: 'barn-hayloft', fill: '#FFECB3' }
-        ]};
-    }
-
-    function buildFence(x, groundY) {
-        var c = '#D7CCC8';
-        var svg = '';
-        var fenceH = 40, postCount = 6, spacing = 14;
-        var totalW = (postCount-1)*spacing + 6;
-        for (var i = 0; i < postCount; i++) {
-            svg += cartoonRect(x+i*spacing, groundY-fenceH, 6, fenceH, c, OLthin);
-            svg += cartoonPoly((x+i*spacing)+','+(groundY-fenceH)+' '+(x+i*spacing+3)+','+(groundY-fenceH-8)+' '+(x+i*spacing+6)+','+(groundY-fenceH), c, OLthin);
-        }
-        svg += cartoonRect(x-2, groundY-fenceH+10, totalW+4, 5, c, OLthin);
-        svg += cartoonRect(x-2, groundY-fenceH+26, totalW+4, 5, c, OLthin);
-        return { svg: svg, x: x-2, y: groundY-fenceH-8, w: totalW+4, h: fenceH+8, parts: [
-            { id: 'fence-body', fill: c }
-        ]};
-    }
-
-    function buildRocket(cx, cy) {
-        var noseC = col('planet');
-        var bodyC = '#ECEFF1';
-        var svg = '';
-        svg += cartoonPath('M'+(cx-16)+','+(cy+18)+' L'+(cx-16)+','+(cy-10)+' Q'+cx+','+(cy-48)+' '+(cx+16)+','+(cy-10)+' L'+(cx+16)+','+(cy+18)+' Z', bodyC, OLthick);
-        svg += cartoonPath('M'+(cx-10)+','+(cy-8)+' Q'+cx+','+(cy-45)+' '+(cx+10)+','+(cy-8), noseC, OL);
-        svg += cartoonCircle(cx, cy, 8, '#42A5F5', OL);
-        svg += cartoonCircle(cx, cy, 4, '#B3E5FC', 'stroke="none"');
-        svg += cartoonPath('M'+(cx-16)+','+(cy+10)+' L'+(cx-28)+','+(cy+30)+' L'+(cx-12)+','+(cy+20)+' Z', noseC, OL);
-        svg += cartoonPath('M'+(cx+16)+','+(cy+10)+' L'+(cx+28)+','+(cy+30)+' L'+(cx+12)+','+(cy+20)+' Z', noseC, OL);
-        svg += cartoonPath('M'+(cx-10)+','+(cy+18)+' Q'+cx+','+(cy+40)+' '+(cx+10)+','+(cy+18), '#FF6F00', OLthin);
-        svg += cartoonPath('M'+(cx-5)+','+(cy+18)+' Q'+cx+','+(cy+32)+' '+(cx+5)+','+(cy+18), '#FFD600', 'stroke="none"');
-        return { svg: svg, x: cx-30, y: cy-48, w: 60, h: 88, parts: [
-            { id: 'rocket-body', fill: bodyC },
-            { id: 'rocket-nose', fill: noseC },
-            { id: 'rocket-window', fill: '#42A5F5' }
-        ]};
-    }
-
-    function buildPlanet(cx, cy, size) {
-        var c = col('planet');
-        var s = size || randInt(20, 35);
-        var svg = '';
-        svg += cartoonCircle(cx, cy, s, c, OL);
-        if (rng() > 0.4) {
-            svg += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(s*1.6)+'" ry="'+(s*0.25)+'" fill="none" stroke="'+c+'" stroke-width="3" opacity="0.5"/>';
-        }
-        svg += cartoonCircle(cx-s*0.3, cy-s*0.2, s*0.15, 'rgba(0,0,0,0.1)', 'stroke="none"');
-        svg += cartoonCircle(cx+s*0.2, cy+s*0.3, s*0.12, 'rgba(0,0,0,0.1)', 'stroke="none"');
-        return { svg: svg, x: cx-s*1.7, y: cy-s, w: s*3.4, h: s*2, parts: [
-            { id: 'planet-body', fill: c }
-        ]};
-    }
-
-    function buildStar(cx, cy, size) {
-        var s = size || randInt(5, 10);
-        var c = col('star');
-        var pts = '';
-        for (var i = 0; i < 5; i++) {
-            var a1 = (i * 72 - 90) * Math.PI / 180;
-            var a2 = ((i * 72) + 36 - 90) * Math.PI / 180;
-            pts += (cx + Math.cos(a1)*s)+','+(cy + Math.sin(a1)*s)+' ';
-            pts += (cx + Math.cos(a2)*s*0.4)+','+(cy + Math.sin(a2)*s*0.4)+' ';
-        }
-        var svg = cartoonPoly(pts.trim(), c, OLthin);
-        return { svg: svg, x: cx-s, y: cy-s, w: s*2, h: s*2, parts: [
-            { id: 'star-body', fill: c }
-        ]};
-    }
-
-    function buildAlien(cx, groundY) {
-        var c = '#66BB6A';
-        var svg = '';
-        var by = groundY - 20;
-        svg += cartoonEllipse(cx, by+6, 12, 14, c, OL);
-        svg += cartoonEllipse(cx, by-14, 14, 12, c, OL);
-        svg += cartoonEllipse(cx-6, by-16, 5, 6, '#fff', OLthin);
-        svg += '<circle cx="'+(cx-5)+'" cy="'+(by-16)+'" r="2.5" fill="#2a1f14" stroke="none"/>';
-        svg += cartoonEllipse(cx+6, by-16, 5, 6, '#fff', OLthin);
-        svg += '<circle cx="'+(cx+7)+'" cy="'+(by-16)+'" r="2.5" fill="#2a1f14" stroke="none"/>';
-        svg += '<line x1="'+(cx-6)+'" y1="'+(by-25)+'" x2="'+(cx-10)+'" y2="'+(by-36)+'" stroke="'+c+'" stroke-width="2" stroke-linecap="round"/>';
-        svg += cartoonCircle(cx-10, by-38, 3, '#FFD600', OLthin);
-        svg += '<line x1="'+(cx+6)+'" y1="'+(by-25)+'" x2="'+(cx+10)+'" y2="'+(by-36)+'" stroke="'+c+'" stroke-width="2" stroke-linecap="round"/>';
-        svg += cartoonCircle(cx+10, by-38, 3, '#FFD600', OLthin);
-        svg += '<path d="M'+(cx-4)+','+(by-8)+' Q'+cx+','+(by-4)+' '+(cx+4)+','+(by-8)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
-        svg += '<line x1="'+(cx-12)+'" y1="'+(by+2)+'" x2="'+(cx-22)+'" y2="'+(by-4)+'" stroke="'+c+'" stroke-width="3" stroke-linecap="round"/>';
-        svg += '<line x1="'+(cx+12)+'" y1="'+(by+2)+'" x2="'+(cx+22)+'" y2="'+(by-4)+'" stroke="'+c+'" stroke-width="3" stroke-linecap="round"/>';
-        svg += '<line x1="'+(cx-5)+'" y1="'+(by+18)+'" x2="'+(cx-8)+'" y2="'+groundY+'" stroke="'+c+'" stroke-width="3" stroke-linecap="round"/>';
-        svg += '<line x1="'+(cx+5)+'" y1="'+(by+18)+'" x2="'+(cx+8)+'" y2="'+groundY+'" stroke="'+c+'" stroke-width="3" stroke-linecap="round"/>';
-        return { svg: svg, x: cx-24, y: by-40, w: 48, h: groundY-(by-40), parts: [
-            { id: 'alien-body', fill: c }
-        ]};
-    }
-
-    function buildPlant(x, groundY) {
-        var potC = col('red');
-        var leafC = '#43A047';
-        var svg = '';
-        svg += cartoonPath('M'+x+','+groundY+' L'+(x+4)+','+(groundY-28)+' L'+(x+32)+','+(groundY-28)+' L'+(x+36)+','+groundY+' Z', potC, OL);
-        svg += cartoonRect(x-2, groundY-30, 40, 5, potC, OL);
-        svg += cartoonPath('M'+(x+18)+','+(groundY-30)+' Q'+(x+8)+','+(groundY-50)+' '+(x-2)+','+(groundY-42), leafC, OL);
-        svg += cartoonPath('M'+(x+18)+','+(groundY-30)+' Q'+(x+28)+','+(groundY-50)+' '+(x+38)+','+(groundY-42), leafC, OL);
-        svg += cartoonPath('M'+(x+18)+','+(groundY-30)+' Q'+(x+16)+','+(groundY-56)+' '+(x+18)+','+(groundY-58), leafC, OL);
-        return { svg: svg, x: x-4, y: groundY-60, w: 44, h: 60, parts: [
-            { id: 'plant-pot', fill: potC },
-            { id: 'plant-leaves', fill: leafC }
-        ]};
-    }
-
-    function buildShelf(x, y) {
-        var woodC = '#8D6E63';
-        var svg = '';
-        svg += cartoonRect(x, y, 90, 6, woodC, OL);
-        svg += cartoonPath('M'+(x+5)+','+(y+6)+' L'+(x+5)+','+(y+18)+' L'+(x+15)+','+(y+6), woodC, OLthin);
-        svg += cartoonPath('M'+(x+75)+','+(y+6)+' L'+(x+75)+','+(y+18)+' L'+(x+85)+','+(y+6), woodC, OLthin);
-        svg += cartoonRect(x+10, y-16, 14, 16, '#42A5F5', OLthin);
-        svg += cartoonRect(x+30, y-20, 12, 20, '#66BB6A', OLthin);
-        svg += cartoonRect(x+50, y-14, 16, 14, '#FFA726', OLthin);
-        return { svg: svg, x: x, y: y-20, w: 90, h: 38, parts: [
-            { id: 'shelf-body', fill: woodC }
-        ]};
-    }
-
-    function buildPalmTree(x, groundY) {
-        var trunkC = '#8D6E63';
-        var leafC = '#2E7D32';
-        var svg = '';
-        svg += '<path d="M'+x+','+groundY+' C'+(x-8)+','+(groundY-40)+' '+(x+12)+','+(groundY-70)+' '+(x+4)+','+(groundY-95)+'" stroke="#2a1f14" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.2"/>';
-        svg += '<path d="M'+x+','+groundY+' C'+(x-8)+','+(groundY-40)+' '+(x+12)+','+(groundY-70)+' '+(x+4)+','+(groundY-95)+'" stroke="'+trunkC+'" stroke-width="12" fill="none" stroke-linecap="round"/>';
-        svg += cartoonCircle(x+2, groundY-90, 5, '#795548', OLthin);
-        svg += cartoonCircle(x+10, groundY-88, 5, '#795548', OLthin);
-        svg += cartoonPath('M'+(x+4)+','+(groundY-95)+' Q'+(x-30)+','+(groundY-110)+' '+(x-40)+','+(groundY-85), leafC, OL);
-        svg += cartoonPath('M'+(x+4)+','+(groundY-95)+' Q'+(x+38)+','+(groundY-115)+' '+(x+48)+','+(groundY-85), leafC, OL);
-        svg += cartoonPath('M'+(x+4)+','+(groundY-95)+' Q'+(x-10)+','+(groundY-120)+' '+(x-20)+','+(groundY-95), leafC, OL);
-        svg += cartoonPath('M'+(x+4)+','+(groundY-95)+' Q'+(x+18)+','+(groundY-120)+' '+(x+30)+','+(groundY-95), leafC, OL);
-        svg += cartoonPath('M'+(x+4)+','+(groundY-95)+' Q'+(x+4)+','+(groundY-125)+' '+(x+6)+','+(groundY-100), leafC, OLthin);
-        return { svg: svg, x: x-42, y: groundY-125, w: 92, h: 125, parts: [
-            { id: 'palm-trunk', fill: trunkC },
-            { id: 'palm-fronds', fill: leafC },
-            { id: 'palm-coconuts', fill: '#795548' }
-        ]};
-    }
-
-    function buildSeashell(cx, cy) {
-        var c = '#FFAB91';
-        var svg = '';
-        svg += cartoonPath('M'+(cx-10)+','+(cy+4)+' Q'+(cx-12)+','+(cy-8)+' '+cx+','+(cy-10)+' Q'+(cx+12)+','+(cy-8)+' '+(cx+10)+','+(cy+4)+' Q'+cx+','+(cy+8)+' '+(cx-10)+','+(cy+4)+' Z', c, OLthin);
-        svg += '<path d="M'+(cx-4)+','+(cy+2)+' Q'+(cx-6)+','+(cy-4)+' '+cx+','+(cy-5)+' Q'+(cx+6)+','+(cy-4)+' '+(cx+4)+','+(cy+2)+'" stroke="#E57373" stroke-width="1" fill="none"/>';
-        return { svg: svg, x: cx-12, y: cy-10, w: 24, h: 20, parts: [
-            { id: 'shell-body', fill: c }
-        ]};
-    }
-
-    function buildBucket(x, groundY) {
-        var c = col('blue');
-        var svg = '';
-        svg += cartoonPath('M'+x+','+groundY+' L'+(x+4)+','+(groundY-24)+' L'+(x+28)+','+(groundY-24)+' L'+(x+32)+','+groundY+' Z', c, OL);
-        svg += '<path d="M'+(x+6)+','+(groundY-24)+' Q'+(x+16)+','+(groundY-38)+' '+(x+26)+','+(groundY-24)+'" stroke="#9E9E9E" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
-        return { svg: svg, x: x, y: groundY-38, w: 32, h: 38, parts: [
-            { id: 'bucket-body', fill: c }
-        ]};
-    }
-
-    function buildBackpack(x, groundY) {
-        var c = col('red');
-        var svg = '';
-        var bh = 36, bw = 28;
-        var baseY = groundY - bh;
-        svg += cartoonPath('M'+x+','+groundY+' L'+x+','+(baseY+6)+' Q'+(x+bw/2)+','+(baseY-4)+' '+(x+bw)+','+(baseY+6)+' L'+(x+bw)+','+groundY+' Z', c, OL);
-        svg += cartoonRect(x+4, groundY-16, bw-8, 12, c, OLthin);
-        svg += '<line x1="'+(x+bw/2-6)+'" y1="'+(groundY-10)+'" x2="'+(x+bw/2+6)+'" y2="'+(groundY-10)+'" stroke="#FFD600" stroke-width="2"/>';
-        svg += '<path d="M'+(x+4)+','+(baseY+8)+' Q'+(x-4)+','+(baseY+20)+' '+(x+2)+','+(groundY-4)+'" stroke="'+c+'" stroke-width="3" fill="none"/>';
-        svg += '<path d="M'+(x+bw-4)+','+(baseY+8)+' Q'+(x+bw+4)+','+(baseY+20)+' '+(x+bw-2)+','+(groundY-4)+'" stroke="'+c+'" stroke-width="3" fill="none"/>';
-        return { svg: svg, x: x-6, y: baseY-4, w: bw+12, h: groundY-(baseY-4), parts: [
-            { id: 'backpack-body', fill: c }
-        ]};
-    }
-
-    function buildMoon(cx, cy) {
-        var c = '#FFF9C4';
-        var svg = '';
-        svg += cartoonCircle(cx, cy, 25, c, OL);
-        svg += cartoonCircle(cx-8, cy-6, 5, '#F0E68C', 'stroke="none"');
-        svg += cartoonCircle(cx+10, cy+8, 4, '#F0E68C', 'stroke="none"');
-        svg += cartoonCircle(cx+4, cy-10, 3, '#F0E68C', 'stroke="none"');
-        svg += '<circle cx="'+(cx-6)+'" cy="'+(cy-3)+'" r="2" fill="#2a1f14" stroke="none"/>';
-        svg += '<circle cx="'+(cx+6)+'" cy="'+(cy-3)+'" r="2" fill="#2a1f14" stroke="none"/>';
-        svg += '<path d="M'+(cx-4)+','+(cy+6)+' Q'+cx+','+(cy+10)+' '+(cx+4)+','+(cy+6)+'" stroke="#2a1f14" stroke-width="1.5" fill="none"/>';
-        return { svg: svg, x: cx-25, y: cy-25, w: 50, h: 50, parts: [
-            { id: 'moon-body', fill: c }
-        ]};
-    }
-
-    function buildSatellite(cx, cy) {
-        var bodyC = '#BDBDBD';
-        var panelC = '#1565C0';
-        var svg = '';
-        svg += cartoonRect(cx-10, cy-8, 20, 16, bodyC, OL);
-        svg += cartoonRect(cx-35, cy-6, 22, 12, panelC, OL);
-        svg += cartoonRect(cx+13, cy-6, 22, 12, panelC, OL);
-        svg += '<line x1="'+(cx-24)+'" y1="'+(cy-6)+'" x2="'+(cx-24)+'" y2="'+(cy+6)+'" stroke="#0D47A1" stroke-width="1"/>';
-        svg += '<line x1="'+(cx+24)+'" y1="'+(cy-6)+'" x2="'+(cx+24)+'" y2="'+(cy+6)+'" stroke="#0D47A1" stroke-width="1"/>';
-        svg += '<line x1="'+cx+'" y1="'+(cy-8)+'" x2="'+cx+'" y2="'+(cy-18)+'" stroke="#9E9E9E" stroke-width="2"/>';
-        svg += cartoonCircle(cx, cy-20, 3, '#FF6B6B', OLthin);
-        svg += '<path d="M'+(cx+8)+','+(cy+8)+' Q'+(cx+16)+','+(cy+16)+' '+(cx+12)+','+(cy+20)+'" stroke="#9E9E9E" stroke-width="2" fill="none"/>';
-        return { svg: svg, x: cx-37, y: cy-22, w: 74, h: 44, parts: [
-            { id: 'satellite-body', fill: bodyC },
-            { id: 'satellite-panels', fill: panelC }
-        ]};
-    }
-
-    function buildPig(cx, groundY) {
-        var c = '#F8BBD0';
-        var svg = '';
-        var by = groundY - 22;
-        svg += cartoonEllipse(cx, by, 22, 16, c, OL);
-        svg += cartoonCircle(cx+22, by-4, 12, c, OL);
-        svg += cartoonEllipse(cx+30, by-2, 7, 5, '#F48FB1', OLthin);
-        svg += '<circle cx="'+(cx+28)+'" cy="'+(by-2)+'" r="1.5" fill="#2a1f14" stroke="none"/>';
-        svg += '<circle cx="'+(cx+32)+'" cy="'+(by-2)+'" r="1.5" fill="#2a1f14" stroke="none"/>';
-        svg += '<circle cx="'+(cx+24)+'" cy="'+(by-8)+'" r="2.5" fill="white" stroke="none"/>';
-        svg += '<circle cx="'+(cx+25)+'" cy="'+(by-8)+'" r="1.3" fill="#2a1f14" stroke="none"/>';
-        svg += cartoonPath('M'+(cx+18)+','+(by-14)+' Q'+(cx+14)+','+(by-24)+' '+(cx+20)+','+(by-20), c, OLthin);
-        svg += cartoonPath('M'+(cx+26)+','+(by-14)+' Q'+(cx+30)+','+(by-24)+' '+(cx+24)+','+(by-20), c, OLthin);
-        svg += cartoonRect(cx-14, groundY-12, 7, 12, c, OLthin);
-        svg += cartoonRect(cx-2, groundY-12, 7, 12, c, OLthin);
-        svg += cartoonRect(cx+8, groundY-12, 7, 12, c, OLthin);
-        svg += cartoonRect(cx-15, groundY-3, 9, 3, '#D48BA6', 'stroke="none"');
-        svg += cartoonRect(cx-3, groundY-3, 9, 3, '#D48BA6', 'stroke="none"');
-        svg += cartoonRect(cx+7, groundY-3, 9, 3, '#D48BA6', 'stroke="none"');
-        svg += '<path d="M'+(cx-22)+','+(by-4)+' Q'+(cx-30)+','+(by-12)+' '+(cx-26)+','+(by-2)+' Q'+(cx-34)+','+(by-8)+' '+(cx-28)+','+(by+2)+'" stroke="'+c+'" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
-        return { svg: svg, x: cx-36, y: by-24, w: 74, h: groundY-(by-24), parts: [
-            { id: 'pig-body', fill: c }
-        ]};
-    }
-
-    function buildHayBale(cx, groundY) {
-        var c = '#FFB74D';
-        var svg = '';
-        svg += cartoonEllipse(cx, groundY-14, 22, 14, c, OL);
-        svg += '<line x1="'+(cx-14)+'" y1="'+(groundY-14)+'" x2="'+(cx+14)+'" y2="'+(groundY-14)+'" stroke="#E6A23C" stroke-width="1.5"/>';
-        svg += '<line x1="'+(cx-16)+'" y1="'+(groundY-8)+'" x2="'+(cx+16)+'" y2="'+(groundY-8)+'" stroke="#E6A23C" stroke-width="1.5"/>';
-        svg += '<line x1="'+(cx-14)+'" y1="'+(groundY-20)+'" x2="'+(cx+14)+'" y2="'+(groundY-20)+'" stroke="#E6A23C" stroke-width="1.5"/>';
-        return { svg: svg, x: cx-22, y: groundY-28, w: 44, h: 28, parts: [
-            { id: 'hay-body', fill: c }
-        ]};
-    }
-
-    function buildGlobe(cx, cy) {
-        var c = '#42A5F5';
-        var svg = '';
-        svg += '<line x1="'+cx+'" y1="'+(cy+16)+'" x2="'+cx+'" y2="'+(cy+26)+'" stroke="#9E9E9E" stroke-width="3"/>';
-        svg += cartoonEllipse(cx, cy+27, 10, 4, '#9E9E9E', OLthin);
-        svg += cartoonCircle(cx, cy, 16, c, OL);
-        svg += cartoonPath('M'+(cx-8)+','+(cy-6)+' Q'+(cx-4)+','+(cy-12)+' '+(cx+4)+','+(cy-8)+' Q'+(cx+2)+','+(cy-2)+' '+(cx-6)+','+(cy-2)+' Z', '#66BB6A', 'stroke="none"');
-        svg += cartoonPath('M'+(cx+4)+','+(cy+4)+' Q'+(cx+10)+','+(cy+2)+' '+(cx+10)+','+(cy+8)+' Q'+(cx+6)+','+(cy+10)+' '+(cx+4)+','+(cy+4)+' Z', '#66BB6A', 'stroke="none"');
-        return { svg: svg, x: cx-18, y: cy-18, w: 36, h: 48, parts: [
-            { id: 'globe-body', fill: c }
-        ]};
-    }
-
-    function buildPencilHolder(x, groundY) {
-        var cupC = col('blue');
-        var svg = '';
-        svg += cartoonPath('M'+x+','+groundY+' L'+(x+3)+','+(groundY-28)+' L'+(x+27)+','+(groundY-28)+' L'+(x+30)+','+groundY+' Z', cupC, OL);
-        svg += '<line x1="'+(x+8)+'" y1="'+(groundY-28)+'" x2="'+(x+6)+'" y2="'+(groundY-44)+'" stroke="#FFD600" stroke-width="3" stroke-linecap="round"/>';
-        svg += '<line x1="'+(x+15)+'" y1="'+(groundY-28)+'" x2="'+(x+15)+'" y2="'+(groundY-48)+'" stroke="#F44336" stroke-width="3" stroke-linecap="round"/>';
-        svg += '<line x1="'+(x+22)+'" y1="'+(groundY-28)+'" x2="'+(x+24)+'" y2="'+(groundY-42)+'" stroke="#2196F3" stroke-width="3" stroke-linecap="round"/>';
-        return { svg: svg, x: x, y: groundY-48, w: 30, h: 48, parts: [
-            { id: 'holder-cup', fill: cupC }
-        ]};
-    }
-
-    function buildTowel(x, groundY) {
-        var c = col('flower_petal');
-        var svg = '';
-        svg += cartoonPath('M'+x+','+groundY+' L'+(x+65)+','+groundY+' L'+(x+62)+','+(groundY-6)+' L'+(x+3)+','+(groundY-6)+' Z', c, OL);
-        svg += '<line x1="'+(x+5)+'" y1="'+(groundY-3)+'" x2="'+(x+60)+'" y2="'+(groundY-3)+'" stroke="#fff" stroke-width="2" opacity="0.5"/>';
-        return { svg: svg, x: x, y: groundY-6, w: 65, h: 6, parts: [
-            { id: 'towel-body', fill: c }
-        ]};
-    }
-
-    // ========== SCENE COMPOSERS ==========
-
-    function buildScene(sceneType, difficulty) {
-        var elements = [];
-        var bgSvg = '';
-        var eid = 0;
-        var cfg = DIFFICULTY[difficulty];
-
-        function addEl(name, builderResult, sizeHint) {
-            var sz = sizeHint || sizeCategory(builderResult.w, builderResult.h);
-            elements.push({
-                id: eid++,
-                name: name,
-                size: sz,
-                svg: builderResult.svg,
-                x: builderResult.x,
-                y: builderResult.y,
-                w: builderResult.w,
-                h: builderResult.h,
-                parts: builderResult.parts || []
-            });
-        }
-
-        switch(sceneType) {
-            case 'parco': {
-                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.6)+'" fill="'+col('sky')+'" stroke="none"/>';
-                bgSvg += '<rect x="0" y="'+(H*0.6)+'" width="'+W+'" height="'+(H*0.4)+'" fill="#5ED86A" stroke="none"/>';
-                bgSvg += '<path d="M0,'+(H*0.6)+' Q50,'+(H*0.57)+' 120,'+(H*0.6)+' Q200,'+(H*0.63)+' 300,'+(H*0.6)+' Q400,'+(H*0.57)+' '+W+','+(H*0.6)+'" fill="#4ECB5C" stroke="none"/>';
-
-                addEl('sole', buildSun(430, 58), 'large');
-                addEl('nuvola1', buildCloud(110, 52));
-                addEl('nuvola2', buildCloud(300, 78));
-                addEl('albero1', buildTree(55, H*0.62, 1.3), 'large');
-                addEl('albero2', buildTree(445, H*0.64, 1.0));
-                addEl('altalena', buildSwing(185, H*0.62), 'large');
-                addEl('scivolo', buildSlide(310, H*0.62), 'medium');
-                addEl('panchina', buildBench(370, H*0.88), 'medium');
-                addEl('fiore1', buildFlower(120, H*0.86), 'small');
-                addEl('fiore2', buildFlower(250, H*0.9), 'small');
-                addEl('fiore3', buildFlower(390, H*0.92), 'small');
-                addEl('uccello1', buildBird(165, 42), 'small');
-                addEl('uccello2', buildBird(350, 32), 'small');
-                addEl('farfalla', buildButterfly(140, H*0.52), 'small');
-
-                if (cfg.objectCount[1] >= 10) {
-                    addEl('fiore4', buildFlower(60, H*0.94), 'small');
-                    addEl('albero3', buildTree(240, H*0.58, 0.7), 'medium');
-                }
-                if (cfg.objectCount[1] >= 14) {
-                    addEl('fiore5', buildFlower(470, H*0.88), 'small');
-                    addEl('uccello3', buildBird(80, 75), 'small');
-                    addEl('farfalla2', buildButterfly(420, H*0.48), 'small');
-                    addEl('nuvola3', buildCloud(460, 42), 'small');
-                }
-                break;
-            }
-            case 'camera': {
-                var wallC = col('wall');
-                var floorC = col('floor');
-                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.68)+'" fill="'+wallC+'" stroke="none"/>';
-                bgSvg += '<rect x="0" y="'+(H*0.68)+'" width="'+W+'" height="'+(H*0.32)+'" fill="'+floorC+'" stroke="none"/>';
-                bgSvg += '<line x1="0" y1="'+(H*0.68)+'" x2="'+W+'" y2="'+(H*0.68)+'" stroke="#2a1f14" stroke-width="2"/>';
-
-                addEl('finestra', buildWindow(220, 45), 'medium');
-                addEl('letto', buildBed(20, H*0.68), 'large');
-                addEl('lampada', buildLamp(170, H*0.68), 'medium');
-                addEl('libreria', buildBookshelf(360, H*0.68), 'large');
-                addEl('tappeto', buildRug(250, H*0.85), 'medium');
-                addEl('orologio', buildClock(310, 50), 'small');
-                addEl('orsetto', buildToy(440, H*0.6), 'medium');
-
-                if (cfg.objectCount[1] >= 10) {
-                    var qc = col('flower_petal');
-                    var qsvg = cartoonRect(60, 30, 55, 42, qc, OL);
-                    qsvg += '<rect x="63" y="33" width="49" height="36" fill="#fff" stroke="none" rx="2"/>';
-                    qsvg += cartoonCircle(87, 48, 9, '#FFD600', 'stroke="none"');
-                    qsvg += cartoonPath('M70,68 L87,52 L104,68', '#4CAF50', 'stroke="none"');
-                    addEl('quadro', { svg: qsvg, x: 60, y: 30, w: 55, h: 42, parts: [{ id: 'frame', fill: qc }] }, 'small');
-                    addEl('stella', buildStar(450, 48, 12), 'small');
-                    addEl('sedia', buildChair(280, H*0.68), 'medium');
-                }
-                if (cfg.objectCount[1] >= 14) {
-                    addEl('pianta', buildPlant(160, H*0.98), 'small');
-                    addEl('orologio2', buildClock(80, 50), 'small');
-                    addEl('fiore-vaso', buildFlower(440, H*0.95), 'small');
-                    addEl('tappeto2', buildRug(100, H*0.92), 'small');
-                }
-                break;
-            }
-            case 'cucina': {
-                var wallC2 = col('wall');
-                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.68)+'" fill="'+wallC2+'" stroke="none"/>';
-                bgSvg += '<rect x="0" y="'+(H*0.68)+'" width="'+W+'" height="'+(H*0.32)+'" fill="#BCAAA4" stroke="none"/>';
-                bgSvg += '<line x1="0" y1="'+(H*0.68)+'" x2="'+W+'" y2="'+(H*0.68)+'" stroke="#2a1f14" stroke-width="2"/>';
-
-                addEl('frigo', buildFridge(15, H*0.68), 'large');
-                addEl('tavolo', buildTable(175, H*0.98), 'large');
-                addEl('sedia1', buildChair(195, H*0.98), 'medium');
-                addEl('sedia2', buildChair(245, H*0.98), 'medium');
-                addEl('pentola', buildPot(410, H*0.44), 'medium');
-                addEl('finestra', buildWindow(260, 30), 'medium');
-                addEl('orologio', buildClock(155, 40), 'small');
-
-                if (cfg.objectCount[1] >= 10) {
-                    addEl('mela1', buildApple(200, H*0.5), 'small');
-                    addEl('mela2', buildApple(230, H*0.5), 'small');
-                    addEl('mensola', buildShelf(360, 55), 'small');
-                    addEl('pianta', buildPlant(85, H*0.68), 'small');
-                }
-                if (cfg.objectCount[1] >= 14) {
-                    addEl('mela3', buildApple(440, H*0.62), 'small');
-                    addEl('pianta2', buildPlant(460, H*0.68), 'small');
-                    addEl('orologio2', buildClock(110, 80), 'small');
-                    addEl('tazza', buildBucket(340, H*0.44), 'small');
-                }
-                break;
-            }
-            case 'giardino': {
-                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.55)+'" fill="'+col('sky')+'" stroke="none"/>';
-                bgSvg += '<rect x="0" y="'+(H*0.55)+'" width="'+W+'" height="'+(H*0.45)+'" fill="#5ED86A" stroke="none"/>';
-                bgSvg += '<path d="M0,'+(H*0.55)+' Q80,'+(H*0.52)+' 160,'+(H*0.55)+' Q280,'+(H*0.58)+' 400,'+(H*0.55)+' Q460,'+(H*0.53)+' '+W+','+(H*0.55)+'" fill="#4ECB5C" stroke="none"/>';
-
-                addEl('sole', buildSun(425, 55), 'large');
-                addEl('nuvola', buildCloud(140, 48));
-                addEl('casa', buildHouse(185, H*0.57), 'large');
-                addEl('albero1', buildTree(65, H*0.57, 1.2), 'large');
-                addEl('albero2', buildTree(430, H*0.58, 0.9));
-                addEl('steccato', buildFence(95, H*0.68), 'medium');
-                addEl('fiore1', buildFlower(140, H*0.84), 'small');
-                addEl('fiore2', buildFlower(320, H*0.86), 'small');
-
-                if (cfg.objectCount[1] >= 10) {
-                    addEl('fiore3', buildFlower(360, H*0.8), 'small');
-                    addEl('fiore4', buildFlower(55, H*0.92), 'small');
-                    addEl('farfalla', buildButterfly(290, H*0.48), 'small');
-                    addEl('uccello', buildBird(330, 38), 'small');
-                }
-                if (cfg.objectCount[1] >= 14) {
-                    var bushSvg = '';
-                    bushSvg += cartoonEllipse(460, H*0.72, 28, 18, '#388E3C', OL);
-                    bushSvg += cartoonEllipse(442, H*0.74, 20, 14, '#2E7D32', OL);
-                    bushSvg += cartoonEllipse(478, H*0.74, 20, 14, '#2E7D32', OL);
-                    bushSvg += '<ellipse cx="460" cy="'+(H*0.74)+'" rx="22" ry="12" fill="#388E3C" stroke="none"/>';
-                    addEl('cespuglio', { svg: bushSvg, x: 420, y: H*0.56, w: 78, h: H*0.2, parts: [{ id: 'bush', fill: '#388E3C' }] }, 'medium');
-                    addEl('fiore5', buildFlower(460, H*0.92), 'small');
-                    addEl('uccello2', buildBird(200, 35), 'small');
-                    addEl('farfalla2', buildButterfly(80, H*0.5), 'small');
-                    addEl('nuvola2', buildCloud(380, 68), 'small');
-                }
-                break;
-            }
-            case 'spiaggia': {
-                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.42)+'" fill="#5CC8FF" stroke="none"/>';
-                var wc = col('water');
-                bgSvg += '<rect x="0" y="'+(H*0.42)+'" width="'+W+'" height="'+(H*0.16)+'" fill="'+wc+'" stroke="none"/>';
-                bgSvg += '<path d="M0,'+(H*0.42)+' Q60,'+(H*0.40)+' 130,'+(H*0.42)+' Q220,'+(H*0.44)+' 320,'+(H*0.42)+' Q420,'+(H*0.40)+' '+W+','+(H*0.42)+'" fill="'+wc+'" stroke="none"/>';
-                var sc = col('sand');
-                bgSvg += '<rect x="0" y="'+(H*0.58)+'" width="'+W+'" height="'+(H*0.42)+'" fill="'+sc+'" stroke="none"/>';
-                bgSvg += '<path d="M0,'+(H*0.58)+' Q100,'+(H*0.56)+' 250,'+(H*0.58)+' Q400,'+(H*0.60)+' '+W+','+(H*0.58)+'" fill="'+sc+'" stroke="none"/>';
-
-                addEl('sole', buildSun(430, 55), 'large');
-                addEl('nuvola', buildCloud(130, 45));
-                addEl('palma', buildPalmTree(60, H*0.62), 'large');
-                addEl('ombrellone', buildUmbrella(250, H*0.94), 'large');
-                addEl('castello', buildSandcastle(350, H*0.95), 'medium');
-                addEl('barca', buildBoat(200, H*0.46), 'medium');
-                addEl('granchio', buildCrab(150, H*0.82), 'small');
-
-                if (cfg.objectCount[1] >= 10) {
-                    addEl('pesce', buildFish(350, H*0.5), 'small');
-                    addEl('conchiglia1', buildSeashell(100, H*0.92), 'small');
-                    addEl('secchiello', buildBucket(300, H*0.95), 'small');
-                    addEl('telo', buildTowel(400, H*0.94), 'small');
-                }
-                if (cfg.objectCount[1] >= 14) {
-                    addEl('uccello1', buildBird(300, 35), 'small');
-                    addEl('uccello2', buildBird(100, 60), 'small');
-                    addEl('conchiglia2', buildSeashell(440, H*0.88), 'small');
-                    addEl('pesce2', buildFish(100, H*0.48), 'small');
-                    addEl('stella-marina', buildStar(460, H*0.94, 10), 'small');
-                    addEl('nuvola2', buildCloud(320, 65), 'small');
-                }
-                break;
-            }
-            case 'classe': {
-                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.7)+'" fill="#E8F5E9" stroke="none"/>';
-                bgSvg += '<rect x="0" y="'+(H*0.7)+'" width="'+W+'" height="'+(H*0.3)+'" fill="#BCAAA4" stroke="none"/>';
-                bgSvg += '<line x1="0" y1="'+(H*0.7)+'" x2="'+W+'" y2="'+(H*0.7)+'" stroke="#2a1f14" stroke-width="2"/>';
-
-                addEl('lavagna', buildBlackboard(50, 30), 'large');
-                addEl('banco1', buildDesk(40, H*0.96), 'large');
-                addEl('banco2', buildDesk(240, H*0.96), 'large');
-                addEl('sedia1', buildChair(70, H*0.96), 'medium');
-                addEl('sedia2', buildChair(270, H*0.96), 'medium');
-                addEl('orologio', buildClock(420, 40), 'small');
-                addEl('globo', buildGlobe(440, H*0.54), 'small');
-
-                if (cfg.objectCount[1] >= 10) {
-                    addEl('finestra', buildWindow(380, 65), 'small');
-                    addEl('pianta', buildPlant(460, H*0.7), 'small');
-                    addEl('zaino', buildBackpack(160, H*0.96), 'small');
-                    addEl('portapenne', buildPencilHolder(350, H*0.64), 'small');
-                }
-                if (cfg.objectCount[1] >= 14) {
-                    addEl('sedia3', buildChair(130, H*0.7), 'small');
-                    addEl('banco3', buildDesk(360, H*0.7), 'small');
-                    addEl('stella', buildStar(250, 20, 10), 'small');
-                    var fc2 = col('blue');
-                    var qsvg2 = cartoonRect(220, 55, 45, 35, fc2, OL);
-                    qsvg2 += '<rect x="223" y="58" width="39" height="29" fill="#fff" stroke="none" rx="2"/>';
-                    qsvg2 += cartoonCircle(242, 68, 6, '#FFD600', 'stroke="none"');
-                    addEl('quadro', { svg: qsvg2, x: 220, y: 55, w: 45, h: 35, parts: [{ id: 'frame', fill: fc2 }] }, 'small');
-                }
-                break;
-            }
-            case 'fattoria': {
-                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+(H*0.5)+'" fill="'+col('sky')+'" stroke="none"/>';
-                bgSvg += '<rect x="0" y="'+(H*0.5)+'" width="'+W+'" height="'+(H*0.5)+'" fill="#5ED86A" stroke="none"/>';
-                bgSvg += '<path d="M0,'+(H*0.5)+' Q100,'+(H*0.47)+' 200,'+(H*0.5)+' Q350,'+(H*0.53)+' '+W+','+(H*0.5)+'" fill="#4ECB5C" stroke="none"/>';
-
-                addEl('sole', buildSun(430, 55), 'large');
-                addEl('nuvola', buildCloud(130, 50));
-                addEl('fienile', buildBarn(30, H*0.54), 'large');
-                addEl('mucca', buildCow(260, H*0.72), 'large');
-                addEl('gallina', buildChicken(380, H*0.76), 'medium');
-                addEl('steccato', buildFence(170, H*0.62), 'medium');
-                addEl('albero', buildTree(440, H*0.52, 1.1), 'large');
-
-                if (cfg.objectCount[1] >= 10) {
-                    addEl('maiale', buildPig(180, H*0.88), 'medium');
-                    addEl('fieno', buildHayBale(350, H*0.96), 'small');
-                    addEl('fiore1', buildFlower(300, H*0.92), 'small');
-                    addEl('fiore2', buildFlower(420, H*0.94), 'small');
-                }
-                if (cfg.objectCount[1] >= 14) {
-                    addEl('gallina2', buildChicken(120, H*0.88), 'small');
-                    addEl('fieno2', buildHayBale(70, H*0.96), 'small');
-                    addEl('uccello', buildBird(280, 35), 'small');
-                    addEl('farfalla', buildButterfly(340, H*0.48), 'small');
-                    addEl('nuvola2', buildCloud(300, 65), 'small');
-                    addEl('fiore3', buildFlower(460, H*0.9), 'small');
-                }
-                break;
-            }
-            case 'spazio': {
-                bgSvg += '<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#0D1B2A" stroke="none"/>';
-                for (var si = 0; si < 40; si++) {
-                    var sx = randInt(5, W-5), sy = randInt(5, H-5), sr = randFloat(0.8, 2);
-                    bgSvg += '<circle cx="'+sx+'" cy="'+sy+'" r="'+sr+'" fill="#fff" opacity="'+randFloat(0.3,0.8)+'" stroke="none"/>';
-                }
-
-                addEl('luna', buildMoon(80, 65), 'medium');
-                addEl('razzo', buildRocket(250, 180), 'large');
-                addEl('pianeta1', buildPlanet(420, 100, 35), 'large');
-                addEl('pianeta2', buildPlanet(100, 280, 28), 'medium');
-                addEl('satellite', buildSatellite(380, 280), 'medium');
-                addEl('stella1', buildStar(180, 50, 14), 'small');
-                addEl('stella2', buildStar(340, 340, 12), 'small');
-
-                if (cfg.objectCount[1] >= 10) {
-                    addEl('alieno', buildAlien(60, H*0.88), 'medium');
-                    addEl('stella3', buildStar(460, 220, 10), 'small');
-                    addEl('stella4', buildStar(40, 180, 8), 'small');
-                    addEl('pianeta3', buildPlanet(460, 350, 20), 'small');
-                }
-                if (cfg.objectCount[1] >= 14) {
-                    addEl('stella5', buildStar(300, 50, 10), 'small');
-                    addEl('stella6', buildStar(150, 350, 8), 'small');
-                    addEl('stella7', buildStar(50, 350, 9), 'small');
-                    addEl('stella8', buildStar(480, 60, 7), 'small');
-                    addEl('pianeta4', buildPlanet(200, 340, 18), 'small');
-                }
-                break;
-            }
-        }
-
-        return { elements: elements, bgSvg: bgSvg };
-    }
-
-    // ========== DIFFERENCE GENERATOR ==========
-
-    function getAlternateColor(originalFill) {
-        var allColors = [
-            '#FF4757', '#EF5350', '#FF6B6B',
-            '#2196F3', '#42A5F5', '#1E88E5',
-            '#4CAF50', '#66BB6A', '#43A047',
-            '#AB47BC', '#CE93D8', '#9C27B0',
-            '#FF9800', '#FFA726', '#FB8C00',
-            '#FFEB3B', '#FFC107', '#FFD600',
-            '#FF69B4', '#E91E63', '#FF3B6F',
-            '#00BCD4', '#26C6DA', '#00ACC1',
-            '#795548', '#8D6E63', '#6D4C41',
-            '#FFFFFF', '#ECEFF1', '#CFD8DC'
-        ];
-        var filtered = allColors.filter(function(c) { return c.toLowerCase() !== originalFill.toLowerCase(); });
+    // Available scenes
+    const AVAILABLE_SCENES = ['fattoria'];
+
+    // ========== COLOR ALTERNATIVES FOR DIFFERENCES ==========
+
+    // Map of gradient/fill IDs to alternative flat colors for color-change diffs
+    // Each entry: original fill identifier -> array of alternative fills
+    const COLOR_ALTERNATIVES = [
+        '#FF4757', '#EF5350', '#FF6B6B',
+        '#2196F3', '#42A5F5', '#1E88E5',
+        '#4CAF50', '#66BB6A', '#43A047',
+        '#AB47BC', '#CE93D8', '#9C27B0',
+        '#FF9800', '#FFA726', '#FB8C00',
+        '#FFEB3B', '#FFC107', '#FFD600',
+        '#FF69B4', '#E91E63', '#FF3B6F',
+        '#00BCD4', '#26C6DA', '#00ACC1',
+        '#795548', '#8D6E63', '#6D4C41',
+        '#FFFFFF', '#ECEFF1', '#CFD8DC'
+    ];
+
+    function getAlternateColor(original) {
+        var filtered = COLOR_ALTERNATIVES.filter(function(c) {
+            return c.toLowerCase() !== original.toLowerCase();
+        });
         return pick(filtered);
     }
+
+    // ========== ELEMENT REGISTRY ==========
+    // Defines which elements exist in each scene, their size, and how to apply color changes
+
+    // For fattoria scene, each element entry:
+    // { id: 'el-xxx', size: 'large|medium|small', name: 'xxx',
+    //   colorTargets: [ { selector: 'css-selector-within-group', attr: 'fill|stroke', original: '#xxx' }, ... ] }
+
+    const SCENE_ELEMENTS = {
+        fattoria: [
+            {
+                id: 'el-sole', size: 'large', name: 'sole',
+                colorTargets: [
+                    // Change sun circle fills to a different color
+                    { query: 'circle:nth-child(2)', attr: 'fill', original: 'url(#sunGrad)', replaceFill: '#42A5F5' },
+                ]
+            },
+            {
+                id: 'el-nuvola1', size: 'medium', name: 'nuvola1',
+                colorTargets: [
+                    { query: 'ellipse', attr: 'fill', original: '#FFFFFF', replaceFill: '#FFCDD2' },
+                ]
+            },
+            {
+                id: 'el-nuvola2', size: 'small', name: 'nuvola2',
+                colorTargets: [
+                    { query: 'ellipse', attr: 'fill', original: '#FFFFFF', replaceFill: '#C8E6C9' },
+                ]
+            },
+            {
+                id: 'el-nuvola3', size: 'small', name: 'nuvola3',
+                colorTargets: [
+                    { query: 'ellipse', attr: 'fill', original: '#FFFFFF', replaceFill: '#FFE0B2' },
+                ]
+            },
+            {
+                id: 'el-fienile', size: 'large', name: 'fienile',
+                colorTargets: [
+                    { query: '[fill="url(#barnWallGrad)"]', attr: 'fill', original: 'url(#barnWallGrad)', replaceFill: '#1565C0' },
+                ]
+            },
+            {
+                id: 'el-banderuola', size: 'small', name: 'banderuola',
+                colorTargets: [
+                    { query: 'polygon', attr: 'fill', original: '#FFD600', replaceFill: '#E53935' },
+                ]
+            },
+            {
+                id: 'el-uccello-tetto', size: 'small', name: 'uccello-tetto',
+                colorTargets: [
+                    { query: 'ellipse', attr: 'fill', original: '#FF8F00', replaceFill: '#42A5F5' },
+                ]
+            },
+            {
+                id: 'el-tana-topo', size: 'small', name: 'tana-topo',
+                colorTargets: []
+            },
+            {
+                id: 'el-steccato', size: 'medium', name: 'steccato',
+                colorTargets: [
+                    { query: '[fill="url(#fenceGrad)"]', attr: 'fill', original: 'url(#fenceGrad)', replaceFill: '#FFCC80' },
+                ]
+            },
+            {
+                id: 'el-coccinella', size: 'small', name: 'coccinella',
+                colorTargets: [
+                    { query: '[fill="#E53935"]', attr: 'fill', original: '#E53935', replaceFill: '#FFD600' },
+                ]
+            },
+            {
+                id: 'el-melo', size: 'large', name: 'melo',
+                colorTargets: [
+                    { query: '[fill="url(#treeCanopyGrad)"]', attr: 'fill', original: 'url(#treeCanopyGrad)', replaceFill: '#FF8F00' },
+                ]
+            },
+            {
+                id: 'el-mela1', size: 'small', name: 'mela1',
+                colorTargets: [
+                    { query: 'circle:first-child', attr: 'fill', original: 'url(#appleGrad)', replaceFill: '#FFD600' },
+                ]
+            },
+            {
+                id: 'el-mela2', size: 'small', name: 'mela2',
+                colorTargets: [
+                    { query: 'circle:first-child', attr: 'fill', original: 'url(#appleGrad)', replaceFill: '#66BB6A' },
+                ]
+            },
+            {
+                id: 'el-mela3', size: 'small', name: 'mela3',
+                colorTargets: [
+                    { query: 'circle:first-child', attr: 'fill', original: 'url(#appleGrad)', replaceFill: '#AB47BC' },
+                ]
+            },
+            {
+                id: 'el-fieno1', size: 'medium', name: 'fieno1',
+                colorTargets: [
+                    { query: 'ellipse:first-child', attr: 'fill', original: 'url(#hayGrad)', replaceFill: '#CE93D8' },
+                ]
+            },
+            {
+                id: 'el-fieno2', size: 'small', name: 'fieno2',
+                colorTargets: [
+                    { query: 'ellipse:first-child', attr: 'fill', original: 'url(#hayGrad)', replaceFill: '#90CAF9' },
+                ]
+            },
+            {
+                id: 'el-gatto', size: 'small', name: 'gatto',
+                colorTargets: [
+                    { query: '[fill="#FF8F00"]', attr: 'fill', original: '#FF8F00', replaceFill: '#9E9E9E' },
+                ]
+            },
+            {
+                id: 'el-secchio', size: 'small', name: 'secchio',
+                colorTargets: [
+                    { query: '[fill="url(#bucketGrad)"]', attr: 'fill', original: 'url(#bucketGrad)', replaceFill: '#FF5252' },
+                ]
+            },
+            {
+                id: 'el-stagno', size: 'medium', name: 'stagno',
+                colorTargets: [
+                    { query: '[fill="url(#pondGrad)"]', attr: 'fill', original: 'url(#pondGrad)', replaceFill: '#CE93D8' },
+                ]
+            },
+            {
+                id: 'el-mucca', size: 'large', name: 'mucca',
+                colorTargets: [
+                    { query: '.cow-spots path, .cow-spots ellipse', attr: 'fill', original: '#333', replaceFill: '#D32F2F' },
+                ]
+            },
+            {
+                id: 'el-trattore', size: 'large', name: 'trattore',
+                colorTargets: [
+                    { query: '[fill="url(#tractorBodyGrad)"]', attr: 'fill', original: 'url(#tractorBodyGrad)', replaceFill: '#1565C0' },
+                ]
+            },
+            {
+                id: 'el-gallina1', size: 'medium', name: 'gallina1',
+                colorTargets: [
+                    { query: '[fill="#F44336"]', attr: 'fill', original: '#F44336', replaceFill: '#2196F3' },
+                ]
+            },
+            {
+                id: 'el-gallina2', size: 'small', name: 'gallina2',
+                colorTargets: [
+                    { query: '[fill="url(#chickenGrad)"]', attr: 'fill', original: 'url(#chickenGrad)', replaceFill: '#BBDEFB' },
+                ]
+            },
+            {
+                id: 'el-gallina3', size: 'small', name: 'gallina3',
+                colorTargets: [
+                    { query: '[fill="url(#chickenGrad)"]', attr: 'fill', original: 'url(#chickenGrad)', replaceFill: '#C8E6C9' },
+                ]
+            },
+            {
+                id: 'el-uova', size: 'small', name: 'uova',
+                colorTargets: [
+                    { query: '[fill="#FFF8E1"]', attr: 'fill', original: '#FFF8E1', replaceFill: '#90CAF9' },
+                ]
+            },
+            {
+                id: 'el-maiale', size: 'medium', name: 'maiale',
+                colorTargets: [
+                    { query: '[fill="url(#pigBodyGrad)"]', attr: 'fill', original: 'url(#pigBodyGrad)', replaceFill: '#90CAF9' },
+                ]
+            },
+            {
+                id: 'el-fiore1', size: 'small', name: 'fiore1',
+                colorTargets: [
+                    { query: '[fill="url(#flowerRedGrad)"]', attr: 'fill', original: 'url(#flowerRedGrad)', replaceFill: '#42A5F5' },
+                ]
+            },
+            {
+                id: 'el-fiore2', size: 'small', name: 'fiore2',
+                colorTargets: [
+                    { query: '[fill="url(#flowerYellowGrad)"]', attr: 'fill', original: 'url(#flowerYellowGrad)', replaceFill: '#CE93D8' },
+                ]
+            },
+            {
+                id: 'el-fiore3', size: 'small', name: 'fiore3',
+                colorTargets: [
+                    { query: '[fill="url(#flowerPurpleGrad)"]', attr: 'fill', original: 'url(#flowerPurpleGrad)', replaceFill: '#FF7043' },
+                ]
+            },
+            {
+                id: 'el-farfalla', size: 'small', name: 'farfalla',
+                colorTargets: [
+                    { query: '[fill="#CE93D8"]', attr: 'fill', original: '#CE93D8', replaceFill: '#FFD600' },
+                    { query: '[fill="#AB47BC"]', attr: 'fill', original: '#AB47BC', replaceFill: '#FF8F00' },
+                ]
+            },
+            {
+                id: 'el-fungo', size: 'small', name: 'fungo',
+                colorTargets: [
+                    { query: '[fill="#E53935"]', attr: 'fill', original: '#E53935', replaceFill: '#2196F3' },
+                ]
+            },
+        ]
+    };
+
+    // ========== DIFFERENCE GENERATOR ==========
 
     function generateDifferences(elements, difficulty) {
         var cfg = DIFFICULTY[difficulty];
@@ -1559,6 +1373,7 @@
 
         var eligible = elements.filter(function(el) { return eligibleSizes.indexOf(el.size) !== -1; });
 
+        // Expand size pool if not enough elements
         if (eligible.length < diffCount) {
             var allSizes = ['large', 'medium', 'small'];
             var expandedSizes = eligibleSizes.slice();
@@ -1580,62 +1395,84 @@
         for (var i = 0; i < chosen.length; i++) {
             var el = chosen[i];
             var type;
+            // Decide color change vs removal based on size
             if (el.size === 'large') {
-                type = rng() < 0.85 ? 'color' : 'missing';
+                type = (el.colorTargets && el.colorTargets.length > 0 && rng() < 0.85) ? 'color' : 'missing';
             } else if (el.size === 'medium') {
-                type = rng() < 0.6 ? 'color' : 'missing';
+                type = (el.colorTargets && el.colorTargets.length > 0 && rng() < 0.6) ? 'color' : 'missing';
             } else {
-                type = rng() < 0.5 ? 'color' : 'missing';
+                type = (el.colorTargets && el.colorTargets.length > 0 && rng() < 0.5) ? 'color' : 'missing';
             }
 
-            if (type === 'color' && el.parts && el.parts.length > 0) {
-                var part = pick(el.parts);
-                var newColor = getAlternateColor(part.fill);
-                diffs.push({ elId: el.id, elName: el.name, type: 'color', partId: part.id, oldColor: part.fill, newColor: newColor });
-            } else {
-                diffs.push({ elId: el.id, elName: el.name, type: 'missing' });
-            }
+            diffs.push({ elId: el.id, elName: el.name, type: type, element: el });
         }
 
         return diffs;
     }
 
-    // ========== APPLY DIFFERENCES & RENDER ==========
+    // ========== APPLY DIFFERENCES TO CLONED SVG ==========
 
-    function applySvgDiff(svgStr, el, diff) {
-        if (diff.type === 'missing') {
-            return '';
-        }
-        if (diff.type === 'color') {
-            var modified = svgStr;
-            var oldC = diff.oldColor;
-            var newC = diff.newColor;
-            modified = modified.split('fill="' + oldC + '"').join('fill="' + newC + '"');
-            if (oldC.toLowerCase() !== oldC) {
-                modified = modified.split('fill="' + oldC.toLowerCase() + '"').join('fill="' + newC + '"');
-            }
-            return modified;
-        }
-        return svgStr;
-    }
+    function applyDifferences(svgEl, diffs) {
+        for (var i = 0; i < diffs.length; i++) {
+            var diff = diffs[i];
+            var group = svgEl.querySelector('#' + diff.elId);
+            if (!group) continue;
 
-    function renderScene(bgSvg, elements, diffs, isModified) {
-        var inner = bgSvg;
-        for (var i = 0; i < elements.length; i++) {
-            var el = elements[i];
-            var diff = null;
-            if (isModified) {
-                for (var j = 0; j < diffs.length; j++) {
-                    if (diffs[j].elId === el.id) { diff = diffs[j]; break; }
+            if (diff.type === 'missing') {
+                group.style.display = 'none';
+            } else if (diff.type === 'color') {
+                var el = diff.element;
+                if (el.colorTargets) {
+                    for (var t = 0; t < el.colorTargets.length; t++) {
+                        var target = el.colorTargets[t];
+                        var nodes = group.querySelectorAll(target.query);
+                        for (var n = 0; n < nodes.length; n++) {
+                            nodes[n].setAttribute(target.attr, target.replaceFill);
+                        }
+                    }
                 }
             }
-            if (diff) {
-                inner += applySvgDiff(el.svg, el, diff);
-            } else {
-                inner += el.svg;
+        }
+    }
+
+    // ========== CLONE SVG FROM TEMPLATE ==========
+
+    function cloneSceneSvg(sceneType) {
+        var tpl = document.getElementById('tpl-' + sceneType);
+        if (!tpl) return null;
+        var svg = tpl.content.querySelector('svg').cloneNode(true);
+        return svg;
+    }
+
+    // Make gradient IDs unique per copy to avoid conflicts
+    function makeGradientIdsUnique(svgEl, suffix) {
+        var defs = svgEl.querySelector('defs');
+        if (!defs) return;
+
+        // Collect all elements with IDs in defs
+        var defsChildren = defs.querySelectorAll('[id]');
+        var idMap = {};
+        for (var i = 0; i < defsChildren.length; i++) {
+            var oldId = defsChildren[i].getAttribute('id');
+            var newId = oldId + suffix;
+            idMap[oldId] = newId;
+            defsChildren[i].setAttribute('id', newId);
+        }
+
+        // Replace all url(#oldId) references in the SVG
+        var allEls = svgEl.querySelectorAll('*');
+        var urlAttrs = ['fill', 'stroke', 'filter'];
+        for (var i = 0; i < allEls.length; i++) {
+            for (var a = 0; a < urlAttrs.length; a++) {
+                var val = allEls[i].getAttribute(urlAttrs[a]);
+                if (val && val.indexOf('url(#') !== -1) {
+                    for (var oldId in idMap) {
+                        val = val.replace('url(#' + oldId + ')', 'url(#' + idMap[oldId] + ')');
+                    }
+                    allEls[i].setAttribute(urlAttrs[a], val);
+                }
             }
         }
-        return '<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="background:#fff">'+inner+'</svg>';
     }
 
     // ========== MAIN GENERATE ==========
@@ -1643,33 +1480,68 @@
     function generate() {
         var sceneType = document.getElementById('scene-select').value;
         var difficulty = document.getElementById('difficulty').value;
+
+        // Check if scene is available
+        if (AVAILABLE_SCENES.indexOf(sceneType) === -1) {
+            var output = document.getElementById('output');
+            output.innerHTML = '<div class="placeholder-msg">La scena <strong>' + sceneType + '</strong> sarà disponibile prossimamente! Per ora prova la <strong>Fattoria</strong>.</div>';
+            return;
+        }
+
         var seed = Date.now();
         rng = mulberry32(seed);
 
-        var result = buildScene(sceneType, difficulty);
-        var elements = result.elements;
-        var bgSvg = result.bgSvg;
+        var elements = SCENE_ELEMENTS[sceneType];
+        if (!elements) return;
+
         var diffs = generateDifferences(elements, difficulty);
 
-        var originalSvg = renderScene(bgSvg, elements, [], false);
-        var modifiedSvg = renderScene(bgSvg, elements, diffs, true);
+        // Clone two copies of the SVG
+        var originalSvg = cloneSceneSvg(sceneType);
+        var modifiedSvg = cloneSceneSvg(sceneType);
+
+        if (!originalSvg || !modifiedSvg) return;
+
+        // Make gradient IDs unique to avoid conflicts between the two SVGs
+        makeGradientIdsUnique(originalSvg, '-orig');
+        makeGradientIdsUnique(modifiedSvg, '-mod');
+
+        // Apply differences to the modified copy
+        applyDifferences(modifiedSvg, diffs);
 
         var diffCountText = diffs.length;
         var origLeft = rng() > 0.5;
 
         var output = document.getElementById('output');
-        output.innerHTML =
-            '<div class="scenes-container">' +
-                '<div class="scene-box">' +
-                    (origLeft ? originalSvg : modifiedSvg) +
-                    '<div class="scene-label">' + (origLeft ? 'Originale' : 'Modificata') + '</div>' +
-                '</div>' +
-                '<div class="scene-box">' +
-                    (origLeft ? modifiedSvg : originalSvg) +
-                    '<div class="scene-label">' + (origLeft ? 'Modificata' : 'Originale') + '</div>' +
-                '</div>' +
-            '</div>' +
-            '<div class="challenge-text">Trova le ' + diffCountText + ' differenze!</div>';
+        output.innerHTML = '';
+
+        var container = document.createElement('div');
+        container.className = 'scenes-container';
+
+        var box1 = document.createElement('div');
+        box1.className = 'scene-box';
+        box1.appendChild(origLeft ? originalSvg : modifiedSvg);
+        var label1 = document.createElement('div');
+        label1.className = 'scene-label';
+        label1.textContent = origLeft ? 'Originale' : 'Modificata';
+        box1.appendChild(label1);
+
+        var box2 = document.createElement('div');
+        box2.className = 'scene-box';
+        box2.appendChild(origLeft ? modifiedSvg : originalSvg);
+        var label2 = document.createElement('div');
+        label2.className = 'scene-label';
+        label2.textContent = origLeft ? 'Modificata' : 'Originale';
+        box2.appendChild(label2);
+
+        container.appendChild(box1);
+        container.appendChild(box2);
+        output.appendChild(container);
+
+        var challenge = document.createElement('div');
+        challenge.className = 'challenge-text';
+        challenge.textContent = 'Trova le ' + diffCountText + ' differenze!';
+        output.appendChild(challenge);
     }
 
     // ========== PDF EXPORT ==========
